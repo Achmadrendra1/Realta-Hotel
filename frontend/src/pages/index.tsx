@@ -75,62 +75,6 @@ export default function Home() {
             }
           </Row>
         </div>
-        <div>
-          <h1 className='text-lg font-semibold'>Recommended Hotels</h1>
-          <div className='flex items-center justify-between mb-5'>
-            <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Sunt, architecto.</p>
-            <Link href='/' className='p-2 border-2 border-slate-800 rounded-full flex items-center'><RightOutlined /></Link>
-          </div>
-          <Row gutter={16}>
-            {
-              dummy.map((item:any, index:number) => 
-              <Col span={6} key={index}>
-                <Link href='/'>
-                  <Card
-                    style={{ width: '100%' }}
-                    cover={<img className='h-60 object-cover object-top' alt="example" src="https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png" />}
-                  >
-                    <h2 className='text-lg font-bold'>{item.hotel}</h2>
-                    <p className='text-md font-normal text-gray-400'>{item.location}</p>
-                    <p className='mt-2 font-semibold text-medium'>
-                      Rp. {item.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
-                    </p>
-                    <p className='mt-2 flex items-center gap-2 text-yellow-400'><StarFilled /><span className='text-black'>{item.rating} / 5</span></p>
-                  </Card>
-                </Link>
-              </Col>
-              )
-            }
-          </Row>
-        </div>
-        <div className='my-5'>
-          <h1 className='text-lg font-semibold'>Recommended Restaurant</h1>
-          <div className='flex items-center justify-between mb-5'>
-            <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Sunt, architecto.</p>
-            <Link href='/' className='p-2 border-2 border-slate-800 rounded-full flex items-center'><RightOutlined /></Link>
-          </div>
-          <Row gutter={16} justify="space-between">
-            {
-              dummy.map((item:any, index:number) => 
-              <Col span={6} key={index}>
-                <Link href='/'>
-                  <Card
-                    style={{ width: '100%' }}
-                    cover={<img className='h-60 object-cover object-top' alt="example" src="https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png" />}
-                  >
-                    <h2 className='text-lg font-bold'>{item.hotel}</h2>
-                    <p className='text-md font-normal text-gray-400'>{item.location}</p>
-                    <p className='mt-2 font-semibold text-medium'>
-                      Rp. {item.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
-                    </p>
-                    <p className='mt-2 flex items-center gap-2 text-yellow-400'><StarFilled /><span className='text-black'>{item.rating} / 5</span></p>
-                  </Card>
-                </Link>
-              </Col>
-              )
-            }
-          </Row>
-        </div>
     </Layouts>
   )
 }

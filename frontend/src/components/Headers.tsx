@@ -53,6 +53,7 @@ const Headers = ({nav, logo, click, queries} : {nav?:any, logo?:string, click?:a
         { value: 'Banten' },
     ];
 
+    console.log(queries)
     return(
         <div className="w-full border-b-2">
             <div className="container mx-auto">
@@ -70,12 +71,12 @@ const Headers = ({nav, logo, click, queries} : {nav?:any, logo?:string, click?:a
                         {
                             nav && (
                                 nav.map((item:any, index:any) =>
-                                    <Link href={item.href} key={index} className={`px-7 text-md rounded-full transition ease-in ${item.href == '/' + splits[1] ? 'bg-sky-500 text-white hover:text-white' : null}`}>{item.name}</Link>
+                                    <Link href={item.href} key={index} className={`px-7 py-2 leading-5 text-md rounded-full transition ease-in ${item.href == '/' + splits[1] ? 'bg-sky-500 text-white hover:text-white' : null}`}>{item.name}</Link>
                                 )
                             )
                         }
                     </Item>
-                    { router.asPath == '/' ? null : (
+                    { nav ? router.asPath == '/' ? null : (
                         <Item className="ml-auto mr-5 relative">
                             <div className="flex items-center gap-3 text-gray-400">
                                 <button onClick={() => setOpen(!open)}>{queries ? queries[0] : 'Locations'}</button>
@@ -113,7 +114,8 @@ const Headers = ({nav, logo, click, queries} : {nav?:any, logo?:string, click?:a
                             </div>
                             }
                         </Item>
-                    )}
+                    ) : null
+                    }
                     <Divider type="vertical"/>
                     <Item className="ml-auto">
                         { isLogin ?
