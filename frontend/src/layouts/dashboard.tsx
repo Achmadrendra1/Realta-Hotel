@@ -66,7 +66,7 @@ const Dashboard = ({children} : {children:any}) => {
                 <link rel="icon" href="/assets/Hotel_Icon.png" />
             </Head>
             <Layout className='bg-white  max-h-screen' hasSider>
-                <Sidebar nav={navigation} collapsed={collapsed} logo="/assets/Hotel_Icon.png" locations={router.asPath}/>
+                <Sidebar nav={navigation} collapsed={collapsed} logo="/assets/icons.png" locations={router.asPath}/>
                 <Content style={{ minHeight: "100vh" }}>
                     <Headers click={collapse}/>
                     <Content className='px-5 py-8' style={{minHeight: '80%'}}>
