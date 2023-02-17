@@ -1,8 +1,13 @@
+import 'dotenv/config';
 import { NestFactory } from '@nestjs/core';
-import { AppModule } from './app.module';
+import { MainModule } from './main.module';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
-  await app.listen(3000);
+  const app = await NestFactory.create(MainModule);
+  app.enableCors();
+  const port = 3501;
+  await app.listen(port, () => {
+    console.log(`server anda berjalan pada port ${port}`);
+  });
 }
 bootstrap();
