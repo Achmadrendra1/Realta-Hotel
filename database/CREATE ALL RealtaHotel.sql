@@ -433,8 +433,8 @@ CREATE TABLE payment.payment_transaction(
     patr_note varchar(255),
     patr_modified_date timestamp,
     patr_order_number varchar(55),
-    patr_source_id int,
-    patr_target_id int,
+    patr_source_id numeric,
+    patr_target_id numeric,
     patr_trx_number_ref varchar(55) unique,
     patr_user_id int,
     CONSTRAINT user_fk foreign key (patr_user_id) references users.users(user_id) on delete cascade on update cascade

@@ -84,3 +84,127 @@ JOIN users.users u ON u.user_id = ptr.patr_user_id;
 END;$$
 LANGUAGE plpgsql;
 ----------------------------------------------
+
+--------Store Procedur Insert Payment Transaction------
+CREATE OR REPLACE PROCEDURE  payment.insertPaymentTrx(
+	userId				int,
+	amount				int,
+	sourceNumber		varchar,
+	targetNumber		varchar,
+	trxType    			text DEFAULT NULL,
+	orderNumber			varchar DEFAULT NULL
+)
+AS $$
+DECLARE
+  result text;
+  orderType text;
+  currentDate date := NOW();
+  orderDate date;
+  lastCount int;
+  currentCount int;
+  newCount text;
+  newCode text;
+  debetAmount int := 0;
+  creditAmount int := 0;
+  note text;
+  TransactionNumberRef text := FLOOR(RANDOM() * POWER(CAST(10 as BIGINT), 15))::text;
+BEGIN
+	IF orderNumber IS NULL THEN
+		CASE
+			WHEN trxType = 'TP'
+				THEN 
+				orderDate := (SELECT COALESCE(MAX(SUBSTRING(patr_trx_id, '#(.*)-')::date), now()::date) from payment.payment_transaction where patr_type = trxType);
+				IF orderDate != currentDate
+					THEN currentCount := 1;
+				ELSE
+					currentCount := (SELECT COALESCE(MAX(SUBSTRING(patr_trx_id, '-(.*)'))::int, 0) from payment.payment_transaction where patr_type = trxType) +1;
+				END IF;
+				newCount := lpad(currentCount::text, 4, '0');
+				newCode := CONCAT(trxType, '#', TO_CHAR(currentDate::date, 'YYYYMMDD'), '-', newCount);
+				note := 'Top Up';
+				debetAmount := amount;
+				UPDATE payment.user_accounts SET usac_saldo = usac_saldo + amount WHERE usac_account_number = targetNumber;
+				UPDATE payment.user_accounts SET usac_saldo = usac_saldo - amount WHERE usac_account_number = sourceNumber;
+
+			WHEN trxType = 'RF'
+				THEN 
+				orderDate := (SELECT COALESCE(MAX(SUBSTRING(patr_trx_id, '#(.*)-')::date), now()::date) from payment.payment_transaction where patr_type = trxType);
+				IF orderDate != currentDate
+					THEN currentCount := 1;
+				ELSE
+					currentCount := (SELECT COALESCE(MAX(SUBSTRING(patr_trx_id, '-(.*)'))::int, 0) from payment.payment_transaction where patr_type = trxType) +1;
+				END IF;
+				newCount := lpad(currentCount::text, 4, '0');
+				newCode := CONCAT(trxType, '#', TO_CHAR(currentDate::date, 'YYYYMMDD'), '-', newCount);
+				note := 'Refund';
+				debetAmount := amount;
+				UPDATE payment.user_accounts SET usac_saldo = usac_saldo + amount WHERE usac_account_number = targetNumber;
+				
+			WHEN trxType = 'RPY'
+				THEN 
+				orderDate := (SELECT COALESCE(MAX(SUBSTRING(patr_trx_id, '#(.*)-')::date), now()::date) from payment.payment_transaction where patr_type = trxType);
+				IF orderDate != currentDate
+					THEN currentCount := 1;
+				ELSE
+					currentCount := (SELECT COALESCE(MAX(SUBSTRING(patr_trx_id, '-(.*)'))::int, 0) from payment.payment_transaction where patr_type = trxType) +1;
+				END IF;
+				newCount := lpad(currentCount::text, 4, '0');
+				newCode := CONCAT(trxType, '#', TO_CHAR(currentDate::date, 'YYYYMMDD'), '-', newCount);
+				note := 'Repayment';
+				creditAmount := amount;
+				UPDATE payment.user_accounts SET usac_saldo = usac_saldo + amount WHERE usac_account_number = targetNumber;
+				UPDATE payment.user_accounts SET usac_saldo = usac_saldo - amount WHERE usac_account_number = sourceNumber;	
+		END CASE;
+	ELSE
+		orderType := SUBSTRING(orderNumber, '(.*)#');
+		orderDate := SUBSTRING(orderNumber, '#(.*)-')::date;
+		lastCount := SUBSTRING(orderNumber, '-(.*)')::int;	
+		IF orderDate != currentDate
+			THEN currentCount := 1;
+		ELSE 
+			currentCount := lastCount + 1;
+		END IF;
+		newCount := lpad(currentCount::text, 4, '0');
+		IF orderType = 'BO'::text
+			THEN 
+			trxType := 'TRB';
+			newCode := CONCAT(trxType, '#', TO_CHAR(currentDate::date, 'YYYYMMDD'), '-', newCount);
+			note := 'Booking';
+			creditAmount := amount;
+			UPDATE payment.user_accounts SET usac_saldo = usac_saldo - amount WHERE usac_account_number = sourceNumber;	
+		ELSE
+			trxType := 'ORM';
+		 	newCode := CONCAT(trxType, '#', TO_CHAR(currentDate::date, 'YYYYMMDD'), '-', newCount);
+			note := 'Food Order';
+			creditAmount := amount;
+			UPDATE payment.user_accounts SET usac_saldo = usac_saldo - amount WHERE usac_account_number = sourceNumber;	
+		END IF;
+	END IF;
+	INSERT INTO payment.payment_transaction (
+		patr_trx_id,
+		patr_debet,
+		patr_credit,
+		patr_type,
+		patr_note,
+		patr_order_number,
+		patr_source_id,
+		patr_target_id,
+		patr_trx_number_ref,
+		patr_user_id,
+		patr_modified_date
+	) VALUES (
+		newCode,
+		debetAmount,
+		creditAmount,
+		trxType,
+		note,
+		OrderNumber,
+		sourceNumber::numeric,
+		targetNumber::numeric,
+		TransactionNumberRef,
+		userId,
+		now()
+	);
+END; $$ 
+LANGUAGE plpgsql;
+----------------------------------------------------------------------
