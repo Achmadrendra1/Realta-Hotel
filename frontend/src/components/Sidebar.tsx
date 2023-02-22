@@ -5,11 +5,11 @@ import {useState} from 'react'
 const { Sider } = Layout
 const Sidebar = ({nav, collapsed, logo, locations} : {nav:any, collapsed:any, logo:string, locations:string}) => {
     return(
-        <Sider width={collapsed ? 120 : 250} trigger={null} collapsible collapsed={collapsed} >
+        <Sider width={collapsed ? 120 : 250} trigger={null} collapsible collapsed={collapsed} className='relative'>
             <Menu 
-            className='p-5'
+            className='p-5 fixed top-0'
             mode="inline"
-            style={{ height: '100%' }}>
+            style={{ height: '100%', width: collapsed ? 80 : 250 }}>
                 <div className={`bg-white w-full ${collapsed ? 'p-0' : 'pl-8'} flex`}>
                     <img src={logo} alt='logo' className='w-auto h-8'/>
                 </div>

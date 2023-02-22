@@ -2,9 +2,6 @@
 /dist
 /node_modules
 
-#package
-/package.json
-
 #Module
 
 
@@ -41,4 +38,5 @@ lerna-debug.log*
 !.vscode/extensions.json
 
 .env
-package.json
+package-lock.json
+yarn.lock
