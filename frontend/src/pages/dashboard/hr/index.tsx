@@ -1,4 +1,6 @@
 import Department from "@/components/hr/department"
+import Employee from "@/components/hr/employee"
+import WorkOrders from "@/components/hr/workorders"
 import Dashboard from "@/layouts/dashboard"
 import { Tabs } from "antd"
 
@@ -15,12 +17,12 @@ const Human = () => {
                 {
                     key: '2',
                     label: 'Employees',
-                    children: <div>Test</div>
+                    children: <Employee/>
                 },
                 {
                     key: '3',
                     label: 'Work Orders',
-                    children: <div>Test</div>
+                    children: <WorkOrders/>
                 }
             ]}/>
         </Dashboard>
