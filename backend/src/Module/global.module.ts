@@ -246,7 +246,7 @@ import { PurchaseOrderDetailController } from 'src/Controller/Purchasing/purchas
     StockPhotoController,
     VendorController,
     PurchaseOrderHeaderController,
-    PurchaseOrderDetailController
+    PurchaseOrderDetailController,
   ],
   providers: [
     AppService,
@@ -291,8 +291,7 @@ import { PurchaseOrderDetailController } from 'src/Controller/Purchasing/purchas
     StockPhotoService,
     VendorService,
     PurchaseOrderHeaderService,
-    PurchaseOrderDetailService
-
+    PurchaseOrderDetailService,
   ],
   // controllers: [AppController, EntitysController, BankController, PaymentGatewayController, UserAccountController, PaymentTransactionController],
   // providers: [AppService, EntitysService, BankService, PaymentGatewayService, UserAccountService, PaymentTransactionService],
