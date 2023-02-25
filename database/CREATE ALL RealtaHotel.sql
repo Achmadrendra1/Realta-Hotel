@@ -171,7 +171,7 @@ create table hotel.hotels(
 	hotel_description varchar(500),
 	hotel_rating_star smallint,
 	hotel_phonenumber varchar(25),
-	hotel_modified_date timestamp,
+	hotel_modified_date date,
 	hotel_addr_id int,
 	constraint pk_hotel_id primary key (hotel_id),
 	constraint fk_hotel_addr_id foreign key (hotel_addr_id) references master.address(addr_id) on update cascade on delete cascade
@@ -180,7 +180,7 @@ create table hotel.hotel_reviews(
 	hore_id serial,
 	hore_user_review varchar(125),
 	hore_rating smallint,
-	hore_created_on timestamp,
+	hore_created_on date,
 	hore_user_id int,
 	hore_hotel_id int,
 	constraint pk_hore_id primary key (hore_id),
@@ -194,14 +194,14 @@ create table hotel.facilities(
 	faci_max_number int,
 	faci_measure_unit varchar(15),
 	faci_room_number varchar(6) UNIQUE,
-	faci_startdate timestamp,
-	faci_enddate timestamp,
+	faci_startdate date,
+	faci_enddate date,
 	faci_low_price money,
 	faci_high_price money,
 	faci_rate_price money,
 	faci_discount money,
 	faci_tax_rate money,
-	faci_modified_date timestamp,
+	faci_modified_date date,
 	faci_cagro_id int,
 	faci_hotel_id int,
 	constraint pk_faci_id primary key (faci_id),
@@ -209,30 +209,31 @@ create table hotel.facilities(
 	constraint fk_faci_cagro_id foreign key (faci_cagro_id) references master.category_group(cagro_id) on update cascade on delete cascade
 );
 create table hotel.facility_photo(
-	fapho_faci_id int unique,
+	fapho_faci_id int,
 	fapho_id serial,
-	fapho_thumbnail_filename varchar(50),
-	fapho_photo_filename varchar(50),
+	fapho_thumbnail_filename varchar(125),
+	fapho_photo_filename varchar(125),
 	fapho_primary bool,
 	fapho_url varchar(255),
-	fapho_modified_date timestamp,
-	constraint pk_fapho_id primary key(fapho_id, fapho_faci_id),
+	fapho_modified_date date,
+	constraint pk_fapho_id primary key(fapho_id),
 	constraint fk_fapho_faci_id foreign key (fapho_faci_id) references hotel.facilities(faci_id) on delete cascade on update cascade
 );
 create table hotel.facility_price_history(
-	faph_faci_id int unique,
+	faph_faci_id int,
 	faph_id serial,
-	faph_startdate timestamp,
-	faph_enddate timestamp,
+	faph_startdate date,
+	faph_enddate date,
 	faph_low_price money,
 	faph_high_price money,
 	faph_rate_price money,
 	faph_discount money,
 	faph_tax_rate money,
-	faph_modified_date timestamp,
+	faph_modified_date date,
 	faph_user_id int,
-	constraint pk_facility_price_history primary key (faph_id, faph_faci_id),
-	constraint fk_faph_faci_id foreign key (faph_faci_id) references hotel.facilities(faci_id) on delete cascade on update cascade
+	constraint pk_facility_price_history primary key (faph_id),
+	constraint fk_faph_faci_id foreign key (faph_faci_id) references hotel.facilities(faci_id) on delete cascade on update cascade,
+	constraint fk_faph_user_id foreign key (faph_user_id) references users.users(user_id) on update cascade on delete cascade
 );
 
 --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
