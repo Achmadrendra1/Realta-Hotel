@@ -1,11 +1,4 @@
-import {
-  Column,
-  Entity,
-  Index,
-  OneToMany,
-  PrimaryGeneratedColumn,
-} from "typeorm";
-import { WorkOrderDetail } from "./WorkOrderDetail";
+import { Column, Entity, Index, PrimaryGeneratedColumn } from "typeorm";
 
 @Index("seta_id_pk", ["setaId"], { unique: true })
 @Index("service_task_seta_name_key", ["setaName"], { unique: true })
@@ -24,10 +17,4 @@ export class ServiceTask {
 
   @Column("smallint", { name: "set_seq", nullable: true })
   setSeq: number | null;
-
-  @OneToMany(
-    () => WorkOrderDetail,
-    (workOrderDetail) => workOrderDetail.wodeSeta
-  )
-  workOrderDetails: WorkOrderDetail[];
 }

@@ -2,13 +2,10 @@ import {
   Column,
   Entity,
   Index,
-  JoinColumn,
-  ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
 } from "typeorm";
 import { WorkOrderDetail } from "./WorkOrderDetail";
-import { Users } from "./Users";
 
 @Index("work_orders_pkey", ["woroId"], { unique: true })
 @Entity("work_orders", { schema: "hr" })
@@ -29,16 +26,12 @@ export class WorkOrders {
   })
   woroStatus: string | null;
 
+  @Column("integer", { name: "woro_user_id", nullable: true })
+  woroUserId: number | null;
+
   @OneToMany(
     () => WorkOrderDetail,
     (workOrderDetail) => workOrderDetail.wodeWoro
   )
   workOrderDetails: WorkOrderDetail[];
-
-  @ManyToOne(() => Users, (users) => users.workOrders, {
-    onDelete: "CASCADE",
-    onUpdate: "CASCADE",
-  })
-  @JoinColumn([{ name: "woro_user_id", referencedColumnName: "userId" }])
-  woroUser: Users;
 }

@@ -134,6 +134,9 @@ import { StockPhotoController } from 'src/Controller/Purchasing/stock-photo/stoc
 import { VendorController } from 'src/Controller/Purchasing/vendor/vendor.controller';
 import { PurchaseOrderHeaderController } from 'src/Controller/Purchasing/purchase-order-header/purchase-order-header.controller';
 import { PurchaseOrderDetailController } from 'src/Controller/Purchasing/purchase-order-detail/purchase-order-detail.controller';
+import { DepartmentService } from 'src/Service/HR/department/department.service';
+import { DepartmentController } from 'src/Controller/HR/department/department.controller';
+import { PolicyCategoryGroup } from 'src/entities/PolicyCategoryGroup';
 
 @Module({
   imports: [
@@ -148,6 +151,7 @@ import { PurchaseOrderDetailController } from 'src/Controller/Purchasing/purchas
       Regions,
       ServiceTask,
       PriceItems,
+      PolicyCategoryGroup,
 
       Bank,
       BookingOrderDetail,
@@ -216,7 +220,6 @@ import { PurchaseOrderDetailController } from 'src/Controller/Purchasing/purchas
     HotelReviewsController,
     UserAccountController,
     PaymentTransactionController,
-    EmployeeController,
     RestoMenusController,
     RestoMenuPhotosController,
     OrderMenusController,
@@ -247,6 +250,10 @@ import { PurchaseOrderDetailController } from 'src/Controller/Purchasing/purchas
     VendorController,
     PurchaseOrderHeaderController,
     PurchaseOrderDetailController,
+
+    // HR
+    EmployeeController,
+    DepartmentController,
   ],
   providers: [
     AppService,
@@ -263,7 +270,6 @@ import { PurchaseOrderDetailController } from 'src/Controller/Purchasing/purchas
 
     UserAccountService,
     PaymentTransactionService,
-    EmployeeService,
     RestoMenusService,
     RestoMenuPhotosService,
     OrderMenusService,
@@ -292,6 +298,10 @@ import { PurchaseOrderDetailController } from 'src/Controller/Purchasing/purchas
     VendorService,
     PurchaseOrderHeaderService,
     PurchaseOrderDetailService,
+
+    // HR
+    EmployeeService,
+    DepartmentService,
   ],
   // controllers: [AppController, EntitysController, BankController, PaymentGatewayController, UserAccountController, PaymentTransactionController],
   // providers: [AppService, EntitysService, BankService, PaymentGatewayService, UserAccountService, PaymentTransactionService],

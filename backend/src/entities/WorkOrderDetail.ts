@@ -7,8 +7,6 @@ import {
   PrimaryGeneratedColumn,
 } from "typeorm";
 import { Employee } from "./Employee";
-import { Facilities } from "./Facilities";
-import { ServiceTask } from "./ServiceTask";
 import { WorkOrders } from "./WorkOrders";
 
 @Index("work_order_detail_pkey", ["wodeId"], { unique: true })
@@ -50,26 +48,18 @@ export class WorkOrderDetail {
   })
   wodeNotes: string | null;
 
+  @Column("integer", { name: "wode_seta_id", nullable: true })
+  wodeSetaId: number | null;
+
+  @Column("integer", { name: "wode_faci_id", nullable: true })
+  wodeFaciId: number | null;
+
   @ManyToOne(() => Employee, (employee) => employee.workOrderDetails, {
     onDelete: "CASCADE",
     onUpdate: "CASCADE",
   })
   @JoinColumn([{ name: "wode_emp_id", referencedColumnName: "empId" }])
   wodeEmp: Employee;
-
-  @ManyToOne(() => Facilities, (facilities) => facilities.workOrderDetails, {
-    onDelete: "CASCADE",
-    onUpdate: "CASCADE",
-  })
-  @JoinColumn([{ name: "wode_faci_id", referencedColumnName: "faciId" }])
-  wodeFaci: Facilities;
-
-  @ManyToOne(() => ServiceTask, (serviceTask) => serviceTask.workOrderDetails, {
-    onDelete: "CASCADE",
-    onUpdate: "CASCADE",
-  })
-  @JoinColumn([{ name: "wode_seta_id", referencedColumnName: "setaId" }])
-  wodeSeta: ServiceTask;
 
   @ManyToOne(() => WorkOrders, (workOrders) => workOrders.workOrderDetails, {
     onDelete: "CASCADE",
