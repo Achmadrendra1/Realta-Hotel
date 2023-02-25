@@ -15,7 +15,6 @@ import { FacilityPhoto } from "./FacilityPhoto";
 import { FacilityPriceHistory } from "./FacilityPriceHistory";
 import { RestoMenus } from "./RestoMenus";
 import { StockDetail } from "./StockDetail";
-import { WorkOrderDetail } from "./WorkOrderDetail";
 
 @Index("pk_faci_id", ["faciId"], { unique: true })
 @Index("facilities_faci_room_number_key", ["faciRoomNumber"], { unique: true })
@@ -123,10 +122,4 @@ export class Facilities {
 
   @OneToMany(() => StockDetail, (stockDetail) => stockDetail.stodFaci)
   stockDetails: StockDetail[];
-
-  @OneToMany(
-    () => WorkOrderDetail,
-    (workOrderDetail) => workOrderDetail.wodeFaci
-  )
-  workOrderDetails: WorkOrderDetail[];
 }

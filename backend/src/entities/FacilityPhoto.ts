@@ -8,8 +8,8 @@ import {
 } from "typeorm";
 import { Facilities } from "./Facilities";
 
-@Index("pk_fapho_id", ["faphoFaciId", "faphoId"], { unique: true })
 @Index("facility_photo_fapho_faci_id_key", ["faphoFaciId"], { unique: true })
+@Index("pk_fapho_id", ["faphoFaciId", "faphoId"], { unique: true })
 @Entity("facility_photo", { schema: "hotel" })
 export class FacilityPhoto {
   @Column("integer", { primary: true, name: "fapho_faci_id" })

@@ -1,59 +1,72 @@
 import { DeleteOutlined, EditOutlined, SearchOutlined } from "@ant-design/icons"
 import { Button, Col, Form, Input, Modal, Row, Space, Table } from "antd"
 import Buttons from "../Button"
-import { useState } from "react"
+import { useEffect, useState } from "react"
+import { useDispatch, useSelector } from "react-redux"
+import { AddDept, DeleteDept, GetDeptAll, UpdateDept } from "@/Redux/Action/HR"
 
 const Department = () => {
     const [open, setOpen] = useState(false)
     const [form, setForm] = useState('')
     const [ids, setId] = useState(0)
+    const [titles, setTitle] = useState('Add')
+    const [search, setSearch] = useState('')
+    const dispatch = useDispatch()
+    const { data } = useSelector((state:any) => state.DeptReducer)
+
+    const filterData = data.filter((item:any) => {
+        if (search === "") {
+          return item;
+        } else {
+          return item.deptName.toLowerCase().includes(search.toLocaleLowerCase());
+        }
+    });
+
+    useEffect(() => {
+        dispatch(GetDeptAll())
+    }, [])
+
     const onClose = () => {
         setOpen(false)
         setForm('')
         setId(0)
     }
 
-    const dummy = [
-        {
-            id: 1,
-            name: 'Humanresources'
-        },
-        {
-            id: 2,
-            name: 'Office boy'
-        },
-        {
-            id: 3,
-            name: 'Front Office'
-        },
-        {
-            id: 4,
-            name: 'Executive'
-        },
-        {
-            id: 5,
-            name: 'Receptionist'
+    const addItems = () => {
+        const data = {
+            "name": form
         }
-    ]
+        dispatch(AddDept(data))
+        setOpen(false)
+    }
     
+    const updateItems = () => {
+        const data = {
+            id: ids,
+            name: form
+        }
+        dispatch(UpdateDept(data))
+        setOpen(false)
+    }
     const onOpens = (id?:any) => {
         setOpen(true)
         id && setId(id)
-        const details = id ? dummy.find(item => item.id == id) : ''
-        setForm(id ? details?.name : details)
+        const details = id ? data.find((item:any) => item.deptId == id) : ''
+        setForm(id ? details?.deptName : details)
+        setTitle(id ? 'Edit' : 'Add')
     }
 
     const columns = [
         {
-            title: 'No',
-            key: 'index',
-            render: (text:any, record:any, index:any) => index + 1,
-            width: '10%'
+            title: 'Department ID',
+            dataIndex: 'deptId',
+            key: 'deptId',
+            width: '15%',
         },
         {
             title: 'Name',
-            dataIndex: 'name',
-            key: 'name',
+            dataIndex: 'deptName',
+            key: 'deptName',
         },
         {
             title: 'Action',
@@ -61,18 +74,18 @@ const Department = () => {
             width: '20%',
             render: (_:any, record:any) => (
                 <Space size={10}>
-                    <Button className="border-none text-blue-400" onClick={() => onOpens(record.id)}><EditOutlined /></Button>
-                    <Button className="border-none text-red-400" onClick={() => console.log(record.id)}><DeleteOutlined /></Button>
+                    <Button className="border-none text-blue-400" onClick={() => onOpens(record.deptId)}><EditOutlined /></Button>
+                    <Button className="border-none text-red-400" onClick={() => dispatch(DeleteDept(record.deptId))}><DeleteOutlined /></Button>
                 </Space>
             )
         }
     ];
     return(
         <div>
-            <Modal title='Add Task' open={open} closable={false} footer={
+            <Modal title={titles + ' Name'} open={open} closable={false} footer={
                 <div className="w-full flex gap-5 justify-end">
                     <Buttons funcs={onClose} type='danger'>Cancel</Buttons>
-                    <Buttons funcs={onClose}>Save</Buttons>
+                    <Buttons funcs={() => ids ? updateItems() : addItems()}>Save</Buttons>
                 </div>
             }>
                 <Form.Item label='Department'>
@@ -82,14 +95,14 @@ const Department = () => {
             <Row justify='space-between' className="my-5">
                 <Col>
                     <Space size={17}>
-                        <Input className="w-96 py-2 rounded-full" placeholder="Department Name" prefix={<SearchOutlined />}/>
+                        <Input className="w-96 py-2 rounded-full" value={search} placeholder="Department Name" prefix={<SearchOutlined />} onChange={e => setSearch(e.target.value)}/>
                     </Space>
                 </Col>
                 <Col>
-                    <Buttons funcs={onOpens}>Add</Buttons>
+                    <Buttons funcs={() => onOpens()}>Add</Buttons>
                 </Col>
             </Row>
-            <Table loading={dummy ? false : true} columns={columns} dataSource={dummy}/>
+            <Table loading={data ? false : true} columns={columns} dataSource={filterData.sort((a:any, b:any) => a.deptId - b.deptId)} pagination={{ position: ['bottomCenter'] }}/>
         </div>
     )
 }
