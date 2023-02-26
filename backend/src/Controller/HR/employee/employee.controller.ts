@@ -5,28 +5,21 @@ import { EmployeeService } from 'src/Service/HR/employee/employee.service';
 export class EmployeeController {
   constructor(private employeeService: EmployeeService) {}
 
-  @Get('/all')
+  @Get('/')
   allEmployee(): Promise<any> {
-    return this.employeeService.findEmployee();
+    return this.employeeService.getEmployee();
   }
 
-  @Get('/work-orders')
-  allWork(): Promise<any> {
-    return this.employeeService.allWorkOrderUser();
-  }
+  @Get('/:id')
+  async detailEmployee(@Param('id') param): Promise<any> {
+    const profile = await this.employeeService.employeeDetail(param);
+    const deptHist = await this.employeeService.getDeptHistory(param);
+    const payHist = await this.employeeService.getPayHistory(param);
 
-  @Get('/work-orders/details')
-  allWorkDetails(): Promise<any> {
-    return this.employeeService.getWorkOrdersDetail();
-  }
-
-  @Get('/job')
-  empJobs(): Promise<any> {
-    return this.employeeService.empJob();
-  }
-
-  @Get('/job/:name')
-  jobName(@Param('name') param): Promise<any> {
-    return this.employeeService.getJobByName(param);
+    return {
+      employees: profile[0],
+      deptHist,
+      payHist,
+    };
   }
 }

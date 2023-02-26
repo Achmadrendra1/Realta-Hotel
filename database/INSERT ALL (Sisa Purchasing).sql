@@ -2010,26 +2010,29 @@ insert into hr.employee values (19, 'IDN', '2023-01-12', 'S', 'M', '2019-07-11 2
 insert into hr.employee values (20, 'IDN', '2023-01-12', 'S', 'M', '2019-07-11 22:13:15.547295-07', '1', 4, 0, 1, NULL, now(), 18, 11);
 
 -- Work order detail
-insert into hr.work_order_detail values (1, 'Cleaning the room', 'INPROGESS', now(), NULL, NULL, 17, 1, 1, 1);
-insert into hr.work_order_detail values (2, 'Providing breakfast', 'COMPLETED', now(), (now() + interval '1 hours'), NULL, 16, 2, 9, 2);
-insert into hr.work_order_detail values (3, 'Providing lunch', 'CANCELLED', now(), NULL, NULL, 16, 6, 9, 3);
-insert into hr.work_order_detail values (4, 'Providing dinner', 'COMPLETED', (now() - interval '2 hours'), now(), NULL, NULL, NULL, 15, 4);
-insert into hr.work_order_detail values (5, 'Providing drinks', 'INPROGRESS', now(), NULL, NULL, NULL, 15, 5, 5);
-insert into hr.work_order_detail values (6, 'Providing towels', 'COMPLETED', (now() - interval '1 hours'), now(), NULL, 17, 1, 8, 6);
-insert into hr.work_order_detail values (7, 'Providing linens', 'CANCELLED', now(), NULL, NULL, NULL, 9, NULL, 7);
-insert into hr.work_order_detail values (8, 'Providing swimming pool facilities', 'INPROGRESS', now(), (now() + interval '1 hours'), NULL, NULL, 5, 6, 8);
-insert into hr.work_order_detail values (9, 'Providing spa facilities', 'COMPLETED', (now() - interval '1 hours'), now(), NULL, 20, 13, 3, 9);
-insert into hr.work_order_detail values (10, 'Providing gym facilities', 'INPROGRESS', now(), NULL, NULL, NULL, 4, 9, 10);
-insert into hr.work_order_detail values (11, 'Providing laundry service', 'CANCELLED', now(), NULL, NULL, NULL, 15, 17, 11);
-insert into hr.work_order_detail values (12, 'Providing room service', 'CANCELLED', (now() - interval '1 hours'), NULL, NULL, 17, 1, 8, 12);
-insert into hr.work_order_detail values (13, 'Providing wifi service', 'CANCELLED', now(), NULL, NULL, NULL, 14, 5, 13);
-insert into hr.work_order_detail values (14, 'Providing transportation service', 'CANCELLED', now(), NULL, NULL, NULL, 14, 5, 14);
-insert into hr.work_order_detail values (15, 'Providing concierge service', 'INPROGRESS', now(), (now() + interval '1 hours'), NULL, NULL, 5, 6, 15);
-insert into hr.work_order_detail values (16, 'Providing receptionist service', 'COMPLETED', now(), (now() + interval '1 hours'), NULL, 17, 1, 1, 16);
-insert into hr.work_order_detail values (17, 'Providing security service', 'INPROGRESS', now(), NULL, NULL, 16, 2, 9, 17);
-insert into hr.work_order_detail values (18, 'Providing housekeeping service', 'COMPLETED', now(), (now() + interval '2 hours'), NULL, 16, 6, 9, 18);
-insert into hr.work_order_detail values (19, 'Providing parking service', 'INPROGRESS', now(), NULL, NULL, NULL, NULL, 15, 19);
-insert into hr.work_order_detail values (20, 'Providing tour service', 'COMPLETED', now(), (now() + interval '1 hours'), NULL, NULL, 15, 5, 20);
+insert into hr.work_order_detail values (1, NULL, NULL, NULL, NULL, NULL, 1, NULL, NULL, 1);
+insert into hr.work_order_detail values (2, NULL, NULL, NULL, NULL, NULL, 2, NULL, NULL, 2);
+insert into hr.work_order_detail values (3, NULL, NULL, NULL, NULL, NULL, 3, NULL, NULL, 3);
+insert into hr.work_order_detail values (4, NULL, NULL, NULL, NULL, NULL, 4, NULL, NULL, 4);
+insert into hr.work_order_detail values (5, NULL, NULL, NULL, NULL, NULL, 5, NULL, NULL, 5);
+
+insert into hr.work_order_detail values (6, NULL, NULL, NULL, NULL, NULL, 6, NULL, NULL, 6);
+insert into hr.work_order_detail values (7, NULL, NULL, NULL, NULL, NULL, 7, NULL, NULL, 7);
+insert into hr.work_order_detail values (8, NULL, NULL, NULL, NULL, NULL, 8, NULL, NULL, 8);
+insert into hr.work_order_detail values (9, NULL, NULL, NULL, NULL, NULL, 9, NULL, NULL, 9);
+insert into hr.work_order_detail values (10, NULL, NULL, NULL, NULL, NULL, 10, NULL, NULL, 10);
+
+insert into hr.work_order_detail values (11, NULL, NULL, NULL, NULL, NULL, 11, NULL, NULL, 11);
+insert into hr.work_order_detail values (12, NULL, NULL, NULL, NULL, NULL, 12, NULL, NULL, 12);
+insert into hr.work_order_detail values (13, NULL, NULL, NULL, NULL, NULL, 13, NULL, NULL, 13);
+insert into hr.work_order_detail values (14, NULL, NULL, NULL, NULL, NULL, 14, NULL, NULL, 14);
+insert into hr.work_order_detail values (15, NULL, NULL, NULL, NULL, NULL, 15, NULL, NULL, 15);
+
+insert into hr.work_order_detail values (16, NULL, NULL, NULL, NULL, NULL, 16, NULL, NULL, 16);
+insert into hr.work_order_detail values (17, NULL, NULL, NULL, NULL, NULL, 17, NULL, NULL, 17);
+insert into hr.work_order_detail values (18, NULL, NULL, NULL, NULL, NULL, 18, NULL, NULL, 18);
+insert into hr.work_order_detail values (19, NULL, NULL, NULL, NULL, NULL, 19, NULL, NULL, 19);
+insert into hr.work_order_detail values (20, NULL, NULL, NULL, NULL, NULL, 20, NULL, NULL, 20);
 
 -- Employee Pay History
 insert into hr.employee_pay_history values (1, '2023-01-01', 30000000, 1, now());

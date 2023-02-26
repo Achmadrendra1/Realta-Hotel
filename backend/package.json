@@ -18,7 +18,7 @@
         "test:cov": "jest --coverage",
         "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
         "test:e2e": "jest --config ./test/jest-e2e.json",
-        "pg": "typeorm-model-generator -o model -h localhost -d RealtaHotelV2 -p 5432 -u postgres -x 11111111 -s users,booking,hotel,hr,master,payment,purchasing,resto -e postgres"
+        "pg": "typeorm-model-generator -o model -h localhost -d uhuy_hotel -p 5432 -u postgres -x admin -s master,users,booking,hotel,hr,payment,purchasing,resto -e postgres"
 
     },
     "dependencies": {
