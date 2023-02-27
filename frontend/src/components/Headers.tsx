@@ -1,48 +1,95 @@
 import { Menu, List, Dropdown, Space, Avatar, MenuProps, Button, Row, Col, Input, DatePicker, Divider, AutoComplete } from "antd"
-import { MenuOutlined, SearchOutlined } from '@ant-design/icons'
+import { MenuOutlined, SearchOutlined, UserOutlined, WalletOutlined } from '@ant-design/icons'
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Buttons from "./Button";
 import Image from "next/image";
 import { useRouter } from "next/router";
+import { useDispatch, useSelector } from "react-redux";
+import { doUsacRequest } from "@/Redux/Action/Payment/paymentDashAction";
+import { doGetUser } from "@/Redux/Action/User/GetDataUser";
 
 const { Item } = List
 const { RangePicker } = DatePicker
 
 const Headers = ({nav, logo, click, queries} : {nav?:any, logo?:string, click?:any, queries?:any}) => {
     const router = useRouter()
+    const dispatch = useDispatch();
     const splits = router.asPath.split('/')
     const [isLogin, setIsLogin] = useState(false)
     const [location, setLocation] = useState('')
     const [date, setDate] = useState([])
     const [guest, setGuest] = useState(0)
-    const [open, setOpen] = useState(false)
+    const [open, setOpen] = useState(false);
+
+    const [isActive, setIsActive] = useState(false);
+    const user = useSelector((state:any) => state.GetUserReducer.getUser);
+  const accNumber = `131${user[0]?.user_phone_number}`
+  const {account} = useSelector((state:any) => state.payUserAccReducer)
+  const userAcc = account?.filter((obj:any) => obj.usacUserId === user[0]?.user_id)
+  const fintechAcc = userAcc?.filter((obj:any) => obj.usacType === 'Payment')
+  const acc = fintechAcc?.find((item: any) => item.usacAccountNumber == accNumber)
+  const saldo = (parseInt(acc?.usacSaldo).toLocaleString("id-ID", {style:"currency", currency:"IDR", minimumFractionDigits: 0,
+  maximumFractionDigits: 0}))
+
+  useEffect(()=>{
+    acc ? setIsActive(true) : setIsActive(false)
+   }, [acc])
+
+   // Cek apakah token JWT masih valid
+function isTokenExpired() {
+    let token
+    if (typeof window !== 'undefined') {
+      // Perform localStorage action
+      token = localStorage.getItem('token')
+    }
+    if (!token) {
+      return true;
+    }
+  
+    const payload = JSON.parse(atob(token.split('.')[1]));
+    const expirationTime = payload.exp * 1000; // konversi ke milidetik
+    return Date.now() > expirationTime;
+  }
+  
+  // Hapus data di localStorage jika token sudah kadaluarsa
+  if (isTokenExpired()) {
+    if (typeof window !== 'undefined') {
+      // Perform localStorage action
+      localStorage.removeItem('token')
+    }
+  }
+    useEffect(() => {
+      localStorage.getItem("token") ? setIsLogin(true) : setIsLogin(false);
+    }, []);
+    
+    useEffect(()=>{
+      dispatch(doGetUser())
+      dispatch(doUsacRequest())
+    }, [])
+  
+    const logout =()=>{ 
+      localStorage.removeItem("token");
+      setIsLogin(false)
+    }
+
     //Pisahin isAdmin atau user
-    const items: MenuProps['items'] = [
-        {
-          label: (<Link href='/'>Profile</Link>),
-          key: '0',
-        },
-        {
-          label: (<Link href='/'>History</Link>),
-          key: '1',
-        },
-        {
-          label: (<Link href='/'>Dashboard</Link>),
-          key: '2',
-        },
-        {
-          label: (<Link href='/users/login'>Login</Link>),
-          key: '4',
-        },
-        {
-          type: 'divider'
-        },
-        {
-          label: (<Link href={''} onClick={()=>setIsLogin(false)}><span className="text-red-600">Log Out</span></Link>),
-          key: '3',
-        },
-      ];
+    const menuUser = (
+        <Menu>
+          <Menu.Item key="0"><Link href="/users">Profile</Link></Menu.Item>
+          <Menu.Item key="1"><Link href="/History">History</Link></Menu.Item>
+          <Menu.Item key="2"><Link href={""} onClick={logout}>
+              <span className="text-red-600">Log Out</span>
+            </Link></Menu.Item>
+        </Menu>
+      );
+      const menu2 = (
+        <Menu>
+          <Menu.Item key="1">Menu Item A</Menu.Item>
+          <Menu.Item key="2">Menu Item B</Menu.Item>
+          <Menu.Item key="3">Menu Item C</Menu.Item>
+        </Menu>
+      );
     const change = () => {
         click()
     }
@@ -53,7 +100,7 @@ const Headers = ({nav, logo, click, queries} : {nav?:any, logo?:string, click?:a
         { value: 'Banten' },
     ];
 
-    console.log(queries)
+    // console.log(queries)
     return(
         <div className="w-full border-b-2">
             <div className="container mx-auto">
@@ -118,16 +165,23 @@ const Headers = ({nav, logo, click, queries} : {nav?:any, logo?:string, click?:a
                     }
                     <Divider type="vertical"/>
                     <Item className="ml-auto">
-                        { isLogin ?
-                        <Dropdown menu={{items}} trigger={['click']}>
-                            <a onClick={e => e.preventDefault()}>
-                                <Space>
-                                    <span className="">Guest</span>
-                                </Space>
-                            </a>
-                        </Dropdown> :
-                        <Buttons funcs={()=>setIsLogin(true)}>Sign in</Buttons>
-                        }
+                        {isLogin ? (
+              <div className="flex items-center">
+                <div>
+                  <p className="text-md mr-2 leading-6">{user[0] ? user[0].user_full_name: 'Guest'}</p>
+                  {isActive ? <p className="text-sm text-blue-700 hover:underline hover:cursor-pointer">
+                    <WalletOutlined /> {saldo}
+                  </p> : <p onClick={()=>router.push('/payment')} className="text-sm text-blue-700 hover:underline hover:cursor-pointer">
+                    <WalletOutlined /> Activate
+                  </p>}
+                </div>
+               <Dropdown overlay={isLogin ? menuUser : menu2} trigger={["click"]} className="h-8">
+                <Avatar size="default" icon={<UserOutlined />} className="ml-4 hover:cursor-pointer" />
+              </Dropdown>
+              </div>
+            ) : (
+              <Buttons funcs={()=>router.push("../users/login")}>Sign in</Buttons>
+            )}
                     </Item>
                 </Menu>
             </div>

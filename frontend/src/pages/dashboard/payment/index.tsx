@@ -12,8 +12,11 @@ import {
   Button,
   Card,
   Col,
+  Input,
+  message,
   Modal,
   Row,
+  Select,
   Space,
   Statistic,
   Table,
@@ -24,66 +27,34 @@ import { useState, useEffect } from "react";
 import AddBank from "./addBank";
 import EditBank from "./editBank";
 import { useDispatch, useSelector } from "react-redux";
-import { doBankRequest, doTransactionRequest } from "@/Redux/Action/Payment/paymentDashAction";
+import { doBankRequest, doDeleteBank, doPagaRequest, doTransactionRequest, doUsacRequest } from "@/Redux/Action/Payment/paymentDashAction";
+import Bank from "./bank";
+import Fintech from "./fintech";
 
 interface DataType {
   key: React.Key;
+  patr_id : number;
   patr_trx_id: string;
-  chinese: any;
-  math: number;
-  english: number;
+  patr_order_number: any;
+  total_amount: number;
+  patr_trx_: number;
+  patr_trx_number_ref : any;
+  user_full_name:string
 }
 
-interface DataTypePaga {
-  key: React.Key;
-  pagaName: string;
-  pagaCode: number;
-  pagaEntityId: number;
-}
 
-interface DataTypeBank {
-  key: React.Key;
-  bankName: string;
-  bankCode: number;
-  bankEntityId: number;
-}
-
-export default function index() {
-  const [isOpenAdd, setOpenAdd] = useState(false);
-  const [isOpenEdit, setOpenEdit] = useState(false);
-  const [id, setId] = useState(0);
-
-  const handleClose = (data:boolean) => {
-    setOpenAdd(data)
-  }
-
-  const handleOk = () => {
-    setTimeout(() => {
-      setOpenAdd(false);
-      setOpenEdit(false);
-    }, 2000);
-  };
-
-  const handleCancel = () => {
-    console.log("Clicked cancel button");
-    setOpenAdd(false);
-    setOpenEdit(false);
-  };
-
-  const editData = (id: number) => {
-    setOpenEdit(true);
-    setId(id);
-  };
-
-  const dispatch = useDispatch();
-
+export default function index() {  
+  const [filteredData, setFilteredData] = useState([]);
   const dataTrx = useSelector(
     (state: any) => state.payTrxHistoryReducer.payDashTrx
   );
 
-  const dataBank = useSelector(
-    (state:any) => state.payBankReducer.payBank
-  )
+
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(doTransactionRequest());
+  }, []);
+  
 
   let countResto = dataTrx.filter((obj:any) => obj.patr_order_number.split('#')[0] === "MENUS").length
   let amountResto = dataTrx.filter((obj:any) => obj.patr_order_number.split('#')[0] === "MENUS")
@@ -100,164 +71,57 @@ export default function index() {
     totalAmountBO += parseInt(item.total_amount.split(',')[0].replace(/[^0-9]/g, ''))
   }
   let totalAmountBooking = totalAmountBO.toLocaleString("id-ID", {style:"currency", currency:"IDR"})
-  const { confirm } = Modal;
-  const showDeleteConfirm = () => {
-    confirm({
-      title: 'Are you sure delete this task?',
-      icon: <ExclamationCircleFilled />,
-      content: 'Some descriptions',
-      okText: 'Yes',
-      okType: 'danger',
-      cancelText: 'No',
-      onOk() {
-        console.log('OK');
-      },
-      onCancel() {
-        console.log('Cancel');
-      },
-    });
-  };
 
-  useEffect(() => {
-    dispatch(doTransactionRequest());
-  }, []);
-  
-  useEffect(()=>{
-    dispatch(doBankRequest());
-  }, [])
+ 
 
-  const columns: ColumnsType<DataTypeBank> = [
-    {
-      title: "ID",
-      dataIndex: "bankEntityId",
-    },
-    {
-      title: "Bank Code",
-      dataIndex: "bankCode",
-      sorter: {
-        compare: (a, b) => a.bankCode - b.bankCode,
-        multiple: 3,
-      },
-    },
-    {
-      title: "Bank Name",
-      dataIndex: "bankName",
-      // sorter: {
-      //   compare: (a, b) => a.math - b.math,
-      //   multiple: 2,
-      // },
-    },
-    {
-      title: "Action",
-      key: "action",
-      render: (_, record) => (
-        <Space>
-          <EditOutlined
-            className="hover:text-blue-700 cursor-pointer"
-            onClick={() => editData(record.bankEntityId)}
-          />
-          <DeleteOutlined className="hover:text-red-700 cursor-pointer"
-          onClick={showDeleteConfirm} />
-        </Space>
-      ),
-    },
-  ];
-  const columnsPaga: ColumnsType<DataTypePaga> = [
-    {
-      title: "ID",
-      dataIndex: "pagaEntityId",
-    },
-    {
-      title: "Payment Gateway Code",
-      dataIndex: "pagaCode",
-      sorter: {
-        compare: (a, b) => a.pagaCode - b.pagaCode,
-        multiple: 3,
-      },
-    },
-    {
-      title: "Payment Gateway Name",
-      dataIndex: "pagaName",
-      // sorter: {
-      //   compare: (a, b) => a.pagaName - b.pagaName,
-      //   multiple: 2,
-      // },
-    },
-  ];
   const columnsTrans: ColumnsType<DataType> = [
     {
       title: "ID",
       dataIndex: "patr_id",
+      sorter: {
+        compare: (a, b) => a.patr_id - b.patr_id,
+        multiple: 1,
+      },
     },
     {
       title: "Transaction Number",
       dataIndex: "patr_trx_id",
       sorter: {
         compare: (a, b) => (a.patr_trx_id < b.patr_trx_id ? -1 : 1),
-        multiple: 3,
+        multiple: 2,
       },
     },
     {
       title: "Order Number",
       dataIndex: "patr_order_number",
       sorter: {
-        compare: (a, b) => a.math - b.math,
-        multiple: 2,
+        compare: (a, b) => (a.patr_order_number < b.patr_order_number ? -1 : 1),
+        multiple: 3,
       },
     },
     {
       title: "Amount",
       dataIndex: "total_amount",
       sorter: {
-        compare: (a, b) => a.math - b.math,
-        multiple: 2,
+        compare: (a, b) => (a.total_amount < b.total_amount ? -1 : 1),
+        multiple: 4,
       },
     },
     {
       title: "Trx Ref Number",
       dataIndex: "patr_trx_number_ref",
       sorter: {
-        compare: (a, b) => a.math - b.math,
-        multiple: 2,
+        compare: (a, b) => (a.patr_trx_number_ref < b.patr_trx_number_ref ? -1 : 1),
+        multiple: 5,
       },
     },
     {
       title: "User",
       dataIndex: "user_full_name",
       sorter: {
-        compare: (a, b) => a.math - b.math,
-        multiple: 2,
+        compare: (a, b) => (a.user_full_name < b.user_full_name ? -1 : 1),
+        multiple: 6,
       },
-    },
-  ];
-
-  const data: DataTypeBank[] = [
-    {
-      key: "1",
-      bankEntityId: 1,
-      bankCode: 315,
-      bankName: "BCA",
-    },
-    {
-      key: "2",
-      bankEntityId: 1,
-      bankCode: 316,
-      bankName: "Mandiri",
-    },
-    {
-      key: "3",
-      bankEntityId: 1,
-      bankCode: 317,
-      bankName: "BNI",
-    },
-  ];
-
-  const dataPaga: DataTypePaga[] = [
-    {
-      key: "1",
-      pagaEntityId: 1,
-      pagaCode: 354,
-      pagaName: "H-Pay",
     },
   ];
 
@@ -269,35 +133,56 @@ export default function index() {
   ) => {
     console.log("params", pagination, filters, sorter, extra);
   };
+  
+  const { Search } = Input;
+  const handleChange = (value: string) => {
+    console.log(`selected ${value}`);
+    const data = dataTrx.filter((obj:any) => obj.patr_trx_id.split('#')[0] === value)
+    setFilteredData(data)
+  };
+
+  const onSearch = (value: string) => {
+    const filteredData = dataTrx.filter((item:any) => {
+      const values = Object.values(item).map((x:any) =>
+        x.toString().toLowerCase()
+      );
+      return values.some(x => x.includes(value.toLowerCase()));
+    });
+    setFilteredData(filteredData)
+  };
+  const tableData = filteredData.length > 0 ? filteredData : dataTrx;
 
   return (
     <Dashboard>
-      {isOpenAdd ? (
-        <AddBank
-          show={isOpenAdd}
-          clickOk={handleOk}
-          clickCancel={handleCancel}
-          handleClose={handleClose}
-        />
-      ) : null}
-      {isOpenEdit ? (
-        <EditBank
-          show={isOpenEdit}
-          clickOk={handleOk}
-          clickCancel={handleCancel}
-          id={id}
-        />
-      ) : null}
+   
       <p className="text-xl font-bold mb-6">Payments Dashboard</p>
       <Tabs>
         <Tabs.TabPane tab="List Transaction" key={"list"}>
-          <div className="">
+          <div className="flex-col">
             <Row gutter={16}>
               <Col span={18}>
+                <div className="mb-4 flex justify-between">
                 <p className="mb-4 text-lg">List Transaction</p>
+                <div>
+                <Search placeholder="Search" onSearch={onSearch} style={{ width: 200 }} className="mr-2"/>
+                  <Select
+                     placeholder="Filter"
+                    style={{ width: 150 }}
+                    onChange={handleChange}
+                    options={[
+                      // { value: "TP", label: "Top Up" },
+                      { value: "TRB", label: "Transfer Booking" },
+                      // { value: "RPY", label: "Repayment" },
+                      // { value: "RF", label: "Refund" },
+                      { value: "ORM", label: "Order Menu" },
+                      
+                    ]}
+                  />
+                </div>
+                </div>
                 <Table
                   columns={columnsTrans}
-                  dataSource={dataTrx}
+                  dataSource={tableData}
                   onChange={onChange}
                 />
               </Col>
@@ -308,14 +193,12 @@ export default function index() {
                     <Statistic
                       title="Restaurant"
                       value={countResto}
-                      valueStyle={{ color: "#3f8600" }}
                       prefix={<CoffeeOutlined />}
                       suffix="Order"
                     />
                     <Statistic
-                      // title="Restaurant"
                       value={totalAmountResto}
-                      valueStyle={{ color: "#3f8600" }}
+                      valueStyle={{ color: "blue" }}
                       prefix={<DollarCircleOutlined />}
                     />
                   </Card>
@@ -323,14 +206,12 @@ export default function index() {
                     <Statistic
                       title="Booking Orders"
                       value={countBooking}
-                      valueStyle={{ color: "#3f8600" }}
                       prefix={<CoffeeOutlined />}
                       suffix="Order"
                     />
                     <Statistic
-                      // title="Restaurant"
                       value={totalAmountBooking}
-                      valueStyle={{ color: "#3f8600" }}
+                      valueStyle={{ color: "green" }}
                       prefix={<DollarCircleOutlined />}
                     />
                   </Card>
@@ -339,70 +220,13 @@ export default function index() {
             </Row>
           </div>
         </Tabs.TabPane>
-        <Tabs.TabPane tab="Payment Methods" key={"method"}>
-        <div>
-          <Row gutter={16} className="mb-4">
-            <Col span={16}>
-            <div className=" w-full">
-            <p className=" mb-4 text-lg">Payment Gateway</p>
-            <Table
-              columns={columnsPaga}
-              dataSource={dataPaga}
-              onChange={onChange}
-            />
-          </div>
-            </Col>
-            <Col span={8} className="text-center ">
-              <Statistic
-                title="Total H-Pay Active"
-                value={160}
-                prefix={<CheckOutlined />}
-              />
-            </Col>
-          </Row>
-          <Row gutter={16}>
-            <Col span={16}>
-            <div className=" w-full">
-            <div className="flex justify-between mb-4">
-              <p className="text-lg">Bank</p>
-              <Button
-                className="bg-blue-600 text-white"
-                onClick={() => setOpenAdd(true)}
-              >
-                Add New Bank
-              </Button>
-            </div>
-            <Table columns={columns} dataSource={dataBank} onChange={onChange} />
-          </div>
-            </Col>
-            <Col span={8} className="text-center">
-                 <Statistic
-                title="Total Bank"
-                value={160}
-                prefix={<BankOutlined />}
-              />
-            </Col>
-          </Row>
-        </div>
-
-          
+        <Tabs.TabPane tab="Bank" key={"bank"}>
+            <Bank />
+        </Tabs.TabPane>
+        <Tabs.TabPane tab="Fintech" key={'fintech'}>
+         <Fintech />
         </Tabs.TabPane>
       </Tabs>
     </Dashboard>
   );
 }
-
-// <Space direction="vertical">
-//         <div className=" w-full">
-//           <p className=" mb-4 text-lg">Payment Gateway</p>
-//           <Table columns={columnsPaga} dataSource={dataPaga} onChange={onChange} />
-//         </div>
-//         <Divider />
-//         <div className=" w-full">
-//           <div className="flex justify-between mb-4">
-//             <p className="text-lg">Bank</p>
-//             <Button className="bg-blue-600 text-white" onClick={()=>setOpenAdd(true)}>Add New Bank</Button>
-//           </div>
-//           <Table columns={columns} dataSource={data} onChange={onChange} />
-//         </div>
-//         </Space>

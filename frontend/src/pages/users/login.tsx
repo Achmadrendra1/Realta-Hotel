@@ -1,37 +1,90 @@
-import { MailOutlined, LockOutlined } from "@ant-design/icons";
-import { Button, Card, Checkbox, Col, Form, Input, Row, Space } from "antd";
-import { useDispatch } from "react-redux";
+import { doLogin } from "@/Redux/Action/User/auth";
+import Layouts from "@/layouts/layout";
+import { LockOutlined, MailOutlined } from "@ant-design/icons";
+import { Button, Card, Form, Input, Space, message } from "antd";
+import { Layout } from "antd";
+import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 
-const Login = () => {
+export default function Login() {
+  const { Content } = Layout;
+  const { IsAuth, error } = useSelector((state: any) => state.loginReducer);
   const dispatch = useDispatch();
+  const route = useRouter();
+  const [messageApi, contextHolder] = message.useMessage();
+
+  //kalo udah pake form gausah pake ini
+  // const [login, setLogin]: any = useState({
+  //   email: "",
+  //   password: "",
+  // });
+
+  // let eventHandler = (input: any) => (event: any) => {
+  //   setLogin({ ...login, [input]: event.target.value });
+  // };
+
+  // let Logins = (e: any) => {
+  //   e.preventDefault();
+  //   dispatch(doLogin(login));
+  // };
+
+  useEffect(() => {
+    if (IsAuth) {
+       
+      messageApi
+        .open({
+          type: "loading",
+          content: "loading....",
+          duration: 1,
+        })
+        .then(() => message.success("Login Berhasil", 0.5))
+        .then(() =>  route.push("/"));
+    }
+  }, [IsAuth]);
+
+  useEffect(() => {
+    if (error !== null) {
+      messageApi
+        .open({
+          type: "loading",
+          content: "loading....",
+          duration: 1,
+        })
+        .then(() => message.error(error, 0.5));
+    }
+  }, [error]);
+
+  //Pas click submit dispatch langsung, kalo formnya masih kosong validasi muncul
   const onFinish = (values: any) => {
     console.log("Success:", values);
-    // dispatch(doLogin(values));
+    dispatch(doLogin(values));
   };
+
+  const contentStyle: React.CSSProperties = {
+    textAlign: "center",
+    minHeight: 120,
+    lineHeight: "120px",
+    color: "#fff",
+    backgroundColor: "#fff",
+  };
+
+  const { Meta } = Card;
   return (
-    <div>
-      <Row className="bg-stone-100  min-h-screen">
-        <Col span={12}>
-          <div className="flex ml-5 mt-4">
-            <img src="/assets/icon.svg" className="h-7" />
-            <h3 className="text-lg font-bold mb-4">otelapp</h3>
-          </div>
-          <Space direction="vertical" style={{ display: "flex", margin: 70 }}>
-            <p style={{ marginLeft: 160 }} className="font-medium text-2xl">
-              Welcome Back
-            </p>
-            <span style={{ marginLeft: 170 }} className="font-medium text-xs">
-              Please enter your details.
-            </span>
+    <Layouts>
+      <Content style={contentStyle}>
+        {contextHolder}
+        <Space size={10}>
+          <Card size="small">
+            <Meta title="SIGN IN TO YOUR ACCOUNT" style={{ marginTop: 30 }} />
 
             <Form
               name="normal_login"
               className="login-form"
               initialValues={{ remember: true }}
-              layout="vertical"
               onFinish={onFinish}
               style={{
-                marginTop: 10,
+                marginTop: 30,
                 width: 300,
                 marginLeft: 100,
                 marginRight: 100,
@@ -39,66 +92,50 @@ const Login = () => {
             >
               <Form.Item
                 name="email"
-                rules={[{ message: "Please input your Email!" }]}
+                rules={[
+                  { required: true, message: "Please input your Email!" },
+                ]}
               >
-                <label className="block font-medium mb-2">Email</label>
                 <Input
-                  //   prefix={<MailOutlined className="site-form-item-icon" />}
-                  placeholder="Enter your email"
+                  prefix={<MailOutlined className="site-form-item-icon" />}
+                  placeholder=" Your Email"
+                  // onChange={eventHandler("email")}
                   maxLength={20}
                 />
               </Form.Item>
               <Form.Item
                 name="password"
-                rules={[{ message: "Please input your Password!" }]}
+                rules={[
+                  { required: true, message: "Please input your Password!" },
+                ]}
               >
-                <label className="block font-medium mb-2" >Password</label>
                 <Input.Password
-                  //   prefix={<LockOutlined className="site-form-item-icon" />}
+                  prefix={<LockOutlined className="site-form-item-icon" />}
                   type="password"
-                  placeholder="*******"
+                  placeholder=" Your Password"
                   // onChange={eventHandler("password")}
                 />
               </Form.Item>
+              {/* <Form.Item>
+                  <a className="login-form-forgot" href="">
+                    Forgot password
+                  </a>
+                </Form.Item> */}
 
-                <Form.Item name="remember" valuePropName="checked" noStyle>
-                  <Checkbox >
-                    <p className="font-medium text-xs">
-                    Remember me
-                    </p> 
-                    </Checkbox>
-                </Form.Item>
-
-                <a className=" font-medium text-xs text-[#0e7490]" href="" style={{marginLeft:90}} >
-                  Forgot password
-                </a>
-             
-              
-
-              <Button htmlType="submit" className="login-form-button mt-3" style={{width:300}}>
-                Sign in
+              <Button
+                htmlType="submit"
+                className="login-form-button mt-0"
+                // onClick={Logins}
+              >
+                Log in
               </Button>
-              <Form.Item style={{marginLeft:40, marginTop:5}}>
-               
-                Don't have an account yet?
-                
-                <a href="" className="font-sans ml-1 text-[#0e7490]" >
-                Sign Up
-                </a>
+              <Form.Item>
+                Don't have an account? <a href="">register now!</a>
               </Form.Item>
             </Form>
-          </Space>
-        </Col>
-        <Col span={12}>
-          <img
-            className="bg-origin-border min-h-screen"
-            src="/assets/content-1.jpg"
-            alt="hotel.png"
-          />
-        </Col>
-      </Row>
-    </div>
+          </Card>
+        </Space>
+      </Content>
+    </Layouts>
   );
-};
-
-export default Login;
+}
