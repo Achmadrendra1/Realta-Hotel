@@ -101,23 +101,5 @@ export class BankService {
       await this.entityService.deleteEntity(id)
 
       return 'Data Bank Deleted'
-  
-
-    // //Cek status delete
-    // if (result[0].affected > 0 && result[1].affected > 0) {
-    //   throw new HttpException(
-    //     {
-    //       message: 'Data Bank Successfully Deleted',
-    //     },
-    //     HttpStatus.OK,
-    //   );
-    // } else {
-    //   throw new HttpException(
-    //     {
-    //       message: 'Data Bank Already Exist',
-    //     },
-    //     HttpStatus.NOT_FOUND,
-    //   );
-    // }
   }
 }

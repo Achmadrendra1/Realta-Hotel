@@ -2,9 +2,7 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UserAccounts } from 'src/entities/UserAccounts';
 import { DataSource, Repository } from 'typeorm';
-import * as myEnum from '../../../DataEnum';
-import { userInfo } from 'os';
-import { Users } from 'src/entities/Users';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class UserAccountService {
@@ -12,6 +10,7 @@ export class UserAccountService {
     @InjectRepository(UserAccounts)
     private uacRepository: Repository<UserAccounts>,
   ) {}
+  x;
 
   async getAll() {
     return await this.uacRepository.find();
@@ -19,23 +18,23 @@ export class UserAccountService {
 
   async getPayment() {
     return await this.uacRepository.find({
-      where : {usacUserId : 1}
-    })
+      where: { usacUserId: 1 },
+    });
   }
 
   async getDataWithJoin() {
     return this.uacRepository.find({
-      relations : {
-        usacUser : true
+      relations: {
+        usacUser: true,
       },
-      select : {
-        usacAccountNumber :true,
-        usacUser : {
-          userId : true,
-          userFullName : true
-        }
-      }
-  })
+      select: {
+        usacAccountNumber: true,
+        usacUser: {
+          userId: true,
+          userFullName: true,
+        },
+      },
+    });
   }
 
   async getByAccNumber(accNumber: string) {
@@ -45,8 +44,10 @@ export class UserAccountService {
   }
 
   async createAccount(items: UserAccounts) {
-    const result = await this.uacRepository
-      .save({
+    try {
+      const salt = await bcrypt.genSalt(10);
+      const code = await bcrypt.hash(items.usacSecureCode, salt);
+      await this.uacRepository.save({
         usacEntityId: items.usacEntityId,
         usacUserId: items.usacUserId,
         usacAccountNumber: items.usacAccountNumber,
@@ -54,21 +55,20 @@ export class UserAccountService {
         usacType: items.usacType,
         usacExpmonth: items.usacExpmonth,
         usacExpyear: items.usacExpyear,
+        usacSecureCode: code,
         usacModifiedDate: new Date(),
-      })
-      .catch((err) => {
-        throw new HttpException(
-          {
-            message: err.message,
-          },
-          HttpStatus.BAD_REQUEST,
-        );
       });
-
-    return {
-      message: 'Data Payment Gateway Berhasil Dibuat',
-      result: result,
-    };
+      const result = await this.getAll();
+      return {
+        message: 'Data Payment Gateway Berhasil Dibuat',
+        result: result,
+      };
+    } catch (error) {
+      throw new HttpException(
+        { message: `Card Number Or Bank Is Already Exist` },
+        HttpStatus.BAD_REQUEST,
+      );
+    }
   }
 
   async updateAccount(accNumber: string, items: UserAccounts) {
@@ -105,25 +105,29 @@ export class UserAccountService {
     };
   }
 
-  async deleteAccount(accNumber: string) {
-    const result = await this.uacRepository.delete({
+  async deleteAccount(accNumber: any) {
+    await this.uacRepository.delete({
       usacAccountNumber: accNumber,
     });
 
-    //Cek status delete
-    if (result.affected > 0) {
-      throw new HttpException(
-        {
-          message: 'Data User Account Berhasil Dihapus',
-        },
-        HttpStatus.OK,
-      );
+    return 'User Account Deleted';
+  }
+
+  async checkSecureCode(items: any) {
+    const acc = await this.getByAccNumber(items.sourceNumber);
+    const check = await bcrypt.compare(items.secureCode, acc.usacSecureCode);
+    if (check == true) {
+      return {
+        status: check,
+        message: 'Your PIN is correct! Please Wait',
+      };
     } else {
       throw new HttpException(
         {
-          message: 'Data User Account Tidak Ditemukan',
+          status: check,
+          message: 'Oops, Your PIN is incorrect! Please check and try again!',
         },
-        HttpStatus.NOT_FOUND,
+        HttpStatus.FORBIDDEN,
       );
     }
   }

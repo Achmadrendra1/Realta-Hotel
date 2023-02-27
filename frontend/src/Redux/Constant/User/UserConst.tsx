@@ -1,0 +1,15 @@
+const UserConst = {
+    // Auth
+    LOGIN_USER: 'LOGIN_USER',
+    LOGIN_USER_SUCCESS: 'LOGIN_USER_SUCCESS',
+    LOGIN_USER_FAILED: 'LOGIN_USER_FAILED',
+
+    // Get Data User
+    GET_DATA_USER : 'GET_DATA_USER',
+    DATA_USER_SUCCESS : 'DATA_USER_GET_SUCCESS',
+    DATA_USER_FAILED : 'DATA_USER_GET_FAILED',
+
+
+}
+
+export default UserConst;
