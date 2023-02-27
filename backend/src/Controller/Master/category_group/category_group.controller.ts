@@ -6,8 +6,14 @@ import {
   Param,
   Post,
   Put,
+  UseInterceptors,
+  UploadedFile,
 } from '@nestjs/common';
+import { ServiceTask } from 'src/entities/ServiceTask';
 import { CategoryGroupService } from 'src/Service/Master/category_group/category_group.service';
+import { CategoryGroup } from 'src/entities/CategoryGroup';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { diskStorage } from 'multer';
 
 @Controller('category')
 export class CategoryGroupController {
@@ -25,20 +31,67 @@ export class CategoryGroupController {
     return this.CategoryGroupService.findOneCategoryGroup(id);
   }
 
+  //find by Name
+  @Get('/name/:name')
+  categoryName(@Param('name') params): Promise<any> {
+    return this.CategoryGroupService.getCategoryGroupByName(params);
+  }
+  //find by Provinces
+  @Get('/policy/:name')
+  categoryPoli(@Param('name') params): Promise<any> {
+    return this.CategoryGroupService.getCategoryGroupByPolicy(params);
+  }
+  //find by Hotel
+  @Get('/facility/:name')
+  categoryFaci(@Param('name') params): Promise<any> {
+    return this.CategoryGroupService.getCategoryGroupByFacility(params);
+  }
+
   //create new
-  @Post('create')
-  create(@Body() body: any): Promise<any> {
-    return this.CategoryGroupService.createCategoryGroup(body);
+  @Post('insert')
+  async createCategoryGroup(@Body() data: CategoryGroup) {
+    const CategoryGroup = await this.CategoryGroupService.createCategoryGroup(
+      data,
+    );
+    if (!CategoryGroup) {
+      return 'failed insert to Category';
+    } else {
+      return ' success insert to Category';
+    }
+  }
+
+  @Post('upload')
+  @UseInterceptors(
+    FileInterceptor('file', {
+      dest: 'public/upload',
+      storage: diskStorage({
+        destination: 'public/upload',
+        filename(req, file, cb) {
+          return cb(null, file.originalname);
+        },
+      }),
+    }),
+  )
+  async uploadFile(@UploadedFile() file: any, @Body() body) {
+    const result = await this.CategoryGroupService.storeFileInfo(file, body);
+    if (!result) {
+      return 'gagal upload';
+    } else {
+      return {
+        message: 'berhasil upload',
+        result: result.result,
+      };
+    }
   }
 
   //update
-  @Put(':id')
+  @Put('edit/:id')
   update(@Param() params, @Body() body: any): Promise<any> {
     return this.CategoryGroupService.updateCategoryGroup(params.id, body);
   }
 
   //delete
-  @Delete(':id')
+  @Delete('delete/:id')
   remove(@Param() params): Promise<any> {
     return this.CategoryGroupService.deleteCategoryGroup(params.id);
   }
