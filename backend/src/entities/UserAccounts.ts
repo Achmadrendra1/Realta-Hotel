@@ -38,6 +38,9 @@ export class UserAccounts {
   @Column("smallint", { name: "usac_expyear", nullable: true })
   usacExpyear: number | null;
 
+  @Column("character varying", { name: "usac_secure_code", nullable: true })
+  usacSecureCode: string | null;
+
   @Column("timestamp without time zone", {
     name: "usac_modified_date",
     nullable: true,

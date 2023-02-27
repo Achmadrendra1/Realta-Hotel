@@ -6,6 +6,7 @@ import {
   PrimaryGeneratedColumn,
 } from "typeorm";
 import { PurchaseOrderHeader } from "./PurchaseOrderHeader";
+import { VendorProduct } from "./VendorProduct";
 
 @Index("vendor_id_pk", ["vendorId"], { unique: true })
 @Entity("vendor", { schema: "purchasing" })
@@ -26,11 +27,8 @@ export class Vendor {
   @Column("integer", { name: "vendor_priority", nullable: true })
   vendorPriority: number | null;
 
-  @Column("timestamp without time zone", {
-    name: "vendor_register_date",
-    nullable: true,
-  })
-  vendorRegisterDate: Date | null;
+  @Column("date", { name: "vendor_register_date", nullable: true })
+  vendorRegisterDate: string | null;
 
   @Column("character varying", {
     name: "vendor_weburl",
@@ -50,4 +48,7 @@ export class Vendor {
     (purchaseOrderHeader) => purchaseOrderHeader.poheVendor
   )
   purchaseOrderHeaders: PurchaseOrderHeader[];
+
+  @OneToMany(() => VendorProduct, (vendorProduct) => vendorProduct.veproVendor)
+  vendorProducts: VendorProduct[];
 }

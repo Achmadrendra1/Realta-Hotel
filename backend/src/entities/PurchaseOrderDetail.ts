@@ -4,16 +4,12 @@ import {
   Index,
   JoinColumn,
   ManyToOne,
-  OneToOne,
   PrimaryGeneratedColumn,
 } from "typeorm";
 import { PurchaseOrderHeader } from "./PurchaseOrderHeader";
 import { Stocks } from "./Stocks";
 
 @Index("purchase_order_detail_id_pk", ["podeId", "podePoheId"], {
-  unique: true,
-})
-@Index("purchase_order_detail_pode_pohe_id_key", ["podePoheId"], {
   unique: true,
 })
 @Entity("purchase_order_detail", { schema: "purchasing" })
@@ -63,9 +59,9 @@ export class PurchaseOrderDetail {
   })
   podeModifiedDate: Date | null;
 
-  @OneToOne(
+  @ManyToOne(
     () => PurchaseOrderHeader,
-    (purchaseOrderHeader) => purchaseOrderHeader.purchaseOrderDetail,
+    (purchaseOrderHeader) => purchaseOrderHeader.purchaseOrderDetails,
     { onDelete: "CASCADE", onUpdate: "CASCADE" }
   )
   @JoinColumn([{ name: "pode_pohe_id", referencedColumnName: "poheId" }])

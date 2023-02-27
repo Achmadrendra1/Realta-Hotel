@@ -55,11 +55,11 @@ export class PaymentTransaction {
   })
   patrOrderNumber: string | null;
 
-  @Column("integer", { name: "patr_source_id", nullable: true })
-  patrSourceId: number | null;
+  @Column("numeric", { name: "patr_source_id", nullable: true })
+  patrSourceId: string | null;
 
-  @Column("integer", { name: "patr_target_id", nullable: true })
-  patrTargetId: number | null;
+  @Column("numeric", { name: "patr_target_id", nullable: true })
+  patrTargetId: string | null;
 
   @Column("character varying", {
     name: "patr_trx_number_ref",

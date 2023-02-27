@@ -5,11 +5,9 @@ import {
   JoinColumn,
   ManyToOne,
   OneToMany,
-  OneToOne,
   PrimaryGeneratedColumn,
 } from "typeorm";
 import { PurchaseOrderDetail } from "./PurchaseOrderDetail";
-import { Employee } from "./Employee";
 import { Vendor } from "./Vendor";
 import { StockDetail } from "./StockDetail";
 
@@ -64,18 +62,14 @@ export class PurchaseOrderHeader {
   })
   pohePayType: string | null;
 
-  @OneToOne(
+  @Column("integer", { name: "pohe_emp_id", nullable: true })
+  poheEmpId: number | null;
+
+  @OneToMany(
     () => PurchaseOrderDetail,
     (purchaseOrderDetail) => purchaseOrderDetail.podePohe
   )
-  purchaseOrderDetail: PurchaseOrderDetail;
-
-  @ManyToOne(() => Employee, (employee) => employee.purchaseOrderHeaders, {
-    onDelete: "CASCADE",
-    onUpdate: "CASCADE",
-  })
-  @JoinColumn([{ name: "pohe_emp_id", referencedColumnName: "empId" }])
-  poheEmp: Employee;
+  purchaseOrderDetails: PurchaseOrderDetail[];
 
   @ManyToOne(() => Vendor, (vendor) => vendor.purchaseOrderHeaders, {
     onDelete: "CASCADE",

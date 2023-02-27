@@ -4,7 +4,6 @@ import {
   Index,
   JoinColumn,
   ManyToOne,
-  OneToOne,
   PrimaryGeneratedColumn,
 } from "typeorm";
 import { Facilities } from "./Facilities";
@@ -15,7 +14,6 @@ import { Stocks } from "./Stocks";
   unique: true,
 })
 @Index("stock_detail_id_pk", ["stodId", "stodStockId"], { unique: true })
-@Index("stock_detail_stod_stock_id_key", ["stodStockId"], { unique: true })
 @Entity("stock_detail", { schema: "purchasing" })
 export class StockDetail {
   @Column("integer", { primary: true, name: "stod_stock_id" })
@@ -61,7 +59,7 @@ export class StockDetail {
   @JoinColumn([{ name: "stod_pohe_id", referencedColumnName: "poheId" }])
   stodPohe: PurchaseOrderHeader;
 
-  @OneToOne(() => Stocks, (stocks) => stocks.stockDetail, {
+  @ManyToOne(() => Stocks, (stocks) => stocks.stockDetails, {
     onDelete: "CASCADE",
     onUpdate: "CASCADE",
   })

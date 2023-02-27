@@ -1,73 +1,74 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
-</p>
+# NEST JS GROUP 2
+Dokumentasi Nestjs kelompok 2, udah terdiri dari folder controller dan servis yang sudah dipisah - pisah persetiap module-nya
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+## Instalation
+Untuk instalasi awal pada folder Nest.js ini yang pertama dilakukan setelah git pull maka lakukan perintah ini
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
-
-## Description
-
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
-
-## Installation
-
-```bash
-$ npm install
+```
+cd Nestjs
+npm install
 ```
 
-## Running the app
+Apabila instalasi semua package pada package.json sudah dibuat maka Anda bisa membuat file dengan ekstensi .env, Dengan format default sebagai berikut:
+```
+PORT = 4000
+DATABASE_PORT = 5432
+HOST = localhost
 
-```bash
-# development
-$ npm run start
-
-# watch mode
-$ npm run start:dev
-
-# production mode
-$ npm run start:prod
+DATABASE = (nama_db_realta)
+DATABASE_USER = postgres
+DATABASE_PASSWORD = (password_postgres)
+SECRET_KEY = (secret_password)
 ```
 
-## Test
-
-```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
+Apabila .env kalian sudah dibuat maka kalian bisa jalankan perintah ini di terminal
+```
+npm start
 ```
 
-## Support
+Atau
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+```
+npm start:dev
+```
+## Warn
+Pada folder ini kalian tidak perlu menginstal entity atau model dari database, karena sudah tersedia dan kalian hanya perlu koneksi database kalian menggunakan .env seperti yang diatas.
 
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](LICENSE).
+## Generate code
+Dokumentasi generate code
+```ts
+generateCode(currentCode:string) {
+    //Ambil Tanggal Sekarang  
+    const date = new Date();
+    //Ubah Format Tanggal ke YYYYMMDD
+    const currentDate =
+      date.getFullYear() +
+      ("0" + (date.getMonth() + 1)).slice(-2) +
+      ("0" + date.getDate()).slice(-2);
+    //Deklarasi Counting
+    let count = 0;
+    //Split Kode Jadi 2 array [TRB] [YYYYMMDD-0000]
+    let delHashtag = currentCode.split("#");
+    //Split Kode Jadi 2 array [YYYYMMDD] [0000]
+    let delDash = delHashtag[1].split("-");
+    
+    //Ambil last date dari last code yang diinput
+    let lastDate = delDash[0]
+    //Ambil last counting dari last code yang diinput
+    let lastCount = parseInt(delDash[1])
+  
+    //Cek tanggal sekarang dengan last date, Kalau tidak sama countnya di reset dari 1
+    if (currentDate != lastDate) {
+      count = 1;
+    } else {
+      //kalau sama countnya di lanjut dari last count yang diinput
+      count = lastCount
+      count++
+    }
+    //Set count tadi ke string dan tambahkan 0 didepan nya (Maks 4 digit)
+    let newCounting = count.toString().padStart(4, "0");
+    //Set code baru
+    let newCode = `TRB#${currentDate}-${newCounting}`
+    return newCode
+  }
+```

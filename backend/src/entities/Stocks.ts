@@ -3,12 +3,12 @@ import {
   Entity,
   Index,
   OneToMany,
-  OneToOne,
   PrimaryGeneratedColumn,
 } from "typeorm";
 import { PurchaseOrderDetail } from "./PurchaseOrderDetail";
 import { StockDetail } from "./StockDetail";
 import { StockPhoto } from "./StockPhoto";
+import { VendorProduct } from "./VendorProduct";
 
 @Index("stock_id_pk", ["stockId"], { unique: true })
 @Entity("stocks", { schema: "purchasing" })
@@ -42,12 +42,6 @@ export class Stocks {
   @Column("smallint", { name: "stock_scrap", nullable: true })
   stockScrap: number | null;
 
-  @Column("money", { name: "stock_price", nullable: true })
-  stockPrice: string | null;
-
-  @Column("money", { name: "stock_standar_cost", nullable: true })
-  stockStandarCost: string | null;
-
   @Column("character varying", {
     name: "stock_size",
     nullable: true,
@@ -74,9 +68,12 @@ export class Stocks {
   )
   purchaseOrderDetails: PurchaseOrderDetail[];
 
-  @OneToOne(() => StockDetail, (stockDetail) => stockDetail.stodStock)
-  stockDetail: StockDetail;
+  @OneToMany(() => StockDetail, (stockDetail) => stockDetail.stodStock)
+  stockDetails: StockDetail[];
 
   @OneToMany(() => StockPhoto, (stockPhoto) => stockPhoto.sphoStock)
   stockPhotos: StockPhoto[];
+
+  @OneToMany(() => VendorProduct, (vendorProduct) => vendorProduct.veproStock)
+  vendorProducts: VendorProduct[];
 }

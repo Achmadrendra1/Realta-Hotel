@@ -21,7 +21,11 @@ export class UserPassword {
   })
   uspaPasswordhash: string | null;
 
-  @Column("character varying", { name: "uspa_passwordsalt", nullable: true })
+  @Column("character varying", {
+    name: "uspa_passwordsalt",
+    nullable: true,
+    length: 10,
+  })
   uspaPasswordsalt: string | null;
 
   @OneToOne(() => Users, (users) => users.userPassword, {
