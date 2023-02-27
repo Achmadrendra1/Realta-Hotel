@@ -20,7 +20,7 @@ export class UserAccountController {
         return this.accountService.getDataWithJoin()
     }
 
-    @Get('one')
+    @Post('one')
     getByAccNumber(@Body() body){
         return this.accountService.getByAccNumber(body.usacAccountNumber)
     }
@@ -30,13 +30,18 @@ export class UserAccountController {
         return this.accountService.createAccount(body)
     }
 
+    @Post('/check')
+    checkSecure(@Body() body){
+        return this.accountService.checkSecureCode(body)
+    }
+
     @Put()
     updateAcc(@Body() body){
         return this.accountService.updateAccount(body.usacAccountNumber, body)
     }
 
-    @Delete()
-    deleteAcc(@Body() body){
-        return this.accountService.deleteAccount(body.usacAccountNumber)
+    @Delete(':accNumber')
+    deleteAcc(@Param() params){
+        return this.accountService.deleteAccount(params.accNumber)
     }
 }

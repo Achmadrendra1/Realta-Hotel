@@ -1,15 +1,15 @@
-import { doUpdateBank } from "@/Redux/Action/Payment/paymentDashAction";
+import { doPagaUpdate } from "@/Redux/Action/Payment/paymentDashAction";
 import Buttons from "@/components/Button";
-import {  Form, Input, Modal } from "antd";
+import { Form, Input, Modal } from "antd";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 
-export default function EditBank(props: any) {
+export default function EditFintech(props: any) {
   const dispatch = useDispatch();
   const id = props.id;
   const data = props.data;
   const {handleClose} = props
-  const details = data.find((item: any) => item.bankEntityId == id);
+  const details = data.find((item: any) => item.pagaEntityId == id);
   const [formValues, setFormValues] = useState(details);
 
   const handleInputChange = (input: any) => (e: any) => {
@@ -18,7 +18,7 @@ export default function EditBank(props: any) {
 
   const onFinish = () => {
     console.log("Success:", formValues);
-    dispatch(doUpdateBank(formValues))
+    dispatch(doPagaUpdate(formValues))
     handleClose(false)
   };
 
@@ -29,7 +29,7 @@ export default function EditBank(props: any) {
   return (
     <>
       <Modal
-        title="Edit Data Bank"
+        title="Edit Data Fintech"
         open={props.show}
         onOk={props.clickOk}
         onCancel={props.clickCancel}
@@ -42,17 +42,17 @@ export default function EditBank(props: any) {
           onFinishFailed={onFinishFailed}
           initialValues={formValues}
         >
-          <Form.Item label="Bank Code" name='bankCode' rules={[{ required: true, message: "Please input bank code!" }]}>
+          <Form.Item label="Fintech Code" name='pagaCode' rules={[{ required: true, message: "Please input code!" }]}>
             <Input
-              placeholder="Input Bank Code"
-              onChange={handleInputChange("bankCode")}
+              placeholder="Input Code"
+              onChange={handleInputChange("pagaCode")}
               
             />
           </Form.Item>
-          <Form.Item label="Bank Name" name='bankName' rules={[{ required: true, message: "Please input bank name!" }]}>
+          <Form.Item label="Fintech Name" name='pagaName' rules={[{ required: true, message: "Please input fintech name!" }]}>
             <Input
-              placeholder="Input Bank Name"
-              onChange={handleInputChange("bankName")}
+              placeholder="Input Fintech Name"
+              onChange={handleInputChange("pagaName")}
             />
           </Form.Item>
           <Form.Item label=" " colon={false}>
