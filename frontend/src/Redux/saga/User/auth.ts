@@ -8,7 +8,7 @@ try {
     const result = yield axios(API("Post", "/auth", action.payload));
     localStorage.setItem("token", result.data.token);
     //cek hasil jwt verify
-    console.log(result.data.data);
+    // console.log(result.data.data);
     yield put({ type: UserConst.LOGIN_USER_SUCCESS, payload: result.data });
   } 
 catch (e: any) {

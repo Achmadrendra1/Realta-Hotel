@@ -13,6 +13,8 @@ export default combineReducers({
   DeptReducer,
   employeesReducer,
   detailEmpReducer,
+  
+  //User And Auth
   loginReducer,
   GetUserReducer,
 

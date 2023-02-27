@@ -10,7 +10,7 @@ import { empType } from "../Constant/HR/empType";
 import { handleDetailEmployee, handleGetEmployees } from "./HR/employees";
 import UserConst from "../Constant/User/UserConst";
 import { HandleLoginUser } from "./User/auth";
-import { HandleGetUser } from "./User/getUser";
+import { HandleEditProfile, HandleGetUser } from "./User/getUser";
 import PaymentConst from "../Constant/Payment/PaymentConst";
 import { handleTrxDashRequest, handlePagaRequest, handlePagaCreate, handlePagaUpdate, handlePagaDelete, handleBankRequest, handleBankAdd, handleUpdateBank, handleDeleteBank, handleUsacRequest, handleUsacCreate, handleUsacDelete, handleTopUp, handleCheckSecure, handleGetHistoryTrx } from "./Payment/paymentSagas";
 
@@ -18,6 +18,7 @@ export default function* rootSaga() {
   yield all([
     takeEvery(UserConst.LOGIN_USER, HandleLoginUser),
     takeEvery(UserConst.GET_DATA_USER, HandleGetUser),
+    takeEvery(UserConst.EDIT_DATA_PROFILE,HandleEditProfile),
 
     takeEvery(deptType.GET_DATA, handleGetDept),
     takeEvery(deptType.ADD_DATA, handleAddDept),

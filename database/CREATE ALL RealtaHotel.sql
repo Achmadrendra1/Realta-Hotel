@@ -94,8 +94,8 @@ CREATE TABLE users.users (
 	user_full_name varchar(55),
 	user_type varchar(15),
 	user_company_name varchar(255),
-	user_email varchar(255),
-	user_phone_number varchar(25) unique,
+	user_email varchar(255)unique,
+	user_phone_number varchar(25) ,
 	user_modified_date timestamp,
 	CONSTRAINT user_id_pk primary key (user_id)
 );
@@ -154,7 +154,7 @@ CREATE TABLE users.user_bonus_points (
 CREATE TABLE users.user_password (
 	uspa_user_id serial,
 	uspa_passwordHash VARCHAR(128),
-	uspa_passwordSalt Varchar(10),
+	uspa_passwordSalt Varchar(128),
 	CONSTRAINT uspa_user_pk primary key (uspa_user_id),
 	CONSTRAINT uspa_user_fk FOREIGN key (uspa_user_id) REFERENCES users.users (user_id) 
 	on delete cascade on update cascade
