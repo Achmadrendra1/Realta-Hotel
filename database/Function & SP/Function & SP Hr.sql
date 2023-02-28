@@ -28,6 +28,7 @@ language plpgsql
 -- Detail Emp Profile
 create or replace function hr.profileDetail(id int)
 returns table(
+	userId int,
 	empId int,
 	nation varchar(25),
 	fullName varchar(55),
@@ -54,6 +55,7 @@ as $$
 begin
 	return query
 	select
+		user_id,
 		emp_id,
 		emp_national_id,
 		user_full_name,
@@ -84,7 +86,7 @@ begin
 		join hr.department dpt on edh.edhi_dept_id = dpt.dept_id
 		join hr.shift sh on edh.edhi_shift_id = sh.shift_id
 		join hr.job_role job on emp.emp_joro_id = job.joro_id
-	where emp_id = id;
+	where emp.emp_id = id;
 end; $$
 language plpgsql
 
@@ -271,23 +273,20 @@ call hr.addEmployee('jhon', '/', 'IDN', '2000-10-15', '2023-10-15', 'S', 'M', '0
 create or replace procedure hr.updateEmp(
 	userId int,
 	empId int,
-	fullName character varying,
-	nationalId character varying,
+	fullName varchar(55),
+	nationalId varchar(25),
 	birthDate date,
-	hireDate timestamp,
-	marital character varying,
-	gender character varying,
-	salariedFlag character varying,
+	hireDate date,
+	marital varchar(1),
+	gender varchar(1),
+	salariedFlag varchar(1),
 	status int,
 	vacation int,
 	sick int,
 	jobId int,
 	salary int,
 	frequentlyPay int,
-	departmentId int,
-	startDept date,
-	endDept date,
-	shiftId int
+	departmentId int
 )
 language plpgsql
 as $$
@@ -315,9 +314,6 @@ begin
 		
 	update hr.employee_department_history
 		set
-			edhi_start_date = startDept,
-			edhi_end_date = endDept,
-			edhi_shift_id = shiftId,
 			edhi_dept_id = departmentId,
 			edhi_modified_date = now()
 		where edhi_emp_id = empId;
@@ -330,4 +326,32 @@ begin
 		where ephi_emp_id = empId;
 end; $$
 
-call hr.updateEmp(24, 22, 'Jhon doe'::character varying, 'IDN'::character varying, '2000-10-15'::date, '2023-12-15'::date, 'S'::character varying, 'M'::character varying, '0'::character varying, 1, 4, 5, 9, 4500000, 1, 9, '2023-12-15'::date, '2025-12-15'::date, 1)
+call hr.updateEmp(31, 22, 'Jhon doe', 'IDN', '2000-10-15', '2023-12-15', 'S', 'M', '0', 1, 4, 5, 9, 4500000, 1, 9, '2023-12-15', '2025-12-15', 1)
+
+-- New Emp
+create or replace function newEmployee()
+returns table(
+	id int,
+	nationalId varchar(25),
+	fullName varchar(55),
+	birthDate date,
+	hire timestamp,
+	status smallint
+)
+as $$
+begin
+	return query
+	select 
+		emp_id,
+		emp_national_id,
+		user_full_name,
+		emp_birth_date,
+		emp_hire_date,
+		emp_current_flag
+	from
+		users.users u join hr.work_orders wo on wo.woro_user_id = u.user_id
+		join hr.work_order_detail wod on wod.wode_woro_id = wo.woro_id
+		join hr.employee emp on emp.emp_id = wod.wode_emp_id
+	where emp_id = hr.getId() - 1;
+end; $$
+language plpgsql

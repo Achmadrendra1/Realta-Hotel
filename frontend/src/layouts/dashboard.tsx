@@ -20,7 +20,7 @@ const Dashboard = ({children} : {children:any}) => {
         {
             name: 'Task',
             icon: <CarryOutOutlined />,
-            href: '/Dashboard/hr/officeboy'
+            href: '/dashboard/hr/officeboy'
         },
         {
             name: 'Resepsionis',
@@ -30,12 +30,12 @@ const Dashboard = ({children} : {children:any}) => {
         {
             name: 'Resto',
             icon: <CoffeeOutlined />,
-            href: '/Dashboard/resto'
+            href: '/dashboard/resto'
         },
         {
             name: 'Human resources',
             icon: <UserSwitchOutlined />,
-            href: '/Dashboard/hr'
+            href: '/dashboard/hr'
         },
         {
             name: 'Hotels',
@@ -45,12 +45,12 @@ const Dashboard = ({children} : {children:any}) => {
         {
             name: 'Payments',
             icon: <BankOutlined />,
-            href: '/Dashboard/payment'
+            href: '/dashboard/payment'
         },
         {
             name: 'Purchasing',
             icon: <ReconciliationOutlined />,
-            href: '/Dashboard/purchasing'
+            href: '/dashboard/purchasing'
         }
     ]
     const collapse = () => {
