@@ -45,11 +45,11 @@ export default withAuth (function bookingRoom() {
     //useSelector Average Rating Hotel
     let hotelReview = useSelector((state : any) => state.ReviewBoorReducer.review)
     const oneReview = hotelReview?.filter((item:any) => item.hore_hotel_id == id)
+    console.log(oneReview)
 
     //useSelector Get Special Offers
     let spof = useSelector((state : any) => state.SpofReducer.spof)
     const typeSpof = spof?.filter((item : any)=> item.spofType == 'Individual')
-    console.log(spof)
 
     //useSelector Get Price Items for Booking Extra
     let extra = useSelector((state : any) => state.priceItemsReducer.priceItems)
@@ -276,11 +276,14 @@ export default withAuth (function bookingRoom() {
     }, [ratePriceInt, spofDiscInt, taxRateInt, totalPrice])
 
     // useEffect list hotel into Booking Detail
-    // useEffect(()=> {
-    //     setPriceRoom({
-    //         faci_id, faci_name, faci_rate_price, faci_high_price, faci_tax_rate
-    //     })
-    // }, [faci_name])
+    useEffect(()=> {
+        setPriceRoom({
+            faci_id, faci_name, faci_rate_price, faci_high_price, faci_tax_rate
+        })
+        setDataBooking({
+            ...dataBooking, borde_faci_id : faci_id
+        })
+    }, [faci_name])
 
     //UseEffect untuk change auto totalPrice di booking
     useEffect(() => {
@@ -424,20 +427,6 @@ export default withAuth (function bookingRoom() {
     return (
         <Layouts>
             <div className='mb-3 rounded'>
-                <Carousel autoplay>
-                    <div>
-                    <h3 style={contentStyle}>1</h3>
-                    </div>
-                    <div>
-                    <h3 style={contentStyle}>2</h3>
-                    </div>
-                    <div>
-                    <h3 style={contentStyle}>3</h3>
-                    </div>
-                    <div>
-                    <h3 style={contentStyle}>4</h3>
-                    </div>
-                </Carousel>
             </div>
             <div>
                 <Row gutter={16}>
@@ -523,11 +512,14 @@ export default withAuth (function bookingRoom() {
                             {
                                 faciRoom &&
                                 faciRoom.map((room : any, index : any)=>{
+                                    let pict = room.fapho_url
+                                    let arrPict = pict.split(",")
+                                    console.log(faciRoom)
                                     return (
                                         <div>
                                             <Card>
                                                 <Row>
-                                                    <Col span={12}>
+                                                    <Col span={16}>
                                                     <div className='text-xl'>
                                                         {room.faci_name}
                                                     </div>
@@ -543,10 +535,10 @@ export default withAuth (function bookingRoom() {
                                                         </div>
                                                     </div>
                                                     </Col>
-                                                    <Col span={12}>
+                                                    <Col span={8}>
                                                         <div className='float-right'>
                                                             <div>
-                                                                ini foto
+                                                                <img src={`../.${arrPict[0]}`} className='w-5/6 rounded border-2'/>
                                                             </div>
                                                             <div>
                                                                 <Buttons funcs={()=>handleButtonSelected(index)}>Selected</Buttons>
@@ -763,7 +755,7 @@ export default withAuth (function bookingRoom() {
                                         <p>Full Name :</p>
                                     </div>
                                     <div>
-                                        <Input value={getUser[0] ? getUser[0].user_full_name: 'None'} className='w-3/4' disabled></Input>
+                                        <Input value={getUser[0] ? getUser[0].user_full_name: 'None'} className='w-3/4' readOnly></Input>
                                     </div>
                                 </div>
                             </Col>
@@ -773,7 +765,7 @@ export default withAuth (function bookingRoom() {
                                         <p>Email :</p>
                                     </div>
                                     <div>
-                                        <Input value={getUser[0] ? getUser[0].user_email: 'None'} disabled className='w-3/4'/>
+                                        <Input value={getUser[0] ? getUser[0].user_email: 'None'} readOnly className='w-3/4'/>
                                     </div>
                                 </div>
                             </Col>
@@ -785,7 +777,7 @@ export default withAuth (function bookingRoom() {
                                         <p>Mobile Number : </p>
                                     </div>
                                     <div className='mb-5'>
-                                        <Input value={getUser[0] ? getUser[0].user_phone_number: 'None'} disabled className='w-3/4'/>
+                                        <Input value={getUser[0] ? getUser[0].user_phone_number: 'None'} readOnly className='w-3/4'/>
                                     </div>
                                 </div>
                             </Col>

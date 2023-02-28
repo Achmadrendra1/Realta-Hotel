@@ -1,16 +1,84 @@
+import { getSpInvoice } from '@/Redux/Action/Booking/BookingAction'
 import Buttons from '@/components/Button'
 import Layouts from '@/layouts/layout'
 import { LeftOutlined } from '@ant-design/icons'
 import { Col, Divider, Row } from 'antd'
-import React from 'react'
+import { useRouter } from 'next/router'
+import React, {useEffect, useState} from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 
 export default function index() {
+    
+    let root = useRouter()
+    const {id} = root.query || {};
+    const dispatch = useDispatch();
+
+    const Invoice = useSelector((state : any) => state.BoorInvoiceReducer.invoice)
+
+    const [getInvoice, setGetinvoice] = useState({
+        boor_order_number : '',
+        boor_order_date : '',
+        invoice_number : '',
+        invoice_date : '',
+        boor_is_paid : '',
+        boor_pay_type : '',
+        user_full_name : '',
+        user_phone_number : '',
+        usme_memb_name : '',
+        usme_promote_date : '',
+        usme_points : 0,
+        faci_name : '',
+        boor_total_room : 0,
+        borde_adults : 0,
+        borde_kids : 0,
+        borde_price : '',
+        borde_discount : '',
+        borde_subtotal : ''
+    })
+
+    useEffect(()=> {
+        dispatch(getSpInvoice())
+    }, [id])
+
+    // useEffect(()=> {
+    //     setGetinvoice( 
+    //         [
+    //             {
+    //                 title : 'Booking Order',
+    //                 field : Invoice?.user_full_name
+    //             },
+    //             {
+    //                 title : 'Order Date',
+    //                 field : '23 January 2023'
+    //             },
+    //             {
+    //                 title : 'Invoice Number',
+    //                 field : 'TRX#2023224-0002'
+    //             },
+    //             {
+    //                 title : 'Invoice Date',
+    //                 field : '24 January 2023'
+    //             },
+    //             {
+    //                 title : 'Status',
+    //                 field : 'Paid'
+    //             },
+    //             {
+    //                 title : 'Payment Type',
+    //                 field : 'Debet'
+    //             }
+    //         ]
+            
+    //     )
+    // }, [Invoice])
+
+    console.log(Invoice)
 
     //Array Object untuk title and field
     const invoice1 = [
         {
             title : 'Booking Order',
-            field : 'BO-20230123-0001'
+            field : 
         },
         {
             title : 'Order Date',
@@ -58,7 +126,8 @@ export default function index() {
     ]
 
   return (
-    <Layouts>
+    <>
+   
         <div>
             <h1 className='text-xl mb-5'><LeftOutlined/>Kembali </h1>
         </div>
@@ -67,7 +136,7 @@ export default function index() {
         </div>
         <Row>
             {
-                invoice1.map((item:any, index : any) =>
+                getInvoice.map((item:any, index : any) =>
                 <Col span={4} key={index}>
                     <h2 className='text-xl'>{item.title}</h2>
                     <h3 className='text-l'>{item.field}</h3>
@@ -180,7 +249,7 @@ export default function index() {
                     </Col>
                     <Col span={6}>
                         <div className='flex text-xl'>
-                        <Buttons funcs={''}>Print</Buttons>
+                        <Buttons funcs={()=> window.print()}>Print</Buttons>
                         </div>
                     </Col>
                     <Col span={6}>
@@ -196,7 +265,7 @@ export default function index() {
                 </div>
             </Col>
         </Row>
-    </Layouts>
+    </>
   )
 }
 
