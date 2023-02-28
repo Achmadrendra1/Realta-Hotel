@@ -14,13 +14,31 @@ const EmployeeDetail = () => {
     const dispatch = useDispatch()
     const router = useRouter()
     const { details } = useSelector((state:any) => state.detailEmpReducer)
+    const { selectJob } = useSelector((state:any) => state.selectReducer)
     const { employee } : any = router.query
     const { employees, deptHist, payHist } = details
+    const money = employees.salary.split('Rp')[1].split(',')[0].replace(/\./g, '')
+    const [ update, setUpdate ] = useState({
+        userId: employees.userid,
+        empId: employees.empid,
+        nationalId: employees.nation,
+        fullName: employees.fullname,
+        birthDate: employees.birtdate,
+        hireDate: employees.hiredate,
+        marital: employees.marital,
+        gender: employees.gender,
+        salary: money,
+        frequentlyPay: employees.frequentlypay,
+        salaryFlag: employees.salariedflag,
+        status: employees.status,
+        vacation: employees.vacationhours,
+        sick: employees.sickleave,
+        jobId: employees.jobname
+    })
 
     useEffect(() => {
         dispatch(getDetailEmp(parseInt(employee[0])))
     }, [])
-    console.log(employee)
     return(
         <Dashboard>
             <Row gutter={32}>
@@ -34,22 +52,28 @@ const EmployeeDetail = () => {
                         <Row gutter={[32, 16]} className="my-8">
                             <Col span={12}>
                                 <h2 className="text-lg font-semibold">National ID</h2>
-                                { isEdit ? <Input className="my-2" placeholder="New National ID"/> : <p className="text-md font-regular my-2">{employees?.nation}</p>}
+                                { isEdit ? <Input className="my-2" placeholder="New National ID" 
+                                value={update.nationalId} 
+                                onChange={e => setUpdate({ ...update, nationalId: e.target.value})}/> : <p className="text-md font-regular my-2">{employees?.nation}</p>}
                             </Col>
 
                             <Col span={12}>
                                 <h2 className="text-lg font-semibold">Employee Name</h2>
-                                { isEdit ? <Input className="my-2" placeholder="New Employee Name"/> : <p className="text-md font-regular my-2">{employees?.fullname}</p>}
+                                { isEdit ? <Input className="my-2" placeholder="New Employee Name"
+                                value={update.fullName} 
+                                onChange={e => setUpdate({ ...update, fullName: e.target.value})}/> : <p className="text-md font-regular my-2">{employees?.fullname}</p>}
                             </Col>
 
                             <Col span={12}>
                                 <h2 className="text-lg font-semibold">Birth Date</h2>
-                                { isEdit ? <DatePicker className="my-2 w-full" placeholder="Edit Birth Date"/> : <p className="text-md font-regular my-2">{employees?.birthdate.split('T')[0]}</p>}
+                                { isEdit ? <DatePicker className="my-2 w-full" placeholder="Edit Birth Date"
+                                onChange={(daysjs, dateString) => {setUpdate({...update, birthDate: dateString})}}/> : <p className="text-md font-regular my-2">{employees?.birthdate?.split('T')[0]}</p>}
                             </Col>
 
                             <Col span={12}>
                                 <h2 className="text-lg font-semibold">Hire Date</h2>
-                                { isEdit ? <DatePicker className="my-2 w-full" placeholder="Edit Hire Date"/> : <p className="text-md font-regular my-2">{employees?.hiredate.split('T')[0]}</p>}
+                                { isEdit ? <DatePicker className="my-2 w-full" placeholder="Edit Hire Date"
+                                onChange={(daysjs, dateString) => {setUpdate({...update, hireDate: dateString})}}/> : <p className="text-md font-regular my-2">{employees?.hiredate?.split('T')[0]}</p>}
                             </Col>
 
                             <Col span={12}>
@@ -57,7 +81,7 @@ const EmployeeDetail = () => {
                                 { isEdit ? <Select options={[
                                     { value: 'M', label: 'Married'},
                                     { value: 'S', label: 'Single'}
-                                ]} defaultValue={employees?.marital} className="my-2 w-full" placeholder="New Employee Name"/> : <p className="text-md font-regular my-2">{employees?.marital == 'M' ? 'Married' : 'Single'}</p>}
+                                ]} defaultValue={employees?.marital} onChange={value => {setUpdate({...update, marital: value})}} className="my-2 w-full"/> : <p className="text-md font-regular my-2">{employees?.marital == 'M' ? 'Married' : 'Single'}</p>}
                             </Col>
 
                             <Col span={12}>
@@ -67,36 +91,50 @@ const EmployeeDetail = () => {
                                     { value: '0', label: 'Inactive'}
                                 ]} 
                                 defaultValue={employees?.status == '1' ? 'Active' : 'Inactive'} 
-                                className="my-2 w-full" placeholder="New Employee Name"/> : <p className="text-md font-regular my-2">{employees?.status == '1' ? 'Active' : 'Inactive'}</p>}
+                                className="my-2 w-full" onChange={value => {setUpdate({...update, status: value})}}/> : <p className="text-md font-regular my-2">{employees?.status == '1' ? 'Active' : 'Inactive'}</p>}
                             </Col>
 
                             <Col span={12}>
                                 <h2 className="text-lg font-semibold">Vacation Hours</h2>
-                                { isEdit ? <Input className="my-2" placeholder="New Employee Name"/> : <p className="text-md font-regular my-2">{employees?.vacationhours} Days</p>}
+                                { isEdit ? <Input className="my-2" placeholder="In Days" 
+                                value={update.vacation} 
+                                onChange={e => setUpdate({ ...update, vacation: e.target.value})} suffix={'Days'}/> : <p className="text-md font-regular my-2">{employees?.vacationhours} Days</p>}
                             </Col>
 
                             <Col span={12}>
                                 <h2 className="text-lg font-semibold">Sickleave Hours</h2>
-                                { isEdit ? <Input className="my-2" placeholder="New Employee Name"/> : <p className="text-md font-regular my-2">{employees?.sickleave} Days</p>}
+                                { isEdit ? <Input className="my-2" placeholder="Days sickleave"
+                                value={update.sick} 
+                                onChange={e => setUpdate({ ...update, sick: e.target.value})} suffix={'Days'}/> : <p className="text-md font-regular my-2">{employees?.sickleave} Days</p>}
                             </Col>
 
                             <Col span={12}>
                                 <h2 className="text-lg font-semibold">Job Role</h2>
-                                { isEdit ? <Input className="my-2" placeholder="New Employee Name"/> : <p className="text-md font-regular my-2">{employees?.jobname}</p>}
+                                { isEdit ? <Select options={selectJob} 
+                                className="my-2 w-full" onChange={value => {setUpdate({...update, jobId: value})}}/> : <p className="text-md font-regular my-2">{employees?.jobname}</p>}
                             </Col>
 
                             <Col span={12}>
-                                <h2 className="text-lg font-semibold">Department</h2>
-                                { isEdit ? <Input className="my-2" placeholder="New Employee Name"/> : <p className="text-md font-regular my-2">{employees?.departmane}</p>}
+                                <h2 className="text-lg font-semibold">Salaried Flag</h2>
+                                { isEdit ? <Select options={[
+                                    { value: '1', label: 'Hours'},
+                                    { value: '0', label: 'Salaried'}
+                                ]}
+                                className="my-2 w-full" onChange={value => {setUpdate({...update, salaryFlag: value})}}/> : <p className="text-md font-regular my-2">{employees?.salariedflag == "1" ? 'Hours' : employees?.salariedflag == "0" ? 'Salaried' : 'None'}</p>}
                             </Col>
 
                             <Col span={12}>
                                 <h2 className="text-lg font-semibold">Salary</h2>
-                                { isEdit ? <Input className="my-2" placeholder="New Employee Name"/> : <p className="text-md font-regular my-2">{employees?.salary}</p>}
+                                { isEdit ? <Input className="my-2" placeholder="X.XXX.XXX" prefix={'Rp'} value={update.salary} 
+                                onChange={e => setUpdate({ ...update, salary: e.target.value})}/> : <p className="text-md font-regular my-2">{employees?.salary}</p>}
                             </Col>
                             <Col span={12}>
                                 <h2 className="text-lg font-semibold">Pay Frequencies</h2>
-                                { isEdit ? <Input className="my-2" placeholder="New Employee Name"/> : <p className="text-md font-regular my-2">{employees?.frequentlypay == 1 ? 'Monthly' : 'Hours'}</p>}
+                                { isEdit ? <Select options={[
+                                    { value: '1', label: 'Monthly'},
+                                    { value: '2', label: 'Weekly'}
+                                ]}
+                                className="my-2 w-full" onChange={value => {setUpdate({...update, frequentlyPay: value})}}/> : <p className="text-md font-regular my-2">{employees?.frequentlypay == 1 ? 'Monthly' : employees?.frequentlypay == 2 ? 'Weekly' : 'None'}</p>}
                             </Col>
                         </Row>
                         { isEdit && <Buttons>Save Update</Buttons>}
@@ -109,8 +147,8 @@ const EmployeeDetail = () => {
                                 deptHist && deptHist.map((item:any, index:any) =>
                                     <div key={index} className="flex justify-between px-5 py-4 rounded bg-white drop-shadow-md">
                                         <div><span className="font-medium">Department : </span>{item?.edhiDept?.deptName}</div>
-                                        <div><span className="font-medium">Start Date : </span>{item.edhiStartDate.split('T')[0]}</div>
-                                        <div><span className="font-medium">End Date : </span>{item.edhiEndDate.split('T')[0]}</div>
+                                        <div><span className="font-medium">Start Date : </span>{item.edhiStartDate?.split('T')[0]}</div>
+                                        <div><span className="font-medium">End Date : </span>{item.edhiEndDate?.split('T')[0]}</div>
                                     </div>
                                 )
                             }
@@ -124,7 +162,7 @@ const EmployeeDetail = () => {
                                 payHist && payHist.map((item:any, index:any) =>
                                     <div key={index} className="flex justify-between px-5 py-4 rounded bg-white drop-shadow-md">
                                         <div><span className="font-medium">Salary : </span>{item.ephiRateSalary}</div>
-                                        <div><span className="font-medium">Pay Date : </span>{item.ephiRateChangeDate.split('T')[0]}</div>
+                                        <div><span className="font-medium">Pay Date : </span>{item.ephiRateChangeDate?.split('T')[0]}</div>
                                         <div><span className="font-medium">Pay Frequence : </span>{item.ephiPayFrequence == 1 ? 'Mothly' : 'Weekly'}</div>
                                     </div>
                                 )

@@ -97,12 +97,12 @@ function* handleAddHotel(action: any): any {
 function* handleUpdateHotel(action: any): any {
   const { payload } = action;
   const id = parseInt(payload.get(`hotelId`));
-  console.log(id);
+  // console.log(id);
 
   try {
     const result = yield axios(API("Put", `/hotels/${id}`, payload));
     yield put(updateHotelSucceed(result.data));
-    console.log(result.data);
+    // console.log(result.data);
 
     return result.data;
   } catch (error) {
@@ -112,7 +112,7 @@ function* handleUpdateHotel(action: any): any {
 
 function* handleDeleteHotel(action: any): any {
   const { payload } = action;
-  console.log(payload);
+  // console.log(payload);
 
   try {
     const result = yield axios(API("Delete", `/hotels/${payload}`));
@@ -194,7 +194,7 @@ function* handleFapho(): any {
 function* handleAddFapho(action: any): any {
   const { payload } = action;
   const id = payload.get(`faphoUrl`);
-  console.log(id);
+  // console.log(id);
   try {
     const result = yield axios(API("Post", `/facility-photos/`, payload));
     yield put(addFaphoSuccess(result.data));

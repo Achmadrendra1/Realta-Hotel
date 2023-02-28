@@ -1,9 +1,5 @@
-import {
-  getFacilityID,
-  updateFacility,
-} from "@/Redux/Action/Hotel/HotelAction";
+import { getFacilityID, updateFacility } from "@/Redux/Action/Hotel/HotelAction";
 import { Form, Input, Typography } from "antd";
-import { log } from "console";
 import { useFormik } from "formik";
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -31,7 +27,6 @@ export default function EditFacilityHotel(props: any) {
     dispatch(getFacilityID(props.id));
   }, [props.id]);
   const formik = useFormik({
-    
     enableReinitialize: true,
     initialValues: {
       faciId: faciById.faciId,
@@ -51,10 +46,10 @@ export default function EditFacilityHotel(props: any) {
       faciCagro: faciById.faciCagro?.cagroId,
       faciHotel: faciById.faciHotel?.hotelId,
     },
-    
-    onSubmit: async (values) => {
+
+    onSubmit: async (values:any) => {
       console.log(values);
-      
+
       let payload = new FormData();
       payload.append("faciId", values.faciId);
       payload.append("faciName", values.faciName);
@@ -90,7 +85,10 @@ export default function EditFacilityHotel(props: any) {
       style={{ maxWidth: 600 }}
       className="px-5 py-5 border shadow rounded-lg mx-auto"
     >
-      <Title level={4} style={{textAlign : 'center'}}> Edit {props.htlname} Facilities</Title>
+      <Title level={4} style={{ textAlign: "center" }}>
+        {" "}
+        Edit {props.htlname} Facilities
+      </Title>
       <Form.Item
         label="Facility Name"
         rules={[{ required: true, message: "Please input Hotel!" }]}

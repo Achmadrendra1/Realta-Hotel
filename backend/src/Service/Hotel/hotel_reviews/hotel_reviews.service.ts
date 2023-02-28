@@ -79,6 +79,4 @@ export class HotelReviewsService {
         return `Failed to Delete` + error;
       });
   }
-
-  
 }
