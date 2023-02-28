@@ -8,6 +8,7 @@ import {
   Put,
 } from '@nestjs/common';
 import { MembersService } from 'src/Service/Master/members/members.service';
+import { Members } from 'src/entities/Members';
 @Controller('members')
 export class MembersController {
   constructor(private MembersService: MembersService) {}
@@ -18,26 +19,36 @@ export class MembersController {
     return this.MembersService.findAllMembers();
   }
 
-  //find by Id
-  @Get(':id')
-  findById(@Param('id') id: number): Promise<any> {
-    return this.MembersService.findOneMembers(id);
+  //find by Name
+  @Get('/nama/:name')
+  findById(@Param('name') params): Promise<any> {
+    return this.MembersService.findOneMembers(params);
   }
 
-  //create new
-  @Post('create')
-  create(@Body() body: any): Promise<any> {
-    return this.MembersService.createMembers(body);
+  //find by Name
+  @Get('/name/:name')
+  priceName(@Param('name') params): Promise<any> {
+    return this.MembersService.getMemberByName(params);
+  }
+
+  @Post('insert')
+  async createMembers(@Body() data: Members) {
+    const Members = await this.createMembers(data);
+    if (!Members) {
+      return 'failed insert to regions';
+    } else {
+      return ' success insert to regions';
+    }
   }
 
   //update
-  @Put(':id')
+  @Put('edit/:id')
   update(@Param() params, @Body() body: any): Promise<any> {
     return this.MembersService.updateMembers(params.id, body);
   }
 
   //delete
-  @Delete(':id')
+  @Delete('delete/:id')
   remove(@Param() params): Promise<any> {
     return this.MembersService.deleteMembers(params.id);
   }

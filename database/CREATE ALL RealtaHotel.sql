@@ -94,8 +94,8 @@ CREATE TABLE users.users (
 	user_full_name varchar(55),
 	user_type varchar(15),
 	user_company_name varchar(255),
-	user_email varchar(255),
-	user_phone_number varchar(25) unique,
+	user_email varchar(255)unique,
+	user_phone_number varchar(25) ,
 	user_modified_date timestamp,
 	CONSTRAINT user_id_pk primary key (user_id)
 );
@@ -154,7 +154,7 @@ CREATE TABLE users.user_bonus_points (
 CREATE TABLE users.user_password (
 	uspa_user_id serial,
 	uspa_passwordHash VARCHAR(128),
-	uspa_passwordSalt Varchar(10),
+	uspa_passwordSalt Varchar(128),
 	CONSTRAINT uspa_user_pk primary key (uspa_user_id),
 	CONSTRAINT uspa_user_fk FOREIGN key (uspa_user_id) REFERENCES users.users (user_id) 
 	on delete cascade on update cascade
@@ -209,18 +209,18 @@ create table hotel.facilities(
 	constraint fk_faci_cagro_id foreign key (faci_cagro_id) references master.category_group(cagro_id) on update cascade on delete cascade
 );
 create table hotel.facility_photo(
-	fapho_faci_id int unique,
+	fapho_faci_id int,
 	fapho_id serial,
-	fapho_thumbnail_filename varchar(50),
-	fapho_photo_filename varchar(50),
+	fapho_thumbnail_filename varchar(125),
+	fapho_photo_filename varchar(125),
 	fapho_primary bool,
 	fapho_url varchar(255),
-	fapho_modified_date timestamp,
-	constraint pk_fapho_id primary key(fapho_id, fapho_faci_id),
+	fapho_modified_date date,
+	constraint pk_fapho_id primary key(fapho_id),
 	constraint fk_fapho_faci_id foreign key (fapho_faci_id) references hotel.facilities(faci_id) on delete cascade on update cascade
 );
 create table hotel.facility_price_history(
-	faph_faci_id int unique,
+	faph_faci_id int,
 	faph_id serial,
 	faph_startdate timestamp,
 	faph_enddate timestamp,
@@ -231,8 +231,9 @@ create table hotel.facility_price_history(
 	faph_tax_rate money,
 	faph_modified_date timestamp,
 	faph_user_id int,
-	constraint pk_facility_price_history primary key (faph_id, faph_faci_id),
-	constraint fk_faph_faci_id foreign key (faph_faci_id) references hotel.facilities(faci_id) on delete cascade on update cascade
+	constraint pk_facility_price_history primary key (faph_id),
+	constraint fk_faph_faci_id foreign key (faph_faci_id) references hotel.facilities(faci_id) on delete cascade on update cascade,
+	constraint fk_faph_user_id foreign key (faph_user_id) references users.users(user_id) on update cascade on delete cascade
 );
 
 --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
