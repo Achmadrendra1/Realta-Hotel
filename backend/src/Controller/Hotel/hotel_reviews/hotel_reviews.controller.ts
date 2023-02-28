@@ -33,4 +33,10 @@ export class HotelReviewsController {
   DeleteHore(@Param('id') params) {
     return this.horeService.deleteHotelsReviews(params);
   }
+
+  //Get User Review untuk Booking
+  @Get('Sp')
+  getSpReview(){
+    return this.horeService.findSpReview();
+  }
 }

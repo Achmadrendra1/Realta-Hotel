@@ -7,12 +7,12 @@ import {BiSwim} from 'react-icons/bi'
 import {CgGym} from 'react-icons/cg'
 import Buttons from '@/components/Button';
 import { useDispatch, useSelector } from 'react-redux';
-import { getSpFacilities, getSpHotel, getSpReview } from '@/Redux/Action/Hotel/HotelAction';
+import { getSpFacilities, getSpHotel, getSpReview } from '@/Redux/Action/Booking/BookingAction';
 import { useRouter } from 'next/router';
 import { CaretRightFilled, LeftOutlined} from '@ant-design/icons';
 import dayjs from 'dayjs';
 import { getSpof, getBoor, insertBooking } from '@/Redux/Action/Booking/BookingAction';
-import { getPrit } from '@/Redux/Action/Master/MasterAction';
+import {doPriceItems} from '@/Redux/Action/Master/actionPriceItems'
 import { doGetUser } from '@/Redux/Action/User/GetDataUser';
 import withAuth from '@/PrivateRoute/WithAuth';
 
@@ -28,22 +28,22 @@ export default withAuth (function bookingRoom() {
         dispatch(getSpFacilities())
         dispatch(getSpReview())
         dispatch(getSpof())
-        dispatch(getPrit())
+        dispatch(doPriceItems())
         dispatch(getBoor())
         dispatch(doGetUser())
     }, [id]);
 
     
     //useSelector Get Hotel All
-    let hotel = useSelector((state : any) => state.HotelReducer.hotel)
+    let hotel = useSelector((state : any) => state.HotelBoorReducer.hotel)
     const hotelById = hotel?.filter((item : any)=> item.hotel_id == id)
 
     //useSelector Get Room by Hotel Id
-    let room = useSelector((state : any) => state.FacilitiesReducer.facilities)
+    let room = useSelector((state : any) => state.FaciBoorReducer.facilities)
     const faciRoom = room.filter((item : any)=> item.hotel_id == id)
 
     //useSelector Average Rating Hotel
-    let hotelReview = useSelector((state : any) => state.HotelReviewsReducer.review)
+    let hotelReview = useSelector((state : any) => state.ReviewBoorReducer.review)
     const oneReview = hotelReview?.filter((item:any) => item.hore_hotel_id == id)
 
     //useSelector Get Special Offers
@@ -51,7 +51,7 @@ export default withAuth (function bookingRoom() {
     const typeSpof = spof?.filter((item : any)=> item.spofType == 'Individual')
 
     //useSelector Get Price Items for Booking Extra
-    let extra = useSelector((state : any) => state.PriceItemsReducer.prit)
+    let extra = useSelector((state : any) => state.PriceItemsReducer.priceItems)
 
     //useSelector Get Last Booking Order
     let boorNumber = useSelector((state : any) => state.BoorReducer.boor)

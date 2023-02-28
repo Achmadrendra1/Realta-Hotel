@@ -7,7 +7,7 @@ import {IoRestaurantSharp} from 'react-icons/io5'
 import {BiSwim} from 'react-icons/bi'
 import Buttons from "@/components/Button";
 import { useDispatch, useSelector} from "react-redux";
-import {getSpHotel } from "@/Redux/Action/Hotel/HotelAction";
+import { getSpHotel } from "@/Redux/Action/Booking/BookingAction"; 
 import { useRouter } from "next/router";
 
 export default function index() {
@@ -20,8 +20,7 @@ export default function index() {
   }, []);
   
   //Get data Hotel
-  let hotel = useSelector((state : any) => state.HotelReducer.hotel)
-  console.log(hotel);
+  let hotel = useSelector((state : any) => state.HotelBoorReducer.hotel)
 
   //Hook untuk View More Filter
   const [filter, setFilter] = useState(false)

@@ -5,7 +5,12 @@ import {
     getBoorSuccess,
     getBoorFailed,
     insertBookingSuccess,
-    insertBookingFailed
+    insertBookingFailed,
+    getSpFacilitiesSuccess,
+    getSpHotelFailed,
+    getSpHotelSuccess,
+    getSpReviewSuccess,
+    getSpReviewFailed
 } from "@/Redux/Action/Booking/BookingAction"
 import { API } from "@/Redux/Configs/consumeApi"
 import axios from "axios"
@@ -43,8 +48,43 @@ function* handleBoorCreateFinal(action : any): any {
     }
 }
 
+function* handleSpHotel() : any {
+    try{
+      const result = yield axios(API('Get', `/hotels/Sp`, null));
+      yield put(getSpHotelSuccess(result.data));
+      return result.data
+    }catch(e : any) {
+      yield put(getSpHotelFailed(e))
+    }
+  }
+
+function* handleSpFacilities() : any {
+    try{
+      const result = yield axios(API('Get', `/facilities/Sp`, null));
+      yield put(getSpFacilitiesSuccess(result.data));
+      return result.data
+    }catch(e : any) {
+      yield put(getSpHotelFailed(e))
+    }
+  }
+
+  function* handleSpHotelReviews() : any {
+    try{
+      const result = yield axios(API('Get', `/hotel-reviews/Sp`, null));
+      yield put(getSpReviewSuccess(result.data));
+      return result.data
+    }catch(e : any) {
+      yield put(getSpReviewFailed(e))
+    }
+  }  
+
+
+
 export {
     handleSpof,
     handleBoorLast,
-    handleBoorCreateFinal
+    handleBoorCreateFinal,
+    handleSpFacilities,
+    handleSpHotel,
+    handleSpHotelReviews
 }

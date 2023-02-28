@@ -60,3 +60,63 @@ export const insertBookingFailed = (payload : any) => {
         payload
     }
 }
+
+export const getSpHotel = () => {
+    return{
+        type : BookingConstant.GET_SP_HOTEL
+    }
+}
+
+export const getSpHotelSuccess = (payload : any) => {
+    return {
+        type : BookingConstant.GET_SP_HOTEL_SUCCESS,
+        payload
+    }
+}
+
+export const getSpHotelFailed = (payload : any) => {
+    return {
+        type : BookingConstant.GET_SP_HOTEL_FAILED,
+        payload
+    }
+}
+
+export const getSpFacilities = () => {
+    return {
+        type : BookingConstant.GET_SP_FACILITIES
+    }
+}
+
+export const getSpFacilitiesSuccess = (payload : any) => {
+    return {
+        type : BookingConstant.GET_SP_FACILITIES_SUCCESS,
+        payload
+    }
+}
+
+export const getSpFacilitiesFailed = (payload : any) => {
+    return {
+        type : BookingConstant.GET_SP_FACILITIES_FAILED,
+        payload
+    }
+}
+
+export const getSpReview = () => {
+    return {
+        type : BookingConstant.GET_SP_REVIEW
+    }
+}
+
+export const getSpReviewSuccess = (payload : any) => {
+    return {
+        type : BookingConstant.GET_SP_REVIEW_SUCCESS,
+        payload
+    }
+}
+
+export const getSpReviewFailed = (payload : any) => {
+    return {
+        type : BookingConstant.GET_SP_REVIEW_FAILED,
+        payload
+    }
+}
