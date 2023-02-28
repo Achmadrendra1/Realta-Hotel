@@ -8,7 +8,6 @@ import {
   Put,
 } from '@nestjs/common';
 import { UsersService } from 'src/Service/Users/users/users.service';
-import { Users } from 'src/entities/Users';
 
 @Controller('users')
 export class UsersController {
@@ -19,14 +18,25 @@ export class UsersController {
     return this.UsersService.findAll();
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.UsersService.findOne(+id);
-  }
+  // @Get(':id')
+  // findOne(@Param('id') id: string) {
+  //   return this.UsersService.findOne(+id);
+  // }
 
   @Get(':email')
   findByEmail(@Param('email') email: string ){
     return this.UsersService.findByEmail(email);
+  }
+
+
+  @Put(':id')
+  ChangePassword(@Param('id') id :string,@Body() body){
+    return this.UsersService.ChangePassword(+id,body);
+  }
+
+  @Post()
+  async register(@Body() data,): Promise<any> {
+    return await this.UsersService.register(data);
   }
 
   // @Get()
@@ -41,8 +51,8 @@ export class UsersController {
 //   }
 
   @Put(':id')
-  UpdateUser(@Param('id') id: string, @Body() Body) {
-    return this.UsersService.UpdateUser(+id, Body);
+  updateProfile(@Param('id') id: string, @Body() Body) {
+    return this.UsersService.updateProfile(+id, Body);
   }
 
   @Delete(':id')

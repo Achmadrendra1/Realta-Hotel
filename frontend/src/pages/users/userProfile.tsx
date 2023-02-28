@@ -1,32 +1,32 @@
-import Buttons from "@/components/Button";
-import { Card, Row, Col, Form, Descriptions, Tag, Modal, Avatar } from "antd";
-import React, { useState } from "react";
-import { Image } from "antd";
+import withAuth from "@/PrivateRoute/WithAuth";
 import { EditOutlined, UserOutlined } from "@ant-design/icons";
-import EditProfile from "./editProfile";
+import { Avatar, Card, Col, Row, Table, Tabs, Tag } from "antd";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import ChangePassword from "./changePassword";
+import EditProfile from "./editProfile";
+import { doGetUser } from "@/Redux/Action/User/GetDataUser";
+import moment from "moment";
 
-export default function Userprofile() {
-  const tabList = [
-    {
-      key: "Bonus",
-      tab: "Bonus Points",
-    },
-    {
-      key: "History",
-      tab: "History Member",
-    },
-  ];
 
-  const contentList: Record<string, React.ReactNode> = {
-    Bonus: <p>Table Bonus</p>,
-    History: <p>Table History</p>,
-  };
+export default withAuth( function Userprofile() {
+  const dispatch = useDispatch();
+  const user = useSelector((state:any) => state.GetUserReducer.getUser);
 
-  const [activeTab, setActiveTab] = useState<string>("Bonus");
-  const onTab1Change = (key: string) => {
-    setActiveTab(key);
-  };
+  
+ useEffect(()=>{
+  dispatch(doGetUser())
+ },[]);
+
+  // const contentList: Record<string, React.ReactNode> = {
+  //   Bonus: <p>Table Bonus</p>,
+  //   History: <p>Table History</p>,
+  // };
+
+  // const [activeTab, setActiveTab] = useState<string>("Bonus");
+  // const onTab1Change = (key: string) => {
+  //   setActiveTab(key);
+  // };
 
   const [OpenEdit, setOpenEdit] = useState(false);
   const [OpenChange, setOpenChange] = useState(false);
@@ -48,11 +48,65 @@ export default function Userprofile() {
     setOpenChange(false);
   };
 
+  //Table Bonus Points
+  const columnsUsers = [
+    {
+      title: "Created On",
+      dataIndex: "ubpo_created_on",
+      key: "CreatedOn",
+      render: (text: any) => moment(text).format('DD-MMM-YYYY')
+    },
+    {
+      title: "Bonus Type",
+      dataIndex: "ubpo_bonus_type",
+      key: "BonusType",
+      render:(text:any)=>(
+        text == 'P' ? 'Promote' :'Rating'
+      )
+    },
+    {
+      title: "Point",
+      dataIndex: "ubpo_total_points",
+      key: "Point",
+    }
+  ];
+
+ const columnHistory =[
+    {
+      title: "Promote Date",
+      dataIndex: "usme_promote_date",
+      key: "PromoteDate",
+      render: (text: any) => moment(text).format('DD-MMM-YYYY')
+    },
+    {
+      title: "Member Type",
+      dataIndex: "usme_memb_name",
+      key: "MemberName",
+      render:(text:any)=>(
+        text == 'Silver' ?  <Tag color="default">Silver</Tag> : text == 'Gold'?
+        <Tag color="gold">Gold</Tag> : text == 'VIP'?
+        <Tag color="cyan">VIP</Tag> : 
+        <Tag color="geekblue">Wizard</Tag>
+      )
+    },
+    {
+      title: "Point",
+      dataIndex: "usme_points",
+      key: "Point",
+    },
+    {
+      title: "Status",
+      dataIndex: "usme_type",
+      key: "type",
+    },
+  ]
+
   return (
     <div>
       {OpenEdit ? (
         <EditProfile
           show={OpenEdit}
+          data={user}
           clickOk={handleOk}
           clickCancel={handleCancel}
           handleClose={handleClose}
@@ -72,6 +126,7 @@ export default function Userprofile() {
         </p>
         <Row gutter={16}>
           <Col span={4} className="mr-6">
+            
             <Avatar
               size={120}
               icon={
@@ -79,14 +134,25 @@ export default function Userprofile() {
               }
             />
           </Col>
-          <Col span={6}>
-            <p className="text-lg font-semibold">Kang Ridwan</p>
-            <p className="text-md mb-4">Travel Agency</p>
-            <Tag color="default">Silver</Tag>
+          <Col span={7}>
+            <p className="text-sm font-semibold">{user[0] ? user[0].user_full_name: 'Guest'}</p>
+           
+        
+            <p className="text-md mb-4 mt-1 font-normal">
+          {user[0]?.user_type == "T" ?'Travel Agent' : user[0]?.user_type == "I" ? 'Individual' :'Corporate'}
+            </p>
+            <p  >
+              {user[0]?.usme_memb_name == 'Silver'?
+              <Tag color="default">Silver</Tag> : user[0]?.usme_memb_name == 'Gold'?
+              <Tag color="gold">Gold</Tag> : user[0]?.usme_memb_name == 'VIP'?
+              <Tag color="cyan">VIP</Tag> : 
+              <Tag color="geekblue">Wizard</Tag>
+            }
+            </p>
           </Col>
-          <Col span={8}>
-            <p className="text-md mb-2">Kangridwan@gmail.com (default)</p>
-            <p className="text-md">0834343434343 (active)</p>
+          <Col span={9}>
+            <p className="text-md mb-2">{user[0] ? user[0].user_email: 'None'} (default)</p>
+            <p className="text-md">{user[0] ? user[0].user_phone_number: 'None'} (active)</p>
           </Col>
           <Col></Col>
         </Row>
@@ -100,17 +166,25 @@ export default function Userprofile() {
       <Card title="Security" className="mb-4">
         <div className="flex justify-between">
           <p>Change Password</p>
-          <EditOutlined className="text-lg hover:cursor-pointer hover:text-blue-600" onClick={()=>setOpenChange(true)}/>
+          <EditOutlined
+            className="text-lg hover:cursor-pointer hover:text-blue-600"
+            onClick={() => setOpenChange(true)}
+          />
         </div>
       </Card>
       <Card
-        title="Point & Member"
-        tabList={tabList}
-        activeTabKey={activeTab}
-        onTabChange={onTab1Change}
+       title="Point & Member"
       >
-        {contentList[activeTab]}
+       <Tabs>
+            <Tabs.TabPane tab = "Bonus Points" key={"BP"}>
+              <Table dataSource={user} columns={columnsUsers} pagination={false}></Table>
+            </Tabs.TabPane>
+            <Tabs.TabPane tab = "History Member" key={"HM"}>
+            <Table dataSource={user} columns={columnHistory} pagination={false}></Table>
+            </Tabs.TabPane>
+       </Tabs>
       </Card>
+      
     </div>
   );
-}
+})

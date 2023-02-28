@@ -9,6 +9,7 @@ import {
 } from '@nestjs/common';
 
 import { AddressService } from 'src/Service/Master/address/address.service';
+import { Address } from 'src/entities/Address';
 
 @Controller('address')
 export class AddressController {
@@ -26,21 +27,62 @@ export class AddressController {
     return this.addressService.findOneAddress(id);
   }
 
+  //find by Name
+  @Get('name/:name')
+  addressName(@Param('name') params): Promise<any> {
+    return this.addressService.getAddressByName(params);
+  }
+  //find by Provinces
+  @Get('provinces/:name')
+  addressProvinces(@Param('name') params): Promise<any> {
+    return this.addressService.getAddressByProvinces(params);
+  }
+  //find by Hotel
+  @Get('hotel/:name')
+  addressHotel(@Param('name') params): Promise<any> {
+    return this.addressService.getAddressByHotel(params);
+  }
+  //find by Users
+  @Get('user/:name')
+  addressUser(@Param('name') params): Promise<any> {
+    return this.addressService.getAddressByUser(params);
+  }
+
   //create new
-  @Post('create')
-  create(@Body() body: any): Promise<any> {
-    return this.addressService.createAddress(body);
+  @Post('insert')
+  async create(@Body() data: Address) {
+    // return this.addressService.createAddress(data);
+    const address = await this.addressService.createAddress(data);
+    if (!address) {
+      return 'failed add to address';
+    } else {
+      return 'success add to address';
+    }
   }
 
   //update
-  @Put(':id')
-  update(@Param() params, @Body() body: any): Promise<any> {
-    return this.addressService.updateAddress(params.id, body);
+  @Put('edit/:id')
+  async update(@Param() params, @Body() data: any): Promise<any> {
+    // return this.addressService.updateAddress(params.id, data);
+    const newData: any = await this.addressService.updateAddress(
+      params.id,
+      data,
+    );
+    if (!newData) {
+      return 'hotel fail updated';
+    } else {
+      return 'hotel updated';
+    }
   }
 
   //delete
-  @Delete(':id')
-  remove(@Param() params): Promise<any> {
-    return this.addressService.deleteAddress(params.id);
+  @Delete('delete/:id')
+  remove(@Param() params) {
+    const result = this.addressService.deleteAddress(params.id);
+    if (result) {
+      return ` success deleted`;
+    } else {
+      return ' gagal';
+    }
   }
 }

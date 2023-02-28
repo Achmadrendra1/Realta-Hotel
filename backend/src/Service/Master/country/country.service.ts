@@ -12,7 +12,9 @@ export class CountryService {
 
   //find All
   async findAllCountry(): Promise<any> {
-    return await this.countryRepository.find();
+    return await this.countryRepository.query(
+      'select * from master.country order by country_id',
+    );
   }
 
   //find by Id
@@ -25,19 +27,21 @@ export class CountryService {
   }
 
   //create new
-  async createCountry(data: Country): Promise<any> {
-    return await this.countryRepository.save(data)
-      .then(() => {
-        return 'success';
-      })
-      .catch((error) => {
-        return error;
-      });
+  async createCountry(data: any): Promise<Country> {
+    const country = new Country();
+    country.countryName = data.country_name;
+    country.countryRegion = data.country_region_id;
+    return await this.countryRepository.save(country);
   }
 
   //update
-  async updateCountry(countryId: number, data: Country): Promise<any> {
-    return await this.countryRepository.update({ countryId: countryId }, data)
+  async updateCountry(countryId: number, data: any): Promise<Country> {
+    const country = new Country();
+    country.countryName = data.country_name;
+    country.countryRegion = data.country_region_id;
+
+    return await this.countryRepository
+      .update({ countryId: countryId }, country)
       .then(() => {
         return 'success';
       })
@@ -48,12 +52,12 @@ export class CountryService {
 
   //delete
   async deleteCountry(countryId: number): Promise<any> {
-    return await this.countryRepository.delete({ countryId: countryId })
-      .then(() => {
-        return 'success';
-      })
-      .catch((error) => {
-        return error;
-      });
+    return await this.countryRepository.delete({ countryId: countryId });
+    // .then(() => {
+    //   return 'success';
+    // })
+    // .catch((error) => {
+    //   return error;
+    // });
   }
 }

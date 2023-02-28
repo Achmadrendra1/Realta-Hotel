@@ -1,0 +1,129 @@
+import {
+  doAddAddress,
+  doUpdateAddress,
+} from '@/Redux/Action/Master/actionAddress';
+import { doAddProvinces } from '@/Redux/Action/Master/actionProvinces';
+import { SaveOutlined, UndoOutlined } from '@ant-design/icons';
+import { Button, Divider, Form, Input, Modal } from 'antd';
+import { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+
+export default function AddProvinces(props: any) {
+  const dispatch = useDispatch();
+  const provNamee = props.provNamee;
+  const provId = props.provId;
+  const dataProvinces = props.dataProvinces;
+  const { handleClose } = props;
+  const details = dataProvinces.find(
+    (item: any) => item.prov_name == provNamee
+  );
+  const [formValues, setFormValues] = useState(details);
+  // console.log('provNamee :', provNamee);
+  // console.log('provId :', provId);
+  // console.log('dataProvinces :', dataProvinces);
+  // console.log('details :', details);
+  // console.log('formValues address :', formValues);
+
+  const handleInputChange = (input: any) => (e: any) => {
+    setFormValues({ ...formValues, [input]: e.target.value });
+  };
+
+  // console.log('handleInputChange :', handleInputChange);
+
+  const onFinish = (data: any) => {
+    dispatch(doAddAddress(data));
+    // console.log('add data city:', data);
+    dispatch(doUpdateAddress(formValues));
+    window.location.reload();
+    handleClose(false);
+    alert;
+  };
+
+  const onFinishFailed = (errorInfo: any) => {
+    // console.log('Failed:', errorInfo);
+  };
+
+  //Alert
+  const [visible, setVisible] = useState('hidden');
+  const alert = (e: any) => {
+    window.location.reload();
+    setVisible('');
+    setTimeout(() => {
+      setVisible('hidden');
+    }, 777);
+  };
+
+  return (
+    <>
+      <Modal
+        title="Add New Provinces"
+        open={props.show}
+        onOk={props.clickOk}
+        // confirmLoading={confirmLoading}
+        onCancel={props.clickCancel}
+        style={{ top: 20 }}
+        footer={null}
+      >
+        <Form
+          layout="vertical"
+          onFinish={onFinish}
+          onFinishFailed={onFinishFailed}
+          autoComplete="off"
+          initialValues={formValues}
+        >
+          <p>
+            <Divider style={{ borderWidth: '2px' }} />
+          </p>
+          <Form.Item
+            style={{ marginTop: '5%' }}
+            label={`${provNamee}`}
+            name={'addr_prov_id'}
+            rules={[
+              { required: true, message: 'Please input Provinces name!' },
+            ]}
+          >
+            <Input
+              style={{
+                width: '80%',
+                marginLeft: '10%',
+                marginTop: '3%',
+              }}
+              placeholder="Input Provinces Name"
+              onChange={handleInputChange('addr_prov_id')}
+              disabled
+            />
+          </Form.Item>
+          <Form.Item
+            style={{ marginTop: '5%' }}
+            // label={`${addr_line2}`}
+            name={'addr_line2'}
+            rules={[{ required: true, message: 'Please input City name!' }]}
+          >
+            <Input
+              style={{
+                width: '80%',
+                marginLeft: '10%',
+                marginTop: '3%',
+              }}
+              placeholder="Input City Name"
+              // onChange={handleInputChange('Provinces_name')}
+            />
+          </Form.Item>
+          <Form.Item label=" " colon={false} style={{ textAlign: 'right' }}>
+            <Button htmlType="reset" onClick={props.clickCancel}>
+              <UndoOutlined style={{ color: '#FF8002' }} />
+              Cancel
+            </Button>
+            <Button
+              htmlType="submit"
+              style={{ marginLeft: '3%  ', marginRight: '1%' }}
+            >
+              <SaveOutlined style={{ color: '#3399FF' }} />
+              Save
+            </Button>
+          </Form.Item>
+        </Form>
+      </Modal>
+    </>
+  );
+}

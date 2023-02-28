@@ -14,23 +14,23 @@ export class FacilitiesController {
   constructor(private FaciService: FacilitiesService) {}
 
   @Get()
-  getHore() {
+  getFacility() {
     return this.FaciService.findAllFaci();
   }
   @Get(':id')
-  getHoreId(@Param() params) {
-    return this.FaciService.findByFaciId(params);
+  getFacilityId(@Param('id') id: any) {
+    return this.FaciService.findByFaciId(id);
   }
   @Put(':id')
-  UpdateHore(@Param('hotelId') hotelId: any, @Body() body: any) {
-    return this.FaciService.UpdateFaci(hotelId, body);
+  UpdateFacility(@Param('id') id: any, @Body() body: any) {
+    return this.FaciService.UpdateFaci(id, body);
   }
   @Post('Add')
-  addHore(@Body() body: any) {
+  addFacility(@Body() body: any) {
     return this.FaciService.addNewFaci(body);
   }
-  @Delete()
-  DeleteHore(@Param('id') params) {
-    return this.FaciService.deleteFaci(params);
+  @Delete(':id')
+  DeleteFacility(@Param('id') id: any) {
+    return this.FaciService.deleteFaci(id);
   }
 }
