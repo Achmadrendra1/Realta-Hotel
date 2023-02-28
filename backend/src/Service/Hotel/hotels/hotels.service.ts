@@ -102,8 +102,5 @@ export class HotelsService {
   }
 
 
-  //Get hotel untuk Booking
-  async findSpHotel():Promise<any> {
-    return await this.hotelRepository.query('Select * from hotel.viewHotel')
-  }
+  
 }

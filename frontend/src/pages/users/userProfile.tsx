@@ -1,5 +1,5 @@
 import withAuth from "@/PrivateRoute/WithAuth";
-import { EditOutlined } from "@ant-design/icons";
+import { EditOutlined, UserOutlined } from "@ant-design/icons";
 import { Avatar, Card, Col, Row, Table, Tabs, Tag } from "antd";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -129,13 +129,8 @@ export default withAuth( function Userprofile() {
             
             <Avatar
               size={120}
-              src={
-                <img
-                  src={
-                    user.emp_photo ? user[0].emp_photo  : "https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png"
-                  }
-                  alt="avatar"
-                />
+              icon={
+                <UserOutlined />
               }
             />
           </Col>

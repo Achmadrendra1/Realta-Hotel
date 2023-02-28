@@ -50,27 +50,29 @@ function* handleBoorCreateFinal(action : any): any {
 
 function* handleSpHotel() : any {
     try{
-      const result = yield axios(API('Get', `/hotels/Sp`, null));
+      const result = yield axios(API('Get', `/booking-orders/hotel`));
       yield put(getSpHotelSuccess(result.data));
       return result.data
     }catch(e : any) {
-      yield put(getSpHotelFailed(e))
+      // yield put(getSpHotelFailed(e))
+      console.log(e)
     }
   }
 
 function* handleSpFacilities() : any {
     try{
-      const result = yield axios(API('Get', `/facilities/Sp`, null));
+      const result = yield axios(API('Get', '/booking-orders/Faci', null));
       yield put(getSpFacilitiesSuccess(result.data));
       return result.data
     }catch(e : any) {
-      yield put(getSpHotelFailed(e))
+      // yield put(getSpHotelFailed(e))
+      console.log(e)
     }
   }
 
   function* handleSpHotelReviews() : any {
     try{
-      const result = yield axios(API('Get', `/hotel-reviews/Sp`, null));
+      const result = yield axios(API('Get', '/booking-orders/Review', null));
       yield put(getSpReviewSuccess(result.data));
       return result.data
     }catch(e : any) {
