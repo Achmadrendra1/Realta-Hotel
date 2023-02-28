@@ -87,7 +87,6 @@ import { CategoryGroupService } from 'src/Service/Master/category_group/category
 import { CountryService } from 'src/Service/Master/country/country.service';
 import { MembersService } from 'src/Service/Master/members/members.service';
 import { PolicyService } from 'src/Service/Master/policy/policy.service';
-import { PolicyCategoryGroupService } from 'src/Service/Master/policy_category_group//policy_category_group.service';
 import { ProvincesService } from 'src/Service/Master/provinces/provinces.service';
 import { RegionsService } from 'src/Service/Master/regions/regions.service';
 import { ServiceTaskService } from 'src/Service/Master/service_task/service_task.service';
@@ -99,7 +98,6 @@ import { CategoryGroupController } from 'src/Controller/Master/category_group/ca
 import { CountryController } from 'src/Controller/Master/country/country.controller';
 import { MembersController } from 'src/Controller/Master/members/members.controller';
 import { PolicyController } from 'src/Controller/Master/policy/policy.controller';
-import { PolicyCategoryGroupController } from 'src/Controller/Master/policy_category_group/policy_category_group.controller';
 import { ProvincesController } from 'src/Controller/Master/provinces/provinces.controller';
 import { RegionsController } from 'src/Controller/Master/regions/regions.controller';
 import { ServiceTaskController } from 'src/Controller/Master/service_task/service_task.controller';
@@ -233,7 +231,6 @@ import { PolicyCategoryGroup } from 'src/entities/PolicyCategoryGroup';
     RegionsController,
     ProvincesController,
     PriceItemsController,
-    PolicyCategoryGroupController,
     PolicyController,
     MembersController,
     CountryController,
@@ -281,7 +278,6 @@ import { PolicyCategoryGroup } from 'src/entities/PolicyCategoryGroup';
     ServiceTaskService,
     RegionsService,
     ProvincesService,
-    PolicyCategoryGroupService,
     PolicyService,
     MembersService,
     CountryService,

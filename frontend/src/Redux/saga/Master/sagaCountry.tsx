@@ -12,7 +12,6 @@ import {
   doDelCountrySucceed,
   doDelCountryFailed,
 } from '../../Action/Master/actionCountry';
-import apiCountry from '@/Redux/Service/master/apiMasterCountry';
 import { API } from '@/Redux/Configs/consumeApi';
 import axios from "axios";
 
@@ -29,16 +28,6 @@ function* handlerCountry  (): any {
   }
 }
 
-// function* handlerCountry(): any {
-//   //Jika Postman menampilkan result data
-//   try {
-//     const result = yield call(apiCountry.getCountry);
-//     // console.log('saga Country :', result);
-//     yield put(doCountrySucceed(result.data));
-//   } catch (error) {
-//     yield put(doCountryFailed(error));
-//   }
-// }
 
 //_____________________________________________________________________________________________________________________________________________________________________________________________________________________
 //  ADD
@@ -57,16 +46,6 @@ function* handlerAddCountry(action: any): any {
 }
 
 
-// function* handlerAddCountry(action: any): any {
-//   //jika return di postman a cuma menampilkan string tidak pakai result
-//   try {
-//     yield call(apiCountry.addCountry, action.payload);
-//     yield put(doAddCountrySucceed(action.payload));
-//   } catch (error) {
-//     yield put(doAddCountryFailed(error));
-//   }
-// }
-
 //_____________________________________________________________________________________________________________________________________________________________________________________________________________________
 //  UPDATE
 function* handlerUpdateCountry(action: any): any {
@@ -84,15 +63,6 @@ function* handlerUpdateCountry(action: any): any {
   }
 }
 
-// function* handlerUpdateCountry(action: any) {
-//   try {
-//     yield call(apiCountry.updateCountry, action.payload);
-//     yield put(doUpdateCountrySucceed(action.payload));
-//   } catch (error) {
-//     yield put(doUpdateCountryFailed(error));
-//   }
-// }
-
 //_____________________________________________________________________________________________________________________________________________________________________________________________________________________
 //  DELETE
 function* handlerDeleteCountry(action: any): any {
@@ -105,14 +75,6 @@ function* handlerDeleteCountry(action: any): any {
 }
 
 
-// function* handlerDeleteCountry(action: any) {
-//   try {
-//     yield call(apiCountry.deleteCountry, action.payload);
-//     yield put(doDelCountrySucceed(action.payload));
-//   } catch (error) {
-//     yield put(doDelCountryFailed(error));
-//   }
-// }
 
 //_____________________________________________________________________________________________________________________________________________________________________________________________________________________
 
