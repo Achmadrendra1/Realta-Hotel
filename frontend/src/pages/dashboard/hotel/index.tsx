@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/rules-of-hooks */
 import { deleteHotel, getHotel } from "@/Redux/Action/Hotel/HotelAction";
 import Buttons from "@/components/Button";
 import Dashboard from "@/layouts/dashboard";
@@ -23,17 +22,15 @@ export default function index() {
   const [add, setAdd] = useState(false);
   const [id, setId] = useState();
   const [refresh, setRefresh] = useState(false);
-  const [refreshEdit, setRefreshEdit] = useState(false);
   const [edit, setEdit] = useState(false);
   const router = useRouter();
 
   useEffect(() => {
     dispatch(getHotel());
   }, []);
-
-  const handleRefresh = () =>{
-    setRefresh(true)
-  }
+  const handleRefresh = () => {
+    setRefresh(true);
+  };
 
   const onClick = (id: any) => {
     setEdit(true);
@@ -111,9 +108,10 @@ export default function index() {
     const input = e.target.value.toLowerCase().replace(/\s/g, "");
     setQueryHotel(input);
   };
-  const searchResultsHotel = hotel.filter((item: any) =>
-    item?.hotelName?.toLowerCase().replace(/\s/g, "").includes(queryHotel)||
-    item?.hotelAddr?.addrLine2?.toLowerCase().replace(/\s/g, "").includes(queryHotel)
+  const searchResultsHotel = hotel.filter(
+    (item: any) =>
+      item?.hotelName?.toLowerCase().replace(/\s/g, "").includes(queryHotel) ||
+      item?.hotelAddr?.addrLine2?.toLowerCase().replace(/\s/g, "").includes(queryHotel)
   );
 
   return (

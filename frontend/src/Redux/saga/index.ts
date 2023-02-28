@@ -7,7 +7,7 @@ import {
 } from "./HR/department";
 import { deptType } from "../Constant/HR/deptType";
 import { empType } from "../Constant/HR/empType";
-import { handleDetailEmployee, handleGetEmployees } from "./HR/employees";
+import { handleAddEmployee, handleDelEmployee, handleDetailEmployee, handleGetEmployees } from "./HR/employees";
 import UserConst from "../Constant/User/UserConst";
 import { HandleLoginUser } from "./User/auth";
 import { HandleEditProfile, HandleGetUser } from "./User/getUser";
@@ -104,6 +104,8 @@ import {
   handlerUpdateLocationsRCP,
 } from "./Master/sagaLocationsRCP";
 import ActionTypes from "../Constant/Master/masterActionType";
+import { jobType } from "../Constant/HR/jobType";
+import { handleSelectJob } from "./HR/select";
 import HotelConstant from "../Constant/Hotel/HotelConstant";
 import {
   handleAddFacilities,
@@ -127,6 +129,8 @@ import {
   handleUpdateFapho,
   handleUpdateHotel,
 } from "./Hotel/HotelSaga";
+import BookingConstant from "../Constant/Booking/BookingConstant";
+import { handleBoorCreateFinal, handleBoorLast, handleSpFacilities, handleSpHotel, handleSpHotelReviews, handleSpof } from "./Booking/BookingSaga";
 
 // Purchasing
 import PurchasingConst from '../Constant/Purchasing/PurchasingConst'
@@ -227,6 +231,16 @@ export default function* rootSaga() {
     takeEvery(ActionTypes.UPDATE_LOCATIONSRCP, handlerUpdateLocationsRCP),
     takeEvery(ActionTypes.DEL_LOCATIONSRCP, handlerDeleteLocationsRCP),
 
+    // HR
+    takeEvery(deptType.GET_DATA, handleGetDept),
+    takeEvery(deptType.ADD_DATA, handleAddDept),
+    takeEvery(deptType.UPDATE_DATA, handleUpdateDept),
+    takeEvery(deptType.DELETE_DATA, handleDeleteDept),
+    takeEvery(empType.GET_DATA, handleGetEmployees),
+    takeEvery(empType.GET_DETAIL, handleDetailEmployee),
+    takeEvery(jobType.GET_SELECT_JOB, handleSelectJob),
+    takeEvery(empType.ADD_DATA, handleAddEmployee),
+    takeEvery(empType.DEL_DATA, handleDelEmployee),
     //Hotel
     takeEvery(HotelConstant.GET_HOTEL, handleHotel),
     takeEvery(HotelConstant.GET_HOTEL_ID, handleHotelID),
@@ -247,7 +261,7 @@ export default function* rootSaga() {
     takeEvery(HotelConstant.UPDATE_FAPH, handleUpdateFaph),
     takeEvery(HotelConstant.DEL_FAPH, handleDeleteFaph),
     takeEvery(HotelConstant.GET_ADDRESS, handleAddress),
-    takeEvery(HotelConstant.GET_PROVINCE, handleProvince),,
+    takeEvery(HotelConstant.GET_PROVINCE, handleProvince), ,
 
     // Purchasing
     takeEvery(PurchasingConst.GET_STOCKS, handleStock),
@@ -274,5 +288,14 @@ export default function* rootSaga() {
     takeEvery(PurchasingConst.ADD_PODE, handlePodeAdd),
     takeEvery(PurchasingConst.EDIT_PODE, handlePodeUpdate),
     takeEvery(PurchasingConst.DEL_PODE, handlePodeDelete),
+
+
+    //Booking
+    takeEvery(BookingConstant.GET_SPOF, handleSpof),
+    takeEvery(BookingConstant.GET_BOOR, handleBoorLast),
+    takeEvery(BookingConstant.INSERT_BOOKING_ORDER, handleBoorCreateFinal),
+    takeEvery(BookingConstant.GET_SP_FACILITIES, handleSpFacilities),
+    takeEvery(BookingConstant.GET_SP_HOTEL, handleSpHotel),
+    takeEvery(BookingConstant.GET_SP_REVIEW, handleSpHotelReviews)
   ]);
 }

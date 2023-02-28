@@ -8,6 +8,7 @@ import payTrxHistoryReducer from './Payment/payTrxHistoryReducer';
 import payBankReducer from './Payment/payBankReducer';
 import payPagaReducer from './Payment/payPagaReducer';
 import payUserAccReducer from './Payment/payUserAccReducer';
+import { selectReducer } from './HR/select';
 // Master
 import regionsReducer from './Master/regionsReducer';
 import provincesReducer from './Master/provincesReducer';
@@ -21,6 +22,11 @@ import locationsReducer from './Master/locationsReducer';
 import locationsRCReducer from './Master/locationsRCReducer';
 import locationsRCPReducer from './Master/locationsRCPReducer';
 import HotelReducer from './Hotel/HotelReducer';
+import BoorReducer from './Booking/BoorReducer';
+import SpofReducer from './Booking/SpofReducer';
+import FaciBoorReducer from './Booking/FaciBoorReducer';
+import HotelBoorReducer from './Booking/HotelBoorReducer';
+import ReviewBoorReducer from './Booking/ReviewBoorReducer';
 // Purchasing
 import StockReducer from './Purchasing/stockReducer';
 import StodReducer from './Purchasing/stodReducer';
@@ -33,6 +39,7 @@ export default combineReducers({
   DeptReducer,
   employeesReducer,
   detailEmpReducer,
+  selectReducer,
 
   //User And Auth
   loginReducer,
@@ -59,6 +66,14 @@ export default combineReducers({
 
   //Hotel
   HotelReducer,
+
+  //Booking,
+  BoorReducer,
+  SpofReducer,
+  FaciBoorReducer,
+  HotelBoorReducer,
+  ReviewBoorReducer,
+
 
   //Purchasing
   StockReducer,

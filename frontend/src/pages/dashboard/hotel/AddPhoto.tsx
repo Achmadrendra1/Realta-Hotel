@@ -1,13 +1,13 @@
-import { addFapho } from "@/Redux/Action/Hotel/HotelAction";
-import { PlusOutlined, UploadOutlined } from "@ant-design/icons";
-import { Button, Form, Modal, Upload } from "antd";
-import { RcFile, UploadFile, UploadProps } from "antd/es/upload";
-import { useFormik } from "formik";
-import React, { useState } from "react";
-import { useDispatch } from "react-redux";
+import { addFapho } from '@/Redux/Action/Hotel/HotelAction';
+import { UploadOutlined } from '@ant-design/icons';
+import { Button, Form, Upload, UploadProps } from 'antd';
+import { RcFile, UploadFile } from 'antd/es/upload';
+import { useFormik } from 'formik';
+import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
 
-export default function AddPhoto(props: any) {
-  const dispatch = useDispatch();
+export default function AddPhoto(props: any){
+    const dispatch = useDispatch();
   const [form] = Form.useForm();
   const onFinish = (values: any) => {
     console.log("Received values of form: ", values);
@@ -35,7 +35,7 @@ export default function AddPhoto(props: any) {
   });
   console.log(fileList);
   const handleUpload = () => {
-    fileList.forEach((file) => {
+    fileList.forEach((file:any) => {
       formik.setFieldValue('faphoUrl[]', file as RcFile )
       // formData.append('files[]', file as RcFile);
     });

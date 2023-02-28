@@ -2,25 +2,22 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UserBonusPoints } from 'src/entities/UserBonusPoints';
 import { Repository } from 'typeorm';
-import * as DataEnum  from 'src/DataEnum';
+import * as DataEnum from 'src/DataEnum';
 
 @Injectable()
 export class UserBonusPointsService {
-
-  constructor( 
+  constructor(
     @InjectRepository(UserBonusPoints)
     private userBonusPointsRepository: Repository<UserBonusPoints>,
-  ){
-  }
+  ) {}
 
- async create(items: UserBonusPoints):Promise<any> {
-    const hasil =  await this.userBonusPointsRepository.save({
+  async create(items: UserBonusPoints): Promise<any> {
+    const hasil = await this.userBonusPointsRepository.save({
       ubpoId: items.ubpoId,
-      ubpoUser : items.ubpoUser,
-      ubpoTotalPoints : items.ubpoTotalPoints,
+      ubpoUser: items.ubpoUser,
+      ubpoTotalPoints: items.ubpoTotalPoints,
       ubpoBonusType: DataEnum.BonusType[items.ubpoBonusType],
       ubpoCreatedOn: new Date(),
-
     });
 
     return {
@@ -38,14 +35,17 @@ export class UserBonusPointsService {
   // }
 
   async update(id: number, items: UserBonusPoints) {
-    return await this.userBonusPointsRepository.update(
-      {ubpoId:id },
-      {  ubpoUser : items.ubpoUser,
-        ubpoTotalPoints : items.ubpoTotalPoints,
-        ubpoBonusType: DataEnum.BonusType[items.ubpoBonusType],
-        ubpoCreatedOn: new Date(),
-      }
-      ).catch((err) => {
+    return await this.userBonusPointsRepository
+      .update(
+        { ubpoId: id },
+        {
+          ubpoUser: items.ubpoUser,
+          ubpoTotalPoints: items.ubpoTotalPoints,
+          ubpoBonusType: DataEnum.BonusType[items.ubpoBonusType],
+          ubpoCreatedOn: new Date(),
+        },
+      )
+      .catch((err) => {
         throw new HttpException(
           {
             message: err.message,
@@ -53,23 +53,24 @@ export class UserBonusPointsService {
           HttpStatus.BAD_REQUEST,
         );
       });
-    }
+  }
 
   async remove(id: number) {
-    const result = await this.userBonusPointsRepository.delete({ubpoId:id})
+    const result = await this.userBonusPointsRepository.delete({ ubpoId: id });
     if (result.affected > 0) {
       throw new HttpException(
-      {
-        message: 'Data User Bonus Point Berhasil Dihapus',
-       }, HttpStatus.OK,
+        {
+          message: 'Data User Bonus Point Berhasil Dihapus',
+        },
+        HttpStatus.OK,
       );
-  } else {
-          throw new HttpException(
-          {
-              message: 'Data User Bonus Point Tidak Ditemukan',
-          }, HttpStatus.NOT_FOUND,
-          );
-      };
+    } else {
+      throw new HttpException(
+        {
+          message: 'Data User Bonus Point Tidak Ditemukan',
+        },
+        HttpStatus.NOT_FOUND,
+      );
+    }
   }
 }
-
