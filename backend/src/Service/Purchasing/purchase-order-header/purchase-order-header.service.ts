@@ -33,7 +33,7 @@ export class PurchaseOrderHeaderService {
         poheArrivalDate: pohe.poheArrivalDate,
         pohePayType: pohe.pohePayType,
         poheVendor: pohe.poheVendor,
-        poheEmpId: pohe.poheEmpId,
+        poheEmp: pohe.poheEmp,
       })
       .then((result) => {
         return {
@@ -61,11 +61,10 @@ export class PurchaseOrderHeaderService {
           poheSubtotal: pohe.poheSubtotal,
           poheTax: pohe.poheTax,
           poheTotalAmount: pohe.poheTotalAmount,
-          poheRefund: pohe.poheRefund,
-          poheArrivalDate: pohe.poheArrivalDate,
+          poheRefund: pohe.poheRefund, 
           pohePayType: pohe.pohePayType,
           poheVendor: pohe.poheVendor,
-          poheEmpId: pohe.poheEmpId,
+          poheEmp: pohe.poheEmp,
         },
       )
       .then((result) => {
