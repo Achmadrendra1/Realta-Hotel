@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 //
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Like, Repository } from 'typeorm';
 //
 
 import { ServiceTask } from 'src/entities/ServiceTask';
@@ -14,7 +14,11 @@ export class ServiceTaskService {
 
   //find All
   async findAllServiceTask(): Promise<any> {
-    return await this.serviceTaskRepository.find();
+    return await this.serviceTaskRepository.find({
+      order: {
+        setaId: 'ASC',
+      },
+    });
   }
 
   //find by Id
@@ -26,18 +30,20 @@ export class ServiceTaskService {
     });
   }
 
-  //create new
-  async createServiceTask(data: ServiceTask): Promise<any> {
-    return await this.serviceTaskRepository
-      .save(data)
-      .then(() => {
-        return 'success';
-      })
-      .catch((error) => {
-        return error;
-      });
+  //find service item job Role
+  async getServiceByJobRole(name: string): Promise<any> {
+    return await this.serviceTaskRepository.find({
+      where: {},
+    });
   }
 
+  //create new
+
+  async createService(data: ServiceTask): Promise<ServiceTask> {
+    return await this.serviceTaskRepository.save(
+      this.serviceTaskRepository.create(data),
+    );
+  }
   //update
   async updateServiceTask(setaId: number, data: ServiceTask): Promise<any> {
     return await this.serviceTaskRepository

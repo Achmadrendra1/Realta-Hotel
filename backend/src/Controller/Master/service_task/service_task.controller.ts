@@ -8,7 +8,8 @@ import {
   Put,
 } from '@nestjs/common';
 import { ServiceTaskService } from 'src/Service/Master/service_task/service_task.service';
-@Controller('service-task')
+import { ServiceTask } from 'src/entities/ServiceTask';
+@Controller('service')
 export class ServiceTaskController {
   constructor(private ServiceTaskService: ServiceTaskService) {}
 
@@ -25,19 +26,25 @@ export class ServiceTaskController {
   }
 
   //create new
-  @Post('create')
-  create(@Body() body: any): Promise<any> {
-    return this.ServiceTaskService.createServiceTask(body);
+
+  @Post('insert')
+  async createService(@Body() data: ServiceTask) {
+    const service = await this.ServiceTaskService.createService(data);
+    if (!service) {
+      return 'failed insert to service';
+    } else {
+      return ' success insert to service';
+    }
   }
 
   //update
-  @Put(':id')
+  @Put('edit/:id')
   update(@Param() params, @Body() body: any): Promise<any> {
     return this.ServiceTaskService.updateServiceTask(params.id, body);
   }
 
   //delete
-  @Delete(':id')
+  @Delete('delete/:id')
   remove(@Param() params): Promise<any> {
     return this.ServiceTaskService.deleteServiceTask(params.id);
   }
