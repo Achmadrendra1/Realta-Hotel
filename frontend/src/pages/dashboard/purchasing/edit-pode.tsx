@@ -10,7 +10,7 @@ export default function EditPodes(props: any) {
     const { handleClose } = props
     const dispatch = useDispatch()
 
-    const editPodes = data.find((item: any) => item.podeId == id)
+    const editPodes = data.find((item: any) => item.podhe_id == id)
     const [dataPode, setDataPode] = useState(editPodes)
 
     const eventHandler = (item: any) => (event: any) => {
@@ -43,28 +43,28 @@ export default function EditPodes(props: any) {
                     initialValues={dataPode}
                 >
                     <Form.Item
-                        name="podeStock" label='Stock'
+                        name="podhe_stock_name" label='Stock'
                         rules={[{ required: true, message: 'Please input stock order!' }]}
                     >
                         <Input />
                     </Form.Item>
 
                     <Form.Item
-                        name="podeOrderQty" label='Order Qty'
+                        name="podhe_order_qty" label='Order Qty'
                         rules={[{ required: true, message: 'Please input order quantity!' }]}
                     >
                         <Input />
                     </Form.Item>
 
                     <Form.Item
-                        name="podeReceivedQty" label='Received'
+                        name="podhe_received_qty" label='Received'
                         rules={[{ required: true, message: 'Please input order received quantity!' }]}
                     >
                         <Input />
                     </Form.Item>
 
                     <Form.Item
-                        name="podeRejectedQty" label='Rejected'
+                        name="podhe_rejected_qty" label='Rejected'
                         rules={[{ required: true, message: 'Please input order rejected quantity!' }]}
                     >
                         <Input />

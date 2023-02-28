@@ -10,7 +10,12 @@ export class FacilityPriceHistoryService {
     private faphRepository: Repository<FacilityPriceHistory>,
   ) {}
   async findAllFaph(): Promise<any> {
-    return await this.faphRepository.find();
+    return await this.faphRepository.find({
+      relations: {
+        faphFaci: true,
+        faphUser: true,
+      },
+    });
   }
 
   async findByFaphId(faph: FacilityPriceHistory): Promise<any> {
@@ -22,7 +27,7 @@ export class FacilityPriceHistoryService {
   async addNewFaph(faph: FacilityPriceHistory): Promise<any> {
     return await this.faphRepository
       .save({
-        faphFaciId: faph.faphFaciId,
+        faphFaci: faph.faphFaci,
         faphStartdate: faph.faphStartdate,
         faphEnddate: faph.faphEnddate,
         faphLowPrice: faph.faphLowPrice,
@@ -31,7 +36,7 @@ export class FacilityPriceHistoryService {
         faphDiscount: faph.faphDiscount,
         faphTaxRate: faph.faphTaxRate,
         faphModifiedDate: faph.faphModifiedDate,
-        faphUserId: faph.faphUserId,
+        faphUser: faph.faphUser,
       })
       .then((result) => {
         return {
@@ -51,7 +56,7 @@ export class FacilityPriceHistoryService {
           faphId: id,
         },
         {
-          faphFaciId: faph.faphFaciId,
+          faphFaci: faph.faphFaci,
           faphStartdate: faph.faphStartdate,
           faphEnddate: faph.faphEnddate,
           faphLowPrice: faph.faphLowPrice,
@@ -60,7 +65,7 @@ export class FacilityPriceHistoryService {
           faphDiscount: faph.faphDiscount,
           faphTaxRate: faph.faphTaxRate,
           faphModifiedDate: faph.faphModifiedDate,
-          faphUserId: faph.faphUserId,
+          faphUser: faph.faphUser,
         },
       )
       .then((result) => {

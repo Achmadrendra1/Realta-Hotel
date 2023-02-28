@@ -8,10 +8,6 @@ export default function AddVendors(props: any) {
     const { handleClose } = props
     const dispatch = useDispatch()
 
-    const onChangeSelect = (value: string) => {
-        console.log(value)
-    }
-
     const onChangeDate: DatePickerProps["onChange"] = (date, dateString) => {
         console.log(dateString)
     }
@@ -22,27 +18,28 @@ export default function AddVendors(props: any) {
 
     const active = [
         {
-            value: "0",
+            value: 0,
             label: "InActive"
         },
         {
-            value: "1",
+            value: 1,
             label: "Active"
         }
     ]
 
     const priority = [
         {
-            value: "0",
-            label: "No Priority"
+            value: 0,
+            label: "Lowest"
         },
         {
-            value: "1",
-            label: "Priority"
+            value: 1,
+            label: "Highest"
         }
     ]
 
     const onFinish = (dataVendor: any) => {
+        console.log(dataVendor);
         const data = {
             ...dataVendor,
             vendorRegisterDate: dataVendor["vendorRegisterDate"].format("YYYY-MM-DD")
@@ -74,32 +71,30 @@ export default function AddVendors(props: any) {
                     </p>
 
                     <Form.Item
-                        name="name" label='Vendor'
+                        name="vendorName" label='Vendor'
                         rules={[{ required: true, message: 'Please input vendor name!' }]}
                     >
                         <Input />
                     </Form.Item>
 
-                    <Form.Item name="active" label="Status"
+                    <Form.Item name="vendorActive" label="Status"
                         rules={[{ required: true, message: 'Please select status!' }]}>
                         <Select
                             placeholder='Select Status'
-                            options={active}
-                            onChange={onChangeSelect} />
+                            options={active} />
                     </Form.Item>
 
 
-                    <Form.Item name="priority" label="Priority"
+                    <Form.Item name="vendorPriority" label="Priority"
                         rules={[{ required: true, message: 'Please select priority!' }]}>
                         <Select
                             placeholder='Select Priority'
-                            options={priority}
-                            onChange={onChangeSelect} />
+                            options={priority} />
                     </Form.Item>
 
 
                     <Form.Item
-                        name="register_date" label="Register Date"
+                        name="vendorRegisterDate" label="Register Date"
                         rules={[{ required: true, message: 'Please input register date!' }]}
                     >
                         <DatePicker onChange={onChangeDate} format={customFormat} />
@@ -107,7 +102,7 @@ export default function AddVendors(props: any) {
 
 
                     <Form.Item
-                        name="web_url" label='Site'
+                        name="vendorWeburl" label='Site'
                         rules={[{ required: true, message: 'Please input web site!' }]}
                     >
                         <Input />

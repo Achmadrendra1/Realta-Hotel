@@ -1,23 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import Link from 'next/link';
-import { Dropdown, MenuProps, Modal, Table, Tooltip } from 'antd';
-import { EditOutlined, DeleteOutlined, MoreOutlined } from '@ant-design/icons';
+import { useRouter } from 'next/router';
+import { Modal, Table, Tooltip } from 'antd';
+import { EditOutlined, DeleteOutlined, MoreOutlined, PlusCircleOutlined } from '@ant-design/icons';
 import { AllPohe, DelPohe } from '@/Redux/Action/Purchasing/purchasingAction';
 import EditPohes from './edit-pohe';
 
 export default function Pohe() {
     const dispatch = useDispatch()
+    const router = useRouter()
     const { pohes } = useSelector((state: any) => state.PoheReducer)
     const [id, setId] = useState(0)
     const [addPohe, setAddPohe] = useState(false)
     const [updatePohe, setUpdatePohe] = useState(false)
-
-    const status = (status: any) => {
-        if (status === "1") {
-
-        }
-    }
 
     const handleOk = () => {
         setTimeout(() => {
@@ -63,72 +58,71 @@ export default function Pohe() {
         dispatch(AllPohe())
     }, [])
 
-    const items: MenuProps["items"] = [
-        {
-            label: <Link href="/dashboard/purchasing/list-order">Details</Link>,
-            key: "0"
-        }
-    ]
-
     const columnsPohe = [
         {
             title: 'PO Number',
-            dataIndex: 'poheNumber',
+            dataIndex: 'pove_number',
             sorter: {
-                compare: (a: any, b: any) => a.poheNumber < b.poheNumber ? -1 : 1
+                compare: (a: any, b: any) => a.pove_number < b.pove_number ? -1 : 1
             }
         },
         {
             title: 'PO Date',
-            dataIndex: 'poheOrderDate',
+            dataIndex: 'pove_date',
+            render: (record: any) => {
+                return (
+                    <span>{record.split("T")[0]}</span>
+                )
+            },
             // sorter: {
-            //     compare: (a: any, b: any) => a.poheOrderDate < b.poheOrderDate. ? -1 : 1
+            //     compare: (a: any, b: any) => a.pove_date < b.pove_date. ? -1 : 1
             // }
         },
         {
             title: 'Vendor Target',
-            dataIndex: 'poheVendor',
+            dataIndex: 'pove_name',
             sorter: {
-                compare: (a: any, b: any) => a.poheVendor - b.poheVendor
+                compare: (a: any, b: any) => a.pove_name - b.pove_name
             }
         },
         {
             title: 'Total Amount',
-            dataIndex: 'poheTotalAmount',
+            dataIndex: 'pove_total_amount',
             sorter: {
-                compare: (a: any, b: any) => a.poheTotalAmount - b.poheTotalAmount
+                compare: (a: any, b: any) => a.pove_total_amount - b.pove_total_amount
             }
         },
         {
             title: 'Status',
-            dataIndex: 'poheStatus',
-            // render: (record: any) => {
-            //     return (
-            //         <span>{
-            //             record.poheStatus === "1" ? "Pending"
-            //                 : record.poheStatus === "2" ? "Approve"
-            //                     : record.poheStatus === "3" ? "Rejected"
-            //                         : record.poheStatus === "4" ? "Received" :
-            //                             "Completed"
-            //         }</span>
-            //     )
-            // },
+            dataIndex: 'pove_status',
+            render: (record: any) => {
+                return (
+                    <span>
+                        {record == 1 ? "Pending" : record == 2 ? "Approve" : record == 3 ? "Rejected" : record == 4 ? "Received" : "Completed"}
+                    </span>
+                )
+            },
             sorter: {
-                compare: (a: any, b: any) => a.poheStatus - b.poheStatus
+                compare: (a: any, b: any) => a.pove_status - b.pove_status
             }
         },
         {
             render: (record: any) => (
                 <>
                     <Tooltip placement="top" title='Switch Status'>
-                        <EditOutlined style={{ color: '#13c2c2' }} onClick={() => editPohe(record.poheId)} className="mx-2" />
+                        <EditOutlined style={{ color: '#13c2c2' }} onClick={() => editPohe(record.pove_id)} className="mx-2" />
                     </Tooltip>
                     <Tooltip placement="top" title='Delete'>
-                        <DeleteOutlined style={{ color: 'red' }} onClick={() => showDeleteConfirm(record.poheId, record.poheNumber)} className="mx-2" />
+                        <DeleteOutlined style={{ color: 'red' }} onClick={() => showDeleteConfirm(record.pove_id, record.pove_number)} className="mx-2" />
                     </Tooltip>
-                    <Dropdown menu={{ items }} trigger={["click"]} className="h-8">
-                        <MoreOutlined className="mx-2" />
-                    </Dropdown>
+                    <Tooltip placement="top" title='Details'>
+                        <PlusCircleOutlined
+                            onClick={() => router.push({
+                                pathname: '/dashboard/purchasing/list-order',
+                                query: { id_pohe: record.pove_id }
+                            }, '/dashboard/purchasing/list-order')}
+                            className="mx-2" />
+                    </Tooltip>
                 </>
             )
         }

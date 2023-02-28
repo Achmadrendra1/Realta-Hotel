@@ -1,23 +1,25 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Typography, Row, Button, Card, Col, Descriptions, Table, Tooltip, Modal } from 'antd';
+import { useRouter } from 'next/router';
+import { Descriptions, Table, Tooltip, Modal } from 'antd';
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
 import Dashboard from '@/layouts/dashboard';
-import { AllPode, DelPode } from '@/Redux/Action/Purchasing/purchasingAction';
+import { AllPode, AllPohe, DelPode } from '@/Redux/Action/Purchasing/purchasingAction';
 import EditPodes from './edit-pode';
 
 export default function Pode() {
     const dispatch = useDispatch()
+    const router = useRouter()
     const { podes } = useSelector((state: any) => state.PodeReducer)
     const [id, setId] = useState(0)
     const [updatePode, setUpdatePode] = useState(false)
+    
+    const { pohes } = useSelector((state: any) => state.PoheReducer)
+    const { id_pohe } = router.query
+    const data = pohes.find((item: any) => item.pove_id == id_pohe)
 
-    const rupiah = (number: any) => {
-        return new Intl.NumberFormat("id-ID", {
-            style: "currency",
-            currency: "IDR"
-        }).format(number);
-    }
+    const dataPode = podes.filter((item: any) => item.podhe_pohe_number == data.pove_number)
+    const dataTable = dataPode.length > 0 ? dataPode : []
 
     const handleOk = () => {
         setTimeout(() => {
@@ -56,52 +58,52 @@ export default function Pode() {
         setId(id)
     }
 
-
     useEffect(() => {
         dispatch(AllPode())
+        dispatch(AllPohe())
     }, [])
 
     const columnsPode = [
         {
             title: 'Stock Name',
-            dataIndex: 'podeStock',
+            dataIndex: 'podhe_stock_name',
             sorter: {
-                compare: (a: any, b: any) => a.podeStock < b.podeStock ? -1 : 1
+                compare: (a: any, b: any) => a.podhe_stock_name < b.podhe_stock_name ? -1 : 1
             }
         },
         {
             title: 'Qty',
-            dataIndex: 'podeOrderQty',
+            dataIndex: 'podhe_order_qty',
             sorter: {
-                compare: (a: any, b: any) => a.podeOrderQty - b.podeOrderQty
+                compare: (a: any, b: any) => a.podhe_order_qty - b.podhe_order_qty
             }
         },
         {
             title: 'Price',
-            dataIndex: 'podePrice',
+            dataIndex: 'podhe_price',
             sorter: {
-                compare: (a: any, b: any) => a.podePrice - b.podePrice
+                compare: (a: any, b: any) => a.podhe_price - b.podhe_price
             }
         },
         {
             title: 'Received Qty',
-            dataIndex: 'podeReceivedQty',
+            dataIndex: 'podhe_received_qty',
             sorter: {
-                compare: (a: any, b: any) => a.podeReceivedQty - b.podeReceivedQty
+                compare: (a: any, b: any) => a.podhe_received_qty - b.podhe_received_qty
             }
         },
         {
             title: 'Rejected Qty',
-            dataIndex: 'podeRejectedQty',
+            dataIndex: 'podhe_rejected_qty',
             sorter: {
-                compare: (a: any, b: any) => a.podeRejectedQty - b.podeRejectedQty
+                compare: (a: any, b: any) => a.podhe_rejected_qty - b.podhe_rejected_qty
             }
         },
         {
             title: 'Total',
-            dataIndex: 'podeLineTotal',
+            dataIndex: 'podhe_line_total',
             sorter: {
-                compare: (a: any, b: any) => a.podeLineTotal - b.podeLineTotal
+                compare: (a: any, b: any) => a.podhe_line_total - b.podhe_line_total
             }
         },
         {
@@ -110,10 +112,10 @@ export default function Pode() {
                 return (
                     <>
                         <Tooltip placement="top" title='Switch Status'>
-                            <EditOutlined style={{ color: '#13c2c2' }} onClick={() => editPode(record.podeId)} className="mx-2" />
+                            <EditOutlined style={{ color: '#13c2c2' }} onClick={() => editPode(record.podhe_id)} className="mx-2" />
                         </Tooltip>
                         <Tooltip placement="top" title='Delete'>
-                            <DeleteOutlined style={{ color: 'red' }} onClick={() => showDeleteConfirm(record.podeId, record.podeStock)} className="mx-2" />
+                            <DeleteOutlined style={{ color: 'red' }} onClick={() => showDeleteConfirm(record.podhe_id, record.podhe_stock_name)} className="mx-2" />
                         </Tooltip>
                     </>
                 )
@@ -138,15 +140,15 @@ export default function Pode() {
                 className='m-2'
                 column={{ xxl: 4, xl: 3, lg: 3, md: 3, sm: 2, xs: 1 }}
             >
-                <Descriptions.Item label="PO Number">poheNumber</Descriptions.Item>
-                <Descriptions.Item label="PO Date">poheOrderDate</Descriptions.Item>
-                <Descriptions.Item label="Vendor">poheVendor</Descriptions.Item>
-                <Descriptions.Item label="Status" >poheStatus</Descriptions.Item>
-                <Descriptions.Item label="Subtotal">Rp. poheSubtotal</Descriptions.Item>
-                <Descriptions.Item label="Total Amount">Rp. poheTotalAmount</Descriptions.Item>
+                <Descriptions.Item label="PO Number">{data?.pove_number}</Descriptions.Item>
+                <Descriptions.Item label="PO Date">{data?.pove_date.split('T')[0]}</Descriptions.Item>
+                <Descriptions.Item label="Vendor">{data?.pove_name}</Descriptions.Item>
+                <Descriptions.Item label="Status" >{data?.pove_status == 1 ? "Pending" : data?.pove_status == 2 ? "Approve" : data?.pove_status == 3 ? "Rejected" : data?.pove_status == 4 ? "Received" : "Completed"}</Descriptions.Item>
+                <Descriptions.Item label="Subtotal">{data?.pove_subtotal}</Descriptions.Item>
+                <Descriptions.Item label="Total Amount">{data?.pove_total_amount}</Descriptions.Item>
             </Descriptions>
 
-            <Table dataSource={podes} columns={columnsPode} />
+            <Table dataSource={dataTable} columns={columnsPode} />
         </Dashboard>
     )
 }

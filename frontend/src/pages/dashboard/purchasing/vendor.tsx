@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import Link from 'next/link';
-import { Button, Dropdown, MenuProps, Modal, Table, Tooltip } from 'antd';
-import { DeleteOutlined, EditOutlined, MoreOutlined, PlusOutlined } from '@ant-design/icons';
+import { useRouter } from 'next/router';
+import { Button, Modal, Table, Tooltip } from 'antd';
+import { DeleteOutlined, EditOutlined, MoreOutlined, PlusCircleOutlined, PlusOutlined } from '@ant-design/icons';
 import { AllVendor, DelVendor } from '@/Redux/Action/Purchasing/purchasingAction';
 import AddVendors from './add-vendor';
 import EditVendors from './edit-vendor';
@@ -13,26 +13,30 @@ export default function Vendor() {
     const [id, setId] = useState(0)
     const [addVendor, setAddVendor] = useState(false)
     const [updateVendor, setUpdateVendor] = useState(false)
+    const router = useRouter()
 
+    const product = () => {
+        router.push('/dashboard/purchasing/add-product')
+    }
     const active = [
         {
-            value: "0",
+            value: 0,
             label: "InActive"
         },
         {
-            value: "1",
+            value: 1,
             label: "Active"
         }
     ]
 
     const priority = [
         {
-            value: "0",
-            label: "No Priority"
+            value: 0,
+            label: "Lowest"
         },
         {
-            value: "1",
-            label: "Priority"
+            value: 1,
+            label: "Highest"
         }
     ]
 
@@ -80,13 +84,6 @@ export default function Vendor() {
         dispatch(AllVendor())
     }, [])
 
-    const items: MenuProps["items"] = [
-        {
-            label: <Link href="/dashboard/purchasing/add-product">Add Item Product</Link>,
-            key: "0"
-        }
-    ]
-
     const columnsVendor = [
         {
             title: 'Vendor',
@@ -100,7 +97,7 @@ export default function Vendor() {
             dataIndex: 'vendorActive',
             render: (record: any) => {
                 return (
-                    <span>{record.vendorActive === "0" ? "InActive" : "Active"}</span>
+                    <span>{record === 0 ? "InActive" : "Active"}</span>
                 )
             },
             sorter: {
@@ -112,7 +109,7 @@ export default function Vendor() {
             dataIndex: 'vendorPriority',
             render: (record: any) => {
                 return (
-                    <span>{record.vendorPriority === "0" ? "Lowest" : "Highest"}</span>
+                    <span>{record === 0 ? "Lowest" : "Highest"}</span>
                 )
             },
             sorter: {
@@ -122,11 +119,11 @@ export default function Vendor() {
         {
             title: 'Register At',
             dataIndex: 'vendorRegisterDate',
-            // render: (record: any) => {
-            //     return (
-            //         <span>{record.vendorRegisterDate.split("T")[0]}</span>
-            //     )
-            // },
+            render: (record: any) => {
+                return (
+                    <span>{record.split("T")[0]}</span>
+                )
+            },
             sorter: {
                 compare: (a: any, b: any) => a.vendorRegisterDate < b.vendorRegisterDate ? -1 : 1
             }
@@ -149,9 +146,14 @@ export default function Vendor() {
                         <Tooltip placement="top" title='Delete'>
                             <DeleteOutlined style={{ color: 'red' }} onClick={() => showDeleteConfirm(record.vendorId, record.vendorName)} className="mx-2" />
                         </Tooltip>
-                        <Dropdown menu={{ items }} trigger={["click"]} className="h-8">
-                            <MoreOutlined className="mx-2" />
-                        </Dropdown>
+                        <Tooltip placement="top" title='Add Item Product'>
+                            <PlusCircleOutlined
+                                onClick={() => router.push({
+                                    pathname: '/dashboard/purchasing/add-product',
+                                    query: { id_vendor: record.vendorId }
+                                }, '/dashboard/purchasing/add-product')}
+                                className="mx-2" />
+                        </Tooltip>
                     </>
                 )
             }

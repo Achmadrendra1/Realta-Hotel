@@ -10,24 +10,24 @@ export default function EditPohes(props: any) {
     const { handleClose } = props
     const dispatch = useDispatch()
 
-    const editPohes = data.find((item: any) => item.poheId == id)
+    const editPohes = data.find((item: any) => item.pove_id == id)
     const [dataPohe, setDataPohe] = useState(editPohes)
 
     const status = [
         {
-            value: "1",
+            value: 1,
             label: "Pending"
         },
         {
-            value: "2",
+            value: 2,
             label: "Approve"
         },
         {
-            value: "3",
+            value: 3,
             label: "Rejected"
         },
         {
-            value: "4",
+            value: 4,
             label: "Complete"
         }
     ]
@@ -62,7 +62,7 @@ export default function EditPohes(props: any) {
                     initialValues={dataPohe}
                 >
 
-                    <Form.Item name="poheStatus" label="Status"
+                    <Form.Item name="pove_status" label="Status"
                         rules={[{ required: true, message: 'Please select status!' }]}>
                         <Select options={status} />
                     </Form.Item>

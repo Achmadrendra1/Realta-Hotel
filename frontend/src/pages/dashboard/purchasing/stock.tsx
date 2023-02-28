@@ -2,15 +2,17 @@ import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Link from 'next/link';
 import { Table, MenuProps, Modal, Button, Tooltip, Dropdown } from 'antd';
-import { PlusOutlined, EditOutlined, DeleteOutlined, MoreOutlined } from '@ant-design/icons';
+import { PlusOutlined, EditOutlined, DeleteOutlined, MoreOutlined, PlusCircleOutlined } from '@ant-design/icons';
 import { AllStock, DelStock } from '@/Redux/Action/Purchasing/purchasingAction';
 import AddStocks from './add-stock';
 import EditStocks from './edit-stock';
 import AddSphos from './add-spho';
+import { useRouter } from 'next/router';
 
 export default function Stock() {
     const { stocks } = useSelector((state: any) => state.StockReducer)
     const dispatch = useDispatch()
+    const router = useRouter()
     const [id, setId] = useState(0)
     const [addStock, setAddStock] = useState(false)
     const [updateStock, setUpdateStock] = useState(false)
@@ -71,7 +73,14 @@ export default function Stock() {
             key: "0"
         },
         {
-            label: <Link href="/dashboard/purchasing/stock-detail">Detail Info Stock</Link>,
+            label:
+                <span
+                    onClick={(record: any) => router.push({
+                        pathname: '/dashboard/purchasing/stock-detail',
+                        query: { id_stock: record.stockId }
+                    }, '/dashboard/purchasing/stock-detail')}>
+                    Detail Info Stock
+                </span>,
             key: "1"
         }
     ]
@@ -133,9 +142,17 @@ export default function Stock() {
                     <Tooltip placement="top" title='Delete'>
                         <DeleteOutlined style={{ color: 'red' }} onClick={() => showDeleteConfirm(record.stockId, record.stockName)} className="mx-2" />
                     </Tooltip>
-                    <Dropdown menu={{ items }} trigger={["click"]} className="h-8">
+                    <Tooltip placement="top" title='Detail Info Stock'>
+                        <PlusCircleOutlined
+                            onClick={() => router.push({
+                                pathname: '/dashboard/purchasing/stock-detail',
+                                query: { id_stock: record.stockId }
+                            }, '/dashboard/purchasing/stock-detail')}
+                            className="mx-2" />
+                    </Tooltip>
+                    {/* <Dropdown menu={{ items }} trigger={["click"]} className="h-8">
                         <MoreOutlined className="mx-2" />
-                    </Dropdown>
+                    </Dropdown> */}
                 </>
             )
         }

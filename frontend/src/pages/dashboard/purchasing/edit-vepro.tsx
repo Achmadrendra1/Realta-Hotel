@@ -10,7 +10,7 @@ export default function EditVepros(props: any) {
     const { handleClose } = props
     const dispatch = useDispatch()
 
-    const editVepros = data.find((item: any) => item.veproId == id)
+    const editVepros = data.find((item: any) => item.vestock_id == id)
     const [dataVepro, setDataVepro] = useState(editVepros)
 
     const eventHandler = (item: any) => (event: any) => {
@@ -50,14 +50,14 @@ export default function EditVepros(props: any) {
                     </p>
 
                     <Form.Item
-                        name="veproStock" label='Stock Name'
+                        name="vestock_name" label='Stock Name'
                         rules={[{ required: true, message: 'Please input stock name!' }]}
                     >
                         <Input />
                     </Form.Item>
 
                     <Form.Item
-                        name="veproQtyStocked" label='Qty Stocked'
+                        name="vestock_qty_stocked" label='Qty Stocked'
                         rules={[{ required: true, message: 'Please input qty Stocked!' }]}
                     >
                         <Input />
@@ -65,7 +65,7 @@ export default function EditVepros(props: any) {
 
 
                     <Form.Item
-                        name="veproQtyRemaining" label='Remaining'
+                        name="vestock_qty_remaining" label='Remaining'
                         rules={[{ required: true, message: 'Please input remaining!' }]}
                     >
                         <Input />
@@ -73,7 +73,7 @@ export default function EditVepros(props: any) {
 
 
                     <Form.Item
-                        name="veproPrice" label='Sell Price'
+                        name="vestock_price" label='Sell Price'
                         rules={[{ required: true, message: 'Please input price!' }]}
                     >
                         <Input />

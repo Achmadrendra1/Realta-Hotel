@@ -2,6 +2,7 @@ import React from 'react';
 import { useDispatch } from 'react-redux';
 import { Form, Input, Modal } from 'antd';
 import { AddVepro } from '@/Redux/Action/Purchasing/purchasingAction';
+import Buttons from '@/components/Button';
 
 export default function AddVepros(props: any) {
     const { handleClose } = props
@@ -39,7 +40,7 @@ export default function AddVepros(props: any) {
                     </p>
 
                     <Form.Item
-                        name="veproStock" label='Stock Name'
+                        name="vestock_name" label='Stock Name'
                         rules={[{ required: true, message: 'Please input stock name!' }]}
                     >
                         <Input />
@@ -47,7 +48,7 @@ export default function AddVepros(props: any) {
 
 
                     <Form.Item
-                        name="veproQtyStocked" label='Qty Stocked'
+                        name="vestock_qty_stocked" label='Qty Stocked'
                         rules={[{ required: true, message: 'Please input qty Stocked!' }]}
                     >
                         <Input />
@@ -55,7 +56,7 @@ export default function AddVepros(props: any) {
 
 
                     <Form.Item
-                        name="veproQtyRemaining" label='Remaining'
+                        name="vestock_qty_remaining" label='Remaining'
                         rules={[{ required: true, message: 'Please input remaining!' }]}
                     >
                         <Input />
@@ -63,11 +64,24 @@ export default function AddVepros(props: any) {
 
 
                     <Form.Item
-                        name="veproPrice" label='Sell Price'
+                        name="vestock_price" label='Sell Price'
                         rules={[{ required: true, message: 'Please input price!' }]}
                     >
                         <Input />
                     </Form.Item>
+
+
+                    <Form.Item label=" " colon={false}>
+                        <div className="flex justify-end">
+                            <Buttons type={"danger"} funcs={props.clickCancel}>
+                                Cancel
+                            </Buttons>
+                            <div className="ml-2">
+                                <Buttons>Save</Buttons>
+                            </div>
+                        </div>
+                    </Form.Item>
+
 
                 </Form>
             </Modal>

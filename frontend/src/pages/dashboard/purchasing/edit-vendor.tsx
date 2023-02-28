@@ -20,28 +20,28 @@ export default function EditVendors(props: any) {
     }
 
     const dateFormat = "YYYY/MM/DD"
-    const customFormat: DatePickerProps["format"] = (value) =>
+    const customFormat: DatePickerProps["format"] = (value: any) =>
         `${value.format(dateFormat)}`
 
     const active = [
         {
-            value: "0",
+            value: 0,
             label: "InActive"
         },
         {
-            value: "1",
+            value: 1,
             label: "Active"
         }
     ]
 
     const priority = [
         {
-            value: "0",
-            label: "No Priority"
+            value: 0,
+            label: "Lowest"
         },
         {
-            value: "1",
-            label: "Priority"
+            value: 1,
+            label: "Highest"
         }
     ]
 
@@ -93,15 +93,13 @@ export default function EditVendors(props: any) {
 
                     <Form.Item name="vendorActive" label="Status"
                         rules={[{ required: true, message: 'Please select status!' }]}>
-                        <Select
-                            options={active} />
+                        <Select options={active} />
                     </Form.Item>
 
 
                     <Form.Item name="vendorPriority" label="Priority"
                         rules={[{ required: true, message: 'Please select priority!' }]}>
-                        <Select
-                            options={priority} />
+                        <Select options={priority} />
                     </Form.Item>
 
                     <Form.Item

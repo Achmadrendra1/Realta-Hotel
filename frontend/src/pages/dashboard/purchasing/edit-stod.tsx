@@ -10,8 +10,27 @@ export default function EditStods(props: any) {
     const { handleClose } = props
     const dispatch = useDispatch()
 
-    const editStods = data.find((item: any) => item.stodId == id)
+    const editStods = data.find((item: any) => item.stockdet_id == id)
     const [dataStod, setDataStod] = useState(editStods)
+
+    const status = [
+        {
+            value: 1,
+            label: "Stocked"
+        },
+        {
+            value: 2,
+            label: "Expired"
+        },
+        {
+            value: 3,
+            label: "Broken"
+        },
+        {
+            value: 4,
+            label: "Used"
+        }
+    ]
 
     const eventHandler = (item: any) => (event: any) => {
         setDataStod({ ...dataStod, [item]: event.target.value })
@@ -42,15 +61,12 @@ export default function EditStods(props: any) {
                     onFinishFailed={onFinishFailed}
                     initialValues={dataStod}
                 >
-                    <Form.Item name="stodStatus" label="Status"
+                    <Form.Item name="stockdet_status" label="Status"
                         rules={[{ required: true, message: 'Please select status!' }]}>
-                        <Select >
-                            <Select.Option value='2'>0 (No Priority)</Select.Option>
-                            <Select.Option value='1'>1 (Priority)</Select.Option>
-                        </Select>
+                        <Select options={status} />
                     </Form.Item>
 
-                    <Form.Item name="stodFaci" label="Used In"
+                    <Form.Item name="stockdet_facilities" label="Used In"
                         rules={[{ required: true, message: 'Please select facilities!' }]}>
                         <Select />
                     </Form.Item>

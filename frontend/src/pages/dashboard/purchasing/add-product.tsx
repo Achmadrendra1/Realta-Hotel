@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import { useRouter } from 'next/router';
 import { Button, Table, Tooltip } from 'antd';
 import { PlusOutlined, EditOutlined } from '@ant-design/icons';
 import Dashboard from '@/layouts/dashboard';
@@ -9,10 +10,18 @@ import EditVepros from './edit-vepro';
 
 export default function AddProduct() {
     const dispatch = useDispatch()
+    const router = useRouter()
     const { vepros } = useSelector((state: any) => state.VeproReducer)
     const [id, setId] = useState(0)
     const [addVepro, setAddVepro] = useState(false)
     const [updateVepro, setUpdateVepro] = useState(false)
+
+    const { vendors } = useSelector((state: any) => state.VendorReducer)
+    const { id_vendor } = router.query
+    const data = vendors.find((item: any) => item.vendorId == id_vendor)
+
+    const dataVepro = vepros.filter((item: any) => item.vestock_vendor_id == data.vendorId)
+    const dataTable = dataVepro.length > 0 ? dataVepro : []
 
     const handleOk = () => {
         setTimeout(() => {
@@ -44,30 +53,30 @@ export default function AddProduct() {
     const columnsVepro = [
         {
             title: 'Stock',
-            dataIndex: 'veproStock',
+            dataIndex: 'vestock_name',
             sorter: {
-                compare: (a: any, b: any) => a.veproStock < b.veproStock ? -1 : 1
+                compare: (a: any, b: any) => a.vestock_name < b.vestock_name ? -1 : 1
             }
         },
         {
             title: 'Qty Stocked',
-            dataIndex: 'veproQtyStocked',
+            dataIndex: 'vestock_qty_stocked',
             sorter: {
-                compare: (a: any, b: any) => a.veproQtyStocked - b.veproQtyStocked
+                compare: (a: any, b: any) => a.vestock_qty_stocked - b.vestock_qty_stocked
             }
         },
         {
             title: 'Qty Remaining',
-            dataIndex: 'veproQtyRemaining',
+            dataIndex: 'vestock_qty_remaining',
             sorter: {
-                compare: (a: any, b: any) => a.veproQtyRemaining - b.veproQtyRemaining
+                compare: (a: any, b: any) => a.vestock_qty_remaining - b.vestock_qty_remaining
             }
         },
         {
             title: 'Price',
-            dataIndex: 'veproPrice',
+            dataIndex: 'vestock_price',
             sorter: {
-                compare: (a: any, b: any) => a.veproPrice - b.veproPrice
+                compare: (a: any, b: any) => a.vestock_price - b.vestock_price
             }
         },
         {
@@ -76,7 +85,7 @@ export default function AddProduct() {
                 return (
                     <>
                         <Tooltip placement="top" title='Edit Vendor Product'>
-                            <EditOutlined style={{ color: '#13c2c2' }} onClick={() => editVepro(record.veproId)} className="mx-2" />
+                            <EditOutlined style={{ color: '#13c2c2' }} onClick={() => editVepro(record.vestock_id)} className="mx-2" />
                         </Tooltip>
                     </>
                 )
@@ -105,7 +114,9 @@ export default function AddProduct() {
                 />
                 : null}
 
-            <Table dataSource={vepros} columns={columnsVepro} />
+            <div className='text-2xl py-3'>{data?.vendorName}</div>
+
+            <Table dataSource={dataTable} columns={columnsVepro} />
         </Dashboard>
     )
 }

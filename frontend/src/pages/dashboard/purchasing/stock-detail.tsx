@@ -1,16 +1,25 @@
 import React, { useState, useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux';
+import { useRouter } from 'next/router';
 import { Table, Tooltip } from 'antd';
 import { EditOutlined } from '@ant-design/icons';
 import Dashboard from '@/layouts/dashboard'
-import { AllStod } from '@/Redux/Action/Purchasing/purchasingAction';
+import { AllStock, AllStod } from '@/Redux/Action/Purchasing/purchasingAction';
 import EditStods from './edit-stod';
 
 export default function Stod() {
     const dispatch = useDispatch()
+    const router = useRouter()
     const { stods } = useSelector((state: any) => state.StodReducer)
     const [id, setId] = useState(0)
     const [updateStod, setUpdateStod] = useState(false)
+
+    const { stocks } = useSelector((state: any) => state.StockReducer)
+    const { id_stock } = router.query
+    const data = stocks.find((item: any) => item.stockId == id_stock)
+
+    const dataStod = stods.filter((item: any) => item.stockdet_name == data.stockName)
+    const dataTable = dataStod.length > 0 ? dataStod : []
 
     const handleOk = () => {
         setTimeout(() => {
@@ -34,42 +43,50 @@ export default function Stod() {
 
     useEffect(() => {
         dispatch(AllStod())
+        dispatch(AllStock())
     }, [])
 
     const columnsStods = [
         {
             title: 'Barcode',
-            dataIndex: 'stodBarcodeNumber',
+            dataIndex: 'stockdet_number',
             sorter: {
-                compare: (a: any, b: any) => a.stodBarcodeNumber < b.stodBarcodeNumber ? -1 : 1
+                compare: (a: any, b: any) => a.stockdet_number < b.stockdet_number ? -1 : 1
             }
         },
         {
             title: 'Status',
-            dataIndex: 'stodStatus',
+            dataIndex: 'stockdet_status',
+            render: (record: any) => {
+                return (
+                    <span>
+                        {record == 1 ? "Stocked" : record == 2 ? "Expired" : record == 3 ? "Broken" : "Used"}
+                    </span>
+                )
+            },
             sorter: {
                 compare: (a: any, b: any) => a.stodStatus < b.stodStatus ? -1 : 1
             }
         },
         {
             title: 'Notes',
-            dataIndex: 'stodNotes',
+            dataIndex: 'stockdet_notes',
             sorter: {
-                compare: (a: any, b: any) => a.stodNotes < b.stodNotes ? -1 : 1
+                compare: (a: any, b: any) => a.stockdet_notes < b.stockdet_notes ? -1 : 1
             }
         },
         {
-            title: 'PO Number (POH Number)',
-            dataIndex: 'stodPohe',
+            title: 'PO Number',
+            dataIndex: 'stockdet_pohe_number',
             sorter: {
-                compare: (a: any, b: any) => a.stodPohe < b.stodPohe ? -1 : 1
+                compare: (a: any, b: any) => a.stockdet_pohe_number < b.stockdet_pohe_number ? -1 : 1
             }
         },
         {
-            title: 'Used In (Facilities)',
-            dataIndex: 'stodFaci',
+            title: 'Used In',
+            dataIndex: 'stockdet_facilities',
             sorter: {
-                compare: (a: any, b: any) => a.stodFaci < b.stodFaci ? -1 : 1
+                compare: (a: any, b: any) => a.stockdet_facilities < b.stockdet_facilities ? -1 : 1
             }
         },
         {
@@ -78,7 +95,7 @@ export default function Stod() {
                 return (
                     <>
                         <Tooltip placement="top" title='Switch Status'>
-                            <EditOutlined style={{ color: '#13c2c2' }} onClick={() => editStod(record.stodId)} className="mx-2" />
+                            <EditOutlined style={{ color: '#13c2c2' }} onClick={() => editStod(record.stockdet_id)} className="mx-2" />
                         </Tooltip>
                     </>
                 )
@@ -99,9 +116,9 @@ export default function Stod() {
                 />
                 : null}
 
-            <div className='text-2xl py-3'>Stock Name : </div>
+            <div className='text-2xl py-3'>{data?.stockName}</div>
 
-            <Table dataSource={stods} columns={columnsStods} />
+            <Table dataSource={dataTable} columns={columnsStods} />
         </Dashboard >
     )
 }

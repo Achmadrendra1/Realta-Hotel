@@ -20,11 +20,6 @@ import { Employee } from 'src/entities/Employee';
 import { EmployeeDepartmentHistory } from 'src/entities/EmployeeDepartmentHistory';
 import { EmployeePayHistory } from 'src/entities/EmployeePayHistory';
 import { Entitys } from 'src/entities/Entitys';
-import { Facilities } from 'src/entities/Facilities';
-import { FacilityPriceHistory } from 'src/entities/FacilityPriceHistory';
-import { FacilityPhoto } from 'src/entities/FacilityPhoto';
-import { HotelReviews } from 'src/entities/HotelReviews';
-import { Hotels } from 'src/entities/Hotels';
 import { JobRole } from 'src/entities/JobRole';
 import { Members } from 'src/entities/Members';
 import { OrderMenuDetail } from 'src/entities/OrderMenuDetail';
@@ -52,16 +47,6 @@ import { UserRoles } from 'src/entities/UserRoles';
 import { Users } from 'src/entities/Users';
 import { WorkOrderDetail } from 'src/entities/WorkOrderDetail';
 import { WorkOrders } from 'src/entities/WorkOrders';
-import { FacilityPriceHistoryService } from 'src/Service/Hotel/facility_price_history/facility_price_history.service';
-import { HotelsService } from 'src/Service/Hotel/hotels/hotels.service';
-import { HotelReviewsService } from 'src/Service/Hotel/hotel_reviews/hotel_reviews.service';
-import { FacilitiesService } from 'src/Service/Hotel/facilities/facilities.service';
-import { FacilityPhotosService } from 'src/Service/Hotel/facility_photos/facility_photos.service';
-import { HotelsController } from 'src/Controller/Hotel/hotels/hotels.controller';
-import { HotelReviewsController } from 'src/Controller/Hotel/hotel_reviews/hotel_reviews.controller';
-import { FacilitiesController } from 'src/Controller/Hotel/facilities/facilities.controller';
-import { FacilityPhotosController } from 'src/Controller/Hotel/facility_photos/facility_photos.controller';
-import { FacilityPriceHistoryController } from 'src/Controller/Hotel/facility_price_history/facility_price_history.controller';
 import { EntitysService } from 'src/Service/Payment/entitys/entitys.service';
 import { BankService } from 'src/Service/Payment/bank/bank.service';
 import { PaymentGatewayService } from 'src/Service/Payment/payment-gateway/payment-gateway.service';
@@ -77,13 +62,31 @@ import { RestoMenusService } from 'src/Service/Resto/resto-menus/resto-menus.ser
 import { RestoMenuPhotosService } from 'src/Service/Resto/resto-menu-photos/resto-menu-photos.service';
 import { OrderMenusService } from 'src/Service/Resto/order-menus/order-menus.service';
 
+//Hotel
+import { Facilities } from 'src/entities/Facilities';
+import { FacilityPriceHistory } from 'src/entities/FacilityPriceHistory';
+import { FacilityPhoto } from 'src/entities/FacilityPhoto';
+import { HotelReviews } from 'src/entities/HotelReviews';
+import { Hotels } from 'src/entities/Hotels';
+
+import { FacilityPriceHistoryService } from 'src/Service/Hotel/facility_price_history/facility_price_history.service';
+import { HotelsService } from 'src/Service/Hotel/hotels/hotels.service';
+import { HotelReviewsService } from 'src/Service/Hotel/hotel_reviews/hotel_reviews.service';
+import { FacilitiesService } from 'src/Service/Hotel/facilities/facilities.service';
+import { FacilityPhotosService } from 'src/Service/Hotel/facility_photos/facility_photos.service';
+
+import { HotelsController } from 'src/Controller/Hotel/hotels/hotels.controller';
+import { HotelReviewsController } from 'src/Controller/Hotel/hotel_reviews/hotel_reviews.controller';
+import { FacilitiesController } from 'src/Controller/Hotel/facilities/facilities.controller';
+import { FacilityPhotosController } from 'src/Controller/Hotel/facility_photos/facility_photos.controller';
+import { FacilityPriceHistoryController } from 'src/Controller/Hotel/facility_price_history/facility_price_history.controller';
+
 //master service
 import { AddressService } from '../Service/Master/address/address.service';
 import { CategoryGroupService } from 'src/Service/Master/category_group/category_group.service';
 import { CountryService } from 'src/Service/Master/country/country.service';
 import { MembersService } from 'src/Service/Master/members/members.service';
 import { PolicyService } from 'src/Service/Master/policy/policy.service';
-import { PolicyCategoryGroupService } from 'src/Service/Master/policy_category_group//policy_category_group.service';
 import { ProvincesService } from 'src/Service/Master/provinces/provinces.service';
 import { RegionsService } from 'src/Service/Master/regions/regions.service';
 import { ServiceTaskService } from 'src/Service/Master/service_task/service_task.service';
@@ -95,7 +98,6 @@ import { CategoryGroupController } from 'src/Controller/Master/category_group/ca
 import { CountryController } from 'src/Controller/Master/country/country.controller';
 import { MembersController } from 'src/Controller/Master/members/members.controller';
 import { PolicyController } from 'src/Controller/Master/policy/policy.controller';
-import { PolicyCategoryGroupController } from 'src/Controller/Master/policy_category_group/policy_category_group.controller';
 import { ProvincesController } from 'src/Controller/Master/provinces/provinces.controller';
 import { RegionsController } from 'src/Controller/Master/regions/regions.controller';
 import { ServiceTaskController } from 'src/Controller/Master/service_task/service_task.controller';
@@ -232,7 +234,6 @@ import { PolicyCategoryGroup } from 'src/entities/PolicyCategoryGroup';
     RegionsController,
     ProvincesController,
     PriceItemsController,
-    PolicyCategoryGroupController,
     PolicyController,
     MembersController,
     CountryController,
@@ -282,7 +283,6 @@ import { PolicyCategoryGroup } from 'src/entities/PolicyCategoryGroup';
     ServiceTaskService,
     RegionsService,
     ProvincesService,
-    PolicyCategoryGroupService,
     PolicyService,
     MembersService,
     CountryService,

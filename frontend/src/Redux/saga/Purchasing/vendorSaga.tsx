@@ -24,7 +24,7 @@ function* handleVendor(): any {
 
 function* handleVendorAdd(action: any): any {
     try {
-        const res = yield axios(API('POST', '/vendor' + action.payload))
+        const res = yield axios(API('POST', '/vendor', action.payload))
         yield put(AddVendorSuccess(res.data.result))
         return res.data.result
     } catch (error: any) {
