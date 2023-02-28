@@ -41,11 +41,4 @@ export class HotelsController {
   DeleteHotel(@Param('id') id: any) {
     return this.hotelsService.deleteHotels(id);
   }
-
-  
-  //Get hotel untuk Booking
-  @Get('Sp')
-  getSpHotel() {
-    return this.hotelsService.findSpHotel();
-  }
 }

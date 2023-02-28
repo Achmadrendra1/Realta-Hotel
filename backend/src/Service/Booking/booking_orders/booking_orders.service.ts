@@ -172,6 +172,11 @@ export class BookingOrdersService {
             }
         })
     }
+
+      //Get hotel untuk Booking
+    async findSpHotel():Promise<any> {
+        return await this.bookingOrdersRepository.query('Select * from hotel.viewHotel')
+  }
 }
 
     

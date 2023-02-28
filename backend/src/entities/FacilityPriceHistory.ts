@@ -56,10 +56,10 @@ export class FacilityPriceHistory {
   @JoinColumn([{ name: 'faph_faci_id', referencedColumnName: 'faciId' }])
   faphFaci: Facilities;
 
-  @ManyToOne(() => Users, (users) => users.facilityPriceHistories, {
-    onDelete: 'CASCADE',
-    onUpdate: 'CASCADE',
-  })
+  // @ManyToOne(() => Users, (users) => users.facilityPriceHistories, {
+  //   onDelete: 'CASCADE',
+  //   onUpdate: 'CASCADE',
+  // })
   @JoinColumn([{ name: 'faph_user_id', referencedColumnName: 'userId' }])
   faphUser: Users;
 }

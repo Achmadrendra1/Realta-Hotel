@@ -15,6 +15,9 @@ export class BookingOrdersController {
         return this.BookingOrdersService.findById(params.id)
     }
 
+    @Get('hotel')
+    findSpHotel
+    
     @Get('last')
     findLastBooking(){
         return this.BookingOrdersService.findLastBooking()
