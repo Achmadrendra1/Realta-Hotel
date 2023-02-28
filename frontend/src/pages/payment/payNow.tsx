@@ -74,6 +74,10 @@ export default function pay() {
     setShowCheck(true);
   };
 
+  const onCompleteCash = () => {
+    console.log(finalForm)
+  }
+
   const onClose = () => {
     setShowCheck(false);
   };
@@ -279,7 +283,7 @@ export default function pay() {
                       </p>
                     </div>
                     <Button
-                      onClick={onComplete}
+                      onClick={onCompleteCash}
                       className="mt-6 bg-blue-600 text-white w-full h-10"
                     >
                       Complete Order
