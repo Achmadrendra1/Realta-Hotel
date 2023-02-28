@@ -12,7 +12,6 @@ import {
   doDelLocationsRCSucceed,
   doDelLocationsRCFailed,
 } from '../../Action/Master/actionLocationsRC';
-import apiLocationsRC from '@/Redux/Service/master/apiMasterLocationsRC';
 import { API } from '@/Redux/Configs/consumeApi';
 import axios from "axios";
 
@@ -28,18 +27,6 @@ function* handlerLocationsRC(): any {
   }
 }
 
-
-// Alternatif with Service
-// function* handlerLocationsRC(): any {
-//   //Jika Postman menampilkan result data
-//   try {
-//     const result = yield call(apiLocationsRC.getLocationsRC);
-//     // console.log(result.data);
-//     yield put(doLocationsRCSucceed(result.data));
-//   } catch (error) {
-//     yield put(doLocationsRCFailed(error));
-//   }
-// }
 
 //_____________________________________________________________________________________________________________________________________________________________________________________________________________________
 //  ADD
@@ -57,15 +44,7 @@ function* handlerAddLocationsRC(action: any): any {
     yield put(doAddLocationsRCFailed(null));
   }
 }
-// function* handlerAddLocationsRC(action: any): any {
-//   //jika return di postman a cuma menampilkan string tidak pakai result
-//   try {
-//     yield call(apiLocationsRC.addLocationsRC, action.payload);
-//     yield put(doAddLocationsRCSucceed(action.payload));
-//   } catch (error) {
-//     yield put(doAddLocationsRCFailed(error));
-//   }
-// }
+
 
 //_____________________________________________________________________________________________________________________________________________________________________________________________________________________
 //  UPDATE
@@ -83,14 +62,7 @@ function* handlerUpdateLocationsRC(action: any): any {
     yield put(doUpdateLocationsRCFailed(null));
   }
 }
-// function* handlerUpdateLocationsRC(action: any) {
-//   try {
-//     yield call(apiLocationsRC.updateLocationsRC, action.payload);
-//     yield put(doUpdateLocationsRCSucceed(action.payload));
-//   } catch (error) {
-//     yield put(doUpdateLocationsRCFailed(error));
-//   }
-// }
+
 
 //_____________________________________________________________________________________________________________________________________________________________________________________________________________________
 //  Delete
@@ -106,15 +78,6 @@ function* handlerDeleteLocationsRC(action: any): any {
 
 
 
-// function* handlerDeleteLocationsRC(action: any) {
-//   try {
-//     yield call(apiLocationsRC.deleteLocationsRC, action.payload);
-//     yield put(doDelLocationsRCSucceed(action.payload));
-//   } catch (error) {
-//     yield put(doDelLocationsRCFailed(error));
-//   }
-// }
-
 //_____________________________________________________________________________________________________________________________________________________________________________________________________________________
 
 export {
@@ -123,7 +86,4 @@ export {
   handlerUpdateLocationsRC,
   handlerDeleteLocationsRC,
 };
-  function* axios(arg0: any) {
-    throw new Error('Function not implemented.');
-  }
 

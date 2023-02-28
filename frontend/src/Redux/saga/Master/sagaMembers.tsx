@@ -12,7 +12,6 @@ import {
   doDelMembersSucceed,
   doDelMembersFailed,
 } from '../../Action/Master/actionMembers';
-import apiMembers from '@/Redux/Service/master/apiMasterMembers';
 import axios from "axios";
 import { API } from '@/Redux/Configs/consumeApi';
 
@@ -29,18 +28,6 @@ function* handlerMembers(): any {
   }
 }
 
-// function* handlerMembers(): any {
-//   //Jika Postman menampilkan result data
-//   try {
-//     const result = yield call(apiMembers.getMembers);
-//     // console.log('saga Members :', result);
-    
-
-//     yield put(doMembersSucceed(result.data));
-//   } catch (error) {
-//     yield put(doMembersFailed(error));
-//   }
-// }
 
 //_____________________________________________________________________________________________________________________________________________________________________________________________________________________
 //  ADD
@@ -57,16 +44,6 @@ function* handlerAddMembers(action: any): any {
     yield put(doAddMembersFailed(null));
   }
 }
-
-// function* handlerAddMembers(action: any): any {
-//   //jika return di postman a cuma menampilkan string tidak pakai result
-//   try {
-//     yield call(apiMembers.addMembers, action.payload);
-//     yield put(doAddMembersSucceed(action.payload));
-//   } catch (error) {
-//     yield put(doAddMembersFailed(error));
-//   }
-// }
 
 //_____________________________________________________________________________________________________________________________________________________________________________________________________________________
 //  UPDATE
@@ -85,15 +62,6 @@ function* handlerUpdateMembers(action: any): any {
   }
 }
 
-// function* handlerUpdateMembers(action: any) {
-//   try {
-//     yield call(apiMembers.updateMembers, action.payload);
-//     yield put(doUpdateMembersSucceed(action.payload));
-//   } catch (error) {
-//     yield put(doUpdateMembersFailed(error));
-//   }
-// }
-
 //_____________________________________________________________________________________________________________________________________________________________________________________________________________________
 //  Delete 
 function* handlerDeleteMembers(action: any): any {
@@ -104,15 +72,6 @@ function* handlerDeleteMembers(action: any): any {
     console.log(error);
   }
 }
-
-// function* handlerDeleteMembers(action: any) {
-//   try {
-//     yield call(apiMembers.deleteMembers, action.payload);
-//     yield put(doDelMembersSucceed(action.payload));
-//   } catch (error) {
-//     yield put(doDelMembersFailed(error));
-//   }
-// }
 
 //_____________________________________________________________________________________________________________________________________________________________________________________________________________________
 
