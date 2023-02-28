@@ -8,6 +8,7 @@ import payTrxHistoryReducer from './Payment/payTrxHistoryReducer';
 import payBankReducer from './Payment/payBankReducer';
 import payPagaReducer from './Payment/payPagaReducer';
 import payUserAccReducer from './Payment/payUserAccReducer';
+import { selectReducer } from './HR/select';
 //Master
 import regionsReducer from './Master/regionsReducer';
 import provincesReducer from './Master/provincesReducer';
@@ -32,6 +33,7 @@ export default combineReducers({
   DeptReducer,
   employeesReducer,
   detailEmpReducer,
+  selectReducer,
 
   //User And Auth
   loginReducer,

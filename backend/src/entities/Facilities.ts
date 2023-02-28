@@ -125,7 +125,7 @@ export class Facilities {
 
   @OneToMany(
     () => WorkOrderDetail,
-    (workOrderDetail) => workOrderDetail.wodeFaciId,
+    (workOrderDetail) => workOrderDetail.wodeFaci,
   )
   workOrderDetails: WorkOrderDetail[];
 }

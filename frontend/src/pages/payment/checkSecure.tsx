@@ -1,37 +1,55 @@
+import { doCheckSecureCode } from "@/Redux/Action/Payment/paymentUserAction";
 import Buttons from "@/components/Button";
-import { Input, Modal } from "antd";
+import { Input, Modal, Spin } from "antd";
 import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 
 export default function CheckSecure(props: any) {
-  const { data } = props;
+  const { dataPayment, dataBooking } = props;
   const [pin, setPin] = useState(["", "", "", ""]);
   const [cvv, setCVV] = useState(["", "", ""])
+  const dispacth = useDispatch();
 
-  const [finalForm, setFinalForm] = useState({
-    userId: 0,
-    payType: "", //Buat booking/resto
-    amount: "",
-    sourceNumber: "",
-    targetNumber: "",
-    trxType: "",
-    secureCode: "",
-    orderNumber: "",
-  });
+  const [finalForm, setFinalForm] = useState(dataPayment);
 
 //   useEffect(()=>{
 //     setFinalForm({...data, secureCode: data.payType != 'PG' ? cvv : pin})
 //   }, [cvv, pin])
 
-  const onComplete = () => {
-    console.log(finalForm)
+const onComplete = () => {
+  dispacth(doCheckSecureCode(finalForm))
+}
+
+const { error, messages, validate } = useSelector(
+  (state: any) => state.payUserAccReducer
+);
+
+const [msgValidate, setMsgValidate] = useState("");
+const [isLoading, setLoading] = useState(false);
+
+useEffect(() => {
+  if(messages != null) {
+    // setLoading(true);
+    if(validate == true){
+      setMsgValidate(messages);
+      // setLoading(true);
+      console.log(dataBooking)
+      console.log(dataPayment)
+    } else {
+      setLoading(false);
+      setMsgValidate(messages)
+    }
   }
+}, [messages, validate])
+
+
 
 
   const handleChangeCVV = (index: number, event: any) => {
     const newCVV = [...cvv];
     newCVV[index] = event.target.value;
     setCVV(newCVV);
-    setFinalForm({ ...data, secureCode: newCVV.join("") });
+    setFinalForm({ ...dataPayment, secureCode: newCVV.join("") });
     // setFormValues({...formValues, usacSecureCode: newPin.join("")})
     if (event.target.value.length === 1) {
       const nextIndex = index + 1;
@@ -61,7 +79,7 @@ export default function CheckSecure(props: any) {
     const newPin = [...pin];
     newPin[index] = event.target.value;
     setPin(newPin);
-    setFinalForm({ ...data, secureCode: newPin.join("") });
+    setFinalForm({ ...dataPayment, secureCode: newPin.join("") });
     // setFormValues({...formValues, usacSecureCode: newPin.join("")})
     if (event.target.value.length === 1) {
       const nextIndex = index + 1;
@@ -97,10 +115,11 @@ export default function CheckSecure(props: any) {
         centered
         footer={null}
       >
-        {finalForm.secureCode}
-        <p className="text-lg font-bold mb-4 text-center">Input Your {data.payType != 'PG' ? 'CVV' : 'PIN'}</p>
+    <Spin spinning={isLoading} size="large">
+
+        <p className="text-lg font-bold mb-4 text-center">Input Your {dataBooking.boor_pay_type != 'PG' ? 'CVV' : 'PIN'}</p>
         <div className="flex justify-center">
-          {data.payType != 'PG' ? cvv.map((value, index) => (
+          {dataBooking.boor_pay_type != 'PG' ? cvv.map((value, index) => (
             <Input
               key={index}
               id={`pin-${index + 1}`}
@@ -124,9 +143,15 @@ export default function CheckSecure(props: any) {
             />
           ))}
         </div>
+        {msgValidate == "Your PIN is correct! Please Wait" ? (
+              <p className="text-center mt-4 text-green-500">{msgValidate}</p>
+            ) : (
+              <p className="text-center mt-4 text-red-500">{msgValidate}</p>
+            )}
         <div className="text-center mt-6">
               <Buttons funcs={onComplete}>Submit</Buttons>
             </div>
+      </Spin>
       </Modal>
     </>
   );

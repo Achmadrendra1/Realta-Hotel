@@ -12,9 +12,9 @@ export class HotelsService {
 
   async findAllHotels(): Promise<any> {
     return await this.hotelRepository.find({
-      order: {
-        hotelName: 'ASC',
-      },
+      // order: {
+      //   hotelName: 'ASC',
+      // },
       relations: {
         facilities: {
           facilityPhotos: true,
@@ -28,8 +28,17 @@ export class HotelsService {
   }
 
   async findByNameId(hotelId: number): Promise<any> {
-    return await this.hotelRepository.findOneBy({
-      hotelId,
+    return await this.hotelRepository.find({
+      where: { hotelId },
+      relations: {
+        facilities: {
+          facilityPhotos: true,
+          facilityPriceHistories: true,
+          faciCagro: true,
+        },
+        hotelReviews: true,
+        hotelAddr: true,
+      },
     });
   }
   // async findByLocation(hotelId: number): Promise<any> {
@@ -38,14 +47,30 @@ export class HotelsService {
   //   });
   // }
 
-  async addNewHotel(hotel: Hotels): Promise<any> {
+  async findByHotelName(hotelName: any): Promise<any> {
+    return await this.hotelRepository.find({
+      where: [{ hotelName }],
+      relations: {
+        facilities: {
+          facilityPhotos: true,
+          facilityPriceHistories: true,
+          faciCagro: true,
+        },
+        hotelReviews: true,
+        hotelAddr: true,
+      },
+    });
+  }
+
+  async addNewHotel(hotel: any): Promise<any> {
+    const date = new Date();
     return await this.hotelRepository
       .save({
         hotelName: hotel.hotelName,
         hotelDescription: hotel.hotelDescription,
         hotelRatingStar: hotel.hotelRatingStar,
         hotelPhonenumber: hotel.hotelPhonenumber,
-        hotelModifiedDate: hotel.hotelModifiedDate,
+        hotelModifiedDate: date,
         hotelAddr: hotel.hotelAddr,
       })
       .then((result) => {
@@ -59,37 +84,43 @@ export class HotelsService {
       });
   }
 
-  async UpdateHotel(id: number, hotel: Hotels): Promise<any> {
+  async UpdateHotel(hotelId: any, hotel: Hotels): Promise<any> {
+    const date = new Date();
+    console.log(hotelId);
+
     return await this.hotelRepository
-      .update(
-        {
-          hotelId: id,
-        },
-        {
-          hotelName: hotel.hotelName,
-          hotelDescription: hotel.hotelDescription,
-          hotelRatingStar: hotel.hotelRatingStar,
-          hotelPhonenumber: hotel.hotelPhonenumber,
-          hotelModifiedDate: hotel.hotelModifiedDate,
-          hotelAddr: hotel.hotelAddr,
-        },
-      )
+      .update(hotelId, {
+        hotelName: hotel.hotelName,
+        hotelDescription: hotel.hotelDescription,
+        hotelRatingStar: hotel.hotelRatingStar,
+        hotelPhonenumber: hotel.hotelPhonenumber,
+        hotelModifiedDate: date,
+        hotelAddr: hotel.hotelAddr,
+      })
       .then((result) => {
-        return {
-          message: `Hotel successfully updated`,
-          result: result,
-        };
+        return this.hotelRepository.findOne({
+          where: { hotelId: hotelId },
+          relations: {
+            facilities: {
+              facilityPhotos: true,
+              facilityPriceHistories: true,
+              faciCagro: true,
+            },
+            hotelReviews: true,
+            hotelAddr: true,
+          },
+        });
       })
       .catch((err) => {
-        return `Failed to Update Hotel`;
+        return `Failed to Update Hotel` + err;
       });
   }
 
   async deleteHotels(id: Hotels) {
+    console.log(id);
+
     await this.hotelRepository
-      .delete({
-        hotelId: id.hotelId,
-      })
+      .delete(id)
       .then((result) => {
         return {
           message: `Hotels successfully deleted`,
@@ -100,7 +131,4 @@ export class HotelsService {
         return `Failed to Delete` + error;
       });
   }
-
-
-  
 }

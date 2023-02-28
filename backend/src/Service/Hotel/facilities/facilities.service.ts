@@ -136,6 +136,4 @@ export class FacilitiesService {
         return `Failed to Delete` + error;
       });
   }
-
-
 }
