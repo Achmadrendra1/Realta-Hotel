@@ -6,7 +6,17 @@ import {
   Param,
   Post,
   Put,
+  UseInterceptors,
+  UploadedFiles,
+  Res,
 } from '@nestjs/common';
+// import { UseInterceptors } from '@nestjs/common/decorators/core/use-interceptors.decorator';
+// import { UploadedFiles } from '@nestjs/common/decorators/http/route-params.decorator';
+import { FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
+import { join } from 'path';
+// import { diskStorage } from 'multer';
+import { diskStorage } from 'multer';
+import { UploadConfig } from 'src/Service/Hotel/Middleware/upload.config';
 import { FacilityPhotosService } from 'src/Service/Hotel/facility_photos/facility_photos.service';
 
 @Controller('facility-photos')
@@ -14,23 +24,44 @@ export class FacilityPhotosController {
   constructor(private FaphoService: FacilityPhotosService) {}
 
   @Get()
-  getHore() {
+  getFapho() {
     return this.FaphoService.findAllFapho();
   }
+  @Get(`src/:filename`)
+  getPhoto(@Param('filename') filename: string, @Res() res) {
+    return res.sendFile(filename, {
+      root: join('src', 'Service', 'Hotel', 'Uploads'),
+    });
+  }
   @Get(':id')
-  getHoreId(@Param() params) {
-    return this.FaphoService.findByFaphoId(params);
+  getFaphoId(@Param('id') id) {
+    return this.FaphoService.findByFaphoId(id);
   }
   @Put(':id')
-  UpdateHore(@Param('hotelId') hotelId: any, @Body() body: any) {
+  UpdateFapho(@Param('hotelId') hotelId: any, @Body() body: any) {
     return this.FaphoService.UpdateFapho(hotelId, body);
   }
-  @Post('Add')
-  addHore(@Body() body: any) {
-    return this.FaphoService.addNewFapho(body);
+  // @Post('Add')
+  // @UseInterceptors(FileInterceptor('faphoUrl'))
+  // addFapho(@UploadedFiles() file: any, @Body() body: any) {
+  //   return this.FaphoService.addNewFapho(file, body);
+  // }
+
+  @Post()
+  @UseInterceptors(
+    FilesInterceptor('faphoUrl', 10, {
+      storage: diskStorage({
+        destination: UploadConfig.storage,
+        filename: UploadConfig.customFileName,
+      }),
+    }),
+  )
+  addFapho(@UploadedFiles() file: Express.Multer.File, @Body() body: any) {
+    return this.FaphoService.addNewFapho(file, body);
   }
+
   @Delete()
-  DeleteHore(@Param('id') params) {
+  DeleteFapho(@Param('id') params) {
     return this.FaphoService.deleteFapho(params);
   }
 }
