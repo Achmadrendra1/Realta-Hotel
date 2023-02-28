@@ -1695,85 +1695,68 @@ VALUES
 
 INSERT INTO resto.resto_menus
 VALUES
-	(1,1,'Regular Tea', 'Teh', 20000, 'AVAILABLE', NOW()),
-	(1,2,'Green Tea', 'Green Tea sedap', 25000, 'AVAILABLE', NOW()),
-	(1,3,'Jasmine Tea', 'Teh melati sedap', 20000, 'AVAILABLE', NOW()),
-	(1,4,'Caesar salad', 'Heart of romainde lettuce, crispy bacon, toasted brioche bread, shaved parmesan cheese', 80000, 'AVAILABLE', NOW()),
-	(1,5,'Gado-gado', 'Raw and semi cooked vegetables with pestle grounded peanut sauce and chili', 65000, 'AVAILABLE', NOW()),
-	(1,6,'Crispy vegetable spring rolls', 'Served with chilli sauce', 75000, 'AVAILABLE', NOW()),
-	(1,7,'Porcini mushroom cappuccino', 'Summer truffle, sundried tomatos and olive biscotti', 55000, 'AVAILABLE', NOW()),
-	(2,8,'Deep fried thai fish cake', 'Served with thai sauce', 80000, 'AVAILABLE', NOW()),
-	(2,9,'Crab meat spring rolls', 'Served with thai sauce', 80000, 'AVAILABLE', NOW()),
-	(2,10,'Vegetable spring roll', 'Served with thai sauce', 65000, 'AVAILABLE', NOW()),
-	(2,11,'Vegetable samosa with raita', 'Served with mint yoghurt sauce', 85000, 'AVAILABLE', NOW()),
-	(2,12,'Thai barbecue chicken with sweet chili sauce', 'Served with sweet chili sauce', 60000, 'AVAILABLE', NOW()),
-	(2,13,'Fried pawns', 'Served with mint yoghurt sauce', 80000, 'AVAILABLE', NOW()),
-	(2,14,'Pan fried gyoza', 'Served with soyu sauce', 65000, 'AVAILABLE', NOW()),
-	(3,15,'Profiteroles tart', 'Shortbread, almond choux puff, light grand marnier cream, dark chocolate glaze', 65000, 'AVAILABLE', NOW()),
-	(3,16,'Strawberry Shortcake', 'Ladyfinger sponge, light vanilla cream, fresh strawberry', 50000, 'AVAILABLE', NOW()),
-	(3,17,'US Cheese Cake', 'Ladyfinger sponge, American cream cheese', 55000, 'AVAILABLE', NOW()),
-	(3,18,'Vanilla Parisian Flan', 'Shortbread, vanilla custard', 55000, 'AVAILABLE', NOW()),
-	(3,19,'Chocolate Orange', 'Chocolate almond sponge, light orange mousse, milk chocolate mousse', 50000, 'AVAILABLE', NOW()),
-	(3,20,'Chocolate Coconut', 'Ladyfinger sponge, light yoghurt mousse, milk chocolate mousse, coconut chantilly', 45000, 'AVAILABLE', NOW());
+	(9,1,'Regular Tea', 'Teh', 20000, 'AVAILABLE', NOW(),0),
+	(9,2,'Green Tea', 'Green Tea sedap', 25000, 'AVAILABLE', NOW(),0),
+	(9,3,'Jasmine Tea', 'Teh melati sedap', 20000, 'AVAILABLE', NOW(),0),
+	(9,4,'Caesar salad', 'Heart of romainde lettuce, crispy bacon, toasted brioche bread, shaved parmesan cheese', 80000, 'AVAILABLE', NOW(),2500),
+	(9,5,'Gado-gado', 'Raw and semi cooked vegetables with pestle grounded peanut sauce and chili', 65000, 'AVAILABLE', NOW(),2500),
+	(9,6,'Crispy vegetable spring rolls', 'Served with chilli sauce', 75000, 'AVAILABLE', NOW(),0),
+	(9,7,'Porcini mushroom cappuccino', 'Summer truffle, sundried tomatos and olive biscotti', 55000, 'AVAILABLE', NOW(),0),
+	(2,8,'Deep fried thai fish cake', 'Served with thai sauce', 80000, 'AVAILABLE', NOW(),10000),
+	(2,9,'Crab meat spring rolls', 'Served with thai sauce', 80000, 'AVAILABLE', NOW(),0),
+	(2,10,'Vegetable spring roll', 'Served with thai sauce', 65000, 'AVAILABLE', NOW(),0),
+	(2,11,'Vegetable samosa with raita', 'Served with mint yoghurt sauce', 85000, 'AVAILABLE', NOW(),0),
+	(2,12,'Thai barbecue chicken with sweet chili sauce', 'Served with sweet chili sauce', 60000, 'AVAILABLE', NOW(),0),
+	(2,13,'Fried pawns', 'Served with mint yoghurt sauce', 80000, 'AVAILABLE', NOW(),0),
+	(2,14,'Pan fried gyoza', 'Served with soyu sauce', 65000, 'AVAILABLE', NOW(),0),
+	(16,15,'Profiteroles tart', 'Shortbread, almond choux puff, light grand marnier cream, dark chocolate glaze', 65000, 'AVAILABLE', NOW(),0),
+	(16,16,'Strawberry Shortcake', 'Ladyfinger sponge, light vanilla cream, fresh strawberry', 50000, 'AVAILABLE', NOW(),0),
+	(16,17,'US Cheese Cake', 'Ladyfinger sponge, American cream cheese', 55000, 'AVAILABLE', NOW(),0),
+	(16,18,'Vanilla Parisian Flan', 'Shortbread, vanilla custard', 55000, 'AVAILABLE', NOW(),0),
+	(16,19,'Chocolate Orange', 'Chocolate almond sponge, light orange mousse, milk chocolate mousse', 50000, 'AVAILABLE', NOW(), 2500),
+	(16,20,'Chocolate Coconut', 'Ladyfinger sponge, light yoghurt mousse, milk chocolate mousse, coconut chantilly', 45000, 'AVAILABLE', NOW(),10000);
 
 INSERT INTO resto.resto_menu_photos
 VALUES
-	(1, 'Regular tea', 'Regular tea', B'1', 'link foto reg tea',1),
-	(2, 'Regular tea 2', 'Regular tea 2', B'0', 'link foto reg tea 2',1),
-	(3, 'Green Tea', 'Green tea', B'1', 'link foto Green tea',2),
-	(4, 'Green Tea 2', 'Green tea 2', B'0', 'link foto Green tea 2',2),
-	(5, 'Jasmine Tea', 'Jasmine tea', B'1', 'link foto Jasmine tea',3),
-	(6, 'Caesar salad', 'Caesar salad', B'1', 'link foto Caesar salad',4),
-	(7, 'Gado-gado', 'Gado-gado', B'1', 'link foto Gado-gado',5),
-	(8, 'Gado-gado', 'Gado-gado', B'0', 'link foto Gado-gado',5),
-	(9, 'Crispy vegetable spring rolls', 'Crispy vegetable spring rolls', B'1', 'link foto Crispy vegetable spring rolls',6),
-	(10, 'Crispy vegetable spring rolls 2', 'Crispy vegetable spring rolls 2', B'0', 'link foto Crispy vegetable spring rolls 2',6),
-	(11, 'Porcini mushroom cappuccino', 'Porcini mushroom cappuccino', B'1', 'link foto Porcini mushroom cappuccino',7),
-	(12, 'Porcini mushroom cappuccino 2', 'Porcini mushroom cappuccino 2', B'0', 'link foto Porcini mushroom cappuccino',7),
-	(13, 'Deep fried thai fish cake', 'Deep fried thai fish cake', B'1', 'link foto Deep fried thai fish cake',8),
-	(14, 'Deep fried thai fish cake 2', 'Deep fried thai fish cake 2', B'0', 'link foto Deep fried thai fish cake 2',8),
-	(15, 'Crab meat spring rolls', 'Crab meat spring rolls', B'1', 'link foto Crab meat spring rolls',9),
-	(16, 'Vegetable spring roll', 'Vegetable spring roll', B'1', 'link foto Vegetable spring roll',10),
-	(17, 'Vegetable samosa with raita', 'Vegetable samosa with raita', B'1', 'link foto Vegetable samosa with raita',11),
-	(18, 'Thai barbecue chicken with sweet chili sauce', 'Thai barbecue chicken with sweet chili sauce', B'1', 'link foto Thai barbecue chicken with sweet chili sauce',12),
-	(19, 'Fried pawns', 'Fried pawns', B'1', 'link foto Fried pawns',13),
-	(20, 'Pan fried gyoza', 'Pan fried gyoza', B'1', 'link foto Pan fried gyoza',14),
-	(21, 'Profiteroles tart', 'Profiteroles tart', B'1', 'link foto Profiteroles tart',15),
-	(22, 'Strawberry Shortcake', 'Strawberry Shortcake', B'1', 'link foto Strawberry Shortcake',16),
-	(23, 'US Cheese Cake', 'US Cheese Cake', B'1', 'link foto US Cheese Cake',17),
-	(24, 'Vanilla Parisian Flan', 'Vanilla Parisian Flan', B'1', 'link foto Vanilla Parisian Flan',18),
-	(25, 'Chocolate Orange', 'Chocolate Orange', B'1', 'link foto Chocolate Orange',19),
-	(26, 'Chocolate Coconut', 'Chocolate Coconut', B'1', 'link foto Chocolate Coconut',20),
-	(27, 'Chocolate Coconut 2', 'Chocolate Coconut 2', B'0', 'link foto Chocolate Coconut 2',20);
-
--- select * from users.users
-
--- INSERt INTO users.users (user_full_name)
--- VALUES 
--- 	('c aja')
--- 	('d aja'),
--- 	('e aja'),
--- 	('f aja'),
--- 	('g aja'),
--- 	('h aja'),
--- 	('i aja'),
--- 	('j aja'),
--- 	('k aja'),
--- 	('l aja'),
--- 	('m aja'),
--- 	('n aja')
+	(1,'Regular tea','tea11676605414722-453096302.jpg',B'1','restomenuphotos\tea11676605414722-453096302.jpg',1),
+	(2,'Regular tea 2','tea21676605458603-717688705.jpg',B'0','restomenuphotos\tea21676605458603-717688705.jpg',1),
+	(3,'Green Tea','gtea31676605515548-5675050.jpg',B'1','restomenuphotos\gtea31676605515548-5675050.jpg',2),
+	(4,'Green Tea 2','gtea11676613292710-736558373.jpg',B'0','restomenuphotos\gtea11676613292710-736558373.jpg',2),
+	(5,'Jasmine Tea','jasminetea1676616648158-235957348.png',B'1','restomenuphotos\jasminetea1676616648158-235957348.png',3),
+	(6,'Caesar salad','41676616676181-908735681.jpg',B'1','restomenuphotos\41676616676181-908735681.jpg',4),
+	(7,'Gado-gado','51676616735089-177202222.jpg',B'1','restomenuphotos\51676616735089-177202222.jpg',5),
+	(8,'Gado-gado','5a1676616779122-659575394.jpg',B'0','restomenuphotos\5a1676616779122-659575394.jpg',5),
+	(9,'Crispy vegetable spring rolls','6a1676616798704-140417773.jpg',B'1','restomenuphotos\6a1676616798704-140417773.jpg',6),
+	(10,'Crispy vegetable spring rolls 2','6b1676617060716-553789261.jpg',B'0','restomenuphotos\6b1676617060716-553789261.jpg',6),
+	(11,'Porcini mushroom cappuccino','7a1676617083815-804727480.jpg',B'1','restomenuphotos\7a1676617083815-804727480.jpg',7),
+	(12,'Porcini mushroom cappuccino 2','7b1676617094675-756872834.jpg',B'0','restomenuphotos\7b1676617094675-756872834.jpg',7),
+	(14,'Deep fried thai fish cake 2','8b1676617139568-559458274.jpg',B'0','restomenuphotos\8b1676617139568-559458274.jpg',8),
+	(13,'Deep fried thai fish cake','8c1676617156394-564002927.jpg',B'1','restomenuphotos\8c1676617156394-564002927.jpg',8),
+	(15,'Crab meat spring rolls','91676617177038-459341933.jpg',B'1','restomenuphotos\91676617177038-459341933.jpg',9),
+	(16,'Vegetable spring roll','10a1676617195805-937090282.jpg',B'1','restomenuphotos\10a1676617195805-937090282.jpg',10),
+	(17,'Vegetable samosa with raita','11c1676617219483-912401373.jpg',B'1','restomenuphotos\11c1676617219483-912401373.jpg',11),
+	(18,'Thai barbecue chicken with sweet chili sauce','12b1676617260110-466468625.jpg',B'1','restomenuphotos\12b1676617260110-466468625.jpg',12),
+	(19,'Fried pawns','13a1676617272473-427793259.jpg',B'1','restomenuphotos\13a1676617272473-427793259.jpg',13),
+	(20,'Pan fried gyoza','141676617292266-216289184.jpg',B'1','restomenuphotos\141676617292266-216289184.jpg',14),
+	(21,'Profiteroles tart','151676617315801-79924978.jpg',B'1','restomenuphotos\151676617315801-79924978.jpg',15),
+	(22,'Strawberry Shortcake','16a1676617328185-39041301.jpg',B'1','restomenuphotos\16a1676617328185-39041301.jpg',16),
+	(23,'US Cheese Cake','17a1676617341063-601296367.jpg',B'1','restomenuphotos\17a1676617341063-601296367.jpg',17),
+	(24,'Vanilla Parisian Flan','181676617358468-740783474.jpg',B'1','restomenuphotos\181676617358468-740783474.jpg',18),
+	(25,'Chocolate Orange','191676617371174-84209704.jpg',B'1','restomenuphotos\191676617371174-84209704.jpg',19),
+	(26,'Chocolate Coconut','201676617388693-585613041.jpg',B'1','restomenuphotos\201676617388693-585613041.jpg',20),
+	(27,'Chocolate Coconut 2','20a1676617541430-97768378.jpg',B'0','restomenuphotos\20a1676617541430-97768378.jpg',20);
 	
 INSERT INTO resto.order_menus
 VALUES
 	(1, 'MENUS#20230112-0001', NOW(), 2, 5000, 100000, 'CR', '11111111', 'P', NOW(), 1),
 	(2, 'MENUS#20230112-0002', NOW(), 1, 0, 65000, 'C', '', 'P', NOW(), 1),
 	(3, 'MENUS#20230112-0003', NOW(), 3, 5000, 165000, 'D', '2222222', 'B', NOW(), 2),
-	(4, 'MENUS#20230112-0004', NOW(), 2, 3000, 137000, 'PG', '2222222', 'B', NOW(), 2),
+	(4, 'MENUS#20230112-0004', NOW(), 2, 10000, 137000, 'PG', '2222222', 'B', NOW(), 2),
 	(5, 'MENUS#20230112-0005', NOW(), 3, 0, 150000, 'BO', '3333333', 'B', NOW(), 3),
 	(6, 'MENUS#20230112-0006', NOW(), 1, 0, 65000, 'BO', '3333333', 'B', NOW(), 3),
-	(7, 'MENUS#20230112-0007', NOW(), 3, 0, 65000, 'CR', '4444444', 'P', NOW(), 4),
+	(7, 'MENUS#20230112-0007', NOW(), 3, 2500, 65000, 'CR', '4444444', 'P', NOW(), 4),
 	(8, 'MENUS#20230112-0008', NOW(), 5, 30000, 335000, 'PG', '5555555', 'B', NOW(), 5),
-	(9, 'MENUS#20230112-0009', NOW(), 4, 15000, 18000, 'BO', '6666666', 'P', NOW(), 6), -- sampe sini yang udh bayar
+	(9, 'MENUS#20230112-0009', NOW(), 4, 17500, 18000, 'BO', '6666666', 'P', NOW(), 6), -- sampe sini yang udh bayar
 	(10, 'MENUS#20230112-0010', NOW(), 5, 25000, 300000, 'C', '', 'P', NOW(), 7),
 	(11, 'MENUS#20230112-0011', NOW(), 2, 10000, 190000, 'CR', '8888888', 'P', NOW(), 8),
 	(12, 'MENUS#20230112-0012', NOW(), 5, 25000, 300000, 'BO', '9999999', 'P', NOW(), 9),
@@ -1785,32 +1768,28 @@ VALUES
 	(18, 'MENUS#20230112-0018', NOW(), 2, 10000, 190000, 'CR', '15151515', 'P', NOW(), 15),
 	(19, 'MENUS#20230112-0019', NOW(), 2, 0, 100000, 'CR', '15151515', 'P', NOW(), 16),
 	(20, 'MENUS#20230112-0020', NOW(), 2, 0, 115000, 'CR', '15151515', 'P', NOW(), 17);
-	
--- SELECT * FROM resto.order_menu_detail
-
--- INSERT INTO resto.order_menu_detail
 
 INSERT INTO resto.order_menu_detail(orme_price, orme_qty, orme_subtotal, orme_discount, omde_orme_id, omde_reme_id)
 VALUES 
-	(50000, 2, 50000, 5000, 1, 19), --p1
+	(50000, 2, 50000, 5000, 1, 19), --p1 2500
 	(65000, 1, 65000, 0, 2, 14),	--p1
 	(25000, 1, 25000, 0, 3, 2),		--p2
-	(65000, 1, 65000, 2500, 3, 5),
-	(80000, 1, 80000, 2500, 3, 4),
-	(80000, 1, 80000, 3000, 4, 8),	--p2
+	(65000, 1, 65000, 2500, 3, 5),      -- 2500
+	(80000, 1, 80000, 2500, 3, 4),      -- 2500
+	(80000, 1, 80000, 10000, 4, 8),	--p2 10000 x
 	(60000, 1, 60000, 0, 4, 12),
 	(55000, 1, 55000, 0, 5, 17),	--p3
 	(55000, 1, 55000, 0, 5, 18),
-	(50000, 1, 50000, 0, 5, 19),
+	(50000, 1, 50000, 2500, 5, 19),      -- 2500 x
 	(65000, 1, 65000, 0, 6, 15), 	--p3
 	(20000, 2, 40000, 0, 7, 1),		--p4
 	(25000, 1, 25000, 0, 7, 2),
-	(80000, 1, 80000, 10000, 8, 8), --p5
+	(80000, 1, 80000, 10000, 8, 8), --p5 10000
 	(80000, 2, 160000, 20000, 8, 9),
 	(65000, 1, 65000, 0, 8, 10),
 	(60000, 1, 60000, 0, 8, 12),
-	(45000, 2, 90000, 10000, 9, 20),	--p6
-	(50000, 1, 50000, 0, 9, 19),
+	(45000, 2, 90000, 10000, 9, 20),	--p6 10000
+	(50000, 1, 50000, 2500, 9, 19),        -- 2500 x
 	(55000, 1, 55000, 5000, 9, 17);
 	
 	
