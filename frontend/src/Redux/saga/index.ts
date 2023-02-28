@@ -127,6 +127,8 @@ import {
   handleUpdateFapho,
   handleUpdateHotel,
 } from "./Hotel/HotelSaga";
+import BookingConstant from "../Constant/Booking/BookingConstant";
+import { handleBoorCreateFinal, handleBoorLast, handleSpFacilities, handleSpHotel, handleSpHotelReviews, handleSpof } from "./Booking/BookingSaga";
 
 export default function* rootSaga() {
   yield all([
@@ -239,5 +241,14 @@ export default function* rootSaga() {
     takeEvery(HotelConstant.DEL_FAPH, handleDeleteFaph),
     takeEvery(HotelConstant.GET_ADDRESS, handleAddress),
     takeEvery(HotelConstant.GET_PROVINCE, handleProvince),
+
+
+    //Booking
+    takeEvery(BookingConstant.GET_SPOF, handleSpof),
+    takeEvery(BookingConstant.GET_BOOR, handleBoorLast),
+    takeEvery(BookingConstant.INSERT_BOOKING_ORDER, handleBoorCreateFinal),
+    takeEvery(BookingConstant.GET_SP_FACILITIES, handleSpFacilities),
+    takeEvery(BookingConstant.GET_SP_HOTEL, handleSpHotel),
+    takeEvery(BookingConstant.GET_SP_REVIEW, handleSpHotelReviews)
   ]);
 }

@@ -79,4 +79,9 @@ export class HotelReviewsService {
         return `Failed to Delete` + error;
       });
   }
+
+  //Get UserReview untuk Booking
+  async findSpReview() {
+    return await this.hotelReviewsRepository.query('Select * From hotel.userReview')
+  }
 }
