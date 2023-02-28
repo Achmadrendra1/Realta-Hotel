@@ -60,12 +60,12 @@ export class FacilitiesService {
       .save({
         faphFaci: { faciId: id },
         faphStartdate: new Date(),
-        faphEnddate: faci.faciEnddate,
-        faphLowPrice: faci.faciLowPrice,
-        faphHighPrice: faci.faciHighPrice,
-        faphRatePrice: faci.faciRatePrice,
-        faphDiscount: faci.faciDiscount,
-        faphTaxRate: faci.faciTaxRate,
+        faphEnddate: result.faciEnddate,
+        faphLowPrice: result.faciLowPrice,
+        faphHighPrice: result.faciHighPrice,
+        faphRatePrice: result.faciRatePrice,
+        faphDiscount: result.faciDiscount,
+        faphTaxRate: result.faciTaxRate,
         faphModifiedDate: date,
         faphUser: faci.userId,
       })
