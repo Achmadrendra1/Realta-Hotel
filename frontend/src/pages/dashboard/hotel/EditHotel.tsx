@@ -7,28 +7,13 @@ import { useDispatch, useSelector } from "react-redux";
 export default function EditHotelRealta(props: any) {
   const dispatch = useDispatch();
   const { Title, Text } = Typography;
-  const { hotelById } = useSelector((state:any)=>state.HotelReducer);
-  const [form] = Form.useForm();
-  const dateFormat = "YYYY/MM/DD";
+  const { hotelById } = useSelector((state: any) => state.HotelReducer);
   const onFinish = (values: any) => {
     console.log("Received values of form: ", values);
   };
-  console.log(hotelById);
-  
-  const formItemLayout = {
-    labelCol: {
-      xs: { span: 24 },
-      sm: { span: 8 },
-    },
-    wrapperCol: {
-      xs: { span: 24 },
-      sm: { span: 16 },
-    },
-  };
-  useEffect
-  (() =>{
-    dispatch(getHotelID(props.id))
-  },[props.id])
+  useEffect(() => {
+    dispatch(getHotelID(props.id));
+  }, [props.id]);
 
   const formik = useFormik({
     enableReinitialize: true,
@@ -41,9 +26,9 @@ export default function EditHotelRealta(props: any) {
       hotelModifiedDate: hotelById.hotelModifiedDate,
       hotelAddr: hotelById.hotelAddr,
     },
-    onSubmit: async (values) => {
+    onSubmit: async (values: any) => {
       let payload = new FormData();
-      payload.append("hotelId",values.hotelId)
+      payload.append("hotelId", values.hotelId);
       payload.append("hotelName", values.hotelName);
       payload.append("hotelDescription", values.hotelDescription);
       payload.append("hotelRatingStar", values.hotelRatingStar);
@@ -57,15 +42,20 @@ export default function EditHotelRealta(props: any) {
       window.location.reload();
     },
   });
+
   return (
     <Form
-    onFinish={onFinish}
-        labelCol={{ span: 8 }}
-        wrapperCol={{ span: 14 }}
-        layout="horizontal"
-        style={{ maxWidth: 600 }}
-        className = "py-5 border shadow rounded-lg mx-auto">
-          <Title level={4} style={{textAlign : 'center'}}> Edit Realta Hotel </Title>
+      onFinish={onFinish}
+      labelCol={{ span: 8 }}
+      wrapperCol={{ span: 14 }}
+      layout="horizontal"
+      style={{ maxWidth: 600 }}
+      className="py-5 border shadow rounded-lg mx-auto"
+    >
+      <Title level={4} style={{ textAlign: "center" }}>
+        {" "}
+        Edit Realta Hotel{" "}
+      </Title>
       <Form.Item
         label="Hotel Name : "
         rules={[{ required: true, message: "Please input Hotel!" }]}
@@ -127,22 +117,22 @@ export default function EditHotelRealta(props: any) {
         />
       </Form.Item>
       <div>
-    <button
-      type="submit"
-      className="cursor-pointer inline-flex justify-center py-2 px-2 shadow-sm text-sm font-medium rounded-md text-indigo-500 hover:text-indigo-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-      onClick={formik.handleSubmit}
-    >
-      {" "}
-      Simpan{" "}
-    </button>
-    <button
-      className="cursor-pointer inline-flex justify-center py-2 px-2 shadow-sm text-sm font-medium rounded-md text-indigo-500 hover:text-indigo-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-      onClick={() => props.setDisplay(false)}
-    >
-      {" "}
-      Cancel{" "}
-    </button>
-  </div>
+        <button
+          type="submit"
+          className="cursor-pointer inline-flex justify-center py-2 px-2 shadow-sm text-sm font-medium rounded-md text-indigo-500 hover:text-indigo-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+          onClick={formik.handleSubmit}
+        >
+          {" "}
+          Simpan{" "}
+        </button>
+        <button
+          className="cursor-pointer inline-flex justify-center py-2 px-2 shadow-sm text-sm font-medium rounded-md text-indigo-500 hover:text-indigo-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+          onClick={() => props.setDisplay(false)}
+        >
+          {" "}
+          Cancel{" "}
+        </button>
+      </div>
     </Form>
   );
 }
