@@ -11,6 +11,7 @@ import {
 import { JobRole } from "./JobRole";
 import { EmployeeDepartmentHistory } from "./EmployeeDepartmentHistory";
 import { EmployeePayHistory } from "./EmployeePayHistory";
+import { PurchaseOrderHeader } from "./PurchaseOrderHeader";
 import { WorkOrderDetail } from "./WorkOrderDetail";
 
 @Index("employee_pkey", ["empId"], { unique: true })
@@ -106,6 +107,12 @@ export class Employee {
     (employeePayHistory) => employeePayHistory.ephiEmp
   )
   employeePayHistories: EmployeePayHistory[];
+
+  @OneToMany(
+    () => PurchaseOrderHeader,
+    (purchaseOrderHeader) => purchaseOrderHeader.poheEmp
+  )
+  purchaseOrderHeaders: PurchaseOrderHeader[];
 
   @OneToMany(
     () => WorkOrderDetail,
