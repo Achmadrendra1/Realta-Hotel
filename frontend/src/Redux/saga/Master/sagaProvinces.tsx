@@ -12,7 +12,6 @@ import {
   doDelProvincesSucceed,
   doDelProvincesFailed,
 } from '../../Action/Master/actionProvinces';
-import apiProvinces from '@/Redux/Service/master/apiMasterProvinces';
 import axios from "axios";
 import { API } from '@/Redux/Configs/consumeApi';
 
@@ -29,16 +28,6 @@ function* handlerProvinces(): any {
   }
 }
 
-// function* handlerProvinces(): any {
-//   //Jika Postman menampilkan result data
-//   try {
-//     const result = yield call(apiProvinces.getProvinces);
-//     // console.log('saga provinces:', result.data); 
-//     yield put(doProvincesSucceed(result.data));
-//   } catch (error) {
-//     yield put(doProvincesFailed(error));
-//   }
-// }
 
 //_____________________________________________________________________________________________________________________________________________________________________________________________________________________
 //  ADD
@@ -56,15 +45,6 @@ function* handlerAddProvinces(action: any): any {
   }
 }
 
-// function* handlerAddProvinces(action: any): any {
-//   //jika return di postman a cuma menampilkan string tidak pakai result
-//   try {
-//     yield call(apiProvinces.addProvinces, action.payload);
-//     yield put(doAddProvincesSucceed(action.payload));
-//   } catch (error) {
-//     yield put(doAddProvincesFailed(error));
-//   }
-// }
 
 //_____________________________________________________________________________________________________________________________________________________________________________________________________________________
 //  UPDATE
@@ -82,14 +62,6 @@ function* handlerUpdateProvinces(action: any): any {
     doUpdateProvincesFailed  }
 }
 
-// function* handlerUpdateProvinces(action: any) {
-//   try {
-//     yield call(apiProvinces.updateProvinces, action.payload);
-//     yield put(doUpdateProvincesSucceed(action.payload));
-//   } catch (error) {
-//     yield put(doUpdateProvincesFailed(error));
-//   }
-// }
 
 //_____________________________________________________________________________________________________________________________________________________________________________________________________________________
 //  Delete
@@ -103,14 +75,6 @@ function* handlerDeleteProvinces(action: any): any {
   }
 }
 
-// function* handlerDeleteProvinces(action: any) {
-//   try {
-//     yield call(apiProvinces.deleteProvinces, action.payload);
-//     yield put(doDelProvincesSucceed(action.payload));
-//   } catch (error) {
-//     yield put(doDelProvincesFailed(error));
-//   }
-// }
 
 //_____________________________________________________________________________________________________________________________________________________________________________________________________________________
 

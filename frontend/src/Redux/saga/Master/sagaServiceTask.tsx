@@ -12,7 +12,6 @@ import {
   doDelServiceTaskSucceed,
   doDelServiceTaskFailed,
 } from '../../Action/Master/actionServiceTask';
-import apiServiceTask from '@/Redux/Service/master/apiMasterServiceTask';
 import axios from 'axios';
 import { API } from '@/Redux/Configs/consumeApi';
 
@@ -29,18 +28,6 @@ function* handlerServiceTask(): any {
   }
 }
 
-// function* handlerServiceTask(): any {
-//   //Jika Postman menampilkan result data
-//   try {
-//     const result = yield call(apiServiceTask.getServiceTask);
-//     console.log('saga service :', result);
-
-//     yield put(doServiceTaskSucceed(result.data));
-//   } catch (error) {
-//     yield put(doServiceTaskFailed(error));
-//   }
-// }
-
 //_____________________________________________________________________________________________________________________________________________________________________________________________________________________
 //  ADD
 function* handlerAddServiceTask(action: any): any {
@@ -56,15 +43,6 @@ function* handlerAddServiceTask(action: any): any {
     yield put(doAddServiceTaskFailed(null));
   }
 }
-// function* handlerAddServiceTask(action: any): any {
-//   //jika return di postman a cuma menampilkan string tidak pakai result
-//   try {
-//     yield call(apiServiceTask.addServiceTask, action.payload);
-//     yield put(doAddServiceTaskSucceed(action.payload));
-//   } catch (error) {
-//     yield put(doAddServiceTaskFailed(error));
-//   }
-// }
 
 //_____________________________________________________________________________________________________________________________________________________________________________________________________________________
 //  UPDATE
@@ -83,15 +61,6 @@ function* handlerUpdateServiceTask(action: any): any {
   }
 }
 
-// function* handlerUpdateServiceTask(action: any) {
-//   try {
-//     yield call(apiServiceTask.updateServiceTask, action.payload);
-//     yield put(doUpdateServiceTaskSucceed(action.payload));
-//   } catch (error) {
-//     yield put(doUpdateServiceTaskFailed(error));
-//   }
-// }
-
 //_____________________________________________________________________________________________________________________________________________________________________________________________________________________
 //  DELETE
 function* handlerDeleteServiceTask(action: any): any {
@@ -102,15 +71,6 @@ function* handlerDeleteServiceTask(action: any): any {
     console.log(error);
   }
 }
-
-// function* handlerDeleteServiceTask(action: any) {
-//   try {
-//     yield call(apiServiceTask.deleteServiceTask, action.payload);
-//     yield put(doDelServiceTaskSucceed(action.payload));
-//   } catch (error) {
-//     yield put(doDelServiceTaskFailed(error));
-//   }
-// }
 
 //_____________________________________________________________________________________________________________________________________________________________________________________________________________________
 
