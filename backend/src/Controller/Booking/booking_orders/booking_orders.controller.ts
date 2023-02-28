@@ -34,9 +34,6 @@ export class BookingOrdersController {
     findAllId(@Param() params){
         return this.BookingOrdersService.findById(params.id)
     }
-
-    @Get('hotel')
-    findSpHotel
     
     @Get('last')
     findLastBooking(){
