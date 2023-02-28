@@ -1,36 +1,43 @@
-import { Controller, Param, Body, Get, Post, Put, Delete } from '@nestjs/common';
-import { PurchaseOrderDetailService } from 'src/Service/Purchasing/purchase-order-detail/purchase-order-detail.service';
-
+import {
+    Controller,
+    Param,
+    Body,
+    Get,
+    Post,
+    Put,
+    Delete
+} from '@nestjs/common';
+import { PodeService } from 'src/Service/Purchasing/purchase-order-detail/purchase-order-detail.service';
 
 @Controller('purchase-order-detail')
-export class PurchaseOrderDetailController {
+export class PodeController {
     constructor(
-        private podeService: PurchaseOrderDetailService
+        private podeService: PodeService
     ) { }
 
     @Get()
-    getPurchaseOrderDetail() {
+    getPode() {
         return this.podeService.findAllPode();
     }
 
-    @Get(':podeId')
-    getPodeId(@Param() podeId: any) {
-        return this.podeService.findPodeId(podeId);
+    @Get(':id')
+    getPodeId(@Param() params: any) {
+        return this.podeService.findPodeId(params.id);
     }
 
     @Post()
-    createPurchaseOrderDetail(@Body() pode: any) {
-        return this.podeService.addPode(pode);
+    createPode(@Body() body: any) {
+        return this.podeService.addPode(body);
     }
 
-    @Put(':podeId')
-    updatePurchaseOrderDetail(@Body() podeId: any) {
-        return this.podeService.editPode(podeId);
+    @Put(':id')
+    updatePode(@Param() params: any, @Body() body: any) {
+        return this.podeService.editPode(params.id, body);
     }
 
-    @Delete(':podeId')
-    deletePurchaseOrderDetail(@Param() podeId: any) {
-        return this.podeService.dropPode(podeId);
+    @Delete(':id')
+    deletePode(@Param() params: any) {
+        return this.podeService.dropPode(params.id);
     }
 
 }

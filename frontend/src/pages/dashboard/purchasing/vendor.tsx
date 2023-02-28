@@ -1,102 +1,185 @@
-import React from 'react';
-import Dashboard from '@/layouts/dashboard';
-import { Input, Space, Card, Typography, Badge } from 'antd';
+import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import Link from 'next/link';
+import { Button, Dropdown, MenuProps, Modal, Table, Tooltip } from 'antd';
+import { DeleteOutlined, EditOutlined, MoreOutlined, PlusOutlined } from '@ant-design/icons';
+import { AllVendor, DelVendor } from '@/Redux/Action/Purchasing/purchasingAction';
+import AddVendors from './add-vendor';
+import EditVendors from './edit-vendor';
 
-const { Title } = Typography;
-const { Search } = Input;
+export default function Vendor() {
+    const dispatch = useDispatch()
+    const { vendors } = useSelector((state: any) => state.VendorReducer)
+    const [id, setId] = useState(0)
+    const [addVendor, setAddVendor] = useState(false)
+    const [updateVendor, setUpdateVendor] = useState(false)
 
-const vendor = [
-    {
-        name: 'John Brown',
-        active: 1,
-        priority: 1,
-        register_date: '2023/01/01',
-        web_url: 'http/www.blablabla.com',
-        modified_date: '2023/02/02'
-    },
-    {
-        name: 'Joe Black',
-        active: 1,
-        priority: 0,
-        register_date: '2023/01/01',
-        web_url: 'http/www.blablabla.com',
-        modified_date: '2023/02/02'
-    },
-    {
-        name: 'Jim Green',
-        active: 0,
-        priority: 1,
-        register_date: '2023/01/01',
-        web_url: 'http/www.blablabla.com',
-        modified_date: '2023/02/02'
-    },
-    {
-        name: 'Jim Red',
-        active: 0,
-        priority: 0,
-        register_date: '2023/01/01',
-        web_url: 'http/www.blablabla.com',
-        modified_date: '2023/02/02'
-    },
-];
+    const active = [
+        {
+            value: "0",
+            label: "InActive"
+        },
+        {
+            value: "1",
+            label: "Active"
+        }
+    ]
 
-const onSearch = (value: string) => console.log(value);
+    const priority = [
+        {
+            value: "0",
+            label: "No Priority"
+        },
+        {
+            value: "1",
+            label: "Priority"
+        }
+    ]
 
-const Vendor: React.FC = () => (
-    <Dashboard>
-        <Card className='drop-shadow-md'>
-            <Title>Vendor</Title>
-            <Space direction="vertical" className='my-5'>
-                <Search
-                    placeholder="input search text"
-                    allowClear
-                    enterButton="Search"
-                    size="large"
-                    onSearch={onSearch}
+    const handleOk = () => {
+        setTimeout(() => {
+            setAddVendor(false)
+            setUpdateVendor(false)
+        }, 2000)
+    }
+
+    const handleCancel = () => {
+        console.log('Click cancel button')
+        setAddVendor(false)
+        setUpdateVendor(false)
+    }
+
+    const handleClose = (data: boolean) => {
+        setAddVendor(data)
+        setUpdateVendor(data)
+    }
+
+    const editVendor = (id: number) => {
+        setUpdateVendor(true)
+        setId(id)
+    }
+
+    const { confirm } = Modal
+    const showDeleteConfirm = (id: number, name: string) => {
+        confirm({
+            title: `Are you sure delete this ${name}?`,
+            okText: 'Yes',
+            okType: 'danger',
+            cancelText: 'No',
+            onOk() {
+                console.log(id);
+                dispatch(DelVendor(id))
+            },
+            onCancel() {
+                console.log('Cancel')
+            }
+        })
+    }
+
+    useEffect(() => {
+        dispatch(AllVendor())
+    }, [])
+
+    const items: MenuProps["items"] = [
+        {
+            label: <Link href="/dashboard/purchasing/add-product">Add Item Product</Link>,
+            key: "0"
+        }
+    ]
+
+    const columnsVendor = [
+        {
+            title: 'Vendor',
+            dataIndex: 'vendorName',
+            sorter: {
+                compare: (a: any, b: any) => a.vendorName < b.vendorName ? -1 : 1
+            }
+        },
+        {
+            title: 'Status',
+            dataIndex: 'vendorActive',
+            render: (record: any) => {
+                return (
+                    <span>{record.vendorActive === "0" ? "InActive" : "Active"}</span>
+                )
+            },
+            sorter: {
+                compare: (a: any, b: any) => a.vendorActive - b.vendorActive
+            }
+        },
+        {
+            title: 'Priority',
+            dataIndex: 'vendorPriority',
+            render: (record: any) => {
+                return (
+                    <span>{record.vendorPriority === "0" ? "Lowest" : "Highest"}</span>
+                )
+            },
+            sorter: {
+                compare: (a: any, b: any) => a.vendorPriority - b.vendorPriority
+            }
+        },
+        {
+            title: 'Register At',
+            dataIndex: 'vendorRegisterDate',
+            // render: (record: any) => {
+            //     return (
+            //         <span>{record.vendorRegisterDate.split("T")[0]}</span>
+            //     )
+            // },
+            sorter: {
+                compare: (a: any, b: any) => a.vendorRegisterDate < b.vendorRegisterDate ? -1 : 1
+            }
+        },
+        {
+            title: 'Web Url',
+            dataIndex: 'vendorWeburl',
+            sorter: {
+                compare: (a: any, b: any) => a.vendorWeburl < b.vendorWeburl ? -1 : 1
+            }
+        },
+        {
+            title: [<Button onClick={() => setAddVendor(true)} className='border-0 mr-2'><PlusOutlined /> Add</Button>],
+            render: (record: any) => {
+                return (
+                    <>
+                        <Tooltip placement="top" title='Edit Vendor'>
+                            <EditOutlined style={{ color: '#13c2c2' }} onClick={() => editVendor(record.vendorId)} className="mx-2" />
+                        </Tooltip>
+                        <Tooltip placement="top" title='Delete'>
+                            <DeleteOutlined style={{ color: 'red' }} onClick={() => showDeleteConfirm(record.vendorId, record.vendorName)} className="mx-2" />
+                        </Tooltip>
+                        <Dropdown menu={{ items }} trigger={["click"]} className="h-8">
+                            <MoreOutlined className="mx-2" />
+                        </Dropdown>
+                    </>
+                )
+            }
+        }
+    ]
+
+    return (
+        <>
+            {addVendor ?
+                <AddVendors
+                    show={addVendor}
+                    clickOk={handleOk}
+                    clickCancel={handleCancel}
+                    handleClose={handleClose}
+                /> : null}
+
+            {updateVendor ?
+                <EditVendors
+                    data={vendors}
+                    id={id}
+                    show={updateVendor}
+                    clickOk={handleOk}
+                    clickCancel={handleCancel}
+                    handleClose={handleClose}
                 />
-            </Space>
-            <Badge.Ribbon text={vendor[0].priority === 0 ? 'No Priority' : 'Priority'}>
-                <Card
-                    type="inner"
-                    title={vendor[0].name}
-                    className='drop-shadow-lg my-2'>
-                    <a href="/Dashboard/purchasing/vendor-detail">More</a>
-                </Card>
-            </Badge.Ribbon>
-            <Badge.Ribbon text={vendor[1].priority === 0 ? 'No Priority' : 'Priority'} color='red'>
-                <Card
-                    type="inner"
-                    title={vendor[1].name}
-                    className='drop-shadow-lg my-2'>
-                    <a href="/Dashboard/purchasing/vendor-detail">More</a>
-                </Card>
-            </Badge.Ribbon>
-            <Badge.Ribbon text={vendor[2].priority === 0 ? 'No Priority' : 'Priority'}>
-                <Card
-                    type="inner"
-                    title={vendor[2].name}
-                    className='drop-shadow-lg my-2'>
-                    <a href="/Dashboard/purchasing/vendor-detail">More</a>
-                </Card>
-            </Badge.Ribbon>
-            <Badge.Ribbon text={vendor[3].priority === 0 ? 'No Priority' : 'Priority'} color='red'>
-                <Card
-                    type="inner"
-                    title={vendor[3].name}
-                    className='drop-shadow-lg my-2'>
-                    <a href="/Dashboard/purchasing/vendor-detail">More</a>
-                </Card>
-            </Badge.Ribbon>
-            <Badge.Ribbon text={vendor[1].priority === 0 ? 'No Priority' : 'Priority'} color='red'>
-                <Card
-                    type="inner"
-                    title={vendor[1].name}
-                    className='drop-shadow-lg my-2'>
-                    <a href="/Dashboard/purchasing/vendor-detail">More</a>
-                </Card>
-            </Badge.Ribbon>
-        </Card>
-    </Dashboard>
-);
+                : null}
 
-export default Vendor;
+            <Table columns={columnsVendor} dataSource={vendors} />
+        </>
+    )
+}

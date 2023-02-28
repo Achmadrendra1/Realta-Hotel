@@ -8,6 +8,12 @@ import payTrxHistoryReducer from "./Payment/payTrxHistoryReducer";
 import payBankReducer from "./Payment/payBankReducer";
 import payPagaReducer from "./Payment/payPagaReducer";
 import payUserAccReducer from "./Payment/payUserAccReducer";
+import StockReducer from './Purchasing/stockReducer';
+import StodReducer from './Purchasing/stodReducer';
+import VendorReducer from './Purchasing/vendorReducer';
+import VeproReducer from './Purchasing/veproReducer';
+import PoheReducer from './Purchasing/poheReducer';
+import PodeReducer from './Purchasing/podeReducer';
 
 export default combineReducers({
   DeptReducer,
@@ -23,4 +29,12 @@ export default combineReducers({
   payBankReducer,
   payPagaReducer,
   payUserAccReducer,
+
+  //Purchasing
+  StockReducer,
+  StodReducer,
+  VendorReducer,
+  VeproReducer,
+  PoheReducer,
+  PodeReducer
 });

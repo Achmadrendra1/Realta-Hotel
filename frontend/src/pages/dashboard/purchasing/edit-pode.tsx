@@ -1,24 +1,24 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { Form, Input, Modal, } from 'antd';
+import { Button, Form, Input, Modal } from 'antd';
 import Buttons from '@/components/Button';
-import { EditStock } from '@/Redux/Action/Purchasing/purchasingAction';
+import { EditPode } from '@/Redux/Action/Purchasing/purchasingAction';
 
-export default function EditStocks(props: any) {
+export default function EditPodes(props: any) {
     const id = props.id
     const data = props.data
     const { handleClose } = props
     const dispatch = useDispatch()
 
-    const editStocks = data.find((item: any) => item.stockId == id)
-    const [dataStock, setDataStock] = useState(editStocks)
+    const editPodes = data.find((item: any) => item.podeId == id)
+    const [dataPode, setDataPode] = useState(editPodes)
 
     const eventHandler = (item: any) => (event: any) => {
-        setDataStock({ ...dataStock, [item]: event.target.value })
+        setDataPode({ ...dataPode, [item]: event.target.value })
     }
 
     const onFinish = () => {
-        dispatch(EditStock(dataStock))
+        dispatch(EditPode(dataPode))
         handleClose(false)
     }
 
@@ -29,6 +29,7 @@ export default function EditStocks(props: any) {
     return (
         <>
             <Modal
+                title='Edit Stock'
                 open={props.show}
                 onOk={props.clickOk}
                 onCancel={props.clickCancel}
@@ -39,65 +40,38 @@ export default function EditStocks(props: any) {
                     layout="horizontal"
                     onFinish={onFinish}
                     onFinishFailed={onFinishFailed}
-                    initialValues={dataStock}
+                    initialValues={dataPode}
                 >
-                    <p className='text-center text-xl py-5 font-bold'>
-                        Edit Stock {editStocks.stockName}
-                    </p>
-
                     <Form.Item
-                        name="stockName" label='Stock Name'
-                        rules={[{ required: true, message: 'Please input stock name!' }]}
+                        name="podeStock" label='Stock'
+                        rules={[{ required: true, message: 'Please input stock order!' }]}
                     >
                         <Input />
                     </Form.Item>
 
-
                     <Form.Item
-                        name="stockQuantity" label='Quantity'
-                        rules={[{ required: true, message: 'Please input quantity!' }]}
+                        name="podeOrderQty" label='Order Qty'
+                        rules={[{ required: true, message: 'Please input order quantity!' }]}
                     >
                         <Input />
                     </Form.Item>
 
-
                     <Form.Item
-                        name="stockReorderPoint" label='Reorder Point'
-                        rules={[{ required: true, message: 'Please input reorder point!' }]}
+                        name="podeReceivedQty" label='Received'
+                        rules={[{ required: true, message: 'Please input order received quantity!' }]}
                     >
                         <Input />
                     </Form.Item>
 
-
                     <Form.Item
-                        name="stockUsed" label='Used'
-                        rules={[{ required: true, message: 'Please input used!' }]}
+                        name="podeRejectedQty" label='Rejected'
+                        rules={[{ required: true, message: 'Please input order rejected quantity!' }]}
                     >
                         <Input />
                     </Form.Item>
 
-
-                    <Form.Item
-                        name="stockScrap" label='Scrap'
-                        rules={[{ required: true, message: 'Please input scrap!' }]}
-                    >
-                        <Input />
-                    </Form.Item>
-
-
-                    <Form.Item
-                        name="stockSize" label='Size'
-                        rules={[{ required: true, message: 'Please input size!' }]}
-                    >
-                        <Input />
-                    </Form.Item>
-
-
-                    <Form.Item
-                        name="stockColor" label='Color'
-                        rules={[{ required: true, message: 'Please input color!' }]}
-                    >
-                        <Input />
+                    <Form.Item label=" " colon={false}>
+                        <Button className="flex justify-end" disabled>Generate Barcode</Button>
                     </Form.Item>
 
                     <Form.Item label=" " colon={false}>
