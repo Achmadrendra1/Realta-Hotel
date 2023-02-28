@@ -118,7 +118,7 @@ export default function index() {
                     let room = hotel.faci_hotelall;
                     let arrRoom = room.split(',');
                     let ratePrice = hotel.faci_rateprice;
-                    let arrRatePrice = ratePrice.split('-');
+                    let arrRatePrice = ratePrice?.split('-');
                     let highPrice = hotel.faci_highprice;
                     let arrHighPrice = highPrice.split('-')
 
