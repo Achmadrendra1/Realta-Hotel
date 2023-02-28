@@ -45,7 +45,7 @@ const Employee = () => {
 
     const finish = () => {
         const body = new FormData();
-        body.append('image', forms.image[0]);
+        body.append('image', forms.image[0].name);
         body.append('fullName', forms.fullName);
         body.append('nationalId', forms.nationalId);
         body.append('birthDate', forms.birthDate);
