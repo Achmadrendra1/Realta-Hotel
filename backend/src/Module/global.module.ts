@@ -137,6 +137,8 @@ import { PurchaseOrderDetailController } from 'src/Controller/Purchasing/purchas
 import { DepartmentService } from 'src/Service/HR/department/department.service';
 import { DepartmentController } from 'src/Controller/HR/department/department.controller';
 import { PolicyCategoryGroup } from 'src/entities/PolicyCategoryGroup';
+import { JobRoleController } from 'src/Controller/HR/job-role/job-role.controller';
+import { JobRoleService } from 'src/Service/HR/job-role/job-role.service';
 
 @Module({
   imports: [
@@ -254,6 +256,7 @@ import { PolicyCategoryGroup } from 'src/entities/PolicyCategoryGroup';
     // HR
     EmployeeController,
     DepartmentController,
+    JobRoleController,
   ],
   providers: [
     AppService,
@@ -302,6 +305,7 @@ import { PolicyCategoryGroup } from 'src/entities/PolicyCategoryGroup';
     // HR
     EmployeeService,
     DepartmentService,
+    JobRoleService,
   ],
   // controllers: [AppController, EntitysController, BankController, PaymentGatewayController, UserAccountController, PaymentTransactionController],
   // providers: [AppService, EntitysService, BankService, PaymentGatewayService, UserAccountService, PaymentTransactionService],

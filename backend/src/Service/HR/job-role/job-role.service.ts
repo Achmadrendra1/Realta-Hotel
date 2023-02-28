@@ -10,15 +10,27 @@ export class JobRoleService {
     public jobRoles: Repository<JobRole>,
   ) {}
 
-  async findAJob(name: string): Promise<any> {
+  async findAJob(id: number): Promise<any> {
     return await this.jobRoles.findOne({
       where: {
-        joroName: Like(`%${name}%`),
+        joroId: id,
       },
     });
   }
 
   async getAllJob(): Promise<any> {
     return await this.jobRoles.find();
+  }
+
+  async getJobSelection(): Promise<any> {
+    const datas = await this.jobRoles.find();
+    const items = [];
+    datas.map((item: any) => {
+      items.push({
+        value: item.joroId,
+        label: item.joroName,
+      });
+    });
+    return items;
   }
 }

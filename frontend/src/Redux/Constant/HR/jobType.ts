@@ -1,0 +1,4 @@
+export const jobType = {
+    GET_SELECT_JOB: 'GET_SELECT',
+    GET_SELECT_JOB_SUCCESS: 'GET_SELECT_SUCCESS'
+}
