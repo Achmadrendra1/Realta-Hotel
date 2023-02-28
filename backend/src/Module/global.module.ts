@@ -141,6 +141,18 @@ import { DepartmentController } from 'src/Controller/HR/department/department.co
 import { PolicyCategoryGroup } from 'src/entities/PolicyCategoryGroup';
 import { JobRoleController } from 'src/Controller/HR/job-role/job-role.controller';
 import { JobRoleService } from 'src/Service/HR/job-role/job-role.service';
+import { BookingOrderDetailController } from 'src/Controller/Booking/booking_order_detail/booking_order_detail.controller';
+import { BookingOrderDetailExtraController } from 'src/Controller/Booking/booking-order-detail-extra/booking-order-detail-extra.controller';
+import { BookingOrdersController } from 'src/Controller/Booking/booking_orders/booking_orders.controller';
+import { SpecialOffersController } from 'src/Controller/Booking/special-offers/special-offers.controller';
+import { UserBreakfeastController } from 'src/Controller/Booking/user-breakfeast/user-breakfeast.controller';
+import { BookingOrdersService } from 'src/Service/Booking/booking_orders/booking_orders.service';
+import { BookingOrderDetailService } from 'src/Service/Booking/booking_order_detail/booking_order_detail.service';
+import { BookingOrderDetailExtraService } from 'src/Service/Booking/booking-order-detail-extra/booking-order-detail-extra.service';
+import { SpecialOffersService } from 'src/Service/Booking/special-offers/special-offers.service';
+import { UserBreakfeastService } from 'src/Service/Booking/user-breakfeast/user-breakfeast.service';
+
+//Booking Service
 
 @Module({
   imports: [
@@ -158,9 +170,6 @@ import { JobRoleService } from 'src/Service/HR/job-role/job-role.service';
       PolicyCategoryGroup,
 
       Bank,
-      BookingOrderDetail,
-      BookingOrderDetailExtra,
-      BookingOrders,
       Department,
       Employee,
       EmployeeDepartmentHistory,
@@ -174,6 +183,14 @@ import { JobRoleService } from 'src/Service/HR/job-role/job-role.service';
       HotelReviews,
       Hotels,
 
+      //Booking
+      BookingOrderDetail,
+      BookingOrderDetailExtra,
+      BookingOrders,
+      SpecialOfferCoupons,
+      SpecialOffers,
+      UserBreakfeast,
+
       JobRole,
       OrderMenus,
       OrderMenuDetail,
@@ -181,12 +198,8 @@ import { JobRoleService } from 'src/Service/HR/job-role/job-role.service';
       PaymentTransaction,
       RestoMenus,
       RestoMenuPhotos,
-
       Shift,
-      SpecialOfferCoupons,
-      SpecialOffers,
       UserAccounts,
-      UserBreakfeast,
 
       // Users
       UserBonusPoints,
@@ -227,6 +240,13 @@ import { JobRoleService } from 'src/Service/HR/job-role/job-role.service';
     RestoMenusController,
     RestoMenuPhotosController,
     OrderMenusController,
+
+    //Booking
+    BookingOrderDetailController,
+    BookingOrderDetailExtraController,
+    BookingOrdersController,
+    SpecialOffersController,
+    UserBreakfeastController,
 
     //master
     ServiceTaskController,
@@ -271,6 +291,13 @@ import { JobRoleService } from 'src/Service/HR/job-role/job-role.service';
     FacilityPriceHistoryService,
     HotelsService,
     HotelReviewsService,
+
+    //Booking
+    BookingOrdersService,
+    BookingOrderDetailService,
+    BookingOrderDetailExtraService,
+    SpecialOffersService,
+    UserBreakfeastService,
 
     UserAccountService,
     PaymentTransactionService,

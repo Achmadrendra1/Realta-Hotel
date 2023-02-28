@@ -22,6 +22,11 @@ import locationsReducer from './Master/locationsReducer';
 import locationsRCReducer from './Master/locationsRCReducer';
 import locationsRCPReducer from './Master/locationsRCPReducer';
 import HotelReducer from './Hotel/HotelReducer';
+import BoorReducer from './Booking/BoorReducer';
+import SpofReducer from './Booking/SpofReducer';
+import FaciBoorReducer from './Booking/FaciBoorReducer';
+import HotelBoorReducer from './Booking/HotelBoorReducer';
+import ReviewBoorReducer from './Booking/ReviewBoorReducer';
 
 export default combineReducers({
   DeptReducer,
@@ -54,4 +59,12 @@ export default combineReducers({
 
   //Hotel
   HotelReducer,
+
+  //Booking,
+  BoorReducer,
+  SpofReducer,
+  FaciBoorReducer,
+  HotelBoorReducer,
+  ReviewBoorReducer
+
 });

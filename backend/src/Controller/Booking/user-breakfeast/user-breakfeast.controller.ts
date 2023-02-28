@@ -25,9 +25,9 @@ export class UserBreakfeastController {
         return this.UserBreakfeastService.updateUserBreakfeast(params.id, body)
     }
 
-    @Delete('delete/:usbrBordeId')
+    @Delete('delete/:id')
     deleteUserBreakfeast(@Param() params){
-        return this.UserBreakfeastService.deleteUserBreakfeast(params.usbrBordeId)
+        return this.UserBreakfeastService.deleteUserBreakfeast(params.id)
 
     }
 }

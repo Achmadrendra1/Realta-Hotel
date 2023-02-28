@@ -26,10 +26,10 @@ export class UserBreakfeastService {
             usbrModifiedDate: field.usbrModifiedDate,
             usbrTotalVacant : field.usbrTotalVacant 
         }).then((result) => {
-            return ({
+            return {
                 messeage : `Selamat anda berhasil menambahkan User Breakfeast`,
                 return : result
-            })
+            }
         }).catch((err) =>{
             return (`Maaf, ada kesalahan masukan` + err)
         })
@@ -43,25 +43,23 @@ export class UserBreakfeastService {
             usbrModifiedDate: field.usbrModifiedDate,
             usbrTotalVacant : field.usbrTotalVacant 
         }).then((result) => {
-            return ({
-                meseeage : `Selamat anda berhasil masukan UserBreakfeast`,
+            return {
+                messeage : `Selamat anda berhasil masukan UserBreakfeast`,
                 return : result
-            })
+            }
         }).catch((err) => {
             return (`Maaf, ada kesalahan masukan` + err)
         })
     }
 
-    async deleteUserBreakfeast (field : UserBreakfeast) : Promise <any>{
+    async deleteUserBreakfeast (id : number){
         return await this.userBreakfeastRepository.delete({
-            usbrBordeId : field.usbrBordeId
+            usbrBordeId : id
         }).then((result) =>{
-            return ({
+            return {
                 messeage : `Selamat anda berhasil hapus data`,
                 return : result
-            })
-        }).catch((err) => {
-            return (`Maaf, ada kesalahan`+ err)
+            }
         })
     }
 }
