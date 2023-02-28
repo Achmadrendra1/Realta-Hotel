@@ -75,12 +75,6 @@ export default function Userprofile() {
             <Avatar
               size={120}
               icon={
-                // <img
-                //   src={
-                //     "https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png"
-                //   }
-                //   alt="avatar"
-                // />
                 <UserOutlined />
               }
             />
