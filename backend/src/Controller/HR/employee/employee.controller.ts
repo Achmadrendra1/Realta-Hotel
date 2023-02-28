@@ -6,6 +6,8 @@ import {
   Body,
   Post,
   UseInterceptors,
+  Delete,
+  Put,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
@@ -44,7 +46,10 @@ export class EmployeeController {
         destination: './employeephoto',
         filename(req, file, callback) {
           const filenames = file.originalname.split('.');
-          callback(null, filenames[0] + '.' + filenames[1]);
+          callback(
+            null,
+            req.body.fullName + '.' + filenames[filenames.length - 1],
+          );
         },
       }),
     }),
@@ -55,5 +60,16 @@ export class EmployeeController {
   ): Promise<any> {
     const job = await this.jobRoleService.findAJob(parseInt(body.jobId));
     return await this.employeeService.addEmployee(body, file, job.joroName);
+  }
+
+  @Put('')
+  async updateEmployee(@Body() body): Promise<any> {
+    const job = await this.jobRoleService.findAJob(parseInt(body.jobId));
+    return await this.employeeService.updateEmployee(body, job.joroName);
+  }
+
+  @Delete(':id')
+  async deleteEmployees(@Param('id') id): Promise<any> {
+    return await this.employeeService.deleteEmployee(id);
   }
 }

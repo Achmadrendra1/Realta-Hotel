@@ -4,6 +4,7 @@ import { Department } from 'src/entities/Department';
 import { Employee } from 'src/entities/Employee';
 import { EmployeeDepartmentHistory } from 'src/entities/EmployeeDepartmentHistory';
 import { EmployeePayHistory } from 'src/entities/EmployeePayHistory';
+import { Users } from 'src/entities/Users';
 import { Like, Repository } from 'typeorm';
 
 @Injectable()
@@ -17,6 +18,8 @@ export class EmployeeService {
     private paymentHist: Repository<EmployeePayHistory>,
     @InjectRepository(Department)
     private department: Repository<Department>,
+    @InjectRepository(Users)
+    private users: Repository<Users>,
   ) {}
 
   async getEmployee(): Promise<any> {
@@ -88,11 +91,54 @@ export class EmployeeService {
         ],
       );
 
-      return {
-        message: 'Employee added',
-      };
+      return await this.employeeStore.query('select * from newEmployee()');
     } catch (e: any) {
       throw new HttpException(e.message, HttpStatus.BAD_REQUEST);
     }
+  }
+
+  async deleteEmployee(id: number): Promise<any> {
+    const userDetail = await this.employeeStore.query(
+      `select * from hr.profileDetail(${id})`,
+    );
+
+    await this.employeeStore.delete({ empId: id });
+    await this.users.delete({ userId: userDetail.userid });
+    return {
+      id: id,
+      message: 'Delete Success',
+    };
+  }
+
+  async updateEmployee(data: any, jobs: any): Promise<any> {
+    const similar = jobs.split(' ');
+    const dept = await this.department.findOne({
+      where: { deptName: Like(`%${similar[0]}%`) },
+    });
+    await this.employeeStore.query(
+      `call hr.updateEmp($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16)`,
+      [
+        +data.userId,
+        +data.empId,
+        data.fullName,
+        data.nationalId,
+        data.birthDate,
+        data.hireDate,
+        data.marital,
+        data.gender,
+        data.salaryFlag,
+        +data.status,
+        +data.vacation,
+        +data.sick,
+        data.jobId,
+        +data.salary,
+        data.frequenltyPay,
+        dept.deptId,
+      ],
+    );
+
+    return {
+      message: 'Success',
+    };
   }
 }
