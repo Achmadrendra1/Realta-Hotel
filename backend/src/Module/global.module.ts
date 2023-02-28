@@ -189,7 +189,6 @@ import { UserBreakfeastService } from 'src/Service/Booking/user-breakfeast/user-
       SpecialOffers,
       UserBreakfeast,
 
-
       JobRole,
       OrderMenus,
       OrderMenuDetail,
@@ -199,7 +198,6 @@ import { UserBreakfeastService } from 'src/Service/Booking/user-breakfeast/user-
       RestoMenuPhotos,
       Shift,
       UserAccounts,
-
 
       // Users
       UserBonusPoints,
