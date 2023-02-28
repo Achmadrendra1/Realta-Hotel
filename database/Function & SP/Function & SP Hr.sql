@@ -142,14 +142,14 @@ language plpgsql
 
 -- Stored procedure insert emp
 create or replace procedure hr.addEmployee(
-	fullName character varying,
-	photoUrl character varying,
-	nationalId character varying,
+	fullName varchar(55),
+	photoUrl varchar(255),
+	nationalId varchar(25),
 	birthDate date,
 	hireDate date,
-	marital character varying,
-	gender character varying,
-	salariedFlag character varying,
+	marital varchar(1),
+	gender varchar(1),
+	salariedFlag varchar(1),
 	status int,
 	vacation int,
 	sick int,
@@ -176,9 +176,11 @@ begin
 	id_wode := hr.wodeId();
 	
 	insert into users.users(
+		user_id,
 		user_full_name,
 		user_type
 	)values (
+		id_user,
 		fullName,
 		'C'
 	);
@@ -263,7 +265,7 @@ begin
 	commit;
 end; $$
 
-call hr.addEmployee('jhon'::character varying, '/'::character varying, 'IDN'::character varying, '2000-10-15'::date, '2023-10-15'::date, 'S'::character varying, 'M'::character varying, '0', 1, 4, 5, 9, 5000000, 1, 9, '2023-10-15'::date, 1, 1 );
+call hr.addEmployee('jhon', '/', 'IDN', '2000-10-15', '2023-10-15', 'S', 'M', '0', 1, 4, 5, 9, 5000000, 1, 9, '2023-10-15', 1, 1 );
 
 -- Update
 create or replace procedure hr.updateEmp(

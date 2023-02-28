@@ -7,7 +7,7 @@ import {
 } from "./HR/department";
 import { deptType } from "../Constant/HR/deptType";
 import { empType } from "../Constant/HR/empType";
-import { handleDetailEmployee, handleGetEmployees } from "./HR/employees";
+import { handleAddEmployee, handleDetailEmployee, handleGetEmployees } from "./HR/employees";
 import UserConst from "../Constant/User/UserConst";
 import { HandleLoginUser } from "./User/auth";
 import { HandleEditProfile, HandleGetUser } from "./User/getUser";
@@ -104,6 +104,8 @@ import {
   handlerUpdateLocationsRCP,
 } from "./Master/sagaLocationsRCP";
 import ActionTypes from "../Constant/Master/masterActionType";
+import { jobType } from "../Constant/HR/jobType";
+import { handleSelectJob } from "./HR/select";
 import HotelConstant from "../Constant/Hotel/HotelConstant";
 import {
   handleAddFacilities,
@@ -220,6 +222,15 @@ export default function* rootSaga() {
     takeEvery(ActionTypes.UPDATE_LOCATIONSRCP, handlerUpdateLocationsRCP),
     takeEvery(ActionTypes.DEL_LOCATIONSRCP, handlerDeleteLocationsRCP),
 
+    // HR
+    takeEvery(deptType.GET_DATA, handleGetDept),
+    takeEvery(deptType.ADD_DATA, handleAddDept),
+    takeEvery(deptType.UPDATE_DATA, handleUpdateDept),
+    takeEvery(deptType.DELETE_DATA, handleDeleteDept),
+    takeEvery(empType.GET_DATA, handleGetEmployees),
+    takeEvery(empType.GET_DETAIL, handleDetailEmployee),
+    takeEvery(jobType.GET_SELECT_JOB, handleSelectJob),
+    takeEvery(empType.ADD_DATA, handleAddEmployee),
     //Hotel
     takeEvery(HotelConstant.GET_HOTEL, handleHotel),
     takeEvery(HotelConstant.GET_HOTEL_ID, handleHotelID),

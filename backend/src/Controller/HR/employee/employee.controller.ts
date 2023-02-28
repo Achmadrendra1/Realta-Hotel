@@ -1,9 +1,23 @@
-import { Controller, Get, Param } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Param,
+  UploadedFile,
+  Body,
+  Post,
+  UseInterceptors,
+} from '@nestjs/common';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { diskStorage } from 'multer';
 import { EmployeeService } from 'src/Service/HR/employee/employee.service';
+import { JobRoleService } from 'src/Service/HR/job-role/job-role.service';
 
 @Controller('employee')
 export class EmployeeController {
-  constructor(private employeeService: EmployeeService) {}
+  constructor(
+    private employeeService: EmployeeService,
+    private jobRoleService: JobRoleService,
+  ) {}
 
   @Get('/')
   allEmployee(): Promise<any> {
@@ -21,5 +35,25 @@ export class EmployeeController {
       deptHist,
       payHist,
     };
+  }
+
+  @Post('')
+  @UseInterceptors(
+    FileInterceptor('image', {
+      storage: diskStorage({
+        destination: './employeephoto',
+        filename(req, file, callback) {
+          const filenames = file.originalname.split('.');
+          callback(null, filenames[0] + '.' + filenames[1]);
+        },
+      }),
+    }),
+  )
+  async addEmployees(
+    @UploadedFile() file: Express.Multer.File,
+    @Body() body,
+  ): Promise<any> {
+    const job = await this.jobRoleService.findAJob(parseInt(body.jobId));
+    return await this.employeeService.addEmployee(body, file, job.joroName);
   }
 }
