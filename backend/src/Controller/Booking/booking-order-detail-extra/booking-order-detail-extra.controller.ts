@@ -25,8 +25,8 @@ export class BookingOrderDetailExtraController {
         return this.BookingOrderDetailExtraService.updateBookingOrderDetailExtra(params.id, body)
     }
 
-    @Delete('delete/:boexId')
+    @Delete('delete/id')
     deleteBookingOrderDetailExtra(@Param() params){
-        return this.BookingOrderDetailExtraService.deleteBookingOrderDetailExtra(params.boexId)
+        return this.BookingOrderDetailExtraService.deleteBookingOrderDetailExtra(params.id)
     }
 }

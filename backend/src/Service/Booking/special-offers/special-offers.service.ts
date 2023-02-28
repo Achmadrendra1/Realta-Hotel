@@ -37,10 +37,10 @@ export class SpecialOffersService {
                     
                 })
                .then((result) => {
-                    return ({
-                        message : `Selamat, Anda berhasil menambahkan Coupon Special Offers`,
+                    return {
+                        messeage : `Selamat, Anda berhasil menambahkan Coupon Special Offers`,
                         return : result
-                    })  
+                    }
                }).catch((err) => {
                     return (`Maaf, ada kesalahan masukan` + err)
                })
@@ -71,16 +71,14 @@ export class SpecialOffersService {
             
         }
 
-        async deleteSpecialOffers(field : SpecialOffers) : Promise <any> {
+        async deleteSpecialOffers(id : number) {
             return await this.SpecialOffersRepository.delete({
-                spofId  : field.spofId
+                spofId : id
             }).then((result) => {
                 return {
                     messeage : `Selamat anda berhasil hapus data`,
                     return : result
                 }
-            }).catch((err) => {
-                return (`Maaf, ada kesalahan` + err)
             })
         }
 }

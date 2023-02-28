@@ -137,6 +137,18 @@ import { PurchaseOrderDetailController } from 'src/Controller/Purchasing/purchas
 import { DepartmentService } from 'src/Service/HR/department/department.service';
 import { DepartmentController } from 'src/Controller/HR/department/department.controller';
 import { PolicyCategoryGroup } from 'src/entities/PolicyCategoryGroup';
+import { BookingOrderDetailController } from 'src/Controller/Booking/booking_order_detail/booking_order_detail.controller';
+import { BookingOrderDetailExtraController } from 'src/Controller/Booking/booking-order-detail-extra/booking-order-detail-extra.controller';
+import { BookingOrdersController } from 'src/Controller/Booking/booking_orders/booking_orders.controller';
+import { SpecialOffersController } from 'src/Controller/Booking/special-offers/special-offers.controller';
+import { UserBreakfeastController } from 'src/Controller/Booking/user-breakfeast/user-breakfeast.controller';
+import { BookingOrdersService } from 'src/Service/Booking/booking_orders/booking_orders.service';
+import { BookingOrderDetailService } from 'src/Service/Booking/booking_order_detail/booking_order_detail.service';
+import { BookingOrderDetailExtraService } from 'src/Service/Booking/booking-order-detail-extra/booking-order-detail-extra.service';
+import { SpecialOffersService } from 'src/Service/Booking/special-offers/special-offers.service';
+import { UserBreakfeastService } from 'src/Service/Booking/user-breakfeast/user-breakfeast.service';
+
+//Booking Service
 
 @Module({
   imports: [
@@ -154,9 +166,6 @@ import { PolicyCategoryGroup } from 'src/entities/PolicyCategoryGroup';
       PolicyCategoryGroup,
 
       Bank,
-      BookingOrderDetail,
-      BookingOrderDetailExtra,
-      BookingOrders,
       Department,
       Employee,
       EmployeeDepartmentHistory,
@@ -170,6 +179,15 @@ import { PolicyCategoryGroup } from 'src/entities/PolicyCategoryGroup';
       HotelReviews,
       Hotels,
 
+      //Booking
+      BookingOrderDetail,
+      BookingOrderDetailExtra,
+      BookingOrders,
+      SpecialOfferCoupons,
+      SpecialOffers,
+      UserBreakfeast,
+
+
       JobRole,
       OrderMenus,
       OrderMenuDetail,
@@ -177,12 +195,9 @@ import { PolicyCategoryGroup } from 'src/entities/PolicyCategoryGroup';
       PaymentTransaction,
       RestoMenus,
       RestoMenuPhotos,
-
       Shift,
-      SpecialOfferCoupons,
-      SpecialOffers,
       UserAccounts,
-      UserBreakfeast,
+
 
       // Users
       UserBonusPoints,
@@ -223,6 +238,13 @@ import { PolicyCategoryGroup } from 'src/entities/PolicyCategoryGroup';
     RestoMenusController,
     RestoMenuPhotosController,
     OrderMenusController,
+
+    //Booking
+    BookingOrderDetailController,
+    BookingOrderDetailExtraController,
+    BookingOrdersController,
+    SpecialOffersController,
+    UserBreakfeastController,
 
     //master
     ServiceTaskController,
@@ -267,6 +289,13 @@ import { PolicyCategoryGroup } from 'src/entities/PolicyCategoryGroup';
     FacilityPriceHistoryService,
     HotelsService,
     HotelReviewsService,
+
+    //Booking
+    BookingOrdersService,
+    BookingOrderDetailService,
+    BookingOrderDetailExtraService,
+    SpecialOffersService,
+    UserBreakfeastService,
 
     UserAccountService,
     PaymentTransactionService,
