@@ -33,12 +33,19 @@ export class HotelsController {
   UpdateHotel(@Param('id') id: any, @Body() body: any) {
     return this.hotelsService.UpdateHotel(id, body);
   }
-  @Post('Add')np
+  @Post('Add')
   addHotel(@Body() body: any) {
     return this.hotelsService.addNewHotel(body);
   }
   @Delete(':id')
   DeleteHotel(@Param('id') id: any) {
     return this.hotelsService.deleteHotels(id);
+  }
+
+  
+  //Get hotel untuk Booking
+  @Get('Sp')
+  getSpHotel() {
+    return this.hotelsService.findSpHotel();
   }
 }

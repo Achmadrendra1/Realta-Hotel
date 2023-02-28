@@ -30,10 +30,10 @@ export class BookingOrderDetailExtraService {
             boexBorde       : field.boexBorde,
             boexPrit        : field.boexPrit
         }).then((result) => {
-            return({
+            return{
                 messeage : `Selamat anda berhasil menambahkan Booking Order Detail Extra`,
                 return : result
-            })
+            }
         }).catch((err) => {
             return (`Maaf, ada kesalahan masukan` + err)
         })
@@ -50,24 +50,22 @@ export class BookingOrderDetailExtraService {
             boexBorde       : field.boexBorde,
             boexPrit        : field.boexPrit
         }).then((result)=> {
-            return ({messeage : `Selamat anda berhasil sunting Booking Order Detail Extra`,
+            return {messeage : `Selamat anda berhasil sunting Booking Order Detail Extra`,
             return : result
-            })
+            }
         }).catch((err) => {
             return (`Maaf, ada kesalahan masukan` + err)
         })
     }
 
-    async deleteBookingOrderDetailExtra (field : BookingOrderDetailExtra) : Promise <any> {
+    async deleteBookingOrderDetailExtra (id : number) : Promise <any> {
         return await this.bookingOrderDetailExtra.delete({
-            boexId : field.boexId
+            boexId : id
         }).then((result) => {
-            return ({
+            return {
                 messeage : `Selamat anda berhasil hapus data`,
                 return : result
-            })
-        }).catch((err) => {
-            return (`Maaf, ada kesalahan ` + err)
+            }
         })
     }
 

@@ -136,4 +136,10 @@ export class FacilitiesService {
         return `Failed to Delete` + error;
       });
   }
+
+
+  //Sp Get Facilities untuk Booking
+  async findSpFacility():Promise<any> {
+    return await this.faciRepository.query('Select * from hotel.viewroom')
+  }
 }

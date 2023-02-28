@@ -100,4 +100,10 @@ export class HotelsService {
         return `Failed to Delete` + error;
       });
   }
+
+
+  //Get hotel untuk Booking
+  async findSpHotel():Promise<any> {
+    return await this.hotelRepository.query('Select * from hotel.viewHotel')
+  }
 }
