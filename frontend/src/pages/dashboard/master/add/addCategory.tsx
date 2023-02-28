@@ -44,10 +44,10 @@ export default function AddCategory(props: any) {
 
   const [file, setFile] = useState('');
   const { Search } = Input;
-  const onSearch = (value: string) => // console.log(value);
+  // const onSearch = (value: string) => // console.log(value);
 
   //PICTURE
-
+  
   const [form] = Form.useForm();
 
   const getSrcFromFile = (file: any) => {

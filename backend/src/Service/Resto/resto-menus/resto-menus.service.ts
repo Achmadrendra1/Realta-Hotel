@@ -36,7 +36,7 @@ export class RestoMenusService {
         remeId: param.id,
       },
       {
-        remeFaci : body.remeFaci,
+        remeFaci: body.remeFaci,
         // remeFaciId: body.remeFaciId,
         remeName: body.remeName,
         remeDescription: body.remeDescription,
