@@ -18,7 +18,7 @@ import { put } from "redux-saga/effects"
 
 function* handleSpof(): any {
     try {
-        const result = yield axios(API('Get', `/specialoffers/all`, null))
+        const result = yield axios(API('Get', `/special-offers/all`, null))
         yield put(getSpofSuccess(result.data))
         return result.data
     }catch (e : any) {
@@ -28,7 +28,7 @@ function* handleSpof(): any {
 
 function* handleBoorLast(): any {
     try {
-        const result = yield axios (API('Get', `/bookingorders/last`, null))
+        const result = yield axios (API('Get', `/booking-orders/last`, null))
         yield put(getBoorSuccess(result.data))
         return result.data
     }catch (e : any) {
@@ -38,7 +38,7 @@ function* handleBoorLast(): any {
 
 function* handleBoorCreateFinal(action : any): any {
     try {
-        const res = yield axios (API('Post', `/bookingorders/create/final`, action.payload))
+        const res = yield axios (API('Post', `/booking-orders/create/final`, action.payload))
         yield put(insertBookingSuccess(res.data.result))
         return res.data.result
         // console.log(res)

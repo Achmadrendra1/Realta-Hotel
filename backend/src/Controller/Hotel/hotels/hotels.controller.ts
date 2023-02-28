@@ -41,5 +41,4 @@ export class HotelsController {
   DeleteHotel(@Param('id') id: any) {
     return this.hotelsService.deleteHotels(id);
   }
-
 }

@@ -49,6 +49,7 @@ export default withAuth (function bookingRoom() {
     //useSelector Get Special Offers
     let spof = useSelector((state : any) => state.SpofReducer.spof)
     const typeSpof = spof?.filter((item : any)=> item.spofType == 'Individual')
+    console.log(spof)
 
     //useSelector Get Price Items for Booking Extra
     let extra = useSelector((state : any) => state.priceItemsReducer.priceItems)
@@ -946,7 +947,7 @@ export default withAuth (function bookingRoom() {
                                                         <Col span={16}>
                                                             <div className='flex items-center mb-3'>
                                                                 <div className='items-center w-12 mr-3'>
-                                                                    <img src='../../assets/Hotel_Icon.png'/>
+                                                                    <img src='../../assets/icons.png'/>
                                                                 </div>
                                                                 <div className='items-center'>
                                                                 <Tag color="volcano">{spof.spofName}</Tag>
