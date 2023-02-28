@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Department } from 'src/entities/Department';
 import { Employee } from 'src/entities/Employee';
@@ -63,32 +63,36 @@ export class EmployeeService {
     const empBos = await this.employeeStore.findOne({
       where: { empJoro: true, empEmp: { empId: 1 } },
     });
-    await this.employeeStore.query(
-      `call hr.addEmployee($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18)`,
-      [
-        data.fullName,
-        'employee/' + file.filename,
-        data.nationalId,
-        data.birthDate,
-        date,
-        data.marital,
-        data.gender,
-        data.salaryFlag,
-        data.status,
-        0,
-        0,
-        data.jobId,
-        data.salary,
-        data.frequenltyPay,
-        dept.deptId,
-        date,
-        1,
-        !empBos ? 1 : empBos.empId,
-      ],
-    );
+    try {
+      await this.employeeStore.query(
+        `call hr.addEmployee($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18)`,
+        [
+          data.fullName,
+          file.path,
+          data.nationalId,
+          data.birthDate,
+          date,
+          data.marital,
+          data.gender,
+          data.salaryFlag,
+          +data.status,
+          0,
+          0,
+          +data.jobId,
+          +data.salary,
+          data.frequenltyPay,
+          +dept.deptId,
+          date,
+          1,
+          !empBos ? 1 : empBos.empId,
+        ],
+      );
 
-    return {
-      message: 'Employee added',
-    };
+      return {
+        message: 'Employee added',
+      };
+    } catch (e: any) {
+      throw new HttpException(e.message, HttpStatus.BAD_REQUEST);
+    }
   }
 }
