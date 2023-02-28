@@ -100,7 +100,4 @@ export class HotelsService {
         return `Failed to Delete` + error;
       });
   }
-
-
-  
 }
