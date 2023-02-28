@@ -17,8 +17,8 @@ export class HotelsService {
       },
       relations: {
         facilities: {
-          facilityPhoto: true,
-          facilityPriceHistory: true,
+          facilityPhotos: true,
+          facilityPriceHistories: true,
           faciCagro: true,
         },
         hotelReviews: true,
