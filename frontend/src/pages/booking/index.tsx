@@ -118,7 +118,7 @@ export default function index() {
                     let room = hotel.faci_hotelall;
                     let arrRoom = room.split(',');
                     let ratePrice = hotel.faci_rateprice;
-                    let arrRatePrice = ratePrice.split('-');
+                    // let arrRatePrice = ratePrice.split('-');
                     let highPrice = hotel.faci_highprice;
                     let arrHighPrice = highPrice.split('-')
 
@@ -176,7 +176,7 @@ export default function index() {
                               </div>
                               <div className="flex">
                                 <div className="flex text-xl items-center mr-3">
-                                  {arrRatePrice[0]}
+                                  {/* {arrRatePrice[0]} */}
                                 </div>
                                 <div className="flex text-l text-decoration-line: line-through items-center">
                                   {arrHighPrice[0]}

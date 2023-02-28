@@ -16,10 +16,10 @@ import { HotelsService } from 'src/Service/Hotel/hotels/hotels.service';
 export class HotelsController {
   constructor(private hotelsService: HotelsService) {}
 
-  @Get()
-  getHotels() {
-    return this.hotelsService.findAllHotels();
-  }
+  // @Get()
+  // getHotels() {
+  //   return this.hotelsService.findAllHotels();
+  // }
   @Get(':id')
   getHotelsId(@Param('id') id: number) {
     return this.hotelsService.findByNameId(id);
@@ -42,10 +42,4 @@ export class HotelsController {
     return this.hotelsService.deleteHotels(id);
   }
 
-  
-  //Get hotel untuk Booking
-  @Get('Sp')
-  getSpHotel() {
-    return this.hotelsService.findSpHotel();
-  }
 }
