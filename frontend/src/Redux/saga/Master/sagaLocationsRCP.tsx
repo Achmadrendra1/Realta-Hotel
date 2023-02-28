@@ -12,7 +12,6 @@ import {
   doDelLocationsRCPSucceed,
   doDelLocationsRCPFailed,
 } from '../../Action/Master/actionLocationsRCP';
-import apiLocationsRCP from '@/Redux/Service/master/apiMasterLocationsRCP';
 import axios from 'axios';
 import { API } from '@/Redux/Configs/consumeApi';
 
@@ -28,17 +27,6 @@ function* handlerLocationsRCP(): any {
   }
 }
 
-// Alternatif with Service
-// function* handlerLocationsRCP(): any {
-//   //Jika Postman menampilkan result data
-//   try {
-//     const result = yield call(apiLocationsRCP.getLocationsRCP);
-//     // console.log(result.data);
-//     yield put(doLocationsRCPSucceed(result.data));
-//   } catch (error) {
-//     yield put(doLocationsRCPFailed(error));
-//   }
-// }
 
 //_____________________________________________________________________________________________________________________________________________________________________________________________________________________
 //  ADD
@@ -56,15 +44,6 @@ function* handlerAddLocationsRCP(action: any): any {
   }
 }
 
-// function* handlerAddLocationsRCP(action: any): any {
-//   //jika return di postman a cuma menampilkan string tidak pakai result
-//   try {
-//     yield call(apiLocationsRCP.addLocationsRCP, action.payload);
-//     yield put(doAddLocationsRCPSucceed(action.payload));
-//   } catch (error) {
-//     yield put(doAddLocationsRCPFailed(error));
-//   }
-// }
 
 //_____________________________________________________________________________________________________________________________________________________________________________________________________________________
 //  UPDATE
@@ -83,14 +62,6 @@ function* handlerUpdateLocationsRCP(action: any): any {
   }
 }
 
-// function* handlerUpdateLocationsRCP(action: any) {
-//   try {
-//     yield call(apiLocationsRCP.updateLocationsRCP, action.payload);
-//     yield put(doUpdateLocationsRCPSucceed(action.payload));
-//   } catch (error) {
-//     yield put(doUpdateLocationsRCPFailed(error));
-//   }
-// }
 
 //_____________________________________________________________________________________________________________________________________________________________________________________________________________________
 //  Delete
@@ -103,14 +74,6 @@ function* handlerDeleteLocationsRCP(action: any): any {
   }
 }
 
-// function* handlerDeleteLocationsRCP(action: any) {
-//   try {
-//     yield call(apiLocationsRCP.deleteLocationsRCP, action.payload);
-//     yield put(doDelLocationsRCPSucceed(action.payload));
-//   } catch (error) {
-//     yield put(doDelLocationsRCPFailed(error));
-//   }
-// }
 
 //_____________________________________________________________________________________________________________________________________________________________________________________________________________________
 

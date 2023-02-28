@@ -106,6 +106,29 @@ import {
 import ActionTypes from "../Constant/Master/masterActionType";
 import { jobType } from "../Constant/HR/jobType";
 import { handleSelectJob } from "./HR/select";
+import HotelConstant from "../Constant/Hotel/HotelConstant";
+import {
+  handleAddFacilities,
+  handleAddFaph,
+  handleAddFapho,
+  handleAddHotel,
+  handleAddress,
+  handleDeleteFacility,
+  handleDeleteFaph,
+  handleDeleteFapho,
+  handleDeleteHotel,
+  handleFacilities,
+  handleFacilityID,
+  handleFaph,
+  handleFapho,
+  handleHotel,
+  handleHotelID,
+  handleProvince,
+  handleUpdateFacilities,
+  handleUpdateFaph,
+  handleUpdateFapho,
+  handleUpdateHotel,
+} from "./Hotel/HotelSaga";
 
 export default function* rootSaga() {
   yield all([
@@ -206,5 +229,26 @@ export default function* rootSaga() {
     takeEvery(empType.GET_DETAIL, handleDetailEmployee),
     takeEvery(jobType.GET_SELECT_JOB, handleSelectJob),
     takeEvery(empType.ADD_DATA, handleAddEmployee),
+    //Hotel
+    takeEvery(HotelConstant.GET_HOTEL, handleHotel),
+    takeEvery(HotelConstant.GET_HOTEL_ID, handleHotelID),
+    takeEvery(HotelConstant.ADD_HOTEL, handleAddHotel),
+    takeEvery(HotelConstant.UPDATE_HOTEL, handleUpdateHotel),
+    takeEvery(HotelConstant.DEL_HOTEL, handleDeleteHotel),
+    takeEvery(HotelConstant.GET_FACILITIES, handleFacilities),
+    takeEvery(HotelConstant.GET_FACILITIES_ID, handleFacilityID),
+    takeEvery(HotelConstant.ADD_FACILITIES, handleAddFacilities),
+    takeEvery(HotelConstant.UPDATE_FACILITIES, handleUpdateFacilities),
+    takeEvery(HotelConstant.DEL_FACILITIES, handleDeleteFacility),
+    takeEvery(HotelConstant.GET_FAPHO, handleFapho),
+    takeEvery(HotelConstant.ADD_FAPHO, handleAddFapho),
+    takeEvery(HotelConstant.UPDATE_FAPHO, handleUpdateFapho),
+    takeEvery(HotelConstant.DEL_FAPHO, handleDeleteFapho),
+    takeEvery(HotelConstant.GET_FAPH, handleFaph),
+    takeEvery(HotelConstant.ADD_FAPH, handleAddFaph),
+    takeEvery(HotelConstant.UPDATE_FAPH, handleUpdateFaph),
+    takeEvery(HotelConstant.DEL_FAPH, handleDeleteFaph),
+    takeEvery(HotelConstant.GET_ADDRESS, handleAddress),
+    takeEvery(HotelConstant.GET_PROVINCE, handleProvince),
   ]);
 }

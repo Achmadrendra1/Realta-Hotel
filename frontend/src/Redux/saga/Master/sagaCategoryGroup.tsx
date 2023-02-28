@@ -12,7 +12,6 @@ import {
   doDelCategoryGroupSucceed,
   doDelCategoryGroupFailed,
 } from '../../Action/Master/actionCategoryGroup';
-import apiCategoryGroup from '@/Redux/Service/master/apiMasterCategoryGroup';
 import { API } from '@/Redux/Configs/consumeApi';
 import axios from "axios";
 
@@ -29,18 +28,6 @@ function* handlerCategoryGroup(): any {
   }
 }
 
-
-// function* handlerCategoryGroup(): any {
-//   //Jika Postman menampilkan result data
-//   try {
-//     const result = yield call(apiCategoryGroup.getCategoryGroup);
-//     // console.log('saga category :', result);
-
-//     yield put(doCategoryGroupSucceed(result.data));
-//   } catch (error) {
-//     yield put(doCategoryGroupFailed(error));
-//   }
-// }
 
 //_____________________________________________________________________________________________________________________________________________________________________________________________________________________
 //  ADD
@@ -60,16 +47,6 @@ function* handlerAddCategoryGroup(action: any): any {
 }
 
 
-// function* handlerAddCategoryGroup(action: any): any {
-//   //jika return di postman a cuma menampilkan string tidak pakai result
-//   try {
-//     yield call(apiCategoryGroup.addCategoryGroup, action.payload);
-//     yield put(doAddCategoryGroupSucceed(action.payload));
-//   } catch (error) {
-//     yield put(doAddCategoryGroupFailed(error));
-//   }
-// }
-
 //_____________________________________________________________________________________________________________________________________________________________________________________________________________________
 //  UPDATE
 function* handlerUpdateCategoryGroup(action: any): any {
@@ -87,15 +64,6 @@ function* handlerUpdateCategoryGroup(action: any): any {
   }
 }
 
-// function* handlerUpdateCategoryGroup(action: any): any {
-//   try {
-//     yield call(apiCategoryGroup.updateCategoryGroup, action.payload);
-//     yield put(doUpdateCategoryGroupSucceed(action.payload));
-//   } catch (error) {
-//     yield put(doUpdateCategoryGroupFailed(error));
-//   }
-// }
-
 //____________________________________________________________________________________________________________________________________________________________________________________________________________________
 //  DELETE
 function* handlerDeleteCategoryGroup(action: any): any {
@@ -107,14 +75,6 @@ function* handlerDeleteCategoryGroup(action: any): any {
   }
 }
 
-// function* handlerDeleteCategoryGroup(action: any): any {
-//   try {
-//     yield call(apiCategoryGroup.deleteCategoryGroup, action.payload);
-//     yield put(doDelCategoryGroupSucceed(action.payload));
-//   } catch (error) {
-//     yield put(doDelCategoryGroupFailed(error));
-//   }
-// }
 
 //_____________________________________________________________________________________________________________________________________________________________________________________________________________________
 

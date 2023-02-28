@@ -12,7 +12,6 @@ import {
   doDelRegionsSucceed,
   doDelRegionsFailed,
 } from '../../Action/Master/actionRegions';
-import apiRegions from '@/Redux/Service/master/apiMasterRegions';
 import axios from 'axios';
 import { API } from '@/Redux/Configs/consumeApi';
 
@@ -28,17 +27,6 @@ function* handlerRegions(): any {
   }
 }
 
-// Alternatif with Service
-// function* handlerRegions(): any {
-//   //Jika Postman menampilkan result data
-//   try {
-//     const result = yield call(apiRegions.getRegions);
-//     // console.log(result.data);
-//     yield put(doRegionsSucceed(result.data));
-//   } catch (error) {
-//     yield put(doRegionsFailed(error));
-//   }
-// }
 
 //_____________________________________________________________________________________________________________________________________________________________________________________________________________________
 //  ADD
@@ -56,15 +44,6 @@ function* handlerAddRegions(action: any): any {
   }
 }
 
-// function* handlerAddRegions(action: any): any {
-//   //jika return di postman a cuma menampilkan string tidak pakai result
-//   try {
-//     yield call(apiRegions.addRegions, action.payload);
-//     yield put(doAddRegionsSucceed(action.payload));
-//   } catch (error) {
-//     yield put(doAddRegionsFailed(error));
-//   }
-// }
 
 //_____________________________________________________________________________________________________________________________________________________________________________________________________________________
 //  UPDATE
@@ -83,14 +62,6 @@ function* handlerUpdateRegions(action: any): any {
   }
 }
 
-// function* handlerUpdateRegions(action: any) {
-//   try {
-//     yield call(apiRegions.updateRegions, action.payload);
-//     yield put(doUpdateRegionsSucceed(action.payload));
-//   } catch (error) {
-//     yield put(doUpdateRegionsFailed(error));
-//   }
-// }
 
 //_____________________________________________________________________________________________________________________________________________________________________________________________________________________
 //  Delete
@@ -103,15 +74,6 @@ function* handlerDeleteRegions(action: any): any {
     console.log(error);
   }
 }
-
-// function* handlerDeleteRegions(action: any) {
-//   try {
-//     yield call(apiRegions.deleteRegions, action.payload);
-//     yield put(doDelRegionsSucceed(action.payload));
-//   } catch (error) {
-//     yield put(doDelRegionsFailed(error));
-//   }
-// }
 
 //_____________________________________________________________________________________________________________________________________________________________________________________________________________________
 
