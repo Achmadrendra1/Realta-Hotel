@@ -26,8 +26,18 @@ export function* handleAddEmployee(action:any):any{
     const { payload } = action
     try {
         const res = yield axios(FORMAPI('post', '/employee', payload))
-        yield put({ type: empType.ADD_DATA_SUCCESS, payload: res.data})
+        yield put({ type: empType.ADD_DATA_SUCCESS, payload: res.data[0]})
     } catch (e:any) {
-        console.log(e)
+        yield put({ type: empType.ADD_DATA_FAILED })
+    }
+}
+
+export function* handleDelEmployee(action:any): any{
+    const { payload } = action
+    try {
+        const res = yield axios(API('delete', `/employee/${payload}`))
+        yield put({ type: empType.DEL_DATA_SUCCES, payload: res.data})
+    } catch (e:any) {
+        yield put({ type: empType.DEL_DATA_FAILED })
     }
 }

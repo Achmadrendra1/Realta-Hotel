@@ -4,7 +4,7 @@ import Buttons from "../Button"
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useDispatch, useSelector } from "react-redux";
-import { addEmployee, getEmpData, jobSelectItem } from "@/Redux/Action/HR";
+import { addEmployee, delEmployee, getEmpData, jobSelectItem } from "@/Redux/Action/HR";
 
 const Employee = () => {
     const [value, setValue] = useState<string | number>('Active')
@@ -17,7 +17,7 @@ const Employee = () => {
         marital: '',
         gender: '',
         salaryFlag: '',
-        status: '',
+        status: '0',
         image: [],
         jobId: '',
         salary: '',
@@ -58,6 +58,19 @@ const Employee = () => {
         body.append('frequentlyPay', forms.frequentlyPay);
         dispatch(addEmployee(body))
         setOpen(false)
+        setForms({
+            fullName: '',
+            nationalId: '',
+            birthDate: '',
+            marital: '',
+            gender: '',
+            salaryFlag: '',
+            status: '0',
+            image: [],
+            jobId: '',
+            salary: '',
+            frequentlyPay: ''
+        })
     }
     const columns = [
         {
@@ -108,7 +121,7 @@ const Employee = () => {
             render: (_:any, record:any) => (
                 <Space size={10}>
                     <Link href={`/dashboard/hr/${record.id}/${record.fullname}`}><EyeOutlined /></Link>
-                    <Button className="border-none text-red-400" onClick={() => console.log(record.id)}><DeleteOutlined /></Button>
+                    <Button className="border-none text-red-400" onClick={() => dispatch(delEmployee(record.id))}><DeleteOutlined /></Button>
                 </Space>
             )
         }

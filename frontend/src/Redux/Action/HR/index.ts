@@ -55,3 +55,10 @@ export const addEmployee = ( payload:any ) => {
         payload: payload
     }
 }
+
+export const delEmployee = ( payload:number ) => {
+    return{
+        type: empType.DEL_DATA,
+        payload: payload
+    }
+}

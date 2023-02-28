@@ -7,7 +7,7 @@ import {
 } from "./HR/department";
 import { deptType } from "../Constant/HR/deptType";
 import { empType } from "../Constant/HR/empType";
-import { handleAddEmployee, handleDetailEmployee, handleGetEmployees } from "./HR/employees";
+import { handleAddEmployee, handleDelEmployee, handleDetailEmployee, handleGetEmployees } from "./HR/employees";
 import UserConst from "../Constant/User/UserConst";
 import { HandleLoginUser } from "./User/auth";
 import { HandleEditProfile, HandleGetUser } from "./User/getUser";
@@ -231,6 +231,7 @@ export default function* rootSaga() {
     takeEvery(empType.GET_DETAIL, handleDetailEmployee),
     takeEvery(jobType.GET_SELECT_JOB, handleSelectJob),
     takeEvery(empType.ADD_DATA, handleAddEmployee),
+    takeEvery(empType.DEL_DATA, handleDelEmployee),
     //Hotel
     takeEvery(HotelConstant.GET_HOTEL, handleHotel),
     takeEvery(HotelConstant.GET_HOTEL_ID, handleHotelID),
