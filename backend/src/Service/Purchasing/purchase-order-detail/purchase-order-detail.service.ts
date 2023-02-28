@@ -11,7 +11,7 @@ export class PodeService {
     ) { }
 
     async findAllPode(): Promise<any> {
-        return await this.podeRepository.find()
+        return await this.podeRepository.query('select * from purchasing.getALLPode()')
     }
 
     async findPodeId(id: number): Promise<any> {

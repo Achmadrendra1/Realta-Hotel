@@ -33,7 +33,7 @@ export class HotelsController {
   UpdateHotel(@Param('id') id: any, @Body() body: any) {
     return this.hotelsService.UpdateHotel(id, body);
   }
-  @Post('Add')np
+  @Post('Add')
   addHotel(@Body() body: any) {
     return this.hotelsService.addNewHotel(body);
   }

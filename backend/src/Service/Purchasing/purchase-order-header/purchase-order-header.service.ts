@@ -11,7 +11,7 @@ export class PoheService {
     ) { }
 
     async findAllPohe(): Promise<any> {
-        return await this.poheRepository.find()
+        return await this.poheRepository.query('select * from purchasing.getALLPoheVendor()')
     }
 
     async findPoheId(id: number): Promise<any> {

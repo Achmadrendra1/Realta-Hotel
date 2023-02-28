@@ -11,7 +11,7 @@ export class VeproService {
     ) { }
 
     async findAllVepro(): Promise<any> {
-        return await this.veproRepository.find()
+        return await this.veproRepository.query('select * from purchasing.getALLVendorStock()')
     }
 
     async findVeproId(id: number): Promise<any> {

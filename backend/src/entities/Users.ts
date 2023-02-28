@@ -101,4 +101,5 @@ export class Users {
 
   @OneToOne(() => UserRoles, (userRoles) => userRoles.usroUser)
   userRoles: UserRoles;
+  facilityPriceHistories: any;
 }

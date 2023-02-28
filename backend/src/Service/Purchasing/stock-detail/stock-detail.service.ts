@@ -11,7 +11,7 @@ export class StodService {
   ) { }
 
   async findAllStod(): Promise<any> {
-    return await this.stodRepository.find()
+    return await this.stodRepository.query('select * from purchasing.getALLStod()')
   }
 
   async findStodId(id: number): Promise<any> {
