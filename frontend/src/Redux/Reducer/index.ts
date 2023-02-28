@@ -20,6 +20,7 @@ import serviceTaskReducer from './Master/serviceTaskReducer';
 import locationsReducer from './Master/locationsReducer';
 import locationsRCReducer from './Master/locationsRCReducer';
 import locationsRCPReducer from './Master/locationsRCPReducer';
+import HotelReducer from './Hotel/HotelReducer';
 
 export default combineReducers({
   DeptReducer,
@@ -48,4 +49,7 @@ export default combineReducers({
   locationsReducer,
   locationsRCReducer,
   locationsRCPReducer,
+
+  //Hotel
+  HotelReducer,
 });

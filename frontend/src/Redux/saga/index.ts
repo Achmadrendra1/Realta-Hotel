@@ -1,17 +1,17 @@
-import { all, takeEvery } from 'redux-saga/effects';
+import { all, takeEvery } from "redux-saga/effects";
 import {
   handleAddDept,
   handleDeleteDept,
   handleGetDept,
   handleUpdateDept,
-} from './HR/department';
-import { deptType } from '../Constant/HR/deptType';
-import { empType } from '../Constant/HR/empType';
-import { handleDetailEmployee, handleGetEmployees } from './HR/employees';
-import UserConst from '../Constant/User/UserConst';
-import { HandleLoginUser } from './User/auth';
-import { HandleEditProfile, HandleGetUser } from './User/getUser';
-import PaymentConst from '../Constant/Payment/PaymentConst';
+} from "./HR/department";
+import { deptType } from "../Constant/HR/deptType";
+import { empType } from "../Constant/HR/empType";
+import { handleDetailEmployee, handleGetEmployees } from "./HR/employees";
+import UserConst from "../Constant/User/UserConst";
+import { HandleLoginUser } from "./User/auth";
+import { HandleEditProfile, HandleGetUser } from "./User/getUser";
+import PaymentConst from "../Constant/Payment/PaymentConst";
 import {
   handleTrxDashRequest,
   handlePagaRequest,
@@ -28,7 +28,7 @@ import {
   handleTopUp,
   handleCheckSecure,
   handleGetHistoryTrx,
-} from './Payment/paymentSagas';
+} from "./Payment/paymentSagas";
 
 //Master
 import {
@@ -36,74 +36,97 @@ import {
   handlerDeleteRegions,
   handlerRegions,
   handlerUpdateRegions,
-} from './Master/sagaRegions';
+} from "./Master/sagaRegions";
 import {
   handlerAddCountry,
   handlerDeleteCountry,
   handlerCountry,
   handlerUpdateCountry,
-} from './Master/sagaCountry';
+} from "./Master/sagaCountry";
 import {
   handlerAddProvinces,
   handlerDeleteProvinces,
   handlerProvinces,
   handlerUpdateProvinces,
-} from './Master/sagaProvinces';
+} from "./Master/sagaProvinces";
 import {
   handlerAddAddress,
   handlerDeleteAddress,
   handlerAddress,
   handlerUpdateAddress,
-} from './Master/sagaAddress';
+} from "./Master/sagaAddress";
 import {
   handlerAddPolicy,
   handlerDeletePolicy,
   handlerPolicy,
   handlerUpdatePolicy,
-} from './Master/sagaPolicy';
+} from "./Master/sagaPolicy";
 import {
   handlerAddCategoryGroup,
   handlerDeleteCategoryGroup,
   handlerCategoryGroup,
   handlerUpdateCategoryGroup,
-} from './Master/sagaCategoryGroup';
+} from "./Master/sagaCategoryGroup";
 import {
   handlerAddMembers,
   handlerDeleteMembers,
   handlerMembers,
   handlerUpdateMembers,
-} from './Master/sagaMembers';
+} from "./Master/sagaMembers";
 import {
   handlerAddPriceItems,
   handlerDeletePriceItems,
   handlerPriceItems,
   handlerUpdatePriceItems,
-} from './Master/sagaPriceItems';
+} from "./Master/sagaPriceItems";
 import {
   handlerAddServiceTask,
   handlerDeleteServiceTask,
   handlerServiceTask,
   handlerUpdateServiceTask,
-} from './Master/sagaServiceTask';
+} from "./Master/sagaServiceTask";
 import {
   handlerAddLocations,
   handlerDeleteLocations,
   handlerLocations,
   handlerUpdateLocations,
-} from './Master/sagaLocations';
+} from "./Master/sagaLocations";
 import {
   handlerAddLocationsRC,
   handlerDeleteLocationsRC,
   handlerLocationsRC,
   handlerUpdateLocationsRC,
-} from './Master/sagaLocationsRC';
+} from "./Master/sagaLocationsRC";
 import {
   handlerAddLocationsRCP,
   handlerDeleteLocationsRCP,
   handlerLocationsRCP,
   handlerUpdateLocationsRCP,
-} from './Master/sagaLocationsRCP';
-import ActionTypes from '../Constant/Master/masterActionType';
+} from "./Master/sagaLocationsRCP";
+import ActionTypes from "../Constant/Master/masterActionType";
+import HotelConstant from "../Constant/Hotel/HotelConstant";
+import {
+  handleAddFacilities,
+  handleAddFaph,
+  handleAddFapho,
+  handleAddHotel,
+  handleAddress,
+  handleDeleteFacility,
+  handleDeleteFaph,
+  handleDeleteFapho,
+  handleDeleteHotel,
+  handleFacilities,
+  handleFacilityID,
+  handleFaph,
+  handleFapho,
+  handleHotel,
+  handleHotelID,
+  handleProvince,
+  handleUpdateFacilities,
+  handleUpdateFaph,
+  handleUpdateFapho,
+  handleUpdateHotel,
+} from "./Hotel/HotelSaga";
 
 export default function* rootSaga() {
   yield all([
@@ -194,5 +217,27 @@ export default function* rootSaga() {
     takeEvery(ActionTypes.ADD_LOCATIONSRCP, handlerAddLocationsRCP),
     takeEvery(ActionTypes.UPDATE_LOCATIONSRCP, handlerUpdateLocationsRCP),
     takeEvery(ActionTypes.DEL_LOCATIONSRCP, handlerDeleteLocationsRCP),
+
+    //Hotel
+    takeEvery(HotelConstant.GET_HOTEL, handleHotel),
+    takeEvery(HotelConstant.GET_HOTEL_ID, handleHotelID),
+    takeEvery(HotelConstant.ADD_HOTEL, handleAddHotel),
+    takeEvery(HotelConstant.UPDATE_HOTEL, handleUpdateHotel),
+    takeEvery(HotelConstant.DEL_HOTEL, handleDeleteHotel),
+    takeEvery(HotelConstant.GET_FACILITIES, handleFacilities),
+    takeEvery(HotelConstant.GET_FACILITIES_ID, handleFacilityID),
+    takeEvery(HotelConstant.ADD_FACILITIES, handleAddFacilities),
+    takeEvery(HotelConstant.UPDATE_FACILITIES, handleUpdateFacilities),
+    takeEvery(HotelConstant.DEL_FACILITIES, handleDeleteFacility),
+    takeEvery(HotelConstant.GET_FAPHO, handleFapho),
+    takeEvery(HotelConstant.ADD_FAPHO, handleAddFapho),
+    takeEvery(HotelConstant.UPDATE_FAPHO, handleUpdateFapho),
+    takeEvery(HotelConstant.DEL_FAPHO, handleDeleteFapho),
+    takeEvery(HotelConstant.GET_FAPH, handleFaph),
+    takeEvery(HotelConstant.ADD_FAPH, handleAddFaph),
+    takeEvery(HotelConstant.UPDATE_FAPH, handleUpdateFaph),
+    takeEvery(HotelConstant.DEL_FAPH, handleDeleteFaph),
+    takeEvery(HotelConstant.GET_ADDRESS, handleAddress),
+    takeEvery(HotelConstant.GET_PROVINCE, handleProvince),
   ]);
 }
