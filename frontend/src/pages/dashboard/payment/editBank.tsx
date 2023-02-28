@@ -1,7 +1,31 @@
-import { Button, Form, Input, Modal } from "antd";
+import { doUpdateBank } from "@/Redux/Action/Payment/paymentDashAction";
+import Buttons from "@/components/Button";
+import {  Form, Input, Modal } from "antd";
+import { useState } from "react";
+import { useDispatch } from "react-redux";
 
 export default function EditBank(props: any) {
-    const id = props.id
+  const dispatch = useDispatch();
+  const id = props.id;
+  const data = props.data;
+  const {handleClose} = props
+  const details = data.find((item: any) => item.bankEntityId == id);
+  const [formValues, setFormValues] = useState(details);
+
+  const handleInputChange = (input: any) => (e: any) => {
+    setFormValues({ ...formValues, [input]: e.target.value });
+  };
+
+  const onFinish = () => {
+    console.log("Success:", formValues);
+    dispatch(doUpdateBank(formValues))
+    handleClose(false)
+  };
+
+  const onFinishFailed = (errorInfo: any) => {
+    console.log("Failed:", errorInfo);
+  };
+
   return (
     <>
       <Modal
@@ -12,17 +36,34 @@ export default function EditBank(props: any) {
         centered
         footer={null}
       >
-        <Form layout="vertical">
-          <Form.Item label="Bank Code">
-            <Input placeholder="Input Bank Code" type="number" />
+        <Form
+          layout="vertical"
+          onFinish={onFinish}
+          onFinishFailed={onFinishFailed}
+          initialValues={formValues}
+        >
+          <Form.Item label="Bank Code" name='bankCode' rules={[{ required: true, message: "Please input bank code!" }]}>
+            <Input
+              placeholder="Input Bank Code"
+              onChange={handleInputChange("bankCode")}
+              
+            />
           </Form.Item>
-          <Form.Item label="Bank Name">
-            <Input placeholder="Input Bank Name" />
+          <Form.Item label="Bank Name" name='bankName' rules={[{ required: true, message: "Please input bank name!" }]}>
+            <Input
+              placeholder="Input Bank Name"
+              onChange={handleInputChange("bankName")}
+            />
           </Form.Item>
-          <Form.Item>
-            <Button htmlType="submit" className="bg-blue-700 text-white">
-              Submit
-            </Button>
+          <Form.Item label=" " colon={false}>
+            <div className="flex justify-end">
+              <Buttons type={"danger"} funcs={props.clickCancel}>
+                Cancel
+              </Buttons>
+              <div className="ml-2">
+                <Buttons>Save</Buttons>
+              </div>
+            </div>
           </Form.Item>
         </Form>
       </Modal>

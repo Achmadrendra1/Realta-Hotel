@@ -9,11 +9,6 @@ export class PaymentTransactionController {
         return this.payService.getAll()
     }
 
-    @Get('last')
-    getLastCode(){
-        return this.payService.getLastCode()
-    }
-
     @Post()
     createPayment(@Body() body){
         return this.payService.createData(body)
