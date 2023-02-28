@@ -34,10 +34,10 @@ export class BookingOrderDetailService {
             bordeSubtotal   : field.bordeSubtotal,
             bordeFaci       : field.bordeFaci
         }).then((result) => {
-            return ({
+            return {
                 messeage : `Selamat anda berhasil masukan booking order detail`,
                 return : result
-            })
+            }
         }).catch((err) => {
             return (`Maaf, ada kesalahan masukkan` + err)
         })
@@ -61,23 +61,23 @@ export class BookingOrderDetailService {
             bordeFaci       : field.bordeFaci
         }
         ).then((result)=>{
-            return({
+            return{
                 messeage : `Selamat anda berhasil sunting booking order detail`,
                 return : result
-            })
+            }
         }).catch((err) => {
             return(`Maaf, ada kesalahan masukan` + err)
         })
     }
 
-    async deleteBookingOrderDetail(field : BookingOrderDetail) : Promise <any> {
+    async deleteBookingOrderDetail(id : number) : Promise <any> {
         return await this.bookingOrderDetail.delete({
-            bordeId : field.bordeId
+            bordeId : id
         }).then((result)=> {
-            return ({
+            return {
                 messeage : `Selamat anda berhasil hapus data`,
                 return : result
-            })
+            }
         })
     }
 }

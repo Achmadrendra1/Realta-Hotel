@@ -1,7 +1,7 @@
 import { Body, Controller, Get, Param, Post, Put, Delete, Req, Res } from '@nestjs/common';
 import { SpecialOffersService } from 'src/Service/Booking/special-offers/special-offers.service';
 
-@Controller('SpecialOffers')
+@Controller('special-offers')
 export class SpecialOffersController {
     constructor(private readonly SpecialOffersService : SpecialOffersService){}
     
@@ -25,9 +25,9 @@ export class SpecialOffersController {
         return this.SpecialOffersService.updateSpecialOffers(params.id, body)
     }
     
-    @Delete('delete/:spofId')
+    @Delete('delete/:id')
     deleteSpecialOffers(@Param() params){
-        return this.SpecialOffersService.deleteSpecialOffers(params.spofId)
+        return this.SpecialOffersService.deleteSpecialOffers(params.id)
     }
     
 }

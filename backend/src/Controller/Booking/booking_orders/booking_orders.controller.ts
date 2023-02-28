@@ -15,6 +15,16 @@ export class BookingOrdersController {
         return this.BookingOrdersService.findById(params.id)
     }
 
+    @Get('last')
+    findLastBooking(){
+        return this.BookingOrdersService.findLastBooking()
+    }
+
+    @Post('create/final')
+    async createBookingOrdersFinal(@Body() body : any){
+        return await this.BookingOrdersService.createBookingOrdersFinal(body)
+    }
+    
     @Post('create')
     createBookingOrders(@Body() body){
         return this.BookingOrdersService.createBookingOrders(body)
@@ -25,8 +35,8 @@ export class BookingOrdersController {
         return this.BookingOrdersService.updateBookingOrders(params.id, body)
     }
 
-    @Delete('delete/:boorId')
+    @Delete('delete/:id')
     deleteBookingOrders(@Param() params){
-        return this.BookingOrdersService.deleteBookingOrders(params.boorId)
+        return this.BookingOrdersService.deleteBookingOrders(params.id)
     }
 }
