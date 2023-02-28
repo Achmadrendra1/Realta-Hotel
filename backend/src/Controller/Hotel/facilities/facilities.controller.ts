@@ -33,10 +33,4 @@ export class FacilitiesController {
   DeleteFacility(@Param('id') id: any) {
     return this.FaciService.deleteFaci(id);
   }
-
-  //Sp Get Facilities untuk Booking
-  @Get('Sp')
-  getSpFacility(){
-    return this.FaciService.findSpFacility()
-  }
 }

@@ -208,7 +208,7 @@ export default function index() {
                 <Card
                   type="inner"
                   title={item.patrTrxId}
-                  extra={item.patrModifiedDate.split("T")[0]}
+                  extra={item.patrModifiedDate?.split("T")[0]}
                   className="mb-4"
                 >
                   <div>
