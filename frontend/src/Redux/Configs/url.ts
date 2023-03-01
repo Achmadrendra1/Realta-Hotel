@@ -1,3 +1,3 @@
 export const configuration = {
-    BASE_URL : 'http://localhost:3500'
+    BASE_URL : 'http://localhost:3501'
 }

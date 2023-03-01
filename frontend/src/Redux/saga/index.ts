@@ -132,6 +132,15 @@ import {
 import BookingConstant from "../Constant/Booking/BookingConstant";
 import { handleBoorCreateFinal, handleBoorLast, handleSpBoorInvoice, handleSpFacilities, handleSpHotel, handleSpHotelReviews, handleSpof } from "./Booking/BookingSaga";
 
+// Purchasing
+import PurchasingConst from '../Constant/Purchasing/PurchasingConst'
+import { handleStock, handleStockAdd, handleStockUpdate, handleStockDelete } from './Purchasing/stockSaga'
+import { handleStod, handleStodAdd, handleStodDelete, handleStodUpdate } from './Purchasing/stodSaga'
+import { handleVendor, handleVendorAdd, handleVendorDelete, handleVendorUpdate } from './Purchasing/vendorSaga'
+import { handleVepro, handleVeproAdd, handleVeproDelete, handleVeproUpdate } from './Purchasing/veproSaga'
+import { handlePohe, handlePoheAdd, handlePoheDelete, handlePoheUpdate } from './Purchasing/poheSaga'
+import { handlePode, handlePodeAdd, handlePodeDelete, handlePodeUpdate } from './Purchasing/podeSaga'
+
 export default function* rootSaga() {
   yield all([
     takeEvery(UserConst.LOGIN_USER, HandleLoginUser),
@@ -252,7 +261,33 @@ export default function* rootSaga() {
     takeEvery(HotelConstant.UPDATE_FAPH, handleUpdateFaph),
     takeEvery(HotelConstant.DEL_FAPH, handleDeleteFaph),
     takeEvery(HotelConstant.GET_ADDRESS, handleAddress),
-    takeEvery(HotelConstant.GET_PROVINCE, handleProvince),
+    takeEvery(HotelConstant.GET_PROVINCE, handleProvince), ,
+
+    // Purchasing
+    takeEvery(PurchasingConst.GET_STOCKS, handleStock),
+    takeEvery(PurchasingConst.ADD_STOCKS, handleStockAdd),
+    takeEvery(PurchasingConst.EDIT_STOCKS, handleStockUpdate),
+    takeEvery(PurchasingConst.DEL_STOCKS, handleStockDelete),
+    takeEvery(PurchasingConst.GET_STOD, handleStod),
+    takeEvery(PurchasingConst.ADD_STOD, handleStodAdd),
+    takeEvery(PurchasingConst.EDIT_STOD, handleStodUpdate),
+    takeEvery(PurchasingConst.DEL_STOD, handleStodDelete),
+    takeEvery(PurchasingConst.GET_VENDOR, handleVendor),
+    takeEvery(PurchasingConst.ADD_VENDOR, handleVendorAdd),
+    takeEvery(PurchasingConst.EDIT_VENDOR, handleVendorUpdate),
+    takeEvery(PurchasingConst.DEL_VENDOR, handleVendorDelete),
+    takeEvery(PurchasingConst.GET_VEPRO, handleVepro),
+    takeEvery(PurchasingConst.ADD_VEPRO, handleVeproAdd),
+    takeEvery(PurchasingConst.EDIT_VEPRO, handleVeproUpdate),
+    takeEvery(PurchasingConst.DEL_VEPRO, handleVeproDelete),
+    takeEvery(PurchasingConst.GET_POHE, handlePohe),
+    takeEvery(PurchasingConst.ADD_POHE, handlePoheAdd),
+    takeEvery(PurchasingConst.EDIT_POHE, handlePoheUpdate),
+    takeEvery(PurchasingConst.DEL_POHE, handlePoheDelete),
+    takeEvery(PurchasingConst.GET_PODE, handlePode),
+    takeEvery(PurchasingConst.ADD_PODE, handlePodeAdd),
+    takeEvery(PurchasingConst.EDIT_PODE, handlePodeUpdate),
+    takeEvery(PurchasingConst.DEL_PODE, handlePodeDelete),
 
 
     //Booking

@@ -1,5 +1,13 @@
-import { Controller, Param, Body, Get, Post, Put, Delete } from '@nestjs/common';
-import { VendorService } from '../../../service/Purchasing/vendor/vendor.service';
+import {
+    Controller,
+    Param,
+    Body,
+    Get,
+    Post,
+    Put,
+    Delete
+} from '@nestjs/common';
+import { VendorService } from 'src/service/Purchasing/vendor/vendor.service';
 
 @Controller('vendor')
 export class VendorController {
@@ -12,23 +20,28 @@ export class VendorController {
         return this.vendorService.findAllVendor();
     }
 
-    @Get(':vendorName')
-    getVendorName(@Param() vendor: any) {
-        return this.vendorService.findVendorName(vendor.vendorName);
+    @Get(':id')
+    getVendorId(@Param() params: any) {
+        return this.vendorService.findVendorId(params.id);
+    }
+
+    @Get(':name')
+    getVendorName(@Param() params: any) {
+        return this.vendorService.findVendorName(params.name);
     }
 
     @Post()
-    createVendor(@Body() vendor: any) {
-        return this.vendorService.addVendor(vendor);
+    createVendor(@Body() body: any) {
+        return this.vendorService.addVendor(body);
     }
 
-    @Put(':vendorName')
-    updateVendor(@Body() vendor: any) {
-        return this.vendorService.editVendor(vendor);
+    @Put(':id')
+    updateVendor(@Param() params: any, @Body() body: any) {
+        return this.vendorService.editVendor(params.id, body);
     }
 
-    @Delete(':vendorName')
-    deleteVendor(@Param() vendor: any) {
-        return this.vendorService.dropVendor(vendor.vendorName);
+    @Delete(':id')
+    deleteVendor(@Param() params: any) {
+        return this.vendorService.dropVendor(params.id);
     }
 }
