@@ -1,5 +1,5 @@
 import Layouts from "@/layouts/layout";
-import { Breadcrumb, Button, Card, Checkbox, Col, Input, Rate, Row } from "antd";
+import { Breadcrumb, Button, Card, Carousel, Checkbox, Col, Input, Rate, Row } from "antd";
 import { CheckboxValueType } from "antd/es/checkbox/Group";
 import React, {useEffect, useState} from 'react';
 import {HiUserGroup} from 'react-icons/hi'
@@ -21,6 +21,7 @@ export default function index() {
   
   //Get data Hotel
   let hotel = useSelector((state : any) => state.HotelBoorReducer.hotel)
+  console.log(hotel)
 
   //Hook untuk View More Filter
   const [filter, setFilter] = useState(false)
@@ -121,6 +122,9 @@ export default function index() {
                     let arrRatePrice = ratePrice?.split('-');
                     let highPrice = hotel.faci_highprice;
                     let arrHighPrice = highPrice.split('-')
+                    let pict = hotel.url
+                    let arrPict = pict.split(",")
+                    console.log(pict)
 
                     return (
                       <Card>
@@ -129,10 +133,18 @@ export default function index() {
                             <div>
                               <Row>
                                 <Col span={18}>
-                                  Foto Besar
+                                  <div className="w-5/6 p-2">
+                                    <Carousel autoplay autoplaySpeed={5000}>
+                                      {arrPict.map((each : any) => (
+                                          <img className="w-full" src={each.slice(1)} alt="hotels"/>
+                                      ))}
+                                    </Carousel>
+                                  </div>
                                 </Col>
                                 <Col span={6}>
-                                  Foto Kecil
+                                    {arrPict.map((image : any, index : any)=> (
+                                      <img key={index} src={image} className="w-16 py-1"/>
+                                    ))}
                                 </Col>
                               </Row>
                             </div>
@@ -170,13 +182,13 @@ export default function index() {
                               </div>
                               <div>
                                   <p className="text-l">{
-                                    arrRoom[0]
+                                    arrRoom[3]
                                   }
                                   </p>
                               </div>
                               <div className="flex">
                                 <div className="flex text-xl items-center mr-3">
-                                  {arrRatePrice[0]}
+                                  {arrRatePrice[2]}
                                 </div>
                                 <div className="flex text-l text-decoration-line: line-through items-center">
                                   {arrHighPrice[0]}
