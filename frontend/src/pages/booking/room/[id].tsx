@@ -47,6 +47,7 @@ import AddCard from "@/pages/payment/addCard";
 import ActivationHpay from "@/pages/payment/activationHpay";
 import ActivationGoto from "@/pages/payment/activationGoto";
 import CheckSecure from "@/pages/payment/checkSecure";
+import Link from "next/link";
 
 export default withAuth(function bookingRoom() {
   const root = useRouter();
@@ -78,9 +79,23 @@ export default withAuth(function bookingRoom() {
     (item: any) => item.hore_hotel_id == id
   );
 
+  //useSelector Get User
+  let getUser = useSelector((state: any) => state.GetUserReducer.getUser);
+  const userSpof = getUser.filter((item: any) => item.user_id == id);
+  console.log(userSpof)
+
   //useSelector Get Special Offers
   let spof = useSelector((state: any) => state.SpofReducer.spof);
-  const typeSpof = spof?.filter((item: any) => item.spofType == "Individual");
+  const typeSpof = spof?.filter((item : any) => {
+    if (userSpof[0]?.user_type === "C" && item.spofType === "Corporate") {
+      return true;
+    } else if (userSpof[0]?.user_type === "I" && item.spofType === "Individual") {
+      return true;
+    } else if (userSpof[0]?.user_type === "T" && item.spofType === "Travel Agent") {
+      return true;
+    }
+    return false;
+  });
   //   console.log(spof);
 
   //useSelector Get Price Items for Booking Extra
@@ -89,8 +104,6 @@ export default withAuth(function bookingRoom() {
   //useSelector Get Last Booking Order
   let boorNumber = useSelector((state: any) => state.BoorReducer.boor);
 
-  //useSelector Get User
-  let getUser = useSelector((state: any) => state.GetUserReducer.getUser);
 
   //State untuk View More Amanities
   const [more, setMore] = useState(false);
@@ -208,6 +221,9 @@ export default withAuth(function bookingRoom() {
       ),
     },
   ];
+
+  //Google Maps
+  let maps = 'https://www.google.com/maps/search/?api=1&query='
 
   //Variable untuk Get Room into Booking Detail
   const faci_id = faciRoom?.length > 0 ? faciRoom[0].faci_id : null;
@@ -760,7 +776,10 @@ export default withAuth(function bookingRoom() {
                         </div>
                       </div>
                       <div className="text-l mt-2">
-                        <p>{hotel.place}</p>
+                        <p>{hotel.length > 0 &&(
+                          <Link href = {`${maps}${hotel[0].place}`}>{hotel[0].place}</Link>
+                        )}
+                          {hotel.place}</p>
                       </div>
                       <div className="text-xl mt-2 font-semibold">
                         <p>Description</p>
@@ -825,11 +844,13 @@ export default withAuth(function bookingRoom() {
             <div>
               {faciRoom &&
                 faciRoom.map((room: any, index: any) => {
+                  let pict = room.fapho_url;
+                  let arrPict = pict.split(",");
                   return (
                     <div>
                       <Card>
                         <Row>
-                          <Col span={12}>
+                          <Col span={16}>
                             <div className="text-xl">{room.faci_name}</div>
                             <div>Max Vacant : {room.faci_max_number}</div>
                             <div className="flex">
@@ -841,10 +862,12 @@ export default withAuth(function bookingRoom() {
                               </div>
                             </div>
                           </Col>
-                          <Col span={12}>
+                          <Col span={8}>
                             <div className="float-right">
-                              <div>ini foto</div>
-                              <div>
+                              <div className="flex justify-center">
+                                <img src={`../.${arrPict[0]}`} alt="" className='w-3/4 rounded border-2' />
+                              </div>
+                              <div className="flex justify-center">
                                 <Buttons
                                   funcs={() => handleButtonSelected(index)}
                                 >

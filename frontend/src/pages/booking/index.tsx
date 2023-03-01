@@ -129,17 +129,14 @@ export default function index() {
                     return (
                       <Card>
                         <Row>
-                          <Col span={6}>
-                            <div>
-                              <Row>
+                          <Col span={6} className="flex items-center">
+                              <Row gutter={10}>
                                 <Col span={18}>
-                                  <div className="w-5/6 p-2">
-                                    <Carousel autoplay autoplaySpeed={5000}>
-                                      {arrPict.map((each : any) => (
-                                          <img className="w-full" src={each.slice(1)} alt="hotels"/>
-                                      ))}
-                                    </Carousel>
-                                  </div>
+                                      <Carousel autoplay autoplaySpeed={5000}>
+                                        {arrPict.map((each : any) => (
+                                            <img className="w-full" src={each.slice(1)} alt="hotels"/>
+                                        ))}
+                                      </Carousel>
                                 </Col>
                                 <Col span={6}>
                                     {arrPict.map((image : any, index : any)=> (
@@ -147,7 +144,6 @@ export default function index() {
                                     ))}
                                 </Col>
                               </Row>
-                            </div>
                           </Col>
                           <Col span={18}>
                             <Card>
