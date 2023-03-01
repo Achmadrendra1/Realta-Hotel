@@ -195,7 +195,6 @@ export class BookingOrdersService {
     );
   }
 
-<<<<<<< HEAD
     
     //Sp Get Facilities untuk Booking
     async findSpFacility():Promise<any> {
@@ -210,19 +209,4 @@ export class BookingOrdersService {
     async getInvoice () {
         return await this.bookingOrdersRepository.query('select * from booking.getbookinginvoice')
     }
-=======
-  //Sp Get Facilities untuk Booking
-  async findSpFacility(): Promise<any> {
-    return await this.bookingOrdersRepository.query(
-      'Select * from hotel.faci_allhotel',
-    );
-  }
-
-  //Get UserReview untuk Booking
-  async findSpReview() {
-    return await this.bookingOrdersRepository.query(
-      'Select * From hotel.userReview',
-    );
-  }
->>>>>>> 6c2deb00bcb595d858c523cf3b8982f0d1717d0f
 }

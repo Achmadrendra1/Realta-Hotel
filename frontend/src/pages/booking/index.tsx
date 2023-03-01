@@ -21,6 +21,7 @@ export default function index() {
   
   //Get data Hotel
   let hotel = useSelector((state : any) => state.HotelBoorReducer.hotel)
+  console.log(hotel)
 
   //Hook untuk View More Filter
   const [filter, setFilter] = useState(false)

@@ -68,16 +68,6 @@ export default withAuth(function bookingRoom() {
   let hotel = useSelector((state: any) => state.HotelBoorReducer.hotel);
   const hotelById = hotel?.filter((item: any) => item.hotel_id == id);
 
-<<<<<<< HEAD
-    //useSelector Average Rating Hotel
-    let hotelReview = useSelector((state : any) => state.ReviewBoorReducer.review)
-    const oneReview = hotelReview?.filter((item:any) => item.hore_hotel_id == id)
-    console.log(oneReview)
-
-    //useSelector Get Special Offers
-    let spof = useSelector((state : any) => state.SpofReducer.spof)
-    const typeSpof = spof?.filter((item : any)=> item.spofType == 'Individual')
-=======
   //useSelector Get Room by Hotel Id
   let room = useSelector((state: any) => state.FaciBoorReducer.facilities);
   const faciRoom = room.filter((item: any) => item.hotel_id == id);
@@ -87,7 +77,6 @@ export default withAuth(function bookingRoom() {
   const oneReview = hotelReview?.filter(
     (item: any) => item.hore_hotel_id == id
   );
->>>>>>> 6c2deb00bcb595d858c523cf3b8982f0d1717d0f
 
   //useSelector Get Special Offers
   let spof = useSelector((state: any) => state.SpofReducer.spof);
@@ -420,17 +409,6 @@ export default withAuth(function bookingRoom() {
     });
   };
 
-<<<<<<< HEAD
-    // useEffect list hotel into Booking Detail
-    useEffect(()=> {
-        setPriceRoom({
-            faci_id, faci_name, faci_rate_price, faci_high_price, faci_tax_rate
-        })
-        setDataBooking({
-            ...dataBooking, borde_faci_id : faci_id
-        })
-    }, [faci_name])
-=======
   //Handle button add Special Offers
   const handleButtonModal = (index: any) => {
     const selected = typeSpof[index];
@@ -441,7 +419,6 @@ export default withAuth(function bookingRoom() {
     });
     setSpofOpen(false);
   };
->>>>>>> 6c2deb00bcb595d858c523cf3b8982f0d1717d0f
 
   // Handle untuk Booking Extra di dalam Modal
   const handleValueExtra = (index: any) => {
@@ -476,7 +453,10 @@ export default withAuth(function bookingRoom() {
 
   //Handle untuk generate booking code otomatis
   const handleBookingCode = () => {
+    const boor_id = boorNumber?.length > 0 ? boorNumber[0].boor_id:null
+    const id = boor_id + 1
     dispatch(insertBooking(dataBooking));
+    root.push({pathname: `/booking/room/invoice`, search : `${dataBooking.boor_order_number}`})
   };
 
   const handleReservation = () => {
@@ -528,14 +508,6 @@ export default withAuth(function bookingRoom() {
 
   const handleRoomValue = (value: any) => {
     setDataBooking({ ...dataBooking, boor_total_room: value });
-  };
-
-  const contentStyle: React.CSSProperties = {
-    height: "160px",
-    color: "#fff",
-    lineHeight: "160px",
-    textAlign: "center",
-    background: "#364d79",
   };
 
   useEffect(() => {
@@ -703,459 +675,6 @@ export default withAuth(function bookingRoom() {
     }
   }, [selectCard, totalPrice])
 
-<<<<<<< HEAD
-    // const handleValueExtra = (id : any) => {
-    //     const selected = extra.find(item => item.idExtra === id);
-    //     if (selected) {
-    //         const newValueExtraName = [...valueExtra.pritName, selected.pritName];
-    //         const newValueExtraPrice = [...valueExtra.pritPrice, selected.pritPrice];
-    //         setValueExtra({
-    //         pritName: newValueExtraName,
-    //         pritPrice: newValueExtraPrice
-    //         });
-    //     }
-    // }
-
-    //Handle delete untuk tabel extra
-    const handleDelete = (index:any) => {
-        const delPritName = valueExtra.pritName.filter((name, i) => i !== index);
-        const delPritPrice = valueExtra.pritPrice.filter((price, i) => i !== index);
-        setValueExtra({pritName : delPritName, pritPrice : delPritPrice})
-    }
-
-    //Handle untuk generate booking code otomatis
-    const handleBookingCode = () => {
-        dispatch(insertBooking(dataBooking))
-    }
-
-    const handleReservation = () => {
-        if (boorNumber !== null){              
-            const lastOrderNumber = boorNumber?.length > 0 ? boorNumber[0].boor_order_number : null;
-            const currentDate = new Date();
-            const year = currentDate.getFullYear().toString();
-            const month = (currentDate.getMonth() + 1).toString().padStart(2, '0');
-            const day = currentDate.getDate().toString().padStart(2, '0');
-            const currentDateString = `${day}${month}${year}`;
-            let newOrderNumber;
-            if (lastOrderNumber) {
-            const lastOrderDate = lastOrderNumber.slice(3, 11).split('-').reverse().join('');
-            const lastOrderIncrement = parseInt(lastOrderNumber.slice(-4));
-        
-            if (lastOrderDate === currentDateString) {
-                const newOrderIncrement = lastOrderIncrement + 1;
-                const newOrderIncrementString = newOrderIncrement.toString().padStart(4, '0');
-                newOrderNumber = `BO#${currentDateString}-${newOrderIncrementString}`;
-                setDataBooking({...dataBooking, boor_order_number : newOrderNumber})
-            } else {
-                newOrderNumber = `BO#${currentDateString}-0001`;
-                setDataBooking({...dataBooking, boor_order_number : newOrderNumber})
-            }
-            // } else {
-            // newOrderNumber = `BO#${currentDateString}-0001`;
-            // }
-            setDetail(!detail)
-            }
-        }
-    }
-        
-
-    const handleGuestValue = (value : any) => {
-        setDataBooking({...dataBooking, boor_total_guest : value, borde_adults : value})
-    }
-
-    const handleRoomValue = (value : any) => {
-        setDataBooking({...dataBooking, boor_total_room : value})
-    }
-
-
-    const contentStyle: React.CSSProperties = {
-        height: '160px',
-        color: '#fff',
-        lineHeight: '160px',
-        textAlign: 'center',
-        background: '#364d79',
-      };
-
-    return (
-        <Layouts>
-            <div className='mb-3 rounded'>
-            </div>
-            <div>
-                <Row gutter={16}>
-                    <Col span={14} className={`${!detail ? "block" : "hidden"}`}>
-                        <div className='mb-3'>
-                            {
-                                hotelById &&
-                                hotelById.map((hotel : any)=>{
-                                    return (
-                                        <div>
-                                            <div className='flex'>
-                                                <div className='flex text-4xl mr-5 font-bold'>
-                                                    <p>{hotel.hotel_name}</p>
-                                                </div>
-                                                <div className='flex'>
-                                                    {/* <Rate allowHalf disabled defaultValue={hotel.hotel_rating_star} /> */}
-                                                    <div>
-                                                                <div className='flex border-2 rounded items-center justify-center w-20 h-10 text-2xl'>
-                                                                    <h2>{rating}</h2>
-                                                                    <div className='flex justify-center'>
-                                                                        <img
-                                                                        className='ml-2 w-5 h-5'
-                                                                        src="../../assets/star.png"
-                                                                        />
-                                                                    </div>
-                                                                </div>
-                                                                <div className='flex'>
-                                                                    <div className='flex justify-center'>
-                                                                        <h2 className='ml-2 mr-2'>({allReview} Ratings)</h2>
-                                                                    </div>
-                                                                    <div className='flex justify-center ml-3'>
-                                                                        <h2>{ratingClass}</h2>
-                                                                    </div>
-                                                                </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div className='text-l mt-2'>
-                                                <p>{hotel.place}</p>
-                                            </div>
-                                            <div className='text-xl mt-2 font-semibold'>
-                                                <p>Description</p>
-                                            </div>
-                                            <div className='text-m mt-1 w-3/4'>
-                                                <p>{hotel.hotel_description}</p>
-                                            </div>
-                                            <div className='text-xl mt-3 mb-1 font-semibold'>
-                                                <p>Amenities</p>
-                                            </div>
-                                            <div className="flex">
-                                                <div className="flex items-center mr-2">
-                                                <HiUserGroup/> Meeting Room
-                                                </div>
-                                                <div className="flex items-center mr-2">
-                                                <IoRestaurantSharp/> Restaurant
-                                                </div>
-                                                <div className="flex items-center mr-2">
-                                                <BiSwim/> Swimming Pool
-                                                </div>
-                                                <div className={`${more ? "block flex items-center mr-2" : "hidden"}`}>
-                                                <HiUserGroup/> Ballroom
-                                                </div>
-                                                <div className={`${more ? "block flex items-center mr-2" : "hidden"}`}>
-                                                <CgGym/> Gym
-                                                </div>
-                                                <div className={`${more ? "block flex items-center mr-2" : "hidden"}`}>
-                                                <HiUserGroup/> Aula
-                                                </div>
-                                                <div className="flex items-center">
-                                                <button onClick={()=> setMore(!more)} className={`${more ? "hidden" : "block"}`}>+View More</button>
-                                                <button onClick={()=> setMore(!more)} className={`${!more ? "hidden" : "block"}`}>-Less More</button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    )
-                                })
-                            }
-                        </div>
-                        <div className='text-2xl font-semibold my-2'>
-                            Choose Your Room
-                        </div>
-                        <div>
-                            {
-                                faciRoom &&
-                                faciRoom.map((room : any, index : any)=>{
-                                    let pict = room.fapho_url
-                                    let arrPict = pict.split(",")
-                                    console.log(faciRoom)
-                                    return (
-                                        <div>
-                                            <Card>
-                                                <Row>
-                                                    <Col span={16}>
-                                                    <div className='text-xl'>
-                                                        {room.faci_name}
-                                                    </div>
-                                                    <div>
-                                                        Max Vacant : {room.faci_max_number}
-                                                    </div>
-                                                    <div className="flex">
-                                                        <div className="flex text-xl items-center mr-3">
-                                                        {room.faci_rate_price}
-                                                        </div>
-                                                        <div className="flex text-l text-decoration-line: line-through items-center">
-                                                            {room.faci_high_price}
-                                                        </div>
-                                                    </div>
-                                                    </Col>
-                                                    <Col span={8}>
-                                                        <div className='float-right'>
-                                                            <div>
-                                                                <img src={`../.${arrPict[0]}`} className='w-5/6 rounded border-2'/>
-                                                            </div>
-                                                            <div>
-                                                                <Buttons funcs={()=>handleButtonSelected(index)}>Selected</Buttons>
-                                                            </div>
-                                                        </div>
-                                                    </Col>
-                                                </Row>
-                                            </Card>
-                                        </div>
-                                    )
-                                })
-                            }
-                        </div>
-                        <div className='my-3 mx-1'>
-                            <div className='text-xl mt-10 mb-3'>
-                                Rating and Reviews
-                            </div>
-                            <div className='mr-1'>
-                                <Row>
-                                    <Col span={10} className='flex justify-center'>
-                                        <div>
-                                            <div className='flex border-2 rounded items-center justify-center w-20 h-10 text-2xl'>
-                                                <h2>{rating}</h2>
-                                                <div className='flex justify-center'>
-                                                    <img
-                                                    className='ml-2 w-5 h-5'
-                                                    src="../../assets/star.png"
-                                                    />
-                                                </div>
-                                            </div>
-                                            <div className='flex justify-center'>
-                                                <h2>{ratingClass}</h2>
-                                            </div>
-                                            <div className='flex justify-center'>
-                                                <h2 className='mr-2'>{allReview}</h2> Ratings
-                                            </div>
-                                        </div>
-                                    </Col>
-                                    <Col span={14}>
-                                        <div className='w-3/4 float-right'>
-                                            <div>
-                                                <div className='flex'>
-                                                        <div>
-                                                            <h2>5</h2>
-                                                        </div>
-                                                        <div className='items-center'>
-                                                            <img
-                                                                className='mx-1 w-5 h-5'
-                                                                src="../../assets/star.png"
-                                                                />
-                                                        </div>
-                                                        <div className='w-full'>
-                                                            <Progress 
-                                                            percent={Math.round((rating5/allReview)*100)}
-                                                            format={() => <span style={{ color: "#000" }}>{Math.round((rating5/allReview)*100)}%</span>}
-                                                            strokeColor=""
-                                                            trailColor=""/>
-                                                        </div>
-                                                </div>
-                                            </div>
-                                            <div>
-                                                <div className='flex'>
-                                                        <div>
-                                                            <h2>4</h2>
-                                                        </div>
-                                                        <div className='items-center'>
-                                                            <img
-                                                                className='mx-1 w-5 h-5'
-                                                                src="../../assets/star.png"
-                                                                />
-                                                        </div>
-                                                        <div className='w-full'>
-                                                            <Progress 
-                                                            percent={Math.round((rating4/allReview)*100)} 
-                                                            format={() => <span style={{ color: "#000" }}>{Math.round((rating4/allReview)*100)}%</span>}
-                                                            />
-                                                        </div>
-                                                </div>
-                                            </div>
-                                            <div>
-                                                <div className='flex'>
-                                                        <div>
-                                                            <h2>3</h2>
-                                                        </div>
-                                                        <div className='items-center'>
-                                                            <img
-                                                                className='mx-1 w-5 h-5'
-                                                                src="../../assets/star.png"
-                                                                />
-                                                        </div>
-                                                        <div className='w-full'>
-                                                            <Progress 
-                                                            percent={Math.round((rating3/allReview)*100)} 
-                                                            format={() => <span style={{ color: "#000" }}>{Math.round((rating3/allReview)*100)}%</span>}
-                                                            />
-                                                        </div>
-                                                </div>
-                                            </div>
-                                            <div>
-                                                <div className='flex'>
-                                                        <div>
-                                                            <h2>2</h2>
-                                                        </div>
-                                                        <div className='items-center'>
-                                                            <img
-                                                                className='mx-1 w-5 h-5'
-                                                                src="../../assets/star.png"
-                                                                />
-                                                        </div>
-                                                        <div className='w-full'>
-                                                            <Progress 
-                                                            percent={Math.round((rating2/allReview)*100)} 
-                                                            format={() => <span style={{ color: "#000" }}>{Math.round((rating2/allReview)*100)}%</span>}
-                                                            />
-                                                        </div>
-                                                </div>
-                                            </div>
-                                            <div>
-                                                <div className='flex'>
-                                                        <div>
-                                                            <h2>1</h2>
-                                                        </div>
-                                                        <div className='items-center'>
-                                                            <img
-                                                                className='mx-1 w-5 h-5'
-                                                                src="../../assets/star.png"
-                                                                />
-                                                        </div>
-                                                        <div className='w-full'>
-                                                            <Progress 
-                                                            percent={Math.round((rating1/allReview)*100)} 
-                                                            format={() => <span style={{ color: "#000" }}>{Math.round((rating1/allReview)*100)}%</span>}
-                                                            />
-                                                        </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </Col>
-                                </Row>
-                            </div>
-                        </div>
-                        <div className='mb-5 mt-3'>
-                        {
-                            oneReview &&
-                            oneReview.map((hotelReview : any)=> {
-                                return(
-                                <div>
-                                    <div className='flex items-center'>
-                                        <div className='text-xl mr-5 font-semibold'>
-                                            {hotelReview.user_full_name}
-                                        </div>
-                                        <div className='text-l items-center'>
-                                            <p>{dayjs(hotelReview.hore_created_on).format('DD-MM-YYYY')}</p>
-                                        </div>
-                                    </div>
-                                    <div>
-                                        {hotelReview.hore_user_review}
-                                    </div>
-                                </div>
-                                )
-                            })
-                        }
-                        </div>                 
-                        <div>
-                            <p className='text-2xl font-semibold my-2'>Hotel Policies</p>
-                        </div>
-                        <div className='flex'>
-                            <div className='mr-14 text-l'>
-                                Checkin
-                            </div>
-                            <div className='text-l'>
-                                Checkout
-                            </div>
-                        </div>
-                        <div className='flex mb-1'>
-                            <div className='mr-4 text-xl font-semibold'>
-                                02:00 PM
-                            </div>
-                            <div className='text-xl font-semibold'>
-                                12:00 PM
-                            </div>
-                        </div>
-                        <div>
-                            <CaretRightFilled /> Cancellation policy, Notify 24 hours prior to arrival for full refund.
-                        </div>
-                        <div>
-                            <CaretRightFilled/> Insurance policy, Guests responsible for lost or stolen items.
-                        </div>
-                        <div>
-                            <CaretRightFilled/> Hospitality, Providing excellent service to exceed guest expectations.
-                        </div>
-                    </Col>
-                    <Col span={14} className={`${detail ? "block" : "hidden"}`}>
-                        <button onClick={()=> setDetail(!detail)}>
-                            <div className='flex'>
-                                <div className='flex text-xl items-center mr-3'>
-                                    <LeftOutlined />
-                                </div>
-                                <div className='flex font-semibold text-xl items-center'>
-                                    Modify your booking
-                                </div>
-                            </div>
-                        </button>
-                        <div className='font-bold text-2xl'>
-                            <p>1. Enter Your Details</p>
-                        </div>
-                        <div className='text-xl items-center my-3'>
-                            <p>We will use these details to share your booking information</p>
-                        </div>
-                        <Row>
-                            <Col span={12} className='mb-5'>
-                                <div>
-                                    <div className='text-l mb-2'>
-                                        <p>Full Name :</p>
-                                    </div>
-                                    <div>
-                                        <Input value={getUser[0] ? getUser[0].user_full_name: 'None'} className='w-3/4' readOnly></Input>
-                                    </div>
-                                </div>
-                            </Col>
-                            <Col span={12}>
-                                <div>
-                                    <div className='text-l mb-2'>
-                                        <p>Email :</p>
-                                    </div>
-                                    <div>
-                                        <Input value={getUser[0] ? getUser[0].user_email: 'None'} readOnly className='w-3/4'/>
-                                    </div>
-                                </div>
-                            </Col>
-                        </Row>
-                        <Row>
-                            <Col span={12}>
-                                <div>
-                                    <div className='text-l mb-2'> 
-                                        <p>Mobile Number : </p>
-                                    </div>
-                                    <div className='mb-5'>
-                                        <Input value={getUser[0] ? getUser[0].user_phone_number: 'None'} readOnly className='w-3/4'/>
-                                    </div>
-                                </div>
-                            </Col>
-                        </Row>
-                        <div className='font-bold text-2xl'>
-                            <p>2. Complete your booking</p>
-                        </div>
-                        <div className='text-xl items-center my-3'>
-                            <Modal
-                                title="Add Extra"
-                                centered
-                                open={addExtra}
-                                onOk={() => setAddExtra(false)}
-                                onCancel={() => setAddExtra(false)}
-                                footer = {null}
-                                width = {750}
-                            >
-                            <div>
-                                <Table columns={columnsExtraModal} dataSource={extra} pagination={{ pageSize: 5 }}/>
-                            </div>
-                        </Modal>
-                            <Table columns={columnsExtra} dataSource={dataExtra}/>
-                        </div>
-                        <div className='flex justify-between'>
-                            {/* <div className='flex justify-between'>
-=======
   return (
     <Layouts>
          {openAdd ? (
@@ -1202,20 +721,6 @@ export default withAuth(function bookingRoom() {
         />
       ) : null}
       <div className="mb-3 rounded">
-        <Carousel autoplay>
-          <div>
-            <h3 style={contentStyle}>1</h3>
-          </div>
-          <div>
-            <h3 style={contentStyle}>2</h3>
-          </div>
-          <div>
-            <h3 style={contentStyle}>3</h3>
-          </div>
-          <div>
-            <h3 style={contentStyle}>4</h3>
-          </div>
-        </Carousel>
       </div>
       <div>
         <Row gutter={16}>
@@ -1635,7 +1140,6 @@ export default withAuth(function bookingRoom() {
             </div>
             <div className="flex justify-between">
               {/* <div className='flex justify-between'>
->>>>>>> 6c2deb00bcb595d858c523cf3b8982f0d1717d0f
                                 Total Booking Extra
                             </div>
                             <div className='flex justify-between'>
@@ -2027,10 +1531,11 @@ export default withAuth(function bookingRoom() {
                   Reservation Booking
                 </Button>
                 <Button
-                  onClick={() => {
-                    setPayment(!payment), console.log(dataBooking, dataPayment);
-                  }}
-                  className={`${!detail || payment ? "hidden" : "block"}`}
+                  onClick={handleBookingCode}
+                  // onClick={() => {
+                  //   setPayment(!payment), console.log(dataBooking, dataPayment);
+                  // }}
+                  // className={`${!detail || payment ? "hidden" : "block"}`}
                 >
                   Continue to Booking Order
                 </Button>
