@@ -1,7 +1,5 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import * as bcrypt from 'bcrypt';
-import { UserPassword } from 'src/entities/UserPassword';
 import { UserProfiles } from 'src/entities/UserProfiles';
 import { UserRoles } from 'src/entities/UserRoles';
 import { Users } from 'src/entities/Users';
@@ -28,11 +26,10 @@ interface User {
 
 @Injectable()
 export class UsersService {
+ 
   constructor(
     @InjectRepository(Users)
     private readonly UsersRepository: Repository<Users>,
-    @InjectRepository(UserPassword)
-    private readonly UserPasswordRepository: Repository<UserPassword>,
     @InjectRepository(UserProfiles)
     private readonly UserProfilesRepository: Repository<UserProfiles>,
     @InjectRepository(UserRoles)
@@ -49,6 +46,8 @@ export class UsersService {
       [userEmail],
     );
   }
+
+ 
 
   // async register(data: User): Promise<any> {
   //   const salt = await bcrypt.genSalt(10);
@@ -92,39 +91,6 @@ export class UsersService {
     });
   }
 
-  async updateProfile(id: any, data: User): Promise<any> {
-    await this.UsersRepository.createQueryBuilder()
-      .update()
-      .set({
-        userFullName: data.user_full_name,
-        userType: data.user_type,
-        userCompanyName: data.user_company_name,
-        userEmail: data.user_email,
-        userPhoneNumber: data.user_phone_number,
-        userModifiedDate: new Date(),
-      })
-      .where('userId = :id', { id })
-      .execute();
-    await this.UserProfilesRepository.createQueryBuilder()
-      .update()
-      .set({
-        usproNationalId: data.uspro_national_id,
-        usproBirtDate: data.uspro_birt_date,
-        usproJobTitle: data.uspro_job_title,
-        usproMartialStatus: data.uspro_martial_status,
-        usproGender: data.uspro_gender,
-      })
-      .where('usproUser = :id', { id })
-      .execute();
-    await this.UserRolesRepository.createQueryBuilder()
-      .update()
-      .set({
-        usroRole: data.usro_role,
-      })
-      .where('usroUserId=:id', { id })
-      .execute();
-    return 'Message : Data berhasil di Ubah!';
-  }
 
   // async UpdateUser(id: number, item: Users) {
   //   return await this.UsersRepository.update(
@@ -166,22 +132,40 @@ export class UsersService {
     }
   }
 
-  // Change Password
-  async ChangePassword(id: number, item: UserPassword) {
-    return await this.UserPasswordRepository.update(
-      { uspaUserId: id },
-      {
-        uspaPasswordhash: item.uspaPasswordhash,
-      },
-    ).catch((err) => {
-      throw new HttpException(
-        {
-          message: err.message,
-        },
-        HttpStatus.BAD_REQUEST,
-      );
-    });
+  async updateProfile(id: any, data: User): Promise<any> {
+    await this.UsersRepository.createQueryBuilder()
+      .update()
+      .set({
+        userFullName: data.user_full_name,
+        userType: data.user_type,
+        userCompanyName: data.user_company_name,
+        userEmail: data.user_email,
+        userPhoneNumber: data.user_phone_number,
+        userModifiedDate: new Date(),
+      })
+      .where('userId = :id', { id })
+      .execute();
+    await this.UserProfilesRepository.createQueryBuilder()
+      .update()
+      .set({
+        usproNationalId: data.uspro_national_id,
+        usproBirtDate: data.uspro_birt_date,
+        usproJobTitle: data.uspro_job_title,
+        usproMartialStatus: data.uspro_martial_status,
+        usproGender: data.uspro_gender,
+      })
+      .where('usproUser = :id', { id })
+      .execute();
+    await this.UserRolesRepository.createQueryBuilder()
+      .update()
+      .set({
+        usroRole: data.usro_role,
+      })
+      .where('usroUserId=:id', { id })
+      .execute();
+    return 'Message : Data berhasil di Ubah!';
   }
+
 
   //Cek status delete
   // if (result.affected > 0) {

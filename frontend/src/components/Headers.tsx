@@ -71,6 +71,7 @@ function isTokenExpired() {
     const logout =()=>{ 
       localStorage.removeItem("token");
       setIsLogin(false)
+      window.location.href = "/users/login"
     }
 
     //Pisahin isAdmin atau user

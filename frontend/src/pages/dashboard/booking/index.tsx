@@ -10,6 +10,7 @@ import EditBookingFacilities from './editBookingFacilites';
 import AddSpecialOffers from './addSpecialOffers';
 import EditSpecialOffers from './editSpecialOffers';
 import Buttons from '@/components/Button';
+import withAuth from '@/PrivateRoute/WithAuth';
 
 interface DataBooking {
   key: React.Key,
@@ -50,7 +51,7 @@ interface DataSpecialOffers {
   spofModifiedDate : any
 }
 
-export default function index() {
+export default withAuth( function index() {
   
   const onChange: TableProps<DataBooking>["onChange"] = (
     pagination,
@@ -475,4 +476,4 @@ export default function index() {
           </Tabs>
     </Dashboard>
   )
-}
+})

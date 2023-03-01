@@ -7,8 +7,9 @@ import { Table } from 'antd'
 import { DeleteOutlined, EditOutlined, PlusOutlined } from '@ant-design/icons';
 import { useDispatch, useSelector } from 'react-redux';
 import { doMenuRequest } from '@/Redux/Action/Resto/restoMenuAction';
+import withAuth from '@/PrivateRoute/WithAuth';
 
-export default function restoMenu() {
+export default withAuth( function restoMenu() {
   const dispatch = useDispatch();
 
   let menus = useSelector((state:any) => state.restoMenuReducer.restoMenus);
@@ -408,4 +409,4 @@ export default function restoMenu() {
       </div>
     </Dashboard>
   )
-}
+})

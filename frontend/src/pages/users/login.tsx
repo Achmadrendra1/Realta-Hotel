@@ -3,6 +3,7 @@ import Layouts from "@/layouts/layout";
 import { LockOutlined, MailOutlined } from "@ant-design/icons";
 import { Button, Card, Form, Input, Space, message } from "antd";
 import { Layout } from "antd";
+import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -130,7 +131,8 @@ export default function Login() {
                 Log in
               </Button>
               <Form.Item>
-                Don't have an account? <a href="">register now!</a>
+                Don't have an account?    
+                <Link href={"/users/register"}> Sign Up</Link>
               </Form.Item>
             </Form>
           </Card>

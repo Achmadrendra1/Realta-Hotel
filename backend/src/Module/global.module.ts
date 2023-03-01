@@ -137,6 +137,8 @@ import { PurchaseOrderDetailController } from 'src/Controller/Purchasing/purchas
 import { DepartmentService } from 'src/Service/HR/department/department.service';
 import { DepartmentController } from 'src/Controller/HR/department/department.controller';
 import { PolicyCategoryGroup } from 'src/entities/PolicyCategoryGroup';
+import { UsersPasswordController } from 'src/Controller/Users/userPassword/userPassword.controller';
+import { UserPasswordService } from 'src/Service/Users/user-password/userPassword.service';
 
 @Module({
   imports: [
@@ -243,6 +245,7 @@ import { PolicyCategoryGroup } from 'src/entities/PolicyCategoryGroup';
     UserBonusPointsController,
     RolesController,
     AuthController,
+    UsersPasswordController,
 
     // Purchasing
     StockController,
@@ -291,6 +294,7 @@ import { PolicyCategoryGroup } from 'src/entities/PolicyCategoryGroup';
     RolesService,
     UserRolesService,
     AuthService,
+    UserPasswordService,
 
     // Purchasing
     StockService,

@@ -31,7 +31,7 @@ export default function EditProfile(props: any) {
     user_email:"",
     user_phone_number:"",
     uspro_national_id:"",
-    uspro_birth_date:moment(),
+    uspro_birt_date:moment(),
     uspro_job_title:"",
     uspro_marital_status:"",
     uspro_gender:"",
@@ -68,7 +68,7 @@ export default function EditProfile(props: any) {
     setFormValues({ ...formValues, uspro_marital_status: value });
   };
   const handleSelectDateChange = (value: any,dateString :any) => {
-    setFormValues({ ...formValues, uspro_birth_date: dateString });
+    setFormValues({ ...formValues, uspro_birt_date: dateString });
   };
 
 
@@ -207,7 +207,7 @@ export default function EditProfile(props: any) {
             </Col>
 
             <Col>
-              <Form.Item label="BirthDate" name="uspro_birth_date">
+              <Form.Item label="BirthDate" name="uspro_birt_date">
                 <DatePicker
                   style={{ marginLeft: 8 }}
                   format="DD-MM-YY"

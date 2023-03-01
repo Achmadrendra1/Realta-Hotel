@@ -1,16 +1,42 @@
-import { Card, Form, Input, InputNumber, Layout, Space } from "antd";
-import React from "react";
+import { Button, Card, Form, Input, InputNumber, Layout, Space } from "antd";
+import React, { useState } from "react";
 import Buttons from "../../components/Button";
-import Layouts from "../../layouts/layout";
+import Layouts from "@/layouts/layout";
+import { useDispatch } from "react-redux";
+import { doAddDataUser } from "@/Redux/Action/User/GetDataUser";
 
 export default function Register(): any {
+  const [password,setPassword] = useState('')
+  const [confirmPassword,setConfirmPassword] = useState('')
+  const [error, setError] = useState('');
+  const [Number,setNumber] = useState('');
+
   const { Content } = Layout;
   const { Meta } = Card;
+  const dispatch = useDispatch();
   
 
   const onFinish = (values: any) => {
-    console.log("Success:", values);
+   
+    if (password !== confirmPassword) {
+      setError('Passwords do not match');
+      setTimeout(() => {
+      }, 5000);
+    } else {
+      console.log("Success:", values);
+      dispatch(doAddDataUser(values))
+      window.location.href = "/users/login";
+    }
   };
+
+  // const HandleNumberInput = (value :any) => {
+  //     if (typeof(value) !== 'number'){
+  //       setError('Phone number must be a number'); 
+  //     } 
+  //     }
+  // const handleSubmit = (values :any) => {
+
+  // }
 
   const contentStyle: React.CSSProperties = {
     textAlign: "center",
@@ -18,16 +44,13 @@ export default function Register(): any {
     lineHeight: "120px",
     color: "#fff",
     backgroundColor: "#fff",
+    marginBottom:30,
   };
-
-  const fungsiRegister = () =>{
-    console.log("fungsi register")
-    
-  }
 
   return (
     <Layouts>
-      <Content style={contentStyle}>
+
+      <Content style={contentStyle} >
         <Space size={10}>
           <Card size="small">
             <Meta title="REGISTER YOUR ACCOUNT" style={{ marginTop: 30 }} />
@@ -47,9 +70,8 @@ export default function Register(): any {
             >
               <Form.Item
                 required
-                tooltip="This is a required field"
                 label="Fullname"
-                name="Fullname"
+                name="userFullName"
                 rules={[
                   { required: true, message: "Please input your Fullname!" },
                 ]}
@@ -61,12 +83,11 @@ export default function Register(): any {
                 />
               </Form.Item>
               <Form.Item
-                name="Email"
+                name="userEmail"
                 rules={[
                   { required: true, message: "Please input your Email!" },
                 ]}
                 required
-                tooltip="This is a required field"
                 label="Email"
               >
                 <Input
@@ -77,66 +98,69 @@ export default function Register(): any {
               </Form.Item>
 
               <Form.Item
-                name="Phone Number"
-                rules={[{ type: "number" }]}
-                required
-                tooltip="This is a required field"
                 label="Phone Number"
+                name="userPhoneNumber"
+                rules={[{   required: true, message: "Please input your Number!"}]}
+                required
               >
-                <InputNumber
+                <Input
                   style={{ width: 300 }}
                   type="Phone Number"
                   placeholder="Your Phone Number, ex: +62822..."
+                  value={Number}
+                  maxLength={12}
+                
+
                 />
               </Form.Item>
 
 
               <Form.Item
-                name="password"
-                rules={[
-                  { required: true, message: "Please input your Password!" },
-                ]}
-                required
-                tooltip="This is a required field"
                 label="Password"
-              >
-                <Input.Password
-                  
-                  type="password"
-                  placeholder="Your Password"
-                />
-              </Form.Item>
-              <Form.Item
-                name="password"
+                name="UserPassword"
                 rules={[
                   { required: true, message: "Please input your Password!" },
                 ]}
                 required
-                tooltip="This is a required field"
+              > 
+                <Input.Password
+                  type="password"
+                  value={password}
+                  placeholder="Your Password"
+                  onChange={(e) => setPassword(e.target.value)}
+                />
+              </Form.Item>
+              <Form.Item
                 label="Confirm Password"
+                name="password1"
+                rules={[
+                  { required: true, message: "Please input your Password!" },
+                ]}
+                required
               >
                 <Input.Password
-                  
+                  value={confirmPassword}
                   type="password"
                   placeholder="Re-type Your Password"
+                  onChange={(e) => setConfirmPassword(e.target.value)}
                 />
               </Form.Item>
-
-              <Buttons
-              funcs={fungsiRegister}
-               type="base"
-                //   onClick={Logins}
+              {error && <div  className="error text-red-600 mb-2" >{error}</div>}
+              <Button
+              htmlType="submit"
+              className="login-form-button mt-0"
               >
                 Register
-              </Buttons>
+              </Button>
             
               <Form.Item>
-                Do you have an account? <a href="/users">Sign now!</a>
+                Do you have an account? <a href="/users/login">Sign In </a>
               </Form.Item>
             </Form>
           </Card>
         </Space>
       </Content>
+      
     </Layouts>
   );
 }
