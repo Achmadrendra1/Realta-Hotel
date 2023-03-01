@@ -120,3 +120,23 @@ export const getSpReviewFailed = (payload : any) => {
         payload
     }
 }
+
+export const getSpInvoice = () => {
+    return {
+        type : BookingConstant.GET_SP_INVOICE
+    }
+}
+
+export const getSpInvoiceSuccess = (payload : any) => {
+    return {
+        type : BookingConstant.GET_SP_INVOICE_SUCCESS,
+        payload
+    }
+}
+
+export const getSpInvoiceFailed = (payload : any) => {
+    return {
+        type : BookingConstant.GET_SP_INVOICE_FAILED,
+        payload
+    }
+}
