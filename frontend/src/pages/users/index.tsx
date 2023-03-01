@@ -31,15 +31,15 @@ export default withAuth( function Index() {
       key: "2",
       icon : <CreditCardOutlined />
     },
-    {
-      label: (
-        <Link href={""}>
-          <span className="text-red-600">Log Out</span>
-        </Link>
-      ),
-      key: "3",
-      icon : <LogoutOutlined style={{color : 'red'}} />
-    },
+    // {
+    //   label: (
+    //     <Link href={""}>
+    //       <span className="text-red-600">Log Out</span>
+    //     </Link>
+    //   ),
+    //   key: "3",
+    //   icon : <LogoutOutlined style={{color : 'red'}} />
+    // },
   ];
 
   const [content, setContent] = useState('0')

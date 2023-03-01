@@ -86,9 +86,12 @@ function isTokenExpired() {
       );
       const menu2 = (
         <Menu>
-          <Menu.Item key="1">Menu Item A</Menu.Item>
-          <Menu.Item key="2">Menu Item B</Menu.Item>
-          <Menu.Item key="3">Menu Item C</Menu.Item>
+          <Menu.Item key="1"><Link href="/users">Profile</Link></Menu.Item>
+          <Menu.Item key="2"><Link href="/History">History</Link></Menu.Item>
+          <Menu.Item key="3"><Link href="/dashboard/hr">Dashboard</Link></Menu.Item>
+          <Menu.Item key="4"><Link href={""} onClick={logout}>
+              <span className="text-red-600">Log Out</span>
+            </Link></Menu.Item>
         </Menu>
       );
     const change = () => {
@@ -176,7 +179,7 @@ function isTokenExpired() {
                     <WalletOutlined /> Activate
                   </p>}
                 </div>
-               <Dropdown overlay={isLogin ? menuUser : menu2} trigger={["click"]} className="h-8">
+               <Dropdown overlay={isLogin && user[0]?.user_role=='User' || user[0]?.user_role=='Guest' ? menuUser : menu2} trigger={["click"]} className="h-8">
                 <Avatar size="default" icon={<UserOutlined />} className="ml-4 hover:cursor-pointer" />
               </Dropdown>
               </div>
