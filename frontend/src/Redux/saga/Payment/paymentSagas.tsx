@@ -204,10 +204,11 @@ function* handleCheckSecure(action: any): any {
 function* handleTopUp(action: any): any {
   const delay = (time: any) =>
     new Promise((resolve) => setTimeout(resolve, time));
+    
     const result = yield axios(
       API("POST", "/payment-transaction", action.payload)
     );
-    console.log(action.payload)
+    // console.log(action.payload)
     yield call(delay, 2000)
     yield put(doTopUpSuccess({ message: "Top Up Success", status:null, data: result.data }));
     yield call(delay, 2000)

@@ -1,9 +1,8 @@
-/* eslint-disable react/jsx-key */
-import React, { useState } from "react";
-import { useDispatch } from "react-redux";
-import { DatePicker, Form, Input, InputNumber, Select, Typography } from "antd";
-import { useFormik } from "formik";
 import { addFacility } from "@/Redux/Action/Hotel/HotelAction";
+import { Form, Input, Select, Typography } from "antd";
+import { useFormik } from "formik";
+import React from "react";
+import { useDispatch } from "react-redux";
 
 export default function AddFacilities(props: any) {
   const dispatch = useDispatch();
@@ -11,16 +10,6 @@ export default function AddFacilities(props: any) {
   const [form] = Form.useForm();
   const onFinish = (values: any) => {
     console.log("Received values of form: ", values);
-  };
-  const formItemLayout = {
-    labelCol: {
-      xs: { span: 24 },
-      sm: { span: 8 },
-    },
-    wrapperCol: {
-      xs: { span: 24 },
-      sm: { span: 16 },
-    },
   };
   const formik = useFormik({
     enableReinitialize: true,
@@ -89,9 +78,11 @@ export default function AddFacilities(props: any) {
       style={{ maxWidth: 600 }}
       className="px-5 py-5 border shadow rounded-lg mx-auto"
     >
-      <Title level={4} style={{textAlign : 'center'}}> Adding {props.htlname} Facilities</Title>
+      <Title level={4} style={{ textAlign: "center" }}>
+        {" "}
+        Adding {props.htlname} Facilities
+      </Title>
       <Form.Item
-
         name="faciName"
         label="Facility Name"
         rules={[{ required: true, message: "Please input Hotel!" }]}
@@ -143,8 +134,8 @@ export default function AddFacilities(props: any) {
           value={formik.values.faciMeasureUnit}
           onChange={(value) => formik.setFieldValue("faciMeasureUnit", value)}
         >
-          {unit.map((item: any) => (
-            <Select.Option value={item.value}>{item.label}</Select.Option>
+          {unit.map((item: any, index:any) => (
+            <Select.Option key={index} value={item.value}>{item.label}</Select.Option>
           ))}
         </Select>
         {/* <Input
@@ -263,21 +254,6 @@ export default function AddFacilities(props: any) {
           autoComplete="faciTaxRate"
         />
       </Form.Item>
-      {/* <Form.Item
-        name="faciModifiedDate"
-        label="Facility Modified"
-        rules={[{ required: true, message: "Please input Hotel!" }]}
-      >
-        <input
-          type="date"
-          name="faciModifiedDate"
-          className="border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5 "
-          id="faciModifiedDate"
-          value={formik.values.faciModifiedDate}
-          onChange={formik.handleChange}
-          autoComplete="faciModifiedDate"
-        />
-      </Form.Item> */}
       <Form.Item
         name="faciCagro"
         label="Facility Category"
@@ -288,8 +264,8 @@ export default function AddFacilities(props: any) {
           value={formik.values.faciCagro}
           onChange={(value) => formik.setFieldValue("faciCagro", value)}
         >
-          {Cagro.map((item: any) => (
-            <Select.Option value={item.value}>{item.label}</Select.Option>
+          {Cagro&&Cagro.map((item: any, index: any) => (
+            <Select.Option key={index} value={item.value}>{item.label}</Select.Option>
           ))}
         </Select>
         {/* <Input

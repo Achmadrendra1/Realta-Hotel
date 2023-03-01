@@ -3,49 +3,25 @@ import {
   getAddress,
   getProvince,
 } from "@/Redux/Action/Hotel/HotelAction";
-import { MinusCircleOutlined, PlusOutlined } from "@ant-design/icons";
-import {
-  Button,
-  Cascader,
-  CascaderProps,
-  DatePicker,
-  Form,
-  Input,
-  InputNumber,
-  Select,
-  Space,
-  Typography,
-} from "antd";
+import { Cascader, Form, Input, Typography } from "antd";
 import { useFormik } from "formik";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
-export default function AddHotelsRealta(props: any) {
+export default function AddHotelRealta(props: any) {
   const dispatch = useDispatch();
   const [form] = Form.useForm();
   const { Title, Text } = Typography;
-  const { Option } = Select;
-  const dateFormat = "YYYY/MM/DD";
   const onFinish = (values: any) => {
     console.log("Received values of form: ", values);
   };
   const [cascaderValue, setCascaderValue] = useState<any>([]);
   const { addrs } = useSelector((state: any) => state.HotelReducer);
   const { prov } = useSelector((state: any) => state.HotelReducer);
-  // const address = addrs.filter((item:any)=>item.addrProv?.provId === item.addrProv)
-  const formItemLayout = {
-    labelCol: {
-      xs: { span: 24 },
-      sm: { span: 8 },
-    },
-    wrapperCol: {
-      xs: { span: 24 },
-      sm: { span: 16 },
-    },
-  };
+
   useEffect(() => {
-    dispatch(getAddress());
-    dispatch(getProvince());
+    dispatch(getAddress())
+    dispatch(getProvince())
   }, []);
 
   const formik = useFormik({
@@ -67,7 +43,7 @@ export default function AddHotelsRealta(props: any) {
       payload.append("hotelAddr", cascaderValue);
 
       values.hotelAddr = cascaderValue;
-      console.log;
+
       dispatch(addHotel(payload));
       props.closeAdd();
       window.alert("Data Successfully Added");
@@ -77,9 +53,17 @@ export default function AddHotelsRealta(props: any) {
   });
   const handleCascaderChange = (value: any) => {
     setCascaderValue(value[1]);
-    console.log(value[1]);
   };
-
+  const formItemLayout = {
+    labelCol: {
+      xs: { span: 24 },
+      sm: { span: 8 },
+    },
+    wrapperCol: {
+      xs: { span: 24 },
+      sm: { span: 16 },
+    },
+  };
   return (
     <Form
       {...formItemLayout}

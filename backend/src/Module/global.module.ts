@@ -138,6 +138,8 @@ import { PurchaseOrderDetailController } from 'src/Controller/Purchasing/purchas
 import { DepartmentService } from 'src/Service/HR/department/department.service';
 import { DepartmentController } from 'src/Controller/HR/department/department.controller';
 import { PolicyCategoryGroup } from 'src/entities/PolicyCategoryGroup';
+import { JobRoleController } from 'src/Controller/HR/job-role/job-role.controller';
+import { JobRoleService } from 'src/Service/HR/job-role/job-role.service';
 import { BookingOrderDetailController } from 'src/Controller/Booking/booking_order_detail/booking_order_detail.controller';
 import { BookingOrderDetailExtraController } from 'src/Controller/Booking/booking-order-detail-extra/booking-order-detail-extra.controller';
 import { BookingOrdersController } from 'src/Controller/Booking/booking_orders/booking_orders.controller';
@@ -275,6 +277,7 @@ import { SpecialOfferCoupons } from 'src/entities/SpecialOfferCoupons';
     // HR
     EmployeeController,
     DepartmentController,
+    JobRoleController,
   ],
   providers: [
     AppService,
@@ -329,6 +332,7 @@ import { SpecialOfferCoupons } from 'src/entities/SpecialOfferCoupons';
     // HR
     EmployeeService,
     DepartmentService,
+    JobRoleService,
   ],
   // controllers: [AppController, EntitysController, BankController, PaymentGatewayController, UserAccountController, PaymentTransactionController],
   // providers: [AppService, EntitysService, BankService, PaymentGatewayService, UserAccountService, PaymentTransactionService],
