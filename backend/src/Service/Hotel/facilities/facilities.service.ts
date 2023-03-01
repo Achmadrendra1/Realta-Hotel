@@ -60,12 +60,12 @@ export class FacilitiesService {
       .save({
         faphFaci: { faciId: id },
         faphStartdate: new Date(),
-        faphEnddate: result.faciEnddate,
-        faphLowPrice: result.faciLowPrice,
-        faphHighPrice: result.faciHighPrice,
-        faphRatePrice: result.faciRatePrice,
-        faphDiscount: result.faciDiscount,
-        faphTaxRate: result.faciTaxRate,
+        faphEnddate: faci.faciEnddate,
+        faphLowPrice: faci.faciLowPrice,
+        faphHighPrice: faci.faciHighPrice,
+        faphRatePrice: faci.faciRatePrice,
+        faphDiscount: faci.faciDiscount,
+        faphTaxRate: faci.faciTaxRate,
         faphModifiedDate: date,
         faphUser: faci.userId,
       })
@@ -135,11 +135,5 @@ export class FacilitiesService {
       .catch((error) => {
         return `Failed to Delete` + error;
       });
-  }
-
-
-  //Sp Get Facilities untuk Booking
-  async findSpFacility():Promise<any> {
-    return await this.faciRepository.query('Select * from hotel.viewroom')
   }
 }

@@ -12,7 +12,7 @@ import { useRouter } from 'next/router';
 import { CaretRightFilled, LeftOutlined} from '@ant-design/icons';
 import dayjs from 'dayjs';
 import { getSpof, getBoor, insertBooking } from '@/Redux/Action/Booking/BookingAction';
-import {doPriceItems} from '@/Redux/Action/Master/actionPriceItems'
+import { doPriceItems } from '@/Redux/Action/Master/actionPriceItems';
 import { doGetUser } from '@/Redux/Action/User/GetDataUser';
 import withAuth from '@/PrivateRoute/WithAuth';
 
@@ -28,7 +28,7 @@ export default withAuth (function bookingRoom() {
         dispatch(getSpFacilities())
         dispatch(getSpReview())
         dispatch(getSpof())
-        dispatch(doPriceItems())
+        dispatch(doPriceItems());
         dispatch(getBoor())
         dispatch(doGetUser())
     }, [id]);
@@ -49,9 +49,10 @@ export default withAuth (function bookingRoom() {
     //useSelector Get Special Offers
     let spof = useSelector((state : any) => state.SpofReducer.spof)
     const typeSpof = spof?.filter((item : any)=> item.spofType == 'Individual')
+    console.log(spof)
 
     //useSelector Get Price Items for Booking Extra
-    let extra = useSelector((state : any) => state.PriceItemsReducer.priceItems)
+    let extra = useSelector((state : any) => state.priceItemsReducer.priceItems)
 
     //useSelector Get Last Booking Order
     let boorNumber = useSelector((state : any) => state.BoorReducer.boor)
@@ -946,7 +947,7 @@ export default withAuth (function bookingRoom() {
                                                         <Col span={16}>
                                                             <div className='flex items-center mb-3'>
                                                                 <div className='items-center w-12 mr-3'>
-                                                                    <img src='../../assets/Hotel_Icon.png'/>
+                                                                    <img src='../../assets/icons.png'/>
                                                                 </div>
                                                                 <div className='items-center'>
                                                                 <Tag color="volcano">{spof.spofName}</Tag>

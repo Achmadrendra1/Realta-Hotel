@@ -35,7 +35,6 @@ import { RestoMenus } from 'src/entities/RestoMenus';
 import { Roles } from 'src/entities/Roles';
 import { ServiceTask } from 'src/entities/ServiceTask';
 import { Shift } from 'src/entities/Shift';
-import { SpecialOfferCoupons } from 'src/entities/SpecialOfferCoupons';
 import { SpecialOffers } from 'src/entities/SpecialOffers';
 import { UserAccounts } from 'src/entities/UserAccounts';
 import { UserBonusPoints } from 'src/entities/UserBonusPoints';
@@ -149,6 +148,7 @@ import { BookingOrderDetailService } from 'src/Service/Booking/booking_order_det
 import { BookingOrderDetailExtraService } from 'src/Service/Booking/booking-order-detail-extra/booking-order-detail-extra.service';
 import { SpecialOffersService } from 'src/Service/Booking/special-offers/special-offers.service';
 import { UserBreakfeastService } from 'src/Service/Booking/user-breakfeast/user-breakfeast.service';
+import { SpecialOfferCoupons } from 'src/entities/SpecialOfferCoupons';
 
 //Booking Service
 
@@ -189,7 +189,6 @@ import { UserBreakfeastService } from 'src/Service/Booking/user-breakfeast/user-
       SpecialOffers,
       UserBreakfeast,
 
-
       JobRole,
       OrderMenus,
       OrderMenuDetail,
@@ -199,7 +198,6 @@ import { UserBreakfeastService } from 'src/Service/Booking/user-breakfeast/user-
       RestoMenuPhotos,
       Shift,
       UserAccounts,
-
 
       // Users
       UserBonusPoints,
