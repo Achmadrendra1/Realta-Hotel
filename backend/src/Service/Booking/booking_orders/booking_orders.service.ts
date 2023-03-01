@@ -98,14 +98,17 @@ export class BookingOrdersService {
         ],
       )
       .then((result) => {
-        return {
-          messeage: `Selamat anda berhasil menambahkan Booking Orders`,
-          return: result,
-        };
+        console.log(result)
+        // return {
+        //   messeage: `Selamat anda berhasil menambahkan Booking Orders`,
+        //   return: result,
+        // };
       })
       .catch((err) => {
-        return `Maaf, ada kesalahan masukan` + err;
+        // return `Maaf, ada kesalahan masukan` + err;
+        console.log(err)
       });
+    // console.log(data)
   }
 
   async createBookingOrders(field: BookingOrders): Promise<any> {

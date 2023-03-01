@@ -47,6 +47,7 @@ import AddCard from "@/pages/payment/addCard";
 import ActivationHpay from "@/pages/payment/activationHpay";
 import ActivationGoto from "@/pages/payment/activationGoto";
 import CheckSecure from "@/pages/payment/checkSecure";
+import { doCreateTransaction } from "@/Redux/Action/Payment/paymentUserAction";
 
 export default withAuth(function bookingRoom() {
   const root = useRouter();
@@ -311,8 +312,8 @@ export default withAuth(function bookingRoom() {
   const [dataPayment, setDataPayment] = useState({
     userId: 0,
     amount: 0,
-    sourceNumber: "",
-    targetNumber: "",
+    sourceNumber: "0",
+    targetNumber: "0",
     trxType: "TRB",
     secureCode: "",
     orderNumber: "",
@@ -464,7 +465,7 @@ export default withAuth(function bookingRoom() {
       const year = currentDate.getFullYear().toString();
       const month = (currentDate.getMonth() + 1).toString().padStart(2, "0");
       const day = currentDate.getDate().toString().padStart(2, "0");
-      const currentDateString = `${day}${month}${year}`;
+      const currentDateString = `${year}${month}${day}`;
       let newOrderNumber;
       if (lastOrderNumber) {
         const lastOrderDate = lastOrderNumber
@@ -551,10 +552,13 @@ export default withAuth(function bookingRoom() {
     // console.log(finalForm);
     setShowCheck(true);
   };
-
+  const router = useRouter()
   const onCompleteCash = () => {
-    console.log(dataPayment)
-    // dispatch(insertBooking(dataBooking));
+    // console.log(dataPayment, dataBooking)
+    dispatch(insertBooking(dataBooking));
+    dispacth(doCreateTransaction(dataPayment))
+    setTimeout(()=> router.push('/booking/invoice'))
+    // router.push('/booking/invoice')
   };
 
 //   useEffect(() => {
@@ -1186,8 +1190,8 @@ export default withAuth(function bookingRoom() {
                             setIsCash(true),
                               setDataPayment({
                                 ...dataPayment,
-                                sourceNumber: "",
-                                targetNumber: "",
+                                sourceNumber: "0",
+                                targetNumber: "0",
                               }),
                               setDataBooking({
                                 ...dataBooking,

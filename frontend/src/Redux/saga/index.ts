@@ -28,6 +28,7 @@ import {
   handleTopUp,
   handleCheckSecure,
   handleGetHistoryTrx,
+  handleCreateTransaction,
 } from "./Payment/paymentSagas";
 
 //Master
@@ -145,6 +146,7 @@ export default function* rootSaga() {
     takeEvery(empType.GET_DATA, handleGetEmployees),
     takeEvery(empType.GET_DETAIL, handleDetailEmployee),
 
+    //Payment
     takeEvery(PaymentConst.GET_PAYMENT_HISTORY_DASH, handleTrxDashRequest),
     takeEvery(PaymentConst.GET_PAYMENT_GATEWAY_REQUEST, handlePagaRequest),
     takeEvery(PaymentConst.ADD_PAYMENT_GATEWAY, handlePagaCreate),
@@ -160,6 +162,7 @@ export default function* rootSaga() {
     takeEvery(PaymentConst.TOP_UP_WALLET, handleTopUp),
     takeEvery(PaymentConst.CHECK_SECURE_CODE, handleCheckSecure),
     takeEvery(PaymentConst.GET_HISTORY_PAYMENT, handleGetHistoryTrx),
+    takeEvery(PaymentConst.CREATE_TRANSACTION, handleCreateTransaction),
 
     //Master Regions
     takeEvery(ActionTypes.GET_REGIONS, handlerRegions),

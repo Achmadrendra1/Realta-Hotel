@@ -37,11 +37,11 @@ function* handleBoorLast(): any {
 }
 
 function* handleBoorCreateFinal(action : any): any {
-    try {
-        const res = yield axios (API('Post', `/booking-orders/create/final`, action.payload))
+  try {
+    const res = yield axios (API('Post', `/booking-orders/create/final`, action.payload))
         yield put(insertBookingSuccess(res.data.result))
         return res.data.result
-        // console.log(res)
+        console.log(action.payload)
         
     }catch(e : any){
         yield put(insertBookingFailed(e))
