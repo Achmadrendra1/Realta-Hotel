@@ -454,7 +454,10 @@ export default withAuth(function bookingRoom() {
 
   //Handle untuk generate booking code otomatis
   const handleBookingCode = () => {
+    const boor_id = boorNumber?.length > 0 ? boorNumber[0].boor_id:null
+    const id = boor_id + 1
     dispatch(insertBooking(dataBooking));
+    root.push({pathname: `/booking/room/invoice`, search : `${dataBooking.boor_order_number}`})
   };
 
   const handleReservation = () => {
@@ -506,14 +509,6 @@ export default withAuth(function bookingRoom() {
 
   const handleRoomValue = (value: any) => {
     setDataBooking({ ...dataBooking, boor_total_room: value });
-  };
-
-  const contentStyle: React.CSSProperties = {
-    height: "160px",
-    color: "#fff",
-    lineHeight: "160px",
-    textAlign: "center",
-    background: "#364d79",
   };
 
   useEffect(() => {
@@ -730,20 +725,6 @@ export default withAuth(function bookingRoom() {
         />
       ) : null}
       <div className="mb-3 rounded">
-        <Carousel autoplay>
-          <div>
-            <h3 style={contentStyle}>1</h3>
-          </div>
-          <div>
-            <h3 style={contentStyle}>2</h3>
-          </div>
-          <div>
-            <h3 style={contentStyle}>3</h3>
-          </div>
-          <div>
-            <h3 style={contentStyle}>4</h3>
-          </div>
-        </Carousel>
       </div>
       <div>
         <Row gutter={16}>
@@ -1554,10 +1535,11 @@ export default withAuth(function bookingRoom() {
                   Reservation Booking
                 </Button>
                 <Button
-                  onClick={() => {
-                    setPayment(!payment), console.log(dataBooking, dataPayment);
-                  }}
-                  className={`${!detail || payment ? "hidden" : "block"}`}
+                  onClick={handleBookingCode}
+                  // onClick={() => {
+                  //   setPayment(!payment), console.log(dataBooking, dataPayment);
+                  // }}
+                  // className={`${!detail || payment ? "hidden" : "block"}`}
                 >
                   Continue to Booking Order
                 </Button>

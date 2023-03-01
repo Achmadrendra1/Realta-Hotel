@@ -40,6 +40,11 @@ export class BookingOrdersController {
         return this.BookingOrdersService.findLastBooking()
     }
 
+    @Get('invoice')
+    findInvoice(){
+        return this.BookingOrdersService.getInvoice()
+    }
+
     @Post('create/final')
     async createBookingOrdersFinal(@Body() body : any){
         return await this.BookingOrdersService.createBookingOrdersFinal(body)

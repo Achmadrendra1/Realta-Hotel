@@ -27,6 +27,7 @@ import SpofReducer from './Booking/SpofReducer';
 import FaciBoorReducer from './Booking/FaciBoorReducer';
 import HotelBoorReducer from './Booking/HotelBoorReducer';
 import ReviewBoorReducer from './Booking/ReviewBoorReducer';
+import BoorInvoiceReducer from './Booking/BoorInvoiceReducer';
 
 export default combineReducers({
   DeptReducer,
@@ -65,6 +66,7 @@ export default combineReducers({
   SpofReducer,
   FaciBoorReducer,
   HotelBoorReducer,
-  ReviewBoorReducer
+  ReviewBoorReducer,
+  BoorInvoiceReducer
 
 });
