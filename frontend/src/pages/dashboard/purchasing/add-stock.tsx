@@ -1,98 +1,108 @@
-import React, { useState } from 'react';
-import {
-    Form,
-    Input,
-    DatePicker,
-    InputNumber,
-    FormInstance,
-    Button,
-    Upload,
-    Typography,
-} from 'antd';
-import Dashboard from '@/layouts/dashboard';
-import { PlusOutlined } from '@ant-design/icons';
+import React from 'react';
+import { useDispatch } from 'react-redux';
+import { Form, Input, Modal, } from 'antd';
+import Buttons from '@/components/Button';
+import { AddStock } from '@/Redux/Action/Purchasing/purchasingAction';
 
-const { RangePicker } = DatePicker;
-const { TextArea } = Input;
-const { Title } = Typography;
+export default function AddStocks(props: any) {
+    const { handleClose } = props
+    const dispatch = useDispatch()
 
-const StockEdit: React.FC = () => {
-    const formRef = React.useRef<FormInstance>(null);
-    const onFinish = (values: any) => {
-        console.log(values);
-    };
+    const onFinish = (data: any) => {
+        dispatch(AddStock(data))
+        handleClose(false)
+    }
 
-    const onReset = () => {
-        formRef.current?.resetFields();
-    };
+    const onFinishFailed = (errorInfo: any) => {
+        console.log("Failed", errorInfo)
+    }
+
     return (
-        <Dashboard>
-            <Title level={3} className='m-5'>Add Stock</Title>
-            <form className='m-5'>
-                <div className="relative z-0 w-full mb-6 group">
-                    <input type="text" name="name" id="name" className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-black dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " required />
-                    <label htmlFor="name" className="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Name</label>
-                </div>
+        <>
+            <Modal
+                open={props.show}
+                onOk={props.clickOk}
+                onCancel={props.clickCancel}
+                footer={null}>
+                <Form
+                    labelCol={{ span: 8 }}
+                    wrapperCol={{ span: 14 }}
+                    layout="horizontal"
+                    onFinish={onFinish}
+                    onFinishFailed={onFinishFailed}
+                >
+                    <p className='text-center text-xl py-5 font-bold'>
+                        Add Stock
+                    </p>
 
-                <div className="relative z-0 w-full mb-6 group">
-                    <input type="textarea" name="desc" id="desc" className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-black dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " required />
-                    <label htmlFor="desc" className="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Description</label>
-                </div>
+                    <Form.Item
+                        name="stockName" label='Stock Name'
+                        rules={[{ required: true, message: 'Please input stock name!' }]}
+                    >
+                        <Input />
+                    </Form.Item>
 
-                <div className="grid md:grid-cols-2 md:gap-6">
-                    <div className="relative z-0 w-full mb-6 group">
-                        <input type="number" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" name="quantity" id="quantity" className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-black dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " required />
-                        <label htmlFor="quantity" className="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Quantity</label>
-                    </div>
-                    <div className="relative z-0 w-full mb-6 group">
-                        <input type="number" name="reorder_point" id="reorder_point" className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-black dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " required />
-                        <label htmlFor="reorder_point" className="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Reorder Point</label>
-                    </div>
-                </div>
 
-                <div className="grid md:grid-cols-2 md:gap-6">
-                    <div className="relative z-0 w-full mb-6 group">
-                        <input type="number" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" name="used" id="used" className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-black dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " required />
-                        <label htmlFor="used" className="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Used</label>
-                    </div>
-                    <div className="relative z-0 w-full mb-6 group">
-                        <input type="number" name="scrap" id="scrap" className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-black dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " required />
-                        <label htmlFor="scrap" className="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Scrap</label>
-                    </div>
-                </div>
+                    <Form.Item
+                        name="stockQuantity" label='Quantity'
+                        rules={[{ required: true, message: 'Please input quantity!' }]}
+                    >
+                        <Input />
+                    </Form.Item>
 
-                <div className="grid md:grid-cols-2 md:gap-6">
-                    <div className="relative z-0 w-full mb-6 group">
-                        <input type="number" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" name="size" id="size" className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-black dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " required />
-                        <label htmlFor="size" className="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Size</label>
-                    </div>
-                    <div className="relative z-0 w-full mb-6 group">
-                        <input type="number" name="color" id="color" className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-black dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " required />
-                        <label htmlFor="color" className="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Color</label>
-                    </div>
-                </div>
 
-                <div className="grid md:grid-cols-2 md:gap-6">
-                    <div className="relative z-0 w-full mb-6 group">
-                        <input type="number" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" name="price" id="price" className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-black dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " required />
-                        <label htmlFor="price" className="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Price</label>
-                    </div>
-                    <div className="relative z-0 w-full mb-6 group">
-                        <input type="number" name="standard_cost" id="standard_cost" className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-black dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " required />
-                        <label htmlFor="standard_cost" className="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Standard Cost</label>
-                    </div>
-                </div>
+                    <Form.Item
+                        name="stockReorderPoint" label='Reorder Point'
+                        rules={[{ required: true, message: 'Please input reorder point!' }]}
+                    >
+                        <Input />
+                    </Form.Item>
 
-                <div className="relative z-0 w-full mb-6 group">
-                    <label className="block mb-2 text-sm text-gray-500 dark:text-gray-400" htmlFor="user_avatar">Upload file</label>
-                    <input className="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-700 focus:outline-none dark:border-gray-600 dark:placeholder-gray-700" aria-describedby="user_avatar_help" id="user_avatar" type="file" />
-                </div>
 
-                <button type="reset" className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 mr-2">Reset</button>
-                <button type="submit" className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Submit</button>
-            </form>
-        </Dashboard>
-    );
-};
+                    <Form.Item
+                        name="stockUsed" label='Used'
+                        rules={[{ required: true, message: 'Please input used!' }]}
+                    >
+                        <Input />
+                    </Form.Item>
 
-export default () => <StockEdit />;
+
+                    <Form.Item
+                        name="stockScrap" label='Scrap'
+                        rules={[{ required: true, message: 'Please input scrap!' }]}
+                    >
+                        <Input />
+                    </Form.Item>
+
+
+                    <Form.Item
+                        name="stockSize" label='Size'
+                        rules={[{ required: true, message: 'Please input size!' }]}
+                    >
+                        <Input />
+                    </Form.Item>
+
+
+                    <Form.Item
+                        name="stockColor" label='Color'
+                        rules={[{ required: true, message: 'Please input color!' }]}
+                    >
+                        <Input />
+                    </Form.Item>
+
+                    <Form.Item label=" " colon={false}>
+                        <div className="flex justify-end">
+                            <Buttons type={"danger"} funcs={props.clickCancel}>
+                                Cancel
+                            </Buttons>
+                            <div className="ml-2">
+                                <Buttons>Save</Buttons>
+                            </div>
+                        </div>
+                    </Form.Item>
+
+                </Form>
+            </Modal>
+        </>
+    )
+}

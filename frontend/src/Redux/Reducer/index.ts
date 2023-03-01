@@ -9,7 +9,7 @@ import payBankReducer from './Payment/payBankReducer';
 import payPagaReducer from './Payment/payPagaReducer';
 import payUserAccReducer from './Payment/payUserAccReducer';
 import { selectReducer } from './HR/select';
-//Master
+// Master
 import regionsReducer from './Master/regionsReducer';
 import provincesReducer from './Master/provincesReducer';
 import countryReducer from './Master/countryReducer';
@@ -28,6 +28,13 @@ import FaciBoorReducer from './Booking/FaciBoorReducer';
 import HotelBoorReducer from './Booking/HotelBoorReducer';
 import ReviewBoorReducer from './Booking/ReviewBoorReducer';
 import BoorInvoiceReducer from './Booking/BoorInvoiceReducer';
+// Purchasing
+import StockReducer from './Purchasing/stockReducer';
+import StodReducer from './Purchasing/stodReducer';
+import VendorReducer from './Purchasing/vendorReducer';
+import VeproReducer from './Purchasing/veproReducer';
+import PoheReducer from './Purchasing/poheReducer';
+import PodeReducer from './Purchasing/podeReducer';
 
 export default combineReducers({
   DeptReducer,
@@ -67,6 +74,14 @@ export default combineReducers({
   FaciBoorReducer,
   HotelBoorReducer,
   ReviewBoorReducer,
-  BoorInvoiceReducer
+  BoorInvoiceReducer,
 
+
+  //Purchasing
+  StockReducer,
+  StodReducer,
+  VendorReducer,
+  VeproReducer,
+  PoheReducer,
+  PodeReducer
 });
