@@ -1,3 +1,4 @@
+import withAuth from '@/PrivateRoute/WithAuth';
 import { addFapho } from '@/Redux/Action/Hotel/HotelAction';
 import { UploadOutlined } from '@ant-design/icons';
 import { Button, Form, Upload, UploadProps } from 'antd';
@@ -6,7 +7,7 @@ import { useFormik } from 'formik';
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 
-export default function AddPhoto(props: any){
+export default withAuth( function AddPhoto(props: any){
     const dispatch = useDispatch();
   const [form] = Form.useForm();
   const onFinish = (values: any) => {
@@ -100,3 +101,4 @@ export default function AddPhoto(props: any){
       </Form>
   );
 }
+)
