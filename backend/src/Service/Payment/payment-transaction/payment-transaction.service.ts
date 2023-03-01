@@ -15,7 +15,7 @@ export class PaymentTransactionService {
   ) {}
 
   async getAll() {
-    return await this.payRepository.find();
+    return await this.payRepository.query('select * from payment.user_transactions');
   }
 
   async getHistoryTransaction() {
