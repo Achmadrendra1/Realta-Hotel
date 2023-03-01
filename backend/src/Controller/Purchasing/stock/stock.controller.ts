@@ -7,34 +7,41 @@ import {
   Put,
   Delete,
 } from '@nestjs/common';
-import { StockService } from '../../../service/Purchasing/stock/stock.service';
+import { StockService } from 'src/service/Purchasing/stock/stock.service';
 
 @Controller('stock')
 export class StockController {
-  constructor(private stockService: StockService) {}
+  constructor(
+    private stockService: StockService
+  ) { }
 
   @Get()
   getStocks() {
     return this.stockService.findAllStock();
   }
 
-  @Get(':stockName')
-  getStockName(@Param() stockName: any) {
-    return this.stockService.findStockName(stockName);
+  @Get(':id')
+  getStockId(@Param() params: any) {
+    return this.stockService.findStockName(params.id);
+  }
+
+  @Get(':name')
+  getStockName(@Param() params: any) {
+    return this.stockService.findStockName(params.name);
   }
 
   @Post()
-  createStock(@Body() stock: any) {
-    return this.stockService.addNewStock(stock);
+  createStock(@Body() body: any) {
+    return this.stockService.addNewStock(body);
   }
 
-  @Put(':stockName')
-  updateStock(@Body() stock: any) {
-    return this.stockService.editStock(stock);
+  @Put(':id')
+  updateStock(@Param() params: any, @Body() body: any) {
+    return this.stockService.editStock(params.id, body);
   }
 
-  @Delete(':stockName')
-  deleteStock(@Param() stockName: any) {
-    return this.stockService.dropStock(stockName);
+  @Delete(':id')
+  deleteStock(@Param() params: any) {
+    return this.stockService.dropStock(params.id);
   }
 }

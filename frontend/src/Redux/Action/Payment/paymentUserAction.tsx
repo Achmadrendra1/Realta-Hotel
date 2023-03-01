@@ -99,3 +99,22 @@ export const doGetHistoryFailed = (payload:any) => {
         payload
     }
 }
+
+export const doCreateTransaction = (payload:any) => {
+    return {
+        type : PaymentConst.CREATE_TRANSACTION,
+        payload
+    }
+}
+export const doCreateTransactionSuccess = (payload:any) => {
+    return {
+        type : PaymentConst.CREATE_TRANSACTION_SUCCESS,
+        payload
+    }
+}
+export const doCreateTransactionFailed = (payload:any) => {
+    return {
+        type : PaymentConst.CREATE_TRANSACTION_FAILED,
+        payload
+    }
+}

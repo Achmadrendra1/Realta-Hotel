@@ -2057,33 +2057,28 @@ insert into hr.employee_department_history values (18, 19, '2023-01-19', '2024-0
 insert into hr.employee_department_history values (19, 20, '2023-01-20', '2024-01-02', now(), 12, 1);
 insert into hr.employee_department_history values (20, 1, '2023-01-20', '2024-01-02', now(), 3, 1);
 
--- --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
--- --PURCHASING
--- --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+--PURCHASING
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
--- --stock
--- INSERT INTO purchasing.stocks (stock_id,stock_name, stock_description, stock_quantity, stock_reorder_point, stock_used, stock_scrap, stock_price, stock_standar_cost, stock_size, stock_color, stock_modified_date)
--- VALUES
---     (1,'Towel', 'Soft and absorbent towel', 1000, 500, 250, 100, 20.00, 10.00, 'Large', 'White', NOW()),
---     (2,'Bed Linen', 'High-quality bed linen set', 500, 250, 125, 50, 40.00, 20.00, 'Double', 'White', NOW()),
---     (3,'Shampoo', 'Luxury hotel shampoo', 5000, 2500, 1250, 500, 10.00, 5.00, 'Bottle', 'Transparent', NOW()),
---     (4,'Conditioner', 'Luxury hotel conditioner', 5000, 2500, 1250, 500, 10.00, 5.00, 'Bottle', 'Transparent', NOW()),
---     (5,'Bathrobe', 'Soft and comfortable bathrobe', 200, 100, 50, 20, 50.00, 25.00, 'Large', 'White', NOW()),
---     (6,'Slippers', 'Disposable hotel slippers', 1000, 500, 250, 100, 5.00, 2.50, 'Medium', 'White', NOW()),
---     (7,'Soap', 'Luxury hotel soap', 5000, 2500, 1250, 500, 5.00, 2.50, 'Bar', 'White', NOW()),
---     (8,'Toothbrush', 'Disposable hotel toothbrush', 1000, 500, 250, 100, 2.00, 1.00, 'Small', 'White', NOW()),
---     (9,'Toothpaste', 'Luxury hotel toothpaste', 5000, 2500, 1250, 500, 10.00, 5.00, 'Tube', 'White', NOW()),
---     (10,'Hair Dryer', 'High-powered hotel hair dryer', 100, 50, 25, 10, 30.00, 15.00, 'Medium', 'White', NOW()),
---     (11,'Coffee', 'Premium hotel coffee', 500, 250, 125, 50, 15.00, 7.50, 'Bag', 'Brown', NOW()),
---     (12,'Tea', 'Premium hotel tea', 500, 250, 125, 50, 15.00, 7.50, 'Bag', 'Brown', NOW()),
---     (13,'Sugar', 'Hotel sugar sachets', 5000, 2500, 1250, 500, 5.00, 2.50, 'Sachet', 'White', NOW()),
---     (14,'Creamer', 'Hotel creamer sachets', 5000, 2500, 1250, 500, 5.00, 2.50, 'Sachet', 'White', NOW()),
---     (15,'Stirrers', 'Hotel stirrers', 1000, 500, 250, 100, 2.00, 1.00, 'Small', 'Wood', NOW()),
---     (16,'Cups', 'Disposable hotel cups', 1000, 500, 250, 100, 5.00, 2.50, 'Medium', 'White', NOW()),
---     (17,'Tea Towel', 'Absorbent cloth for drying dishes', 1000, 800, 200, 50, 1.50, 0.75, 'Medium', 'White', NOW()),
---     (18,'Hand Soap', 'Liquid soap for hand washing', 1500, 1000, 500, 100, 2.00, 1.00, 'Medium', 'Clear', NOW()),
---     (19,'Linen Napkin', 'Cloth napkin for dining', 2000, 1500, 500, 100, 0.50, 0.25, 'Medium', 'White', NOW()),
---     (20,'Bath Towel', 'Towel for drying after a bath', 2500, 2000, 500, 100, 4.00, 2.00, 'Large', 'White', NOW());
+--Stock
+INSERT INTO purchasing.stocks (stock_name, stock_description, stock_quantity, stock_reorder_point, stock_used, stock_scrap, stock_size, stock_color, stock_modified_date)
+VALUES
+	('Towel', 'Soft and absorbent towel', 50, 20, 10, 2, 'Medium', 'White', NOW()),
+	('Shampoo', 'Luxury hotel shampoo', 100, 50, 20, 0, '250ml', 'Clear', NOW()),
+	('Soap', 'Moisturizing soap bar', 200, 100, 40, 5, '100g', 'White', NOW()),
+	('Blanket', 'Warm and cozy blanket', 50, 20, 10, 2, 'Queen', 'Gray', NOW()),
+	('Slippers', 'Comfortable hotel slippers', 150, 75, 30, 5, 'Large', 'Black', NOW()),
+	('Sheets', 'Luxury hotel sheets', 50, 20, 10, 2, 'Queen', 'White', NOW()),
+	('Conditioner', 'Hydrating hair conditioner', 75, 35, 15, 2, '250ml', 'Clear', NOW()),
+	('Robe', 'Plush hotel bathrobe', 25, 10, 5, 0, 'Large', 'White', NOW()),
+	('Coffee', 'Gourmet hotel coffee', 200, 100, 40, 5, '250g', 'Brown', NOW()),
+	('Pillows', 'Comfortable hotel pillows', 100, 50, 20, 2, 'Standard', 'White', NOW()),
+	('Iron', 'Hotel iron for guest use', 25, 10, 5, 0, 'Small', 'Silver', NOW()),
+	('Kettle', 'Hotel kettle for guest use', 25, 10, 5, 0, 'Small', 'White', NOW()),
+	('Shower gel', 'Refreshing shower gel', 75, 35, 15, 2, '250ml', 'Clear', NOW()),
+	('Toothbrush', 'Hotel toothbrushes for guests', 200, 100, 40, 5, 'Small', 'White', NOW()),
+	('Hair dryer', 'Hotel hair dryer for guests', 50, 20, 10, 2, 'Small', 'White', NOW());
 
 -- --stock photo
 -- INSERT INTO purchasing.stock_photo (spho_id,spho_thumbnail_filename, spho_photo_filename, spho_primary, spho_url, spho_stock_id)
@@ -2110,101 +2105,74 @@ insert into hr.employee_department_history values (20, 1, '2023-01-20', '2024-01
 -- (20,'Bath Towel_thumbnail', 'Bath Towel_photo', 1, 'www.hotel.com/BathTowel', 20);
 
 
--- --vendor
--- INSERT INTO purchasing.vendor (vendor_id,vendor_name, vendor_active, vendor_priority, vendor_register_date, vendor_weburl, vendor_modified_date)
--- VALUES
--- (1,'PT. Liquid Indonesia', 1, 1, '2022-01-01 00:00:00', 'www.liquidindonesia.com', '2022-01-01 00:00:00'),
--- (2,'PT. Shinzue Shampoo Indonesia', 1, 1, '2022-02-01 00:00:00', 'www.shinzueshampooindonesia.com', '2022-02-01 00:00:00'),
--- (3,'PT. Shinzue Conditioner Indonesia', 1, 0, '2022-03-01 00:00:00', 'www.shinzueconditionerindonesia.com', '2022-03-01 00:00:00'),
--- (4,'PT. Shinzue Hand Wash Indonesia', 1, 0, '2022-04-01 00:00:00', 'www.shinzuehandwashindonesia.com', '2022-04-01 00:00:00'),
--- (5,'PT. Shinzue Body Wash Indonesia', 1, 0, '2022-05-01 00:00:00', 'www.shinzuebodywashindonesia.com', '2022-05-01 00:00:00'),
--- (6,'PT. Dental Care Indonesia', 1, 0, '2022-06-01 00:00:00', 'www.dentalcareindonesia.com', '2022-06-01 00:00:00'),
--- (7,'PT. Toothpaste Indonesia', 1, 0, '2022-07-01 00:00:00', 'www.toothpasteindonesia.com', '2022-07-01 00:00:00'),
--- (8,'PT. Soft Towel Indonesia', 1, 1, '2022-08-01 00:00:00', 'www.softtowelindonesia.com', '2022-08-01 00:00:00'),
--- (9,'PT. Quick Dry Towel Indonesia', 1, 0, '2022-09-01 00:00:00', 'www.quickdrytowelindonesia.com', '2022-09-01 00:00:00'),
--- (10,'PT. Face Fresh Towel Indonesia', 1, 0, '2022-10-01 00:00:00', 'www.facefreshtowelindonesia.com', '2022-10-01 00:00:00'),
--- (11,'PT. Shinzue Shampoo Sachet Indonesia', 1, 0, '2022-11-01 00:00:00', 'www.shinzueshampoosachetindonesia.com', '2022-11-01 00:00:00'),
--- (12,'PT. Shinzue Conditioner Sachet Indonesia', 1, 0, '2022-12-01 00:00:00', 'www.shinzueconditionersachetindonesia.com', '2022-12-01 00:00:00'),
--- (13,'PT. Shinzue Soap Sachet Indonesia', 1, 0, '2023-01-01 00:00:00', 'www.shinzuesoapsachetindonesia.com', '2023-01-01 00:00:00'),
--- (14,'PT. Comfort Robe Indonesia', 1, 0, '2023-02-01 00:00:00', 'www.comfortrobeindonesia.com', '2023-02-01 00:00:00'),
--- (15,'PT. Cozy Slipper Indonesia', 1, 0, '2023-03-01 00:00:00', 'www.cozyslipperindonesia.com', '2023-03-01 00:00:00'),
--- (16,'PT. Tissue Master Indonesia', 1, 1, '2023-04-01 00:00:00', 'www.tissuemasterindonesia.com', '2023-04-01 00:00:00'),
--- (17,'PT. Clean Roll Indonesia', 1, 0, '2023-05-01 00:00:00', 'www.cleanrollindonesia.com', '2023-05-01 00:00:00'),
--- (18,'PT. Garbage Bag Indonesia', 1, 0, '2023-06-01 00:00:00', 'www.garbagebagindonesia.com', '2023-06-01 00:00:00'),
--- (19,'PT. Clean Wash Indonesia', 1, 0, '2023-07-01 00:00:00', 'www.cleanwashindonesia.com', '2023-07-01 00:00:00'),
--- (20,'PT. Fresh Fabric Indonesia', 1, 0, '2023-08-01 00:00:00', 'www.freshfabricindonesia.com', '2023-08-01 00:00:00');
+--Vendor
+INSERT INTO purchasing.vendor(vendor_name, vendor_active, vendor_priority, vendor_register_date, vendor_weburl, vendor_modified_date)
+VALUES 
+	('PT. Dunlopillo Indonesia', 1, 0, '2022-01-01 12:00:00', 'https://www.dunlopillo.co.id/en', '2022-01-05 08:00:00'),
+	('PT. Unilever Indonesia', 1, 1, '2022-01-01 12:00:00', 'https://www.unilever.co.id/', '2022-01-05 08:00:00'),
+	('PT. Indonesia Bersih Rapi', 1, 1, '2022-01-01 12:00:00','www.indonesiabersihrapi.com', '2022-01-05 08:00:00'),
+	('PT. Securindo Packatama Indonesia', 1, 1 , '2022-01-01 12:00:00','www.secureparking.co.id', '2022-01-05 08:00:00'),
+	('Precor Gym', 1, 0, '2022-01-01 12:00:00','www.precor.com', '2022-01-05 08:00:00'),
+	('PT. Klasse Mitra International', 1, 1, '2022-01-01 12:00:00','www.klasse.co.id', '2022-01-05 08:00:00'),
+	('PT. Royal Security Indonesia', 1, 1, '2022-01-01 12:00:00','www.royalsecurity.co.id', '2022-01-05 08:00:00'),
+	('IKEA Indonesia', 1, 0, '2022-01-01 12:00:00','www.ikea.co.id', '2022-01-05 08:00:00');
 
--- --header
--- INSERT INTO purchasing.purchase_order_header (pohe_id,pohe_number, pohe_status, pohe_order_date, pohe_subtotal, pohe_tax, pohe_total_amount, pohe_refund, pohe_arrival_date, pohe_pay_type, pohe_emp_id, pohe_vendor_id)
--- VALUES
--- (1,'PO001', 2, '2022-12-01 12:00:00', 10000, 1000, 11000, 0, '2022-12-15 12:00:00', 'TR', 1, 1),
--- (2,'PO002', 1, '2022-12-02 12:00:00', 11000, 1100, 12100, 0, '2022-12-16 12:00:00', 'C', 2, 2),
--- (3,'PO003', 2, '2022-12-03 12:00:00', 12000, 1200, 13200, 0, '2022-12-17 12:00:00', 'TR', 3, 3),
--- (4,'PO004', 3, '2022-12-04 12:00:00', 13000, 1300, 14300, 0, '2022-12-18 12:00:00', 'C', 4, 4),
--- (5,'PO005', 4, '2022-12-05 12:00:00', 14000, 1400, 15400, 0, '2022-12-19 12:00:00', 'TR', 5, 5),
--- (6,'PO006', 1, '2022-12-06 12:00:00', 15000, 1500, 16500, 0, '2022-12-20 12:00:00', 'C', 6, 6),
--- (7,'PO007', 2, '2022-12-07 12:00:00', 16000, 1600, 17600, 0, '2022-12-21 12:00:00', 'TR', 7, 7),
--- (8,'PO008', 3, '2022-12-08 12:00:00', 17000, 1700, 18700, 0, '2022-12-22 12:00:00', 'C', 8, 8),
--- (9,'PO009', 4, '2022-12-09 12:00:00', 18000, 1800, 19800, 0, '2022-12-23 12:00:00', 'TR', 9, 9),
--- (10,'PO010', 1, '2022-12-10 12:00:00', 19000, 1900, 20900, 0, '2022-12-24 12:00:00', 'C', 10, 10),
--- (11,'PO011', 2, '2022-12-11 12:00:00', 20000, 2000, 22000, 0, '2022-12-25 12:00:00', 'TR', 11, 11),
--- (12,'PO012', 3, '2022-12-12 12:00:00', 21000, 2100, 23100, 0, '2022-12-26 12:00:00', 'C', 12, 12),
--- (13,'PO013', 4, '2022-12-13 12:00:00', 22000, 2200, 24200, 0, '2022-12-27 12:00:00', 'TR', 13, 13),
--- (14,'PO014', 1, '2022-12-14 12:00:00', 23000, 2300, 25300, 0, '2022-12-28 12:00:00', 'C', 14, 14),
--- (15,'PO015', 2, '2022-12-15 12:00:00', 24000, 2400, 26400, 0, '2022-12-29 12:00:00', 'TR', 15, 15),
--- (16,'PO016', 3, '2022-12-16 12:00:00', 25000, 2500, 27500, 0, '2022-12-30 12:00:00', 'C', 16, 16),
--- (17,'PO017', 4, '2022-12-17 12:00:00', 26000, 2600, 28600, 0, '2022-12-31 12:00:00', 'TR', 17, 17),
--- (18,'PO018', 1, '2022-12-18 12:00:00', 27000, 2700, 29700, 0, '2023-01-01 12:00:00', 'C', 18, 18),
--- (19,'PO019', 2, '2022-12-19 12:00:00', 28000, 2800, 30800, 0, '2023-01-02 12:00:00', 'TR', 19, 19),
--- (20,'PO020', 3, '2022-12-20 12:00:00', 29000, 2900, 31900, 0, '2023-01-03 12:00:00', 'C', 20, 20);
+-- Vendor Product
+INSERT INTO purchasing.vendor_product(vepro_qty_stocked, vepro_qty_remaining, vepro_price, vepro_stock_id, vepro_vendor_id)
+VALUES 
+	(100, 50, 10000, 1, 1),
+	(200, 100, 8000, 2, 1),
+	(150, 75, 12000, 1, 2),
+	(300, 200, 7000, 2, 2);
+	
+--Purchase Order Header
+INSERT INTO purchasing.purchase_order_header (pohe_number, pohe_status, pohe_order_date, pohe_subtotal, pohe_tax, pohe_total_amount, pohe_refund, pohe_arrival_date, pohe_pay_type, pohe_emp_id, pohe_vendor_id)
+VALUES 
+('PO1001', 1, '2022-01-01 10:00:00', 100.00, 10.00, 110.00, 0.00, '2022-01-10 10:00:00', 'CA', 1, 1),
+('PO1002', 2, '2022-01-02 10:00:00', 200.00, 20.00, 220.00, 0.00, '2022-01-11 10:00:00', 'TR', 2, 2),
+('PO1003', 3, '2022-01-03 10:00:00', 300.00, 30.00, 330.00, 0.00, '2022-01-12 10:00:00', 'CA', 3, 3),
+('PO1004', 4, '2022-01-04 10:00:00', 400.00, 40.00, 440.00, 0.00, '2022-01-13 10:00:00', 'CA', 4, 4),
+('PO1005', 1, '2022-01-05 10:00:00', 500.00, 50.00, 550.00, 0.00, '2022-01-14 10:00:00', 'TR', 5, 5),
+('PO1006', 2, '2022-01-06 10:00:00', 600.00, 60.00, 660.00, 0.00, '2022-01-15 10:00:00', 'CA', 6, 6),
+('PO1007', 3, '2022-01-07 10:00:00', 700.00, 70.00, 770.00, 0.00, '2022-01-16 10:00:00', 'TR', 7, 7),
+('PO1008', 4, '2022-01-08 10:00:00', 800.00, 80.00, 880.00, 0.00, '2022-01-17 10:00:00', 'CA', 8, 8),
+('PO1009', 1, '2022-01-09 10:00:00', 900.00, 90.00, 990.00, 0.00, '2022-01-18 10:00:00', 'TR', 9, 1),
+('PO1010', 2, '2022-01-10 10:00:00', 1000.00, 100.00, 1100.00, 0.00, '2022-01-19 10:00:00', 'TR', 10, 1);
 
--- --detail
--- INSERT INTO purchasing.stock_detail (stod_stock_id, stod_barcode_number, stod_status, stod_notes, stod_faci_id, stod_pohe_id)
--- VALUES
--- (1, 'abcd1234', '1', 'Towel', 1, 1),
--- (2, 'efgh5678', '2', 'Bed', 2, 2),  
--- (3, 'ijkl9101', '3', 'Linen', 3, 3),
--- (4, 'mnop1213', '4', 'Shampoo', 4, 4),
--- (5, 'qrst1415', '1', 'Conditioner', 5, 5),
--- (6, 'uvwx1617', '2', 'Bathrobe', 6, 6),
--- (7, 'yzab1819', '3', 'Slippers', 7, 7),
--- (8, 'bcde2021', '4', 'Soap', 8, 8),
--- (9, 'cdef2223', '1', 'Toothbrush', 9, 9),
--- (10, 'defg2425', '2', 'Toothpaste', 10, 10),
--- (11, 'efgh2627', '3', 'Hair Dryer', 11, 11),
--- (12, 'fghi2829', '4', 'Coffee', 12, 12),
--- (13, 'ghij3031', '1', 'Tea', 13, 13),
--- (14, 'hijk3233', '2', 'Sugar', 14, 14),
--- (15, 'ijkl3435', '3', 'Creamer', 15, 15),
--- (16, 'jklm3637', '4', 'Stirrers', 16, 16),
--- (17, 'klmn3839', '1', 'Cups', 17, 17),
--- (18, 'lmno4041', '2', 'Tea Towel', 18, 18),
--- (19, 'mnop4243', '3', 'Hand Soap', 19, 19),
--- (20, 'nopq4445', '4', 'Linen Napkin', 20, 20);
+--Stock Detail
+INSERT INTO purchasing.stock_detail (stod_stock_id, stod_barcode_number, stod_status, stod_notes, stod_faci_id, stod_pohe_id)
+VALUES
+	(1, 'A1234', '1', 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Debitis, incidunt.', 1, 1),
+	(2, 'A1235', '2', 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Debitis, incidunt.', 2, 1),
+	(3, 'A1236', '3', 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Debitis, incidunt.', 3, 2),
+	(4, 'A1237', '4', 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Debitis, incidunt.', 4, 2),
+	(5, 'A1238', '1', 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Debitis, incidunt.', 5, 3),
+	(6, 'A1239', '2', 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Debitis, incidunt.', 6, 3),
+	(7, 'A1240', '3', 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Debitis, incidunt.', 7, 4),
+	(8, 'A1241', '4', 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Debitis, incidunt.', 8, 4),
+	(9, 'A1242', '1', 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Debitis, incidunt.', 9, 5),
+	(10, 'A1243', '2', 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Debitis, incidunt.', 10, 5),
+	(11, 'A1244', '3', 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Debitis, incidunt.', 11, 6),
+	(12, 'A1245', '4', 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Debitis, incidunt.', 12, 6),
+	(13, 'A1246', '1', 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Debitis, incidunt.', 13, 7),
+	(14, 'A1247', '2', 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Debitis, incidunt.', 14, 7),
+	(16, 'A1248', '3', 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Debitis, incidunt.', 15, 8),
+	(1, 'A1249', '4', 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Debitis, incidunt.', 16, 8),
+	(2, 'A1250', '1', 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Debitis, incidunt.', 17, 9),
+	(3, 'A1251', '2', 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Debitis, incidunt.', 18, 9),
+	(4, 'A1252', '3', 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Debitis, incidunt.', 19, 10),
+	(5, 'A1253', '4', 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Debitis, incidunt.', 20, 10),
+	(6, 'A1254', '1', 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Debitis, incidunt.', 21, 10);
 
--- --order detail
--- INSERT INTO purchasing.purchase_order_detail (pode_pohe_id, pode_id,pode_order_qty, pode_price, pode_line_total, pode_received_qty, pode_rejected_qty, pode_stocked_qty, pode_modified_date, pode_stock_id)
--- VALUES 
--- (1, 1,22, 175000, 3835000, 20, 2, 18, '2022-12-01 12:01:00', 1),
--- (2,2, 25, 230000, 5750000, 22, 3, 19, '2022-12-02 12:01:00', 2),
--- (3,3, 29, 195000, 565250, 28, 1, 27, '2022-12-03 12:01:00', 3),
--- (4,4, 35, 185000, 6477500, 34, 1, 33, '2022-12-04 12:01:00', 4),
--- (5,5, 33, 220000, 7260000, 32, 1, 31, '2022-12-05 12:01:00', 5),
--- (6,6, 30, 195000, 5855000, 29, 1, 28, '2022-12-06 12:01:00', 6),
--- (7,7, 31, 200000, 6200000, 30, 1, 29, '2022-12-07 12:01:00', 7),
--- (8,8, 28, 190000, 5272000, 27, 1, 26, '2022-12-08 12:01:00', 8),
--- (9,9, 36, 195000, 6970000, 35, 1, 34, '2022-12-09 12:01:00', 9),
--- (10,10, 27, 205000, 5513500, 26, 1, 25, '2022-12-10 12:01:00', 10),
--- (11,11, 22, 180000, 3960000, 21, 1, 20, '2022-12-11 12:01:00', 11),
--- (12,12, 25, 185000, 4637500, 24, 1, 23, '2022-12-12 12:01:00', 12),
--- (13,13, 29, 185000, 5361500, 28, 1, 27, '2022-12-13 12:01:00', 13),
--- (14,14, 32, 200000, 6400000, 31, 1, 30, '2022-12-14 12:01:00', 14),
--- (15,15, 24, 190000, 4536000, 23, 1, 22, '2022-12-15 12:01:00', 15),
--- (16,16, 26, 205000, 5330500, 25, 1, 24, '2022-12-16 12:01:00', 16),
--- (17,17, 30, 180000, 5400000, 29, 1, 28, '2022-12-17 12:01:00', 17),
--- (18,18, 32, 175000, 5602000, 31, 1, 30, '2022-12-18 12:01:00', 18),
--- (19,19, 25, 185000, 4637500, 24, 1, 23, '2022-12-19 12:01:00', 19),
--- (20,20, 28, 220000, 6160000, 27, 1, 26, '2022-12-20 12:01:00', 20);
+--Purchase Order Detail
+INSERT INTO purchasing.purchase_order_detail (pode_pohe_id, pode_order_qty, pode_price, pode_line_total, pode_received_qty, pode_rejected_qty, pode_stocked_qty, pode_modified_date, pode_stock_id)
+VALUES 
+	(1, 22, 175000, 3835000, 20, 2, 18, '2022-12-01 12:01:00', 1),
+	(2, 25, 230000, 5750000, 22, 3, 19, '2022-12-02 12:01:00', 2),
+	(3, 29, 195000, 565250, 28, 1, 27, '2022-12-03 12:01:00', 3),
+	(4, 35, 185000, 6477500, 34, 1, 33, '2022-12-04 12:01:00', 4),
+	(5, 33, 220000, 7260000, 32, 1, 31, '2022-12-05 12:01:00', 5),
+	(6, 30, 195000, 5855000, 29, 1, 28, '2022-12-06 12:01:00', 6);
 
 -- --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 -- --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
