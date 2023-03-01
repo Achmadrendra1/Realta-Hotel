@@ -16,8 +16,9 @@ import {
   doUsacRequest,
 } from "@/Redux/Action/Payment/paymentDashAction";
 import { doGetHistory } from "@/Redux/Action/Payment/paymentUserAction";
+import withAuth from "@/PrivateRoute/WithAuth";
 
-export default function index() {
+export default withAuth(function index() {
   const dispacth = useDispatch();
   const [isActive, setIsActive] = useState(false);
   const [isOpenAct, setOpenAct] = useState(false);
@@ -265,4 +266,4 @@ export default function index() {
       </main>
     </>
   );
-}
+})
