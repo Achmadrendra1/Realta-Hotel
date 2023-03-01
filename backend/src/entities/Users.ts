@@ -109,11 +109,7 @@ export class Users {
 
   @OneToOne(() => UserRoles, (userRoles) => userRoles.usroUser)
   userRoles: UserRoles;
-<<<<<<< HEAD
-  facilityPriceHistories: any;
-=======
 
   @OneToMany(() => WorkOrders, (workOrders) => workOrders.woroUser)
   workOrders: WorkOrders[];
->>>>>>> 6c2deb00bcb595d858c523cf3b8982f0d1717d0f
 }

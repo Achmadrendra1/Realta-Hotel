@@ -20,7 +20,6 @@ export class PoheService {
         )
     }
 
-<<<<<<< HEAD
     async findPoheNumber(pohe: PurchaseOrderHeader): Promise<any> {
         return await this.poheRepository.findOneBy(
             { poheNumber: pohe.poheNumber }
@@ -39,7 +38,7 @@ export class PoheService {
                 poheRefund: pohe.poheRefund,
                 poheArrivalDate: pohe.poheArrivalDate,
                 pohePayType: pohe.pohePayType,
-                poheEmpId: pohe.poheEmpId,
+                poheEmp: pohe.poheEmp,
                 poheVendor: pohe.poheVendor
             }
         )
@@ -63,7 +62,7 @@ export class PoheService {
                 poheRefund: pohe.poheRefund,
                 poheArrivalDate: pohe.poheArrivalDate,
                 pohePayType: pohe.pohePayType,
-                poheEmpId: pohe.poheEmpId,
+                poheEmp: pohe.poheEmp,
                 poheVendor: pohe.poheVendor
             })
             return { message: `Congrats, you're purchase order header has been changed` }
@@ -80,66 +79,4 @@ export class PoheService {
         )
         return `Congrats, you're purchase order header has been deleted`
     }
-=======
-  async addPohe(pohe: PurchaseOrderHeader): Promise<any> {
-    return await this.poheRepository
-      .save({
-        poheNumber: pohe.poheNumber,
-        poheStatus: pohe.poheStatus,
-        poheOrderDate: pohe.poheOrderDate,
-        poheSubtotal: pohe.poheSubtotal,
-        poheTax: pohe.poheTax,
-        poheTotalAmount: pohe.poheTotalAmount,
-        poheRefund: pohe.poheRefund,
-        poheArrivalDate: pohe.poheArrivalDate,
-        pohePayType: pohe.pohePayType,
-        poheVendor: pohe.poheVendor,
-        poheEmpId: pohe.poheEmp,
-      })
-      .then((result) => {
-        return {
-          message: 'Congrats, you have new purchase order header',
-          result: result,
-        };
-      })
-      .catch((error) => {
-        return {
-          massage: 'Sorry, something went wrong' + error,
-        };
-      });
-  }
-
-  async editPohe(pohe: PurchaseOrderHeader): Promise<any> {
-    return await this.poheRepository
-      .update(
-        {
-          poheNumber: pohe.poheNumber,
-        },
-        {
-          poheNumber: pohe.poheNumber,
-          poheStatus: pohe.poheStatus,
-          poheOrderDate: pohe.poheOrderDate,
-          poheSubtotal: pohe.poheSubtotal,
-          poheTax: pohe.poheTax,
-          poheTotalAmount: pohe.poheTotalAmount,
-          poheRefund: pohe.poheRefund, 
-          pohePayType: pohe.pohePayType,
-          poheVendor: pohe.poheVendor,
-          poheEmp: pohe.poheEmp,
-        },
-      )
-      .then((result) => {
-        return {
-          message: `Congrats, you're purchase order header has been changed`,
-          result: result,
-        };
-      })
-      .catch((error) => {
-        return {
-          massage: 'Sorry, something went wrong' + error,
-        };
-      });
-  }
->>>>>>> 6c2deb00bcb595d858c523cf3b8982f0d1717d0f
-
 }
