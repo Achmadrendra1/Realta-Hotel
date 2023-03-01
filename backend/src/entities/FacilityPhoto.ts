@@ -3,32 +3,28 @@ import {
   Entity,
   Index,
   JoinColumn,
-  OneToOne,
+  ManyToOne,
   PrimaryGeneratedColumn,
 } from "typeorm";
 import { Facilities } from "./Facilities";
 
-@Index("facility_photo_fapho_faci_id_key", ["faphoFaciId"], { unique: true })
-@Index("pk_fapho_id", ["faphoFaciId", "faphoId"], { unique: true })
+@Index("pk_fapho_id", ["faphoId"], { unique: true })
 @Entity("facility_photo", { schema: "hotel" })
 export class FacilityPhoto {
-  @Column("integer", { primary: true, name: "fapho_faci_id" })
-  faphoFaciId: number;
-
   @PrimaryGeneratedColumn({ type: "integer", name: "fapho_id" })
   faphoId: number;
 
   @Column("character varying", {
     name: "fapho_thumbnail_filename",
     nullable: true,
-    length: 50,
+    length: 125,
   })
   faphoThumbnailFilename: string | null;
 
   @Column("character varying", {
     name: "fapho_photo_filename",
     nullable: true,
-    length: 50,
+    length: 125,
   })
   faphoPhotoFilename: string | null;
 
@@ -42,13 +38,10 @@ export class FacilityPhoto {
   })
   faphoUrl: string | null;
 
-  @Column("timestamp without time zone", {
-    name: "fapho_modified_date",
-    nullable: true,
-  })
-  faphoModifiedDate: Date | null;
+  @Column("date", { name: "fapho_modified_date", nullable: true })
+  faphoModifiedDate: string | null;
 
-  @OneToOne(() => Facilities, (facilities) => facilities.facilityPhoto, {
+  @ManyToOne(() => Facilities, (facilities) => facilities.facilityPhotos, {
     onDelete: "CASCADE",
     onUpdate: "CASCADE",
   })

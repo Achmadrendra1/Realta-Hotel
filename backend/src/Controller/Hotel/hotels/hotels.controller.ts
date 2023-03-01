@@ -24,16 +24,21 @@ export class HotelsController {
   getHotelsId(@Param('id') id: number) {
     return this.hotelsService.findByNameId(id);
   }
+  // @Get(':hotelName')
+  // getHotelName(@Param('hotelName') hotelName: string) {
+  //   return this.hotelsService.findByHotelName(hotelName);
+  // }
+
   @Put(':id')
-  UpdateHotel(@Param('hotelId') hotelId: any, @Body() body: any) {
-    return this.hotelsService.UpdateHotel(hotelId, body);
+  UpdateHotel(@Param('id') id: any, @Body() body: any) {
+    return this.hotelsService.UpdateHotel(id, body);
   }
   @Post('Add')
   addHotel(@Body() body: any) {
     return this.hotelsService.addNewHotel(body);
   }
-  @Delete()
-  DeleteHotel(@Param('id') params) {
-    return this.hotelsService.deleteHotels(params);
+  @Delete(':id')
+  DeleteHotel(@Param('id') id: any) {
+    return this.hotelsService.deleteHotels(id);
   }
 }

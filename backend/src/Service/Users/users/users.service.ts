@@ -18,10 +18,10 @@ interface User {
   uspro_job_title: any;
   uspro_martial_status: any;
   uspro_gender: any;
-  
+
   usro_role: any;
-  uspa_password_hash : any;
-  uspa_user : any
+  uspa_password_hash: any;
+  uspa_user: any;
 }
 
 @Injectable()
@@ -52,7 +52,7 @@ export class UsersService {
   // async register(data: User): Promise<any> {
   //   const salt = await bcrypt.genSalt(10);
   //   const hashedPassword = await bcrypt.hash(data.uspa_password_hash, salt);
-    
+
   //   // Insert new user to Users table and retrieve the new user's ID
   //   const newUser = await this.UsersRepository.create({
   //     userFullName: data.user_full_name,
@@ -61,7 +61,7 @@ export class UsersService {
   //     userModifiedDate: new Date(),
   //   });
   //   await this.UsersRepository.save(newUser);
-    
+
   //   // Insert the new user's password to UserPassword table
   //   const newUserPassword = await this.UserPasswordRepository.create({
   //     uspaUser: newUser,
@@ -70,7 +70,6 @@ export class UsersService {
   //   });
   //   await this.UserPasswordRepository.save(newUserPassword);
   // }
-  
 
   async register(user: any): Promise<any> {
     return await this.UsersRepository.query(

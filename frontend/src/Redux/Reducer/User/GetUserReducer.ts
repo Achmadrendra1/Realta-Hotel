@@ -38,7 +38,7 @@ export default function GetUserReducer(state = initialState, action:any) {
     case UserConst.UPDATE_PASSWORD_SUCCESS:
       state.getUser.splice(
         state.getUser.findIndex(
-          (i: any) => i.uspaUserId == action.payload.uspaUserId
+          (i: any) => i.user_id == action.payload.user_id
         ),
         action.payload
       );

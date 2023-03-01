@@ -47,8 +47,8 @@ export function* HandleEditProfile(action:any):any{
 
 export function* HandleUpdatePassword(action:any):any{
     try {
-        yield axios (API("PUT","/password/"+ action.payload.uspaUserId, action.payload))
-      //   console.log(result);
+        const result = yield axios (API("PUT","/password/"+ action.payload.user_id, action.payload))
+        console.log(result);
           yield put (doUpdateSuccess(action.payload))
       } catch (error :any) {
           // yield put (doUpdateFailed(error))

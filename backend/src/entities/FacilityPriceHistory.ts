@@ -3,20 +3,15 @@ import {
   Entity,
   Index,
   JoinColumn,
-  OneToOne,
+  ManyToOne,
   PrimaryGeneratedColumn,
 } from "typeorm";
 import { Facilities } from "./Facilities";
+import { Users } from "./Users";
 
-@Index("pk_facility_price_history", ["faphFaciId", "faphId"], { unique: true })
-@Index("facility_price_history_faph_faci_id_key", ["faphFaciId"], {
-  unique: true,
-})
+@Index("pk_facility_price_history", ["faphId"], { unique: true })
 @Entity("facility_price_history", { schema: "hotel" })
 export class FacilityPriceHistory {
-  @Column("integer", { primary: true, name: "faph_faci_id" })
-  faphFaciId: number;
-
   @PrimaryGeneratedColumn({ type: "integer", name: "faph_id" })
   faphId: number;
 
@@ -53,13 +48,18 @@ export class FacilityPriceHistory {
   })
   faphModifiedDate: Date | null;
 
-  @Column("integer", { name: "faph_user_id", nullable: true })
-  faphUserId: number | null;
+  @ManyToOne(
+    () => Facilities,
+    (facilities) => facilities.facilityPriceHistories,
+    { onDelete: "CASCADE", onUpdate: "CASCADE" }
+  )
+  @JoinColumn([{ name: "faph_faci_id", referencedColumnName: "faciId" }])
+  faphFaci: Facilities;
 
-  @OneToOne(() => Facilities, (facilities) => facilities.facilityPriceHistory, {
+  @ManyToOne(() => Users, (users) => users.facilityPriceHistories, {
     onDelete: "CASCADE",
     onUpdate: "CASCADE",
   })
-  @JoinColumn([{ name: "faph_faci_id", referencedColumnName: "faciId" }])
-  faphFaci: Facilities;
+  @JoinColumn([{ name: "faph_user_id", referencedColumnName: "userId" }])
+  faphUser: Users;
 }

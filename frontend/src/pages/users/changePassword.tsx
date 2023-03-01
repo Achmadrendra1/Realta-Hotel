@@ -1,28 +1,32 @@
 import { doUpdatePassword } from "@/Redux/Action/User/GetDataUser";
-import Buttons from "@/components/Button";
-import { LogoutOutlined } from "@ant-design/icons";
-import { Button, Card, Col, Form, Input, Menu, Modal, Row } from "antd";
-import Link from "next/link";
-import router from "next/router";
-import React, { useState } from "react";
+import { Button, Col, Form, Input, Modal, Row } from "antd";
+import { useState } from "react";
 import { useDispatch } from "react-redux";
 
 export default function ChangePassword(props: any) {
  const  dispatch = useDispatch();
  const { handleClose } = props;
+ const [password,setPassword] = useState('')
+ const [confirmPassword,setConfirmPassword] = useState('')
+ const [error, setError] = useState('');
+
 
 
 
   const onFinish = (values: any) => {
-    console.log("Success:", values);
-    dispatch(doUpdatePassword(values));
-    handleClose(false);
+    
+    if (password !== confirmPassword) {
+      setError(`Password don't match`);
+      setTimeout(() => {
+      }, 5000);
+    } else {
+      console.log("Success:", values);
+      dispatch(doUpdatePassword(values));
+      handleClose(false);
+    }
+  
   };
 
-  //Button
-  const [open, setOpen] = useState(false);
-  const [confirmLoading, setConfirmLoading] = useState(false);
-  const [modalText, setModalText] = useState("Content of the modal");
 
  
 
@@ -60,7 +64,7 @@ export default function ChangePassword(props: any) {
                   { required: true, message: "Please input your Password!" },
                 ]}
                 required
-                tooltip="This is a required field"
+              
                 label="Current Password"
               >
                 <Input.Password
@@ -70,35 +74,38 @@ export default function ChangePassword(props: any) {
               </Form.Item>
 
               <Form.Item
+                label="New Password"
                 name="uspa_passwordhash"
                 rules={[
                   { required: true, message: "Please input your Password!" },
                 ]}
                 required
-                tooltip="This is a required field"
-                label="New Password"
               >
                 <Input.Password
                   type="password"
+                  value={password}
                   placeholder="Your New Password"
+                  onChange={(e) => setPassword(e.target.value)}
                 />
               </Form.Item>
 
               <Form.Item
+                label="Confirm Password"
                 name="Confirmpassword"
                 rules={[
                   { required: true, message: "Please input your Password!" },
                 ]}
                 required
-                tooltip="This is a required field"
-                label="Confirm Password"
+              
               >
                 <Input.Password
+                 value={confirmPassword}
                   type="password"
                   placeholder="Re-type Your Password"
+                  onChange={(e) => setConfirmPassword(e.target.value)}
                 />
               </Form.Item>
-
+              {error && <div  className="error text-red-600 mb-2" >{error}</div>}
               <Button  htmlType="submit" style={{marginBottom:30}}>
                 Change Password
               </Button>

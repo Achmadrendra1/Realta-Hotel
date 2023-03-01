@@ -1,0 +1,8 @@
+"type LayoutType = Parameters<typeof Form>[0]['layout'];" adalah sebuah deklarasi tipe pada TypeScript, 
+yang digunakan untuk mendefinisikan tipe dari sebuah variabel atau tipe data.
+typeof Form digunakan untuk mengambil tipe dari variabel atau tipe data yang bernama "Form".
+Parameters<typeof Form> digunakan untuk mengambil tipe dari parameter yang diterima oleh tipe data atau variabel "Form".
+[0] digunakan untuk mengakses indeks ke-0 dari array yang dihasilkan oleh Parameters<typeof Form>.
+['layout'] digunakan untuk mengakses properti bernama "layout" dari elemen ke-0 dari array.
+LayoutType adalah nama dari tipe baru yang didefinisikan oleh deklarasi ini.
+Jadi, deklarasi ini membuat tipe baru bernama "LayoutType" yang sama dengan tipe dari properti bernama "layout" yang ada di parameter ke-0 dari tipe data atau variabel "Form".

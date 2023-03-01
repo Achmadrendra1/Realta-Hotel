@@ -11,23 +11,59 @@ export class FacilityPhotosService {
   ) {}
 
   async findAllFapho(): Promise<any> {
-    return await this.FaphoRepsitory.find();
-  }
-
-  async findByFaphoId(fapho: FacilityPhoto): Promise<any> {
-    return await this.FaphoRepsitory.findOneBy({
-      faphoId: fapho.faphoId,
+    return await this.FaphoRepsitory.find({
+      relations: {
+        faphoFaci: true,
+      },
     });
   }
 
-  async addNewFapho(fapho: FacilityPhoto): Promise<any> {
-    return await this.FaphoRepsitory.save({
-      faphoFaciId: fapho.faphoFaciId,
-      faphoThumbnailFilename: fapho.faphoThumbnailFilename,
-      faphoPhotoFilename: fapho.faphoPhotoFilename,
-      faphoPrimary: fapho.faphoPrimary,
-      faphoUrl: fapho.faphoUrl,
-      faphoModifiedDate: fapho.faphoModifiedDate,
+  async findByFaphoId(id: any): Promise<any> {
+    return await this.FaphoRepsitory.find({
+      relations: {
+        faphoFaci: true,
+      },
+      where: { faphoFaci: { faciId: id } },
+    });
+  }
+
+  // async addNewFapho(file, fapho: FacilityPhoto): Promise<any> {
+  //   return await this.FaphoRepsitory.save({
+  //     faphoFaciId: fapho.faphoFaciId,
+  //     faphoThumbnailFilename: fapho.faphoThumbnailFilename,
+  //     faphoPhotoFilename: fapho.faphoPhotoFilename,
+  //     faphoPrimary: fapho.faphoPrimary,
+  //     // faphoUrl: file ? file[0].originalname : null,
+  //     faphoUrl: file,
+  //     faphoModifiedDate: fapho.faphoModifiedDate,
+  //   })
+  //     .then((result) => {
+  //       return {
+  //         message: `Facilities successfuly added to the system`,
+  //         result: result,
+  //       };
+  //     })
+  //     .catch((error) => {
+  //       return `facilities failed adding to the system` + error;
+  //     });
+  // }
+
+  async addNewFapho(file, fapho: any) {
+    console.log(file);
+    const id = fapho.faphoFaci;
+    for (const data of file) {
+      await this.FaphoRepsitory.save({
+        faphoFaci: fapho.faphoFaci,
+        faphoThumbnailFilename: data.originalname,
+        faphoPhotoFilename: data.filename,
+        faphoPrimary: fapho.faphoPrimary,
+        faphoUrl: data.path,
+        // faphoUrl: file.path,
+        faphoModifiedDate: fapho.faphoModifiedDate,
+      });
+    }
+    return await this.FaphoRepsitory.find({
+      where: { faphoFaci: { faciId: id } },
     })
       .then((result) => {
         return {
@@ -46,7 +82,7 @@ export class FacilityPhotosService {
         faphoId: id,
       },
       {
-        faphoFaciId: fapho.faphoFaciId,
+        faphoFaci: fapho.faphoFaci,
         faphoThumbnailFilename: fapho.faphoThumbnailFilename,
         faphoPhotoFilename: fapho.faphoPhotoFilename,
         faphoPrimary: fapho.faphoPrimary,

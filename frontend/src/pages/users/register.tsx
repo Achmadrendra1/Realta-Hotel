@@ -6,33 +6,32 @@ import { useDispatch } from "react-redux";
 import { doAddDataUser } from "@/Redux/Action/User/GetDataUser";
 
 export default function Register(): any {
-  const [password,setPassword] = useState('')
-  const [confirmPassword,setConfirmPassword] = useState('')
-  const [error, setError] = useState('');
-  const [Number,setNumber] = useState('');
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [error, setError] = useState("");
+  const [Number, setNumber] = useState("");
 
   const { Content } = Layout;
   const { Meta } = Card;
   const dispatch = useDispatch();
-  
 
   const onFinish = (values: any) => {
-   
-    if (password !== confirmPassword) {
-      setError('Passwords do not match');
-      setTimeout(() => {
-      }, 5000);
+    if (Number === '') {
+      setError("Number Phone must be a number");
+    } else if (password !== confirmPassword) {
+      setError("Password do not match");
+      setTimeout(() => {}, 5000);
     } else {
       console.log("Success:", values);
-      dispatch(doAddDataUser(values))
+      dispatch(doAddDataUser(values));
       window.location.href = "/users/login";
     }
   };
 
   // const HandleNumberInput = (value :any) => {
   //     if (typeof(value) !== 'number'){
-  //       setError('Phone number must be a number'); 
-  //     } 
+  //       setError('Phone number must be a number');
+  //     }
   //     }
   // const handleSubmit = (values :any) => {
 
@@ -44,13 +43,12 @@ export default function Register(): any {
     lineHeight: "120px",
     color: "#fff",
     backgroundColor: "#fff",
-    marginBottom:30,
+    marginBottom: 30,
   };
 
   return (
     <Layouts>
-
-      <Content style={contentStyle} >
+      <Content style={contentStyle}>
         <Space size={10}>
           <Card size="small">
             <Meta title="REGISTER YOUR ACCOUNT" style={{ marginTop: 30 }} />
@@ -100,7 +98,9 @@ export default function Register(): any {
               <Form.Item
                 label="Phone Number"
                 name="userPhoneNumber"
-                rules={[{   required: true, message: "Please input your Number!"}]}
+                rules={[
+                  { required: true, message: "Please input your Number!" },
+                ]}
                 required
               >
                 <Input
@@ -109,11 +109,9 @@ export default function Register(): any {
                   placeholder="Your Phone Number, ex: +62822..."
                   value={Number}
                   maxLength={12}
-                
-
+                  onChange={(e) => setNumber(e.target.value)}
                 />
               </Form.Item>
-
 
               <Form.Item
                 label="Password"
@@ -122,7 +120,7 @@ export default function Register(): any {
                   { required: true, message: "Please input your Password!" },
                 ]}
                 required
-              > 
+              >
                 <Input.Password
                   type="password"
                   value={password}
@@ -145,14 +143,11 @@ export default function Register(): any {
                   onChange={(e) => setConfirmPassword(e.target.value)}
                 />
               </Form.Item>
-              {error && <div  className="error text-red-600 mb-2" >{error}</div>}
-              <Button
-              htmlType="submit"
-              className="login-form-button mt-0"
-              >
+              {error && <div className="error text-red-600 mb-2">{error}</div>}
+              <Button htmlType="submit" className="login-form-button mt-0">
                 Register
               </Button>
-            
+
               <Form.Item>
                 Do you have an account? <a href="/users/login">Sign In </a>
               </Form.Item>
@@ -160,7 +155,6 @@ export default function Register(): any {
           </Card>
         </Space>
       </Content>
-      
     </Layouts>
   );
 }
