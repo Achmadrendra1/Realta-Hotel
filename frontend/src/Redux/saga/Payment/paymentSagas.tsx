@@ -23,6 +23,7 @@ import {
   doCheckSecureCodeSuccess,
   doCreateAccountFailed,
   doCreateAccountSuccess,
+  doCreateTransactionSuccess,
   doDeleteAccountSuccess,
   doGetHistoryFailed,
   doGetHistorySuccess,
@@ -215,6 +216,15 @@ function* handleTopUp(action: any): any {
     yield put(doTopUpSuccess({ message: null, status:null, data: result.data }))
 }
 
+function* handleCreateTransaction(action:any):any {
+  const delay = (time: any) =>
+  new Promise((resolve) => setTimeout(resolve, time));
+  yield axios(API('POST', '/payment-transaction', action.payload))
+  yield put(doCreateTransactionSuccess({message : 'Transaksi Berhasil'}))
+  yield call(delay, 3000)
+  yield put(doCreateAccountSuccess({message : null}))
+}
+
 function* handleGetHistoryTrx():any{
   try {
     const res = yield axios(API('GET', '/payment-transaction'))
@@ -240,4 +250,5 @@ export {
   handleTopUp,
   handleCheckSecure,
   handleGetHistoryTrx,
+  handleCreateTransaction
 };

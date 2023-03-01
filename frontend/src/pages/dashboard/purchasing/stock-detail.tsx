@@ -1,110 +1,124 @@
-import React, { useState } from 'react';
-import { Button, Card, Col, Descriptions, Modal, Row, Table, Typography } from 'antd';
-import Dashboard from '@/layouts/dashboard';
+import React, { useState, useEffect } from 'react'
+import { useSelector, useDispatch } from 'react-redux';
+import { useRouter } from 'next/router';
+import { Table, Tooltip } from 'antd';
+import { EditOutlined } from '@ant-design/icons';
+import Dashboard from '@/layouts/dashboard'
+import { AllStock, AllStod } from '@/Redux/Action/Purchasing/purchasingAction';
+import EditStods from './edit-stod';
 
-const { Title } = Typography;
+export default function Stod() {
+    const dispatch = useDispatch()
+    const router = useRouter()
+    const { stods } = useSelector((state: any) => state.StodReducer)
+    const [id, setId] = useState(0)
+    const [updateStod, setUpdateStod] = useState(false)
 
-const stock = [
-    {
-        name: 'John Brown',
-        desc: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Magni possimus, illo odit itaque iusto animi vel veniam provident suscipit laboriosam nulla quia, in ullam atque exercitationem officia velit, quo neque.',
-        quantity: 20,
-        reorder_point: 20,
-        used: 10,
-        scrap: 10,
-        price: 10000,
-        standard_cost: 10000,
-        size: 'medium',
-        color: 'white',
-        modified_date: '2023/02/04',
+    const { stocks } = useSelector((state: any) => state.StockReducer)
+    const { id_stock } = router.query
+    const data = stocks.find((item: any) => item.stockId == id_stock)
 
-        // stock photo
-        url: 'http://blablabla.com'
-    },
-];
+    const dataStod = stods.filter((item: any) => item.stockdet_name == data.stockName)
+    const dataTable = dataStod.length > 0 ? dataStod : []
 
-const details = [
-    {
-        key: '1',
-        barcode_number: 'A1000',
-        status: '1',
-        notes: 'lorem ipsum dolor sit amet, consectetur adip',
-        facilities: '1',
+    const handleOk = () => {
+        setTimeout(() => {
+            setUpdateStod(false)
+        }, 2000)
     }
-];
 
-const columns = [
-    {
-        title: 'Barcode Number',
-        dataIndex: 'barcode_number',
-        key: 'barcode_number',
-    },
-    {
-        title: 'Status',
-        dataIndex: 'status',
-        key: 'status',
-    },
-    {
-        title: 'Notes',
-        dataIndex: 'notes',
-        key: 'notes',
-    },
-    {
-        title: 'Facilities',
-        dataIndex: 'facilities',
-        key: 'facilities',
-    },
-];
+    const handleCancel = () => {
+        console.log("Clicked cancel button")
+        setUpdateStod(false)
+    }
 
-const rupiah = (number: any) => {
-    return new Intl.NumberFormat("id-ID", {
-        style: "currency",
-        currency: "IDR"
-    }).format(number);
-}
+    const handleClose = (data: boolean) => {
+        setUpdateStod(data)
+    }
 
-const StockDetail: React.FC = () => {
-    const [modal1Open, setModal1Open] = useState(false);
+    const editStod = (id: number) => {
+        setUpdateStod(true)
+        setId(id)
+    }
+
+    useEffect(() => {
+        dispatch(AllStod())
+        dispatch(AllStock())
+    }, [])
+
+    const columnsStods = [
+        {
+            title: 'Barcode',
+            dataIndex: 'stockdet_number',
+            sorter: {
+                compare: (a: any, b: any) => a.stockdet_number < b.stockdet_number ? -1 : 1
+            }
+        },
+        {
+            title: 'Status',
+            dataIndex: 'stockdet_status',
+            render: (record: any) => {
+                return (
+                    <span>
+                        {record == 1 ? "Stocked" : record == 2 ? "Expired" : record == 3 ? "Broken" : "Used"}
+                    </span>
+                )
+            },
+            sorter: {
+                compare: (a: any, b: any) => a.stodStatus < b.stodStatus ? -1 : 1
+            }
+        },
+        {
+            title: 'Notes',
+            dataIndex: 'stockdet_notes',
+            sorter: {
+                compare: (a: any, b: any) => a.stockdet_notes < b.stockdet_notes ? -1 : 1
+            }
+        },
+        {
+            title: 'PO Number',
+            dataIndex: 'stockdet_pohe_number',
+            sorter: {
+                compare: (a: any, b: any) => a.stockdet_pohe_number < b.stockdet_pohe_number ? -1 : 1
+            }
+        },
+        {
+            title: 'Used In',
+            dataIndex: 'stockdet_facilities',
+            sorter: {
+                compare: (a: any, b: any) => a.stockdet_facilities < b.stockdet_facilities ? -1 : 1
+            }
+        },
+        {
+            title: 'Action',
+            render: (record: any) => {
+                return (
+                    <>
+                        <Tooltip placement="top" title='Switch Status'>
+                            <EditOutlined style={{ color: '#13c2c2' }} onClick={() => editStod(record.stockdet_id)} className="mx-2" />
+                        </Tooltip>
+                    </>
+                )
+            }
+        }
+    ]
+
     return (
         <Dashboard>
-            <Card>
-                <Title level={3}>{stock[0].name}</Title>
-                <Descriptions
-                    bordered
-                    column={{ xxl: 4, xl: 3, lg: 3, md: 3, sm: 2, xs: 1 }}
-                >
-                    <Descriptions.Item label="Name" span={3}>{stock[0].name}</Descriptions.Item>
-                    <Descriptions.Item label="Quantity" >{stock[0].quantity}</Descriptions.Item>
-                    <Descriptions.Item label="Reorder Point" span={2}>{stock[0].reorder_point}</Descriptions.Item>
-                    <Descriptions.Item label="Used">{stock[0].used}</Descriptions.Item>
-                    <Descriptions.Item label="Scrap" span={2}>{stock[0].scrap}</Descriptions.Item>
-                    <Descriptions.Item label="Size">{stock[0].size}</Descriptions.Item>
-                    <Descriptions.Item label="Color" span={2}>{stock[0].color}</Descriptions.Item>
-                    <Descriptions.Item label="Price">{rupiah(stock[0].price)}</Descriptions.Item>
-                    <Descriptions.Item label="Standard Cost" span={2}>{rupiah(stock[0].standard_cost)}</Descriptions.Item>
-                    <Descriptions.Item label="Modified Date" span={3}>{stock[0].modified_date}</Descriptions.Item>
-                    <Descriptions.Item label="Description" span={3}>{stock[0].desc}</Descriptions.Item>
-                </Descriptions>
-                <Row>
-                    <Col span={2}>
-                        <Button className='my-2' href='/Dashboard/purchasing/edit-stock'>Edit</Button>
-                    </Col>
-                    <Col span={4}>
-                        <Button type='text' className='my-2' onClick={() => setModal1Open(true)}>See More Details</Button>
-                    </Col>
-                </Row>
-                <Modal
-                    title="Stock Details"
-                    centered
-                    open={modal1Open}
-                    onOk={() => setModal1Open(false)}
-                    onCancel={() => setModal1Open(false)}
-                >
-                    <Table dataSource={details} columns={columns} />;
-                </Modal>
-            </Card>
-        </Dashboard>
-    )
-};
+            {updateStod ?
+                <EditStods
+                    data={stods}
+                    id={id}
+                    show={updateStod}
+                    clickOk={handleOk}
+                    clickCancel={handleCancel}
+                    handleClose={handleClose}
+                />
+                : null}
 
-export default StockDetail;
+            <div className='text-2xl py-3'>{data?.stockName}</div>
+
+            <Table dataSource={dataTable} columns={columnsStods} />
+        </Dashboard >
+    )
+}

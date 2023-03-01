@@ -1,34 +1,47 @@
-import { Controller, Param, Body, Get, Post, Put, Delete} from '@nestjs/common';
-import { StockPhotoService } from '../../../service/Purchasing/stock-photo/stock-photo.service';
+import {
+    Controller,
+    Param,
+    Body,
+    Get,
+    Post,
+    Put,
+    Delete
+} from '@nestjs/common';
+import { SphoService } from 'src/service/Purchasing/stock-photo/stock-photo.service';
 
 @Controller('stock-photo')
-export class StockPhotoController {
+export class SphoController {
     constructor(
-        private sphoService: StockPhotoService
+        private sphoService: SphoService
     ) { }
 
     @Get()
-    getStockPhoto() {
-        return this.sphoService.findAllStockPhoto();
+    getSpho() {
+        return this.sphoService.findAllSpho();
     }
 
-    @Get(':sphoPhotoFilename')
-    getSPhoName(@Param() sphoPhotoFilename: any) {
-        return this.sphoService.findSPhoFilename(sphoPhotoFilename);
+    @Get(':id')
+    getSphoId(@Param() params: any) {
+        return this.sphoService.findSphoId(params.id);
+    }
+
+    @Get(':name')
+    getSphoName(@Param() params: any) {
+        return this.sphoService.findSphoName(params.name);
     }
 
     @Post()
-    createStockPhoto(@Body() stockPhoto: any) {
-        return this.sphoService.addStockPhoto(stockPhoto);
+    createSpho(@Body() body: any) {
+        return this.sphoService.addSpho(body);
     }
 
-    @Put(':sphoPhotoFilename')
-    updateStockPhoto(@Body() sphoPhotoFilename: any) {
-        return this.sphoService.editStockPhoto(sphoPhotoFilename);
+    @Put(':id')
+    updateSpho(@Param() params: any, @Body() body: any) {
+        return this.sphoService.editSpho(params.id, body);
     }
 
-    @Delete(':sphoPhotoFilename')
-    deleteStockPhoto(@Param() sphoPhotoFilename: any) {
-        return this.sphoService.dropStockPhoto(sphoPhotoFilename);
+    @Delete(':id')
+    deleteSpho(@Param() params: any) {
+        return this.sphoService.dropSpho(params.id);
     }
 }
