@@ -16,6 +16,13 @@ export class RestoMenuPhotosController {
         return this.restoMenuPhotos.getMenuPhotos();    
     }
 
+    @Get(':id')
+    getListPhoto(@Param() param){
+        console.warn('ini param', param);
+        
+        return this.restoMenuPhotos.getListPhoto(param)
+    }
+
     // add data
     @Post()
     @UseInterceptors(FileInterceptor('rempUrl', {
@@ -25,22 +32,32 @@ export class RestoMenuPhotosController {
         })
     }))
     addMenuPhoto(@UploadedFile() file: Express.Multer.File, @Body() body){
+        // console.log('ini file di controller: ', file)
         return this.restoMenuPhotos.addMenuPhoto(file,body);
     }
-
-    // update/edit data
-    @Put(':id')
-    @UseInterceptors(FileInterceptor('rempUrl', {
-        storage:diskStorage({
-            destination: Helper.storage,
-            filename: Helper.customFileName
-        })
-    }))
-    editMenuPhoto(@UploadedFile() file: Express.Multer.File, @Body() body, @Param() Param){
-        return this.restoMenuPhotos.editMenuPhoto(file,body, Param);
+    
+    @Put('/primary')
+    editPrimary(@Body() body){
+        // return body;
+        // console.log(body,'body di controller');
+        
+        return this.restoMenuPhotos.editPrimary(body);
     }
 
+    // // update/edit data
+    // @Put(':id')
+    // @UseInterceptors(FileInterceptor('rempUrl', {
+    //     storage:diskStorage({
+    //         destination: Helper.storage,
+    //         filename: Helper.customFileName
+    //     })
+    // }))
+    // editMenuPhoto(@UploadedFile() file: Express.Multer.File, @Body() body, @Param() Param){
+    //     return this.restoMenuPhotos.editMenuPhoto(file,body, Param);
+    // }
 
+
+ 
     // delete
     @Delete(':id')
     deleteMenuPhoto(@Param() param){
