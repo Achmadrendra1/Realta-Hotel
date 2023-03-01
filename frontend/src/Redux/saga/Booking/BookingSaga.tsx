@@ -10,7 +10,10 @@ import {
     getSpHotelFailed,
     getSpHotelSuccess,
     getSpReviewSuccess,
-    getSpReviewFailed
+    getSpReviewFailed,
+    getSpInvoice,
+    getSpInvoiceSuccess,
+    getSpInvoiceFailed
 } from "@/Redux/Action/Booking/BookingAction"
 import { API } from "@/Redux/Configs/consumeApi"
 import axios from "axios"
@@ -78,7 +81,17 @@ function* handleSpFacilities() : any {
     }catch(e : any) {
       yield put(getSpReviewFailed(e))
     }
-  }  
+  }
+  
+  function* handleSpBoorInvoice () : any {
+    try{
+      const result = yield axios (API('Get', '/booking-orders/invoice', null))
+      yield put(getSpInvoiceSuccess(result.data))
+      return result.data
+    }catch(e : any) {
+      yield put (getSpInvoiceFailed(e))
+    }
+  }
 
 
 
@@ -88,5 +101,6 @@ export {
     handleBoorCreateFinal,
     handleSpFacilities,
     handleSpHotel,
-    handleSpHotelReviews
+    handleSpHotelReviews,
+    handleSpBoorInvoice
 }
