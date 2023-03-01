@@ -47,7 +47,11 @@ import AddCard from "@/pages/payment/addCard";
 import ActivationHpay from "@/pages/payment/activationHpay";
 import ActivationGoto from "@/pages/payment/activationGoto";
 import CheckSecure from "@/pages/payment/checkSecure";
+<<<<<<< HEAD
 import Link from "next/link";
+=======
+import { doCreateTransaction } from "@/Redux/Action/Payment/paymentUserAction";
+>>>>>>> 70f2ed5bfcaf1b397d6d1c0c67c0031e98d0aa4e
 
 export default withAuth(function bookingRoom() {
   const root = useRouter();
@@ -327,8 +331,8 @@ export default withAuth(function bookingRoom() {
   const [dataPayment, setDataPayment] = useState({
     userId: 0,
     amount: 0,
-    sourceNumber: "",
-    targetNumber: "",
+    sourceNumber: "0",
+    targetNumber: "0",
     trxType: "TRB",
     secureCode: "",
     orderNumber: "",
@@ -469,10 +473,13 @@ export default withAuth(function bookingRoom() {
 
   //Handle untuk generate booking code otomatis
   const handleBookingCode = () => {
-    const boor_id = boorNumber?.length > 0 ? boorNumber[0].boor_id:null
-    const id = boor_id + 1
+    const boor_id = boorNumber?.length > 0 ? boorNumber[0].boor_id : null;
+    const id = boor_id + 1;
     dispatch(insertBooking(dataBooking));
-    root.push({pathname: `/booking/room/invoice`, search : `${dataBooking.boor_order_number}`})
+    root.push({
+      pathname: `/booking/room/invoice`,
+      search: `${dataBooking.boor_order_number}`,
+    });
   };
 
   const handleReservation = () => {
@@ -483,7 +490,7 @@ export default withAuth(function bookingRoom() {
       const year = currentDate.getFullYear().toString();
       const month = (currentDate.getMonth() + 1).toString().padStart(2, "0");
       const day = currentDate.getDate().toString().padStart(2, "0");
-      const currentDateString = `${day}${month}${year}`;
+      const currentDateString = `${year}${month}${day}`;
       let newOrderNumber;
       if (lastOrderNumber) {
         const lastOrderDate = lastOrderNumber
@@ -534,7 +541,7 @@ export default withAuth(function bookingRoom() {
   const [isLinked, setIsLinked] = useState(false);
   const [isCash, setIsCash] = useState(true);
   const [disabled, setDisaled] = useState(true);
-  const [selectCard, setSelectCard] = useState({accNumber : '', balance : ''});
+  const [selectCard, setSelectCard] = useState({ accNumber: "", balance: "" });
   const [openAdd, setOpenAdd] = useState(false);
   const [showActivation, setShowActivation] = useState(false);
   const [showLinked, setShowLinked] = useState(false);
@@ -553,7 +560,7 @@ export default withAuth(function bookingRoom() {
       ...dataBooking,
       boor_user_id: user[0]?.user_id,
       boor_member_type: user[0]?.usme_memb_name,
-      boor_type : user[0]?.user_type
+      boor_type: user[0]?.user_type,
     });
     setDataPayment({ ...dataPayment, userId: user[0]?.user_id });
   }, [user]);
@@ -563,18 +570,28 @@ export default withAuth(function bookingRoom() {
     setShowCheck(true);
   };
 
+  const router = useRouter()
   const onCompleteCash = () => {
-    console.log(dataPayment)
-    // dispatch(insertBooking(dataBooking));
+    const boor_id = boorNumber?.length > 0 ? boorNumber[0].boor_id : null;
+    const id = boor_id + 1;
+    dispatch(insertBooking(dataBooking));
+    dispacth(doCreateTransaction(dataPayment));
+    
+    setTimeout(() =>
+      router.push({
+        pathname: `/booking/room/invoice`,
+        query: {id : dataBooking.boor_order_number},
+      })
+    );
   };
 
-//   useEffect(() => {
-//     if (dataBooking.boor_pay_type != "C") {
-//       setDisaled(false);
-//     } else {
-//       setDisaled(true);
-//     }
-//   }, [dataBooking]);
+  //   useEffect(() => {
+  //     if (dataBooking.boor_pay_type != "C") {
+  //       setDisaled(false);
+  //     } else {
+  //       setDisaled(true);
+  //     }
+  //   }, [dataBooking]);
 
   const onClose = () => {
     setShowCheck(false);
@@ -673,27 +690,27 @@ export default withAuth(function bookingRoom() {
     const maskedCardNumber = `${maskedDigits} ${lastFourDigits}`;
     return maskedCardNumber;
   }
-  const [payMsg, setPayMsg] = useState('')
+  const [payMsg, setPayMsg] = useState("");
 
-  useEffect(()=>{
-    if(selectCard.balance < totalPrice){
-        setPayMsg(
-            "Your Card Balance Is Insufficient, Please Check Or Select Another Card !"
-          );
-          setDisaled(true)
+  useEffect(() => {
+    if (selectCard.balance < totalPrice) {
+      setPayMsg(
+        "Your Card Balance Is Insufficient, Please Check Or Select Another Card !"
+      );
+      setDisaled(true);
     } else {
-        setPayMsg('')
-        setDisaled(false)
+      setPayMsg("");
+      setDisaled(false);
     }
-    if(selectCard.balance == ''){
-        setPayMsg('')
-        setDisaled(true)
+    if (selectCard.balance == "") {
+      setPayMsg("");
+      setDisaled(true);
     }
-  }, [selectCard, totalPrice])
+  }, [selectCard, totalPrice]);
 
   return (
     <Layouts>
-         {openAdd ? (
+      {openAdd ? (
         <AddCard
           show={openAdd}
           clickOk={handleOk}
@@ -736,8 +753,7 @@ export default withAuth(function bookingRoom() {
           dataBooking={dataBooking}
         />
       ) : null}
-      <div className="mb-3 rounded">
-      </div>
+      <div className="mb-3 rounded"></div>
       <div>
         <Row gutter={16}>
           <Col span={14} className={`${!detail ? "block" : "hidden"}`}>
@@ -864,10 +880,21 @@ export default withAuth(function bookingRoom() {
                           </Col>
                           <Col span={8}>
                             <div className="float-right">
+<<<<<<< HEAD
                               <div className="flex justify-center">
                                 <img src={`../.${arrPict[0]}`} alt="" className='w-3/4 rounded border-2' />
                               </div>
                               <div className="flex justify-center">
+=======
+                              <div>
+                                <img
+                                  src={`../.${arrPict[0]}`}
+                                  alt=""
+                                  className="w-3/4 rounded border-2"
+                                />
+                              </div>
+                              <div>
+>>>>>>> 70f2ed5bfcaf1b397d6d1c0c67c0031e98d0aa4e
                                 <Buttons
                                   funcs={() => handleButtonSelected(index)}
                                 >
@@ -1076,7 +1103,11 @@ export default withAuth(function bookingRoom() {
             </div>
           </Col>
           <Col span={14} className={`${detail ? "block" : "hidden"}`}>
-            <button onClick={() => {setDetail(!detail), setPayment(!payment)}}>
+            <button
+              onClick={() => {
+                setDetail(!detail), setPayment(!payment);
+              }}
+            >
               <div className="flex">
                 <div className="flex text-xl items-center mr-3">
                   <LeftOutlined />
@@ -1184,21 +1215,18 @@ export default withAuth(function bookingRoom() {
                       size="small"
                       className="m-4 font-bold text-[14px]"
                       hoverable
-                      onClick={
-                        () =>
-                            {
-                            setIsCash(true),
-                              setDataPayment({
-                                ...dataPayment,
-                                sourceNumber: "",
-                                targetNumber: "",
-                              }),
-                              setDataBooking({
-                                ...dataBooking,
-                                boor_pay_type : 'C'
-                              })
-                          }
-                      }
+                      onClick={() => {
+                        setIsCash(true),
+                          setDataPayment({
+                            ...dataPayment,
+                            sourceNumber: "0",
+                            targetNumber: "0",
+                          }),
+                          setDataBooking({
+                            ...dataBooking,
+                            boor_pay_type: "C",
+                          });
+                      }}
                     >
                       Cash
                     </Card>
@@ -1206,23 +1234,21 @@ export default withAuth(function bookingRoom() {
                       size="small"
                       className="m-4 font-bold text-[14px]"
                       hoverable
-                      onClick={
-                        () => 
-                            {
-                            setIsCash(false), setSelectCard({accNumber : '', balance : ''});
-                            setDataPayment({
-                              ...dataPayment,
-                              sourceNumber: "",
-                              targetNumber: "",
-                              trxType: "TRB",
-                              secureCode: "",
-                            })
-                            setDataBooking({
-                                ...dataBooking,
-                                boor_pay_type : 'C'
-                            })
-                          }
-                      }
+                      onClick={() => {
+                        setIsCash(false),
+                          setSelectCard({ accNumber: "", balance: "" });
+                        setDataPayment({
+                          ...dataPayment,
+                          sourceNumber: "",
+                          targetNumber: "",
+                          trxType: "TRB",
+                          secureCode: "",
+                        });
+                        setDataBooking({
+                          ...dataBooking,
+                          boor_pay_type: "C",
+                        });
+                      }}
                     >
                       Pay Now
                     </Card>
@@ -1240,7 +1266,7 @@ export default withAuth(function bookingRoom() {
                           </p>
                         </div>
                         <Button
-                            onClick={onCompleteCash}
+                          onClick={onCompleteCash}
                           className="mt-6 bg-blue-600 text-white w-full h-10"
                         >
                           Complete Order
@@ -1253,26 +1279,27 @@ export default withAuth(function bookingRoom() {
                           <Card
                             size={"small"}
                             className={`mb-2 ${
-                              selectCard.accNumber === accDompet?.usacAccountNumber &&
+                              selectCard.accNumber ===
+                                accDompet?.usacAccountNumber &&
                               "bg-slate-500 text-white"
                             }`}
                             hoverable
-                            onClick={
-                              () => 
-                              {
-                                setSelectCard({accNumber : accDompet?.usacAccountNumber, balance : accDompet?.usacSaldo})
-                                  setDataPayment({
-                                    ...dataPayment,
-                                    sourceNumber: accDompet?.usacAccountNumber,
-                                    targetNumber: "13198989898"
-                                  })
-                                  setDataBooking({
-                                    ...dataBooking,
-                                    boor_pay_type : 'PG',
-                                    boor_cardnumber : accDompet?.usacAccountNumber
-                                  })
-                              }
-                            }
+                            onClick={() => {
+                              setSelectCard({
+                                accNumber: accDompet?.usacAccountNumber,
+                                balance: accDompet?.usacSaldo,
+                              });
+                              setDataPayment({
+                                ...dataPayment,
+                                sourceNumber: accDompet?.usacAccountNumber,
+                                targetNumber: "13198989898",
+                              });
+                              setDataBooking({
+                                ...dataBooking,
+                                boor_pay_type: "PG",
+                                boor_cardnumber: accDompet?.usacAccountNumber,
+                              });
+                            }}
                           >
                             <div className="flex justify-between items-center px-6">
                               <p className="text-[16px] font-semibold">
@@ -1291,7 +1318,8 @@ export default withAuth(function bookingRoom() {
                               </p>
                               <p
                                 className={`${
-                                  selectCard.accNumber === accDompet?.usacAccountNumber
+                                  selectCard.accNumber ===
+                                  accDompet?.usacAccountNumber
                                     ? "text-white"
                                     : "text-blue-700"
                                 }`}
@@ -1306,13 +1334,17 @@ export default withAuth(function bookingRoom() {
                         <Card
                           size={"small"}
                           className={`mb-2 ${
-                            selectCard.accNumber === accGoto?.usacAccountNumber &&
+                            selectCard.accNumber ===
+                              accGoto?.usacAccountNumber &&
                             "bg-slate-500 text-white"
                           }`}
                           hoverable
                           onClick={() =>
                             isLinked
-                              ? setSelectCard({accNumber : accGoto?.usacAccountNumber, balance : accGoto?.usacSaldo})
+                              ? setSelectCard({
+                                  accNumber: accGoto?.usacAccountNumber,
+                                  balance: accGoto?.usacSaldo,
+                                })
                               : ""
                           }
                         >
@@ -1325,7 +1357,8 @@ export default withAuth(function bookingRoom() {
                             ) : (
                               <p
                                 className={`${
-                                  selectCard.accNumber === accGoto?.usacAccountNumber
+                                  selectCard.accNumber ===
+                                  accGoto?.usacAccountNumber
                                     ? "text-white"
                                     : "text-blue-700"
                                 }`}
@@ -1346,19 +1379,22 @@ export default withAuth(function bookingRoom() {
                               "bg-slate-500 text-white"
                             }`}
                             hoverable
-                            onClick={
-                              () => {
-                              setSelectCard({accNumber : item.usacAccountNumber, balance : item.usacSaldo})
-                                  setDataPayment({
-                                    ...dataPayment,
-                                    sourceNumber: item.usacAccountNumber,
-                                    targetNumber: "13198989898"
-                                  })
-                                  setDataBooking({
-                                    ...dataBooking,
-                                    boor_pay_type : item.usacType == "Debet" ? "D" : "CR",
-                                    boor_cardnumber : item.usacAccountNumber
-                                  })
+                            onClick={() => {
+                              setSelectCard({
+                                accNumber: item.usacAccountNumber,
+                                balance: item.usacSaldo,
+                              });
+                              setDataPayment({
+                                ...dataPayment,
+                                sourceNumber: item.usacAccountNumber,
+                                targetNumber: "13198989898",
+                              });
+                              setDataBooking({
+                                ...dataBooking,
+                                boor_pay_type:
+                                  item.usacType == "Debet" ? "D" : "CR",
+                                boor_cardnumber: item.usacAccountNumber,
+                              });
                             }}
                           >
                             <div className="flex justify-between px-6">
@@ -1554,11 +1590,11 @@ export default withAuth(function bookingRoom() {
                   Reservation Booking
                 </Button>
                 <Button
-                  onClick={handleBookingCode}
-                  // onClick={() => {
-                  //   setPayment(!payment), console.log(dataBooking, dataPayment);
-                  // }}
-                  // className={`${!detail || payment ? "hidden" : "block"}`}
+                  // onClick={handleBookingCode}
+                  onClick={() => {
+                    setPayment(!payment), console.log(dataBooking, dataPayment);
+                  }}
+                  className={`${!detail || payment ? "hidden" : "block"}`}
                 >
                   Continue to Booking Order
                 </Button>

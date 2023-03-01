@@ -5,6 +5,7 @@ import Headers from '@/components/Headers'
 import { useState } from 'react'
 import { useRouter } from 'next/router'
 import Head from 'next/head'
+import withAuth from '@/PrivateRoute/WithAuth'
 
 
 const Dashboard = ({children} : {children:any}) => {
@@ -81,4 +82,4 @@ const Dashboard = ({children} : {children:any}) => {
     )
 }
 
-export default Dashboard
+export default withAuth(Dashboard)
