@@ -10,6 +10,21 @@ export class RestoMenusController {
         return this.restoMenuService.getMenus();
     }
 
+    @Get(':id')
+    getMenu(@Param() Param:any){
+        return this.restoMenuService.getMenu(Param)
+    }
+
+    @Get('/list/:id')
+    getMenuByFacility(@Param() Param:any){
+        return this.restoMenuService.getMenuByFacility(Param)
+    } 
+
+    // @Get('/facility')
+    // getFacility(){
+    //     return this.restoMenuService.getFacility()
+    // }
+   
     @Post()
     addMenus(@Body() body){
         return this.restoMenuService.addMenus(body);
@@ -22,6 +37,7 @@ export class RestoMenusController {
 
     @Delete(':id')
     deleteMenu(@Param() param:number){
+        console.log('sampai ke delete di be');
         return this.restoMenuService.deleteMenu(param);
     }
-}
+} 
