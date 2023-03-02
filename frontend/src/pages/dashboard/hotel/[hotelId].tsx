@@ -13,6 +13,7 @@ import { useDispatch, useSelector } from "react-redux";
 import AddFacilities from "./AddFacility";
 import EditFacilityHotel from "./EditFacility";
 import AddPhoto from "./AddPhoto";
+import withAuth from "@/PrivateRoute/WithAuth";
 
 export default withAuth( function HotelDetails() {
   const dispatch = useDispatch();
