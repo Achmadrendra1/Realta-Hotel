@@ -98,17 +98,16 @@ export class BookingOrdersService {
         ],
       )
       .then((result) => {
-        console.log(result)
-        // return {
-        //   messeage: `Selamat anda berhasil menambahkan Booking Orders`,
-        //   return: result,
-        // };
+        // console.log(result)
+        return {
+          messeage: `Selamat anda berhasil menambahkan Booking Orders`,
+          return: result,
+        };
       })
       .catch((err) => {
-        // return `Maaf, ada kesalahan masukan` + err;
-        console.log(err)
+        return `Maaf, ada kesalahan masukan` + err;
+        // console.log(err)
       });
-    // console.log(data)
   }
 
   async createBookingOrders(field: BookingOrders): Promise<any> {
@@ -206,7 +205,7 @@ export class BookingOrdersService {
 
     //Get UserReview untuk Booking
     async findSpReview() {
-        return await this.bookingOrdersRepository.query('Select * From hotel.user_review')
+        return await this.bookingOrdersRepository.query('Select * From hotel.userreview')
     }
 
     async getInvoice () {

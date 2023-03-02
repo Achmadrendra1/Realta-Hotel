@@ -28,7 +28,7 @@ import {
   getSpReview,
 } from "@/Redux/Action/Booking/BookingAction";
 import { useRouter } from "next/router";
-import { CaretRightFilled, LeftOutlined } from "@ant-design/icons";
+import { CaretRightFilled, DeleteOutlined, LeftOutlined } from "@ant-design/icons";
 import dayjs from "dayjs";
 import {
   getSpof,
@@ -47,13 +47,10 @@ import AddCard from "@/pages/payment/addCard";
 import ActivationHpay from "@/pages/payment/activationHpay";
 import ActivationGoto from "@/pages/payment/activationGoto";
 import CheckSecure from "@/pages/payment/checkSecure";
-<<<<<<< HEAD
-import Link from "next/link";
-=======
 import { doCreateTransaction } from "@/Redux/Action/Payment/paymentUserAction";
->>>>>>> 70f2ed5bfcaf1b397d6d1c0c67c0031e98d0aa4e
+import Link from "next/link";
 
-export default withAuth(function bookingRoom() {
+export default function bookingRoom() {
   const root = useRouter();
   const { id } = root.query || {};
   const dispatch = useDispatch();
@@ -82,11 +79,10 @@ export default withAuth(function bookingRoom() {
   const oneReview = hotelReview?.filter(
     (item: any) => item.hore_hotel_id == id
   );
-
+  
   //useSelector Get User
   let getUser = useSelector((state: any) => state.GetUserReducer.getUser);
   const userSpof = getUser.filter((item: any) => item.user_id == id);
-  console.log(userSpof)
 
   //useSelector Get Special Offers
   let spof = useSelector((state: any) => state.SpofReducer.spof);
@@ -100,8 +96,8 @@ export default withAuth(function bookingRoom() {
     }
     return false;
   });
-  //   console.log(spof);
 
+  
   //useSelector Get Price Items for Booking Extra
   let extra = useSelector((state: any) => state.priceItemsReducer.priceItems);
 
@@ -126,7 +122,7 @@ export default withAuth(function bookingRoom() {
 
   //State untuk table Special Offers
   const [spofPrice, setSpofPrice] = useState({
-    spofId: Number,
+    spofId: 0,
     spofName: "",
     spofDiscount: "",
   });
@@ -158,6 +154,11 @@ export default withAuth(function bookingRoom() {
     pritName: [] as any[],
     pritPrice: [] as any[],
   });
+
+  //State untuk Checkin-Checkout Date
+  const [inDate, setInDate] = useState(null)
+  const [outDate, setOutDate] = useState(null)
+  const [numDays, setNumDays] = useState(null)
 
   //Looping Map untuk menampilkan data booking extra
   const dataExtra = valueExtra.pritName.map((name: any, index: any) => {
@@ -232,11 +233,9 @@ export default withAuth(function bookingRoom() {
   //Variable untuk Get Room into Booking Detail
   const faci_id = faciRoom?.length > 0 ? faciRoom[0].faci_id : null;
   const faci_name = faciRoom?.length > 0 ? faciRoom[0].faci_name : "";
-  const faci_rate_price =
-    faciRoom?.length > 0 ? faciRoom[0].faci_rate_price : "";
-  const faci_high_price =
-    faciRoom?.length > 0 ? faciRoom[0].faci_high_price : "";
-  const faci_tax_rate = faciRoom?.length > 0 ? faciRoom[0].faci_rate_price : "";
+  const faci_rate_price = faciRoom?.length > 0 ? faciRoom[0].faci_rate_price : "";
+  const faci_high_price = faciRoom?.length > 0 ? faciRoom[0].faci_high_price : "";
+  const faci_tax_rate = faciRoom?.length > 0 ? faciRoom[0].faci_tax_price : "";
 
   //Variable Count and Filter Rating
   let rating1 = oneReview?.filter((item: any) => item.hore_rating == 1).length;
@@ -289,13 +288,25 @@ export default withAuth(function bookingRoom() {
       borde_checkin: dateString,
       boor_arrival_date: dateString,
     });
-    // setCheckInDate(dayjs(dateString))
+    setInDate(date)
+    calculateNumDays(date, outDate)
   };
 
   const onCheckOutChange = (date: any, dateString: any) => {
     setDataBooking({ ...dataBooking, borde_checkout: dateString });
-    // setCheckOutDate(dayjs(dateString))
+    setOutDate(date)
+    calculateNumDays(inDate, date)
   };
+
+  const calculateNumDays = (start : any, end : any) => {
+    if (start && end) {
+      const numDays = ((end.diff(start, 'days') + 1)-1);
+      setNumDays(numDays);
+    } else {
+      setNumDays(null);
+    }
+  };
+
 
   const [dataBooking, setDataBooking] = useState({
     boor_user_id: 0,
@@ -328,6 +339,7 @@ export default withAuth(function bookingRoom() {
     boor_cardnumber: "",
   });
 
+
   const [dataPayment, setDataPayment] = useState({
     userId: 0,
     amount: 0,
@@ -337,7 +349,10 @@ export default withAuth(function bookingRoom() {
     secureCode: "",
     orderNumber: "",
   });
-  // console.log(dataBooking)
+
+  useEffect(() => {
+    setTotalPrice(0);
+  }, [id]);
 
   useEffect(() => {
     setDataBooking({
@@ -362,11 +377,14 @@ export default withAuth(function bookingRoom() {
   //UseEffect untuk change auto totalPrice di booking
   useEffect(() => {
     const subTotal = () => {
-      const sumPriceSpof = ratePriceInt - spofDiscInt;
-      setTotalPrice(sumPriceSpof);
+        const sumDays = numDays * ratePriceInt
+        const sumRoom = sumDays * dataBooking.boor_total_room
+        const sumPriceSpof = sumRoom - spofDiscInt
+        setTotalPrice(sumPriceSpof)
     };
     subTotal();
   }, [faciRoom.faci_rate_price, spofPrice.spofDiscount]);
+
 
   useEffect(() => {
     setTotalPrice(ratePriceInt);
@@ -483,6 +501,7 @@ export default withAuth(function bookingRoom() {
   };
 
   const handleReservation = () => {
+
     if (boorNumber !== null) {
       const lastOrderNumber =
         boorNumber?.length > 0 ? boorNumber[0].boor_order_number : null;
@@ -516,7 +535,13 @@ export default withAuth(function bookingRoom() {
         // } else {
         // newOrderNumber = `BO#${currentDateString}-0001`;
         // }
-        setDetail(!detail);
+          // const token = localStorage.getItem("token");
+          // //   console.log(token)
+          //   if (!token) {
+          //     window.location.href = "/users/login";
+          //   }else {
+            //   }
+                setDetail(!detail);
       }
     }
   };
@@ -533,9 +558,9 @@ export default withAuth(function bookingRoom() {
     setDataBooking({ ...dataBooking, boor_total_room: value });
   };
 
-  useEffect(() => {
-    setTotalPrice(0);
-  }, []);
+  // const handleDeleteSpof = () => {
+  //   setSpofPrice({...spofPrice, spofId : 0, spofDiscount : '', spofName : ''})
+  // }
 
   const [isActive, setIsActive] = useState(false);
   const [isLinked, setIsLinked] = useState(false);
@@ -880,21 +905,10 @@ export default withAuth(function bookingRoom() {
                           </Col>
                           <Col span={8}>
                             <div className="float-right">
-<<<<<<< HEAD
                               <div className="flex justify-center">
                                 <img src={`../.${arrPict[0]}`} alt="" className='w-3/4 rounded border-2' />
                               </div>
                               <div className="flex justify-center">
-=======
-                              <div>
-                                <img
-                                  src={`../.${arrPict[0]}`}
-                                  alt=""
-                                  className="w-3/4 rounded border-2"
-                                />
-                              </div>
-                              <div>
->>>>>>> 70f2ed5bfcaf1b397d6d1c0c67c0031e98d0aa4e
                                 <Buttons
                                   funcs={() => handleButtonSelected(index)}
                                 >
@@ -1102,6 +1116,7 @@ export default withAuth(function bookingRoom() {
               exceed guest expectations.
             </div>
           </Col>
+
           <Col span={14} className={`${detail ? "block" : "hidden"}`}>
             <button
               onClick={() => {
@@ -1554,6 +1569,9 @@ export default withAuth(function bookingRoom() {
                 <div className="text-xl font-semibold">
                   {spofPrice.spofName}
                 </div>
+                {/* <div>
+                  <button onClick={handleDeleteSpof}><DeleteOutlined /></button>
+                </div> */}
                 <div className="flex text-xl my-1 items-center">
                   - {spofPrice.spofDiscount}
                 </div>
@@ -1605,4 +1623,4 @@ export default withAuth(function bookingRoom() {
       </div>
     </Layouts>
   );
-});
+};
