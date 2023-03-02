@@ -16,6 +16,7 @@ export default function CheckSecure(props: any) {
   const dispacth = useDispatch();
 
   const [finalForm, setFinalForm] = useState(dataPayment);
+  // console.log(dataPayment)
 
   const onComplete = () => {
     dispacth(doCheckSecureCode(finalForm));
@@ -38,23 +39,39 @@ export default function CheckSecure(props: any) {
         setMsgValidate(messages);
         setLoading(true);
         // setTimeout(() => props.handleCancell(false), 5000);
-        const boor_id = dataBooking.boor_order_number;
-        dispatch(insertBooking(dataBooking));
-        dispacth(doCreateTransaction(dataPayment));
-        {
-          messageApi
-          .open({
-              type: "loading",
-              content: "Payment Is Processing",
-              duration: 3,
-            })
-            .then(() => props.handleCancell(false))
-            .then(() => message.success("Payment Success", 3))
-            .then(() => router.push({
-              pathname: `/booking/room/invoice`,
-              query: { id: boor_id },
-            }));
+        if(dataPayment.trxType == 'ORM'){
+          dispacth(doCreateTransaction(dataPayment));
+          {
+            messageApi
+            .open({
+                type: "loading",
+                content: "Payment Is Processing",
+                duration: 3,
+              })
+              .then(() => props.handleCancell(false))
+              .then(() => message.success("Payment Success", 3))
+              .then(() => router.push('/restaurant/bill'));
+          }
+        } else {
+          const boor_id = dataBooking.boor_order_number;
+          dispacth(doCreateTransaction(dataPayment));
+          dispatch(insertBooking(dataBooking));
+          {
+            messageApi
+            .open({
+                type: "loading",
+                content: "Payment Is Processing",
+                duration: 3,
+              })
+              .then(() => props.handleCancell(false))
+              .then(() => message.success("Payment Success", 3))
+              .then(() => router.push({
+                pathname: `/booking/room/invoice`,
+                query: { id: boor_id },
+              }));
+          }
         }
+       
       } else {
         setLoading(false);
         setMsgValidate(messages);
@@ -135,10 +152,10 @@ export default function CheckSecure(props: any) {
       >
         <Spin spinning={isLoading} size="large">
           <p className="text-lg font-bold mb-4 text-center">
-            Input Your {dataBooking.boor_pay_type != "PG" ? "CVV" : "PIN"}
+            Input Your {dataPayment?.payType || dataBooking?.boor_pay_type != "PG" ? "CVV" : "PIN"}
           </p>
           <div className="flex justify-center">
-            {dataBooking.boor_pay_type != "PG"
+            {dataPayment?.payType || dataBooking?.boor_pay_type != "PG"
               ? cvv.map((value, index) => (
                   <Input
                     key={index}

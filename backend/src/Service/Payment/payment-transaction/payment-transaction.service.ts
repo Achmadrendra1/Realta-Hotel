@@ -15,7 +15,9 @@ export class PaymentTransactionService {
   ) {}
 
   async getAll() {
-    return await this.payRepository.query('select * from payment.user_transactions');
+    return await this.payRepository.query(
+      'select * from payment.user_transactions',
+    );
   }
 
   async getHistoryTransaction() {
@@ -32,11 +34,19 @@ export class PaymentTransactionService {
 
   async createData(items: any) {
     await this.payRepository.query(
-      'call payment.insertPaymentTrx($1, $2, $3, $4, $5, $6)',
-      [items.userId, items.amount, items.sourceNumber, items.targetNumber, items.trxType, items.orderNumber],
+      'call payment.insertPaymentTrx($1, $2, $3, $4, $5, $6, $7)',
+      [
+        items.userId,
+        items.amount,
+        items.sourceNumber,
+        items.targetNumber,
+        items.trxType,
+        items.payType,
+        items.orderNumber,
+      ],
     );
-    const res = await this.usacService.getByAccNumber(items.targetNumber)
-    return res
+    const res = await this.usacService.getByAccNumber(items.targetNumber);
+    return res;
   }
 
   async updateData(id: number, items: PaymentTransaction) {
@@ -56,7 +66,7 @@ export class PaymentTransactionService {
           patrSourceId: items.patrSourceId,
           patrTargetId: items.patrTargetId,
           patrTrxNumberRef: items.patrTrxNumberRef,
-          patrUser : items.patrUser
+          patrUser: items.patrUser,
         },
       )
       .catch((err) => {

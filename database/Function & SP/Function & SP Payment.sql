@@ -92,6 +92,7 @@ CREATE OR REPLACE PROCEDURE  payment.insertPaymentTrx(
 	sourceNumber		varchar,
 	targetNumber		varchar,
 	trxType    			text DEFAULT NULL,
+	payType             text DEFAULT NULL,
 	orderNumber			varchar DEFAULT NULL
 )
 AS $$
@@ -178,6 +179,7 @@ BEGIN
 			note := 'Food Order';
 			creditAmount := amount;
 			UPDATE payment.user_accounts SET usac_saldo = usac_saldo - amount WHERE usac_account_number = sourceNumber;	
+			UPDATE resto.order_menus SET orme_pay_type = payType, orme_cardnumber = sourceNumber, orme_is_paid = 'P' where orme_order_number = orderNumber;
 		END IF;
 	END IF;
 	INSERT INTO payment.payment_transaction (
