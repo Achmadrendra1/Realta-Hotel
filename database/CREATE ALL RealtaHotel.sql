@@ -349,8 +349,10 @@ CREATE TABLE resto.resto_menus(
 	reme_name VARCHAR(55),
 	reme_description VARCHAR(255),
 	reme_price MONEY,
+	reme_discount money,
 	reme_status VARCHAR(15), --AVAILABLE | EMPTY
 	reme_modified_date TIMESTAMP,
+	reme_discount MONEY,
 	CONSTRAINT pk_resto_menus PRIMARY KEY (reme_id),
 	CONSTRAINT fk_reme_faci_id FOREIGN KEY (reme_faci_id) REFERENCES hotel.facilities(faci_id) ON DELETE CASCADE ON UPDATE CASCADE
 );
