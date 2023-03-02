@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import * as bcrypt from 'bcrypt';
 import { UserPassword } from 'src/entities/UserPassword';
@@ -32,24 +32,34 @@ export class UserPasswordService {
         // if (!user) {
         //   throw new HttpException('User not found', HttpStatus.NOT_FOUND);
         // }
-        // Validasi Password 
-        // const passwordMatch = await bcrypt.compare(oldPassword, user.uspaPasswordhash);
-        // if (!passwordMatch) {
-        //   throw new HttpException('Old password is incorrect', HttpStatus.BAD_REQUEST);
-        // }
         // Password baru
+        
+        try {
+          // // Validasi Password 
+          // const passwordMatch = await bcrypt.compare(oldPassword, item.uspa_passwordhash);
+          // if (!passwordMatch) {
+          //   throw new HttpException('Current password is incorrect', HttpStatus.BAD_REQUEST);
+          // }
         const newPasswordHash = await bcrypt.hash(item.uspa_passwordhash, 10);
         const salt = await bcrypt.genSalt(10);
-        await this.UserPasswordRepository.createQueryBuilder()
+         await this.UserPasswordRepository.createQueryBuilder()
         .update()
         .set({
-            uspaPasswordhash: newPasswordHash,
-            uspaPasswordsalt: salt
+        uspaPasswordhash: newPasswordHash,
+        uspaPasswordsalt: salt
         })
         .where('uspaUserId = :id', { id })
         .execute();
-        return 'Message : Password berhasil di Ubah!';
-    
+        return 'Message : Password berhasil di Ubah!';   
+        } catch (error) {
+          throw new HttpException(
+            {
+              message: error.message,
+            },
+            HttpStatus.OK,
+          );
+          
+        }
    
   }
 

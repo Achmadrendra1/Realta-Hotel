@@ -156,6 +156,12 @@ import { UserBreakfeastService } from 'src/Service/Booking/user-breakfeast/user-
 import { SpecialOfferCoupons } from 'src/entities/SpecialOfferCoupons';
 import { UsersPasswordController } from 'src/Controller/Users/userPassword/userPassword.controller';
 import { UserPasswordService } from 'src/Service/Users/user-password/userPassword.service';
+import { RestoMenuDetailController } from 'src/Controller/Resto/resto-menu-detail/resto-menu-detail.controller';
+import { ListRestaurantController } from 'src/Controller/Resto/list-restaurant/list-restaurant.controller';
+import { OrderMenuDetailController } from 'src/Controller/Resto/order-menu-detail/order-menu-detail.controller';
+import { RestoMenuDetailService } from 'src/Service/Resto/resto-menu-detail/resto-menu-detail.service';
+import { ListRestaurantService } from 'src/Service/Resto/list-restaurant/list-restaurant.service';
+import { OrderMenuDetailService } from 'src/Service/Resto/order-menu-detail/order-menu-detail.service';
 
 //Booking Service
 
@@ -197,14 +203,16 @@ import { UserPasswordService } from 'src/Service/Users/user-password/userPasswor
       UserBreakfeast,
 
       JobRole,
-      OrderMenus,
-      OrderMenuDetail,
       PaymentGateway,
       PaymentTransaction,
-      RestoMenus,
-      RestoMenuPhotos,
       Shift,
       UserAccounts,
+
+      // Restaurant
+      OrderMenus,
+      OrderMenuDetail,
+      RestoMenus,
+      RestoMenuPhotos,
 
       // Users
       UserBonusPoints,
@@ -286,6 +294,15 @@ import { UserPasswordService } from 'src/Service/Users/user-password/userPasswor
     EmployeeController,
     DepartmentController,
     JobRoleController,
+
+    // Resto
+    
+    RestoMenusController,
+    RestoMenuPhotosController,
+    OrderMenusController,
+    RestoMenuDetailController,
+    ListRestaurantController,
+    OrderMenuDetailController,
   ],
   providers: [
     AppService,
@@ -344,6 +361,15 @@ import { UserPasswordService } from 'src/Service/Users/user-password/userPasswor
     EmployeeService,
     DepartmentService,
     JobRoleService,
+
+    // Resto
+    RestoMenusService,
+    RestoMenuPhotosService,
+    OrderMenusService,
+    RestoMenuDetailService,
+    ListRestaurantService,
+    OrderMenuDetailService,
+
   ],
   // controllers: [AppController, EntitysController, BankController, PaymentGatewayController, UserAccountController, PaymentTransactionController],
   // providers: [AppService, EntitysService, BankService, PaymentGatewayService, UserAccountService, PaymentTransactionService],

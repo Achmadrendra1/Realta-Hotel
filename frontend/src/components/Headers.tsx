@@ -179,7 +179,7 @@ function isTokenExpired() {
                     <WalletOutlined /> Activate
                   </p>}
                 </div>
-               <Dropdown overlay={isLogin && user[0]?.user_role=='User' || user[0]?.user_role=='Guest' ? menuUser : menu2} trigger={["click"]} className="h-8">
+               <Dropdown overlay={isLogin && user[0]?.user_role=='User' && user[0]?.user_role=='Guest' ? menuUser :  menu2} trigger={["click"]} className="h-8">
                 <Avatar size="default" icon={<UserOutlined />} className="ml-4 hover:cursor-pointer" />
               </Dropdown>
               </div>

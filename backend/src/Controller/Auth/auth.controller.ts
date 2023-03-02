@@ -1,4 +1,12 @@
-import { Body, Controller, Param, Post,Get } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Param,
+  Post,
+  Get,
+  HttpException,
+  HttpStatus,
+} from '@nestjs/common';
 import { AuthService } from 'src/Service/Auth/auth.service';
 import * as jwt from 'jsonwebtoken';
 
@@ -13,6 +21,7 @@ export class AuthController {
 
   @Get('/:token')
   async verif(@Param() params): Promise<any> {
-    return jwt.verify(params.token, process.env.SECRET_KEY);
+    const result = jwt.verify(params.token, process.env.SECRET_KEY);
+    return `Result : ${result}`;
   }
 }

@@ -22,6 +22,8 @@ export default function EditProfile(props: any) {
   const [form] = Form.useForm();
   const [messageApi, contextHolder] = message.useMessage();
   const user = data.find((item: any) => item[0]?.user_id == id);
+
+  
   // console.log(user);
 
   const [formValues, setFormValues] = useState({
@@ -36,7 +38,7 @@ export default function EditProfile(props: any) {
     uspro_marital_status:"",
     uspro_gender:"",
     usro_role:"",
-    role_name:"",
+    role_name:null,
   });
 // console.log('t',formValues)
   useEffect (()=>{
@@ -48,15 +50,17 @@ export default function EditProfile(props: any) {
     console.log("Success:", formValues);
     dispatch(doUpdate(formValues));
     handleClose(false);
-   message.success("Data Berhasil Diubah!", 0.5);
+    message.success("Login Berhasil", 1.5)
   };
+
+ 
 
   const handleInputChange = (input: any) => (e: any) => {
     setFormValues({ ...formValues, [input]: e.target.value });
   };
 
   const handleSelectRoleChange = (value: any) => {
-    setFormValues({ ...formValues, role_name: value });
+    setFormValues({ ...formValues, usro_role: value });
   };
   const handleSelectGenderChange = (value: any) => {
     setFormValues({ ...formValues, uspro_gender: value });
@@ -157,8 +161,8 @@ export default function EditProfile(props: any) {
                   style={{ width: 250 }}
                 >
                   <Select
-                  value={formValues.role_name}
                     style={{ marginLeft: 10 }}
+                    value={formValues.role_name}
                     onChange={handleSelectRoleChange}
                   >
                     <Select.Option value="1">Guest</Select.Option>

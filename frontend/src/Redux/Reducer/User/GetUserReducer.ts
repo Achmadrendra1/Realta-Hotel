@@ -24,6 +24,7 @@ export default function GetUserReducer(state = initialState, action:any) {
         state.getUser.findIndex(
           (i: any) => i.user_id == action.payload.user_id
         ),
+        1,
         action.payload
       );
       return {
@@ -32,13 +33,12 @@ export default function GetUserReducer(state = initialState, action:any) {
       };
     case UserConst.EDIT_DATA_PROFILE_FAILED:
       return {...state,error : action.payload};
-
     case UserConst.UPDATE_PASSWORD:
       return{ ...state}
     case UserConst.UPDATE_PASSWORD_SUCCESS:
       state.getUser.splice(
         state.getUser.findIndex(
-          (i: any) => i.user_id == action.payload.user_id
+          (i: any) => i.uspa_user_id == action.payload.uspa_user_id
         ),
         action.payload
       );

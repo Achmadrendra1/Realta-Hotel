@@ -16,7 +16,7 @@ interface User {
   uspro_national_id: any;
   uspro_birt_date: any;
   uspro_job_title: any;
-  uspro_martial_status: any;
+  uspro_marital_status: any;
   uspro_gender: any;
 
   usro_role: any;
@@ -132,7 +132,8 @@ export class UsersService {
   }
 
   async updateProfile(id: any, data: User): Promise<any> {
-    await this.UsersRepository.createQueryBuilder()
+    try {
+      const result = await this.UsersRepository.createQueryBuilder()
       .update()
       .set({
         userFullName: data.user_full_name,
@@ -150,7 +151,7 @@ export class UsersService {
         usproNationalId: data.uspro_national_id,
         usproBirtDate: data.uspro_birt_date,
         usproJobTitle: data.uspro_job_title,
-        usproMartialStatus: data.uspro_martial_status,
+        usproMartialStatus: data.uspro_marital_status,
         usproGender: data.uspro_gender,
       })
       .where('usproUser = :id', { id })
@@ -162,7 +163,17 @@ export class UsersService {
       })
       .where('usroUserId=:id', { id })
       .execute();
-    return 'Message : Data berhasil di Ubah!';
+    return `Message : Data berhasil di Ubah! 
+    Hasil : ${result}`;
+    } catch (error) {
+      throw new HttpException(
+            {
+              message: error.message,
+            },
+            HttpStatus.OK,
+          );
+    }
+ 
   }
 
 
@@ -199,3 +210,4 @@ export class UsersService {
   //   result: updated,
   // };
 }
+

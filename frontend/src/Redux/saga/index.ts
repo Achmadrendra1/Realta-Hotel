@@ -141,9 +141,24 @@ import { handleVendor, handleVendorAdd, handleVendorDelete, handleVendorUpdate }
 import { handleVepro, handleVeproAdd, handleVeproDelete, handleVeproUpdate } from './Purchasing/veproSaga'
 import { handlePohe, handlePoheAdd, handlePoheDelete, handlePoheUpdate } from './Purchasing/poheSaga'
 import { handlePode, handlePodeAdd, handlePodeDelete, handlePodeUpdate } from './Purchasing/podeSaga'
+import menuConstant from "../Constant/Resto/menuConstant";
+import { handleAddMenu, handleDeleteMenu, handleMenu, handleUpdateMenu } from "./Resto/menuProcess";
+import restoConstant from "../Constant/Resto/restoConstant";
+import { handleResto } from "./Resto/restoProcess";
+import photoConstant from "../Constant/Resto/photoConstant";
+import { handleAddMenuPhoto, handleDeletePhoto, handleGetPhoto, handleUpdatePrimary } from "./Resto/menuPhotoProcess";
+import orderConstant from "../Constant/Resto/orderConstant";
+import numberOrderConst from "../Constant/Resto/numberOrderConstant";
+import userOrderConstant from "../Constant/Resto/userOrderConstant";
+import { handleAddOrder, handleOrder } from "./Resto/orderProcess";
+import { handleOrderNumber } from "./Resto/orderNumberProcess";
+import { handleUserOrder } from "./Resto/userOrderProcess";
+import userMenuConstant from "../Constant/Resto/userMenuConstant";
+import { handleUserMenu } from "./Resto/userMenuProcess";
 
 export default function* rootSaga() {
   yield all([
+    //user and auth
     takeEvery(UserConst.LOGIN_USER, HandleLoginUser),
     takeEvery(UserConst.GET_DATA_USER, HandleGetUser),
     takeEvery(UserConst.EDIT_DATA_PROFILE,HandleEditProfile),
@@ -301,6 +316,23 @@ export default function* rootSaga() {
     takeEvery(BookingConstant.GET_SP_FACILITIES, handleSpFacilities),
     takeEvery(BookingConstant.GET_SP_HOTEL, handleSpHotel),
     takeEvery(BookingConstant.GET_SP_REVIEW, handleSpHotelReviews),
-    takeEvery(BookingConstant.GET_SP_INVOICE, handleSpBoorInvoice)
+    takeEvery(BookingConstant.GET_SP_INVOICE, handleSpBoorInvoice),
+
+    //Resto
+    takeEvery(menuConstant.GET_MENUS, handleMenu),
+    takeEvery(menuConstant.UPDATE_MENU, handleUpdateMenu),
+    takeEvery(menuConstant.ADD_MENU, handleAddMenu),
+    takeEvery(menuConstant.DELETE_MENU, handleDeleteMenu),
+    takeEvery(restoConstant.GET_RESTOS, handleResto),
+    takeEvery(photoConstant.ADD_PHOTO, handleAddMenuPhoto),
+    takeEvery(photoConstant.DELETE_PHOTO, handleDeletePhoto),
+    takeEvery(photoConstant.GET_PHOTO, handleGetPhoto),
+    takeEvery(photoConstant.UPDATE_PRIMARY, handleUpdatePrimary),
+    takeEvery(orderConstant.GET_ORDERS, handleOrder),
+    takeEvery(orderConstant.ADD_ORDERS, handleAddOrder),
+    takeEvery(numberOrderConst.GET_NUMBER_ORDER, handleOrderNumber),
+    takeEvery(userOrderConstant.GET_ORDER_COMPLETE, handleUserOrder),
+    takeEvery(userMenuConstant.GET_MENU_USER, handleUserMenu),
+
   ]);
 }

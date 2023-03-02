@@ -9,34 +9,33 @@ export class AuthService {
 
   async Login(userEmail: any, password: any): Promise<any> {
     try {
-        
         const users = await this.UserService.findByEmail(userEmail);
         if (users.length == 0) {
-            throw new HttpException(
-                { message: 'No user found' },
-                HttpStatus.BAD_REQUEST,
-            );
+          throw new HttpException(
+            { message: 'No user found' },
+            HttpStatus.BAD_REQUEST,
+          );
         } else {
-            if (await bcrypt.compare(password, users[0].uspa_passwordhash)) {
-                delete users[0].uspa_passwordhash
-                let token = jwt.sign({ users }, process.env.SECRET_KEY, {
-                expiresIn: '24h',
+          if (await bcrypt.compare(password, users[0].uspa_passwordhash)) {
+            delete users[0].uspa_passwordhash;
+            let token = jwt.sign({ users }, process.env.SECRET_KEY, {
+              expiresIn: '24h',
             });
             let verify = jwt.verify(token, process.env.SECRET_KEY);
-            return { message: 'Login berhasil!', token: token, data : verify };
-            } else {
+            return { message: 'Login berhasil!', token: token, data: verify };
+          } else {
             throw new HttpException(
-                { message: 'Wrong Password' },
-                HttpStatus.BAD_REQUEST,
+              { message: 'Wrong Password' },
+              HttpStatus.BAD_REQUEST,
             );
-            }
-         
+          }
         }
     } catch (error) {
         throw new HttpException(
-            { message: error },
+            { message: error.message },
             HttpStatus.BAD_REQUEST,
-        );
+          );
     }
+ 
   }
 }
