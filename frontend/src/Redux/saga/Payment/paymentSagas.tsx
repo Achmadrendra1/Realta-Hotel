@@ -217,6 +217,7 @@ function* handleTopUp(action: any): any {
 }
 
 function* handleCreateTransaction(action:any):any {
+  console.log(action.payload)
   const delay = (time: any) =>
   new Promise((resolve) => setTimeout(resolve, time));
   yield axios(API('POST', '/payment-transaction', action.payload))

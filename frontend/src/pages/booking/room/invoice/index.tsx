@@ -1,6 +1,5 @@
 import { getSpInvoice } from "@/Redux/Action/Booking/BookingAction";
 import Buttons from "@/components/Button";
-import Layouts from "@/layouts/layout";
 import { LeftCircleOutlined, LeftOutlined } from "@ant-design/icons";
 import { Col, Divider, QRCode, Row } from "antd";
 import Link from "next/link";
@@ -12,6 +11,8 @@ export default function index() {
   let root = useRouter();
   const { id } = root.query || {};
   const dispatch = useDispatch();
+
+  const router = useRouter()
 
   const invoiceView = useSelector(
     (state: any) => state.BoorInvoiceReducer.invoice
@@ -91,7 +92,13 @@ export default function index() {
     });
   }, [boor_order_number]);
 
-  console.log(Invoice);
+  // console.log(getInvoice);
+
+  // const email = "aryasamiftah@gmail.com"
+
+  // const handleEmailClick = () => {
+  //   window.location.href = `mailto:${email}`;
+  // };
 
   //Array Object untuk title and field
   const invoice1 = [
@@ -143,10 +150,6 @@ export default function index() {
       field: getInvoice.usme_points,
     },
   ];
-  const router = useRouter();
-  const printRef = useRef(null);
-
- 
 
   return (
     <>
@@ -164,7 +167,7 @@ export default function index() {
         </div>
       </div>
 
-      <div ref={printRef} id="invoice" className=" w-11/12 shadow-lg m-auto p-4">
+      <div id="invoice" className=" w-11/12 shadow-lg m-auto p-4">
         <h1 className="text-2xl mb-3 font-bold">Invoice {id}</h1>
 
         <Row>
