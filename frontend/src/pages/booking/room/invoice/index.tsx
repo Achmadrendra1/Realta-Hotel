@@ -1,6 +1,4 @@
 import { getSpInvoice } from "@/Redux/Action/Booking/BookingAction";
-import Buttons from "@/components/Button";
-import Layouts from "@/layouts/layout";
 import { LeftCircleOutlined, LeftOutlined } from "@ant-design/icons";
 import { Col, Divider, QRCode, Row } from "antd";
 import Link from "next/link";
@@ -12,6 +10,8 @@ export default function index() {
   let root = useRouter();
   const { id } = root.query || {};
   const dispatch = useDispatch();
+
+  const router = useRouter()
 
   const invoiceView = useSelector(
     (state: any) => state.BoorInvoiceReducer.invoice
@@ -90,7 +90,13 @@ export default function index() {
     });
   }, [boor_order_number]);
 
-  console.log(Invoice);
+  // console.log(getInvoice);
+
+  // const email = "aryasamiftah@gmail.com"
+
+  // const handleEmailClick = () => {
+  //   window.location.href = `mailto:${email}`;
+  // };
 
   //Array Object untuk title and field
   const invoice1 = [
@@ -142,7 +148,6 @@ export default function index() {
       field: getInvoice.usme_points,
     },
   ];
-  const router = useRouter()
 
   return (
     <>
@@ -229,11 +234,16 @@ export default function index() {
           </div>
           <div className="flex justify-between min-w-[350px]">
           <h2 className="flex text-lg font-semibold mb-1 mr-5">Payment Amount</h2>
-          <h2 className="flex text-lg font-semibold mb-1">{getInvoice.borde_price}</h2>
+          <h2 className="flex text-lg font-semibold mb-1">{getInvoice.borde_subtotal}</h2>
           </div>
         </div>
         </div>
-       
+          {/* <div>
+            <button onClick={handleEmailClick}>Send Email</button>
+          </div>
+          <div>
+            <button onClick={()=>window.print()}>Print</button>
+          </div> */}
       </div>
     </>
   );
