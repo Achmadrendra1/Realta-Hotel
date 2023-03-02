@@ -2,12 +2,12 @@
 import Hero from '@/components/restaurant.tsx/Hero'
 import Layouts from '@/layouts/layout'
 import { doRestoRequest } from '@/Redux/Action/Resto/restoAction'
-import { Card, Carousel, Col, Row } from 'antd'
+import { Card, Carousel, Col, Pagination, Row } from 'antd'
 import Head from 'next/head'
 import Image from 'next/image'
 import Link from 'next/link'
 import Router, { useRouter } from 'next/router'
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 
 export default function index() {
@@ -41,6 +41,18 @@ export default function index() {
       },
     })
   }
+
+  // PAGINATION
+  
+  const [currentpage, setCurrentPage] = useState(1);
+  function handlePagination(page:any){
+    setCurrentPage(page)
+  }
+  
+  const startIndex = (currentpage-1)*9;
+  const endIndex = startIndex + 9;
+  const restoPagination = restaurant.slice(startIndex, endIndex);
+
   return (
     <>
       <Head>
@@ -52,22 +64,24 @@ export default function index() {
       <main>
         <Layouts>
           {/* <Hero/> */}
+          <br />
+          <br />
           <Carousel autoplay>
             <img src="/assets/resto/1.jpg" alt="Restaurant" className='w-full object-cover object-bottom h-80 rounded-lg'/>
             <img src="/assets/resto/2.jpg" alt="Restaurant" className='w-full object-cover h-80' />
             <img src="/assets/resto/3.jpg" alt="Restaurant" className='w-full object-cover h-80' />
           </Carousel>
-          <div className='mt-5 '>
+          <div className='my-10 '>
             <h1 className='text-2xl text-center'>HOTEL REALTA SYSTEM RESTAURANT LIST</h1>
 
-            <hr className='my-5 border-t-2' />
+            {/* <hr className='my-10 border-t-2' /> */}
 
             <div className='container mx-auto '>
 
               {
-                restaurant && restaurant.map( (hotel:any,index:any) =>
+                restoPagination && restoPagination.map( (hotel:any,index:any) =>
                   <>
-                    <div className='border rounded-lg shadow-lg p-3 flex my-5 hover:bg-slate-100'>
+                    <div className='border rounded-lg shadow-lg p-3 flex my-10 hover:bg-slate-100'>
                       <img  src={`/assets/resto/${index+1}.jpg`} alt='Resto' width={250} height={250}></img>
                       <div className='ml-5'>
                         <h1 className='text-xl'>{hotel.hotel_name}</h1>
@@ -84,6 +98,10 @@ export default function index() {
                   </>
                 )
               }
+
+              
+              <Pagination onChange={handlePagination} current={currentpage} pageSize={5} total={restaurant.length} className='text-center py-14' />
+
             </div>
 
           </div>
@@ -92,8 +110,4 @@ export default function index() {
     </>
 
   )
-}
-function jwtDecode(token: string | null) {
-  throw new Error('Function not implemented.')
-}
-
+} 

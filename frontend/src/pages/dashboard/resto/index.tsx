@@ -4,7 +4,7 @@ import { Button, Dropdown, Form, Input, Menu, MenuProps, Modal, Pagination, Sele
 import Link from 'next/link';
 
 import { Table } from 'antd'
-import { CloseOutlined, DeleteOutlined, DownOutlined, EditOutlined, InboxOutlined, MoreOutlined, PlusOutlined } from '@ant-design/icons';
+import { CloseOutlined, DeleteOutlined, DownOutlined, EditOutlined, InboxOutlined, MoreOutlined, PlusOutlined, WarningOutlined } from '@ant-design/icons';
 import { useDispatch, useSelector } from 'react-redux';
 import { doAddMenu, doDeleteMenu, doMenuRequest, doUpdateMenu } from '@/Redux/Action/Resto/restoMenuAction';
 import axios from 'axios';
@@ -17,6 +17,8 @@ import dayjs from 'dayjs';
 import 'dayjs/locale/id'; // impor lokalisasi untuk bahasa Indonesia
 import Buttons from '@/components/Button';
 import { doRestoRequest } from '@/Redux/Action/Resto/restoAction';
+import { doGetUser } from '@/Redux/Action/User/GetDataUser';
+import Unauthorized from '@/components/Unauthorized';
 
 export default function restoMenu() {
   const dispatch = useDispatch();
@@ -24,7 +26,14 @@ export default function restoMenu() {
   let photos = useSelector((state: any) => state.menuPhotoReducer.menuPhoto);
   let menus = useSelector((state: any) => state.restoMenuReducer.restoMenus);
   let list_restaurant = useSelector((state: any) => state.restoReducer.resto);
+  let user = useSelector((state: any) => state.GetUserReducer.getUser);
+  let role = user[0]?.role_name;
 
+  // console.log(user);
+  useEffect(() => {
+    dispatch(doGetUser())
+  },[user])
+  
   useEffect(() => {
     dispatch(doMenuRequest());
     dispatch(doGetPhoto());
@@ -214,7 +223,7 @@ export default function restoMenu() {
 
   }
 
-  
+
 
 
   let [getMenu, setGetMenu] = useState({
@@ -562,11 +571,11 @@ export default function restoMenu() {
   const switchMenu = (checked: boolean) => {
     if (checked == true) {
       setAddMenu({ ...addMenu, remeStatus: 'AVAILABLE' })
-      setGetMenu({...getMenu, remeStatus: 'AVAILABLE'})
+      setGetMenu({ ...getMenu, remeStatus: 'AVAILABLE' })
       // setAvailable('AVAILABLE');
     } else {
       setAddMenu({ ...addMenu, remeStatus: 'EMPTY' })
-      setGetMenu({...getMenu, remeStatus: 'EMPTY'})
+      setGetMenu({ ...getMenu, remeStatus: 'EMPTY' })
       // setAvailable('EMPTY');
     }
 
@@ -621,28 +630,28 @@ export default function restoMenu() {
     let migratePhoto: any = [];
     photos.map((photo: any) => {
       // if (photo.rempprimary == '1') {
-        let newDataPhoto = {
+      let newDataPhoto = {
+        remename: photo.rempname,
+        rempid: photo.rempid,
+        rempphotofilename: photo.rempphotofilename,
+        rempprimary: '0',
+        rempreme: photo.rempreme,
+        rempthumbnailfilename: photo.rempthumbnailfilename,
+        rempurl: `${configuration.BASE_URL}/${photo.rempurl}`
+      }
+      migratePhoto.push(newDataPhoto)
+      // } else {
+      if (photo.rempprimary == '1') {
+        setNewPrimary({
           remename: photo.rempname,
           rempid: photo.rempid,
           rempphotofilename: photo.rempphotofilename,
-          rempprimary: '0',
+          rempprimary: '1',
           rempreme: photo.rempreme,
           rempthumbnailfilename: photo.rempthumbnailfilename,
           rempurl: `${configuration.BASE_URL}/${photo.rempurl}`
-        }
-        migratePhoto.push(newDataPhoto)
-      // } else {
-        if (photo.rempprimary == '1') {
-          setNewPrimary({
-            remename: photo.rempname,
-            rempid: photo.rempid,
-            rempphotofilename: photo.rempphotofilename,
-            rempprimary: '1',
-            rempreme: photo.rempreme,
-            rempthumbnailfilename: photo.rempthumbnailfilename,
-            rempurl: `${configuration.BASE_URL}/${photo.rempurl}`
-          })
-        }
+        })
+      }
     })
     setViewThumbnailPhoto(migratePhoto)
 
@@ -653,7 +662,7 @@ export default function restoMenu() {
     setisThumbnail(false);
   }
 
-  function setPrimary(photo:any){
+  function setPrimary(photo: any) {
     setNewPrimary({
       remename: photo.rempname,
       rempid: photo.rempid,
@@ -666,219 +675,224 @@ export default function restoMenu() {
 
   }
 
-  function updatePhoto(){
-    let newPhotoPrimary:any = [];
+  function updatePhoto() {
+    let newPhotoPrimary: any = [];
 
-    viewThumbnailPhoto.map( (listphoto:any) => {
+    viewThumbnailPhoto.map((listphoto: any) => {
       // kalau datanya sama berarti input yang primarynya 1 (newPrimary)
-      if(listphoto.rempid == newPrimary.rempid){
+      if (listphoto.rempid == newPrimary.rempid) {
         newPhotoPrimary.push(newPrimary);
-      }else{
+      } else {
         newPhotoPrimary.push(listphoto)
       }
     })
-    
+
     dispatch(doUpdatePrimary(newPhotoPrimary))
 
     // console.log('newPhotoPrimary',newPhotoPrimary);
 
     setisThumbnail(false);
-    
+
   }
-
+  // console.log(role);
+  
   return (
-    <Dashboard>
-      {/* <Tabs> */}
-        {/* TABEL MENU */}
-        {/* <Tabs.TabPane tab='Menu' key='menu'> */}
-          <div className='text-2xl text-center py-3 font-bold'>Resto Menu</div>
+    <>
+      {
+        role == 'Manager' || role == 'Admin' ?
 
-          <div className='my-4 px-4'>
-            <div className='float-right right-0 items-right'>
-              {/*<a className='bg-slate-400' onClick={showAddMenu}>
+          <Dashboard>
+            {/* <Tabs> */}
+            {/* TABEL MENU */}
+            {/* <Tabs.TabPane tab='Menu' key='menu'> */}
+            <div className='text-2xl text-center py-3 font-bold'>Resto Menu</div>
+
+            <div className='my-4 px-4'>
+              <div className='float-right right-0 items-right'>
+                {/*<a className='bg-slate-400' onClick={showAddMenu}>
                  <div className='bg-sky-600 hover:bg-sky-500 text-white rounded-md p-3 w-32 text-center font-bold'> */}
                 <Buttons funcs={showAddMenu}>
-                   <PlusOutlined /> Add Menu
-                </Buttons>  
+                  <PlusOutlined /> Add Menu
+                </Buttons>
                 {/* </div>
               </a> */}
+              </div>
+              <Input.Search value={search} onChange={(e: any) => setSearch(e.target.value)} placeholder='Search here..' style={{ width: 400 }} />
             </div>
-            <Input.Search value={search} onChange={(e: any) => setSearch(e.target.value)} placeholder='Search here..' style={{ width: 400 }} />
-          </div>
 
-          <Table dataSource={menus} className='py-4'>
-            <Table.Column title='ID' dataIndex='reme_id' key='reme_id'
-              filteredValue={[search]} onFilter={(value: any, record: any) => {
-                return String(record.reme_name).toLowerCase().includes(value.toLowerCase()) ||
-                  String(record.hotel_name).toLowerCase().includes(value.toLowerCase()) ||
-                  String(record.faci_name).toLowerCase().includes(value.toLowerCase()) ||
-                  String(record.reme_price).toLowerCase().includes(value.toLowerCase()) ||
-                  String(record.reme_description).toLowerCase().includes(value.toLowerCase()) ||
-                  String(record.reme_status).toLowerCase().includes(value.toLowerCase())
+            <Table dataSource={menus} className='py-4'>
+              <Table.Column title='ID' dataIndex='reme_id' key='reme_id'
+                filteredValue={[search]} onFilter={(value: any, record: any) => {
+                  return String(record.reme_name).toLowerCase().includes(value.toLowerCase()) ||
+                    String(record.hotel_name).toLowerCase().includes(value.toLowerCase()) ||
+                    String(record.faci_name).toLowerCase().includes(value.toLowerCase()) ||
+                    String(record.reme_price).toLowerCase().includes(value.toLowerCase()) ||
+                    String(record.reme_description).toLowerCase().includes(value.toLowerCase()) ||
+                    String(record.reme_status).toLowerCase().includes(value.toLowerCase())
+                }}
+              />
+              <Table.Column title='Hotel Name' dataIndex='hotel_name' key='hotel_name' />
+              <Table.Column title='Facility' dataIndex='faci_name' key='faci_name' />
+              <Table.Column title='Menu' dataIndex='reme_name' key='reme_name' />
+              <Table.Column title='Price' dataIndex='reme_price' key='reme_price' render={((rp) => { return rp.replace('$', 'Rp.') })} />
+              <Table.Column title='Description' dataIndex='reme_description' key='reme_description' />
+              <Table.Column title='Status' dataIndex='reme_status' key='reme_status' />
+              <Table.Column title='Modified Date' dataIndex='reme_modified_date' key='reme_modified_date' render={(dateString) => {
+                const formattedDate = dayjs(dateString).locale('id').format('DD MMMM YYYY');
+                return formattedDate;
               }}
-            />
-            <Table.Column title='Hotel Name' dataIndex='hotel_name' key='hotel_name' />
-            <Table.Column title='Facility' dataIndex='faci_name' key='faci_name' />
-            <Table.Column title='Menu' dataIndex='reme_name' key='reme_name' />
-            <Table.Column title='Price' dataIndex='reme_price' key='reme_price' />
-            <Table.Column title='Description' dataIndex='reme_description' key='reme_description' />
-            <Table.Column title='Status' dataIndex='reme_status' key='reme_status' />
-            <Table.Column title='Modified Date' dataIndex='reme_modified_date' key='reme_modified_date' render={(dateString) => {
-              const formattedDate = dayjs(dateString).locale('id').format('DD MMMM YYYY');
-              return formattedDate;
-            }}
-            />
-            <Table.Column title="Action" key="action"
-              render={(_: any, record: any) => (
+              />
+              <Table.Column title="Action" key="action"
+                render={(_: any, record: any) => (
 
-                <Space size="middle">
-                  {/* <Button onClick={() => editMenu(record.reme_id)}>Edit</Button>
+                  <Space size="middle">
+                    {/* <Button onClick={() => editMenu(record.reme_id)}>Edit</Button>
                   <Button onClick={() => deleteMenu(record.reme_id)}>Delete</Button> */}
 
-                  <Dropdown overlay={
-                    <Menu>
-                      <Menu.Item key={'edit'} onClick={() => editMenu(record.reme_id)}>Edit Menu</Menu.Item>
-                      <Menu.Item key={'add'} onClick={() => photoMenu(record)}>Upload photo</Menu.Item>
-                      <Menu.Item key={'update'} onClick={() => thumbnailMenu(record)}>Edit Photo Menu</Menu.Item>
-                    </Menu>
-                  }
-                    trigger={['click']}
-                  >
-                    <a onClick={(e) => e.preventDefault()}>
-                      <Space>
-                        <MoreOutlined />
-                      </Space>
-                    </a>
-                  </Dropdown>
+                    <Dropdown overlay={
+                      <Menu>
+                        <Menu.Item key={'edit'} onClick={() => editMenu(record.reme_id)}>Edit Menu</Menu.Item>
+                        <Menu.Item key={'add'} onClick={() => photoMenu(record)}>Upload photo</Menu.Item>
+                        <Menu.Item key={'update'} onClick={() => thumbnailMenu(record)}>Edit Photo Menu</Menu.Item>
+                      </Menu>
+                    }
+                      trigger={['click']}
+                    >
+                      <a onClick={(e) => e.preventDefault()}>
+                        <Space>
+                          <MoreOutlined />
+                        </Space>
+                      </a>
+                    </Dropdown>
 
 
-                  {/* <Select value="Select option">
+                    {/* <Select value="Select option">
                     <Select.Option value={'edit'} onClick={() => editMenu(record.reme_id)} className='w-48'>Edit</Select.Option>
                     <Select.Option value={'upload'} onClick={() => photoMenu(record.reme_id)}>Upload Photo</Select.Option>
                   </Select> */}
 
-                  {/* <Button onClick={() => photoMenu(record)}><MoreOutlined /></Button> */}
-                </Space>
-              )}
-            />
-          </Table>
-          {/* 
+                    {/* <Button onClick={() => photoMenu(record)}><MoreOutlined /></Button> */}
+                  </Space>
+                )}
+              />
+            </Table>
+            {/* 
           ----------------------SEBELUMNYA PAKE INI TAPI GA BISA BUAT KOLOM MODIFIED
           <Table
                   dataSource={ menus }
                   columns={columnsMenu}
           >
           </Table> */}
-          {/* ------------------------------------------------------------------------------------- MODALS EDIT MENU */}
-          <Modal
-            title="Update Menu"
-            open={isModalOpen}
-            onOk={handleUpdateMenu}
-            onCancel={handleCancel}
-            width={1000}
-            footer={[
-              <>
-                <Button key="back" onClick={handleCancel}>Cancel</Button>
-                <Button key="submit" onClick={handleUpdateMenu}>Update Menu</Button>
-              </>
-            ]}
+            {/* ------------------------------------------------------------------------------------- MODALS EDIT MENU */}
+            <Modal
+              title="Update Menu"
+              open={isModalOpen}
+              onOk={handleUpdateMenu}
+              onCancel={handleCancel}
+              width={1000}
+              footer={[
+                <>
+                  <Button key="back" onClick={handleCancel}>Cancel</Button>
+                  <Button key="submit" onClick={handleUpdateMenu}>Update Menu</Button>
+                </>
+              ]}
 
-          >
-            <Form
-              onFinish={onFinish}
-              labelCol={{ span: 8 }}
-              wrapperCol={{ span: 14 }}
-              layout="horizontal"
-              style={{ maxWidth: 900 }}
-              className="mx-auto"
             >
-              <p className='text-center text-xl py-5 font-bold'>
-                Update Menu Resto
-              </p>
-              <>
-                <Form.Item name="remeFaciId" label="Facility"
-                  rules={[{ required: true, message: 'Please select restaurant!!' }]}>
-                  <Select value={getMenu.remeFaciId} onChange={(e) => handleSelection(e, 'remeFaci')}>
-                    <>
-                      {
-                        list_restaurant.map((resto: any) => (
-                          <Select.Option value={resto.faci_id} >{resto.hotel_name} - {resto.faci_name}</Select.Option>
+              <Form
+                onFinish={onFinish}
+                labelCol={{ span: 8 }}
+                wrapperCol={{ span: 14 }}
+                layout="horizontal"
+                style={{ maxWidth: 900 }}
+                className="mx-auto"
+              >
+                <p className='text-center text-xl py-5 font-bold'>
+                  Update Menu Resto
+                </p>
+                <>
+                  <Form.Item name="remeFaciId" label="Facility"
+                    rules={[{ required: true, message: 'Please select restaurant!!' }]}>
+                    <Select value={getMenu.remeFaciId} onChange={(e) => handleSelection(e, 'remeFaci')}>
+                      <>
+                        {
+                          list_restaurant.map((resto: any) => (
+                            <Select.Option value={resto.faci_id} >{resto.hotel_name} - {resto.faci_name}</Select.Option>
 
-                        ))
-                      }
-                    </>
-                    {/* <Select.Option value={1} >1</Select.Option>
+                          ))
+                        }
+                      </>
+                      {/* <Select.Option value={1} >1</Select.Option>
                   <Select.Option value={2} >2</Select.Option>
                   <Select.Option value={3} >3</Select.Option> */}
-                  </Select>
-                  {/* <select value={(getMenu.remeFaciId).toString()} placeholder={(getMenu.remeFaciId).toString()} onChange={eventHandler('remeFaciId')}>
+                    </Select>
+                    {/* <select value={(getMenu.remeFaciId).toString()} placeholder={(getMenu.remeFaciId).toString()} onChange={eventHandler('remeFaciId')}>
                   <option value={1}>1</option>
                   <option value={2}>2</option>
                   <option value={3}>3</option>
                 </select> */}
-                </Form.Item>
+                  </Form.Item>
 
-                <Form.Item
-                  name={"remeName"} label='Name Menu'
-                  rules={[{ required: true, message: 'Please input name menu!' }]}
-                >
-                  <Input type="text" value={getMenu.remeName} onChange={eventHandler('remeName')} />
-                  <p className='pl-3 text-slate-500'>Previous: {getMenu.remeName}</p>
-                  
-                  {/* <Input type="text" onChange={eventHandler('remeName')} /> */}
-                  {/* <Input /> */}
-                  {/* <Input value={getMenu.remeName} /> */}
+                  <Form.Item
+                    name={"remeName"} label='Name Menu'
+                    rules={[{ required: true, message: 'Please input name menu!' }]}
+                  >
+                    <Input type="text" value={getMenu.remeName} onChange={eventHandler('remeName')} />
+                    <p className='pl-3 text-slate-500'>Previous: {getMenu.remeName}</p>
 
-                </Form.Item>
+                    {/* <Input type="text" onChange={eventHandler('remeName')} /> */}
+                    {/* <Input /> */}
+                    {/* <Input value={getMenu.remeName} /> */}
 
-                <Form.Item
-                  name="remeDescription" label='Description'
-                  rules={[{ required: true, message: 'Please input description!' }]}
-                >
-                  {/* <textarea rows={3} value={getMenu.remeDescription} onChange={eventHandler('remeDescription')} > </textarea> */}
-                  <Input.TextArea onChange={eventHandler('remeDescription')} rows={3} value={getMenu.remeDescription} /> 
-                  <p className='pl-3 text-slate-500'>Previous: {getMenu.remeDescription}</p>
-                </Form.Item>
+                  </Form.Item>
+
+                  <Form.Item
+                    name="remeDescription" label='Description'
+                    rules={[{ required: true, message: 'Please input description!' }]}
+                  >
+                    {/* <textarea rows={3} value={getMenu.remeDescription} onChange={eventHandler('remeDescription')} > </textarea> */}
+                    <Input.TextArea onChange={eventHandler('remeDescription')} rows={3} value={getMenu.remeDescription} />
+                    <p className='pl-3 text-slate-500'>Previous: {getMenu.remeDescription}</p>
+                  </Form.Item>
 
 
-                <Form.Item
-                  name="remePrice" label='Price'
-                  rules={[{ required: true, message: 'Please input price!' }]}
-                >
-                  <Input onChange={eventHandler('remePrice')} value={(getMenu.remePrice).toString()} />
-                  <p className='pl-3 text-slate-500'>Previous: {getMenu.remePrice}</p>
-                </Form.Item>
+                  <Form.Item
+                    name="remePrice" label='Price'
+                    rules={[{ required: true, message: 'Please input price!' }]}
+                  >
+                    <Input onChange={eventHandler('remePrice')} value={(getMenu.remePrice).toString()} />
+                    <p className='pl-3 text-slate-500'>Previous: {getMenu.remePrice}</p>
+                  </Form.Item>
 
-                <Form.Item
-                  name="remeStatus" label='Status'
-                  rules={[{ required: true, message: 'Please select status!' }]}
-                >
-                  
-                  <Switch onChange={switchMenu} className='bg-slate-400' />
-                  <p className='pl-3 text-slate-500'>Previous: {getMenu.remeStatus}</p>
-                
-                  {/* <Select placeholder={getMenu.remeStatus} onChange={(e) => handleSelection2(e, 'remeStatus')}>
+                  <Form.Item
+                    name="remeStatus" label='Status'
+                    rules={[{ required: true, message: 'Please select status!' }]}
+                  >
+
+                    <Switch onChange={switchMenu} className='bg-slate-400' />
+                    <p className='pl-3 text-slate-500'>Previous: {getMenu.remeStatus}</p>
+
+                    {/* <Select placeholder={getMenu.remeStatus} onChange={(e) => handleSelection2(e, 'remeStatus')}>
                     <Select.Option value='AVAILABLE'>AVAILABLE</Select.Option>
                     <Select.Option value='EMPTY'>EMPTY</Select.Option>
                   </Select> */}
-                </Form.Item>
-              </>
-              {/* <div className='flex justify-center'>
+                  </Form.Item>
+                </>
+                {/* <div className='flex justify-center'>
                 <Link href=''>
                   <div className='bg-slate-600 hover:bg-slate-500 text-white rounded-lg py-2 w-40 text-center'>
                       Update Menu
                   </div>
                 </Link>
               </div> */}
-            </Form>
+              </Form>
 
-          </Modal>
+            </Modal>
 
-        {/* </Tabs.TabPane> */}
+            {/* </Tabs.TabPane> */}
 
-        {/* TABEL MENU PHOTO */}
-        {/* <Tabs.TabPane tab='List Photo' key='photo'> */}
-          {/* <p className='text-xl font-bold'>List photo resto menu</p>
+            {/* TABEL MENU PHOTO */}
+            {/* <Tabs.TabPane tab='List Photo' key='photo'> */}
+            {/* <p className='text-xl font-bold'>List photo resto menu</p>
 
           <div>
             {
@@ -900,7 +914,7 @@ export default function restoMenu() {
           <Pagination onChange={handlePageListPhoto} current={currentPage} pageSize={10} total={photos.length}></Pagination> */}
 
 
-          {/*// ------------------------------------------------------------------ mnu photo awal
+            {/*// ------------------------------------------------------------------ mnu photo awal
            <div className='text-2xl py-3 text-center'>Resto Menu Photo</div>
 
           
@@ -920,10 +934,10 @@ export default function restoMenu() {
                   columns={columnPhoto}
           >
           </Table> */}
-        {/* </Tabs.TabPane> */}
-        {/* TABEL ORDER */}
-        {/* <Tabs.TabPane tab='Order' key='order'> */}
-          {/* <div className='text-2xl text-center py-3'>Data Order Menu Resto</div>
+            {/* </Tabs.TabPane> */}
+            {/* TABEL ORDER */}
+            {/* <Tabs.TabPane tab='Order' key='order'> */}
+            {/* <div className='text-2xl text-center py-3'>Data Order Menu Resto</div>
 
           <div className='my-4 px-4'>
             <Input.Search placeholder='Search here..' style={{ width: 400 }} />
@@ -934,131 +948,131 @@ export default function restoMenu() {
             columns={columnOrder}
           >
           </Table> */}
-        {/* </Tabs.TabPane> */}
-      {/* </Tabs> */}
-      {/* -------------------------------------------- MODAL ADD MENU */}
-      <Modal
-        title="Add Menu"
-        open={isModalAddMenu}
-        onOk={handleAddMenu}
-        onCancel={handleCancelAddMenu}
-        width={1000}
-        footer={[
-          <>
-            <Button key="back" onClick={handleCancel}>Cancel</Button>
-            <Button key="submit" onClick={handleAddMenu}>Add Menu</Button>
-          </>
-        ]}
+            {/* </Tabs.TabPane> */}
+            {/* </Tabs> */}
+            {/* -------------------------------------------- MODAL ADD MENU */}
+            <Modal
+              title="Add Menu"
+              open={isModalAddMenu}
+              onOk={handleAddMenu}
+              onCancel={handleCancelAddMenu}
+              width={1000}
+              footer={[
+                <>
+                  <Button key="back" onClick={handleCancel}>Cancel</Button>
+                  <Button key="submit" onClick={handleAddMenu}>Add Menu</Button>
+                </>
+              ]}
 
-      >
-        <Form
-          onFinish={onFinish}
-          labelCol={{ span: 8 }}
-          wrapperCol={{ span: 14 }}
-          layout="horizontal"
-          style={{ maxWidth: 900 }}
-          className="mx-auto"
-        >
-          <p className='text-center text-xl py-5 font-bold'>
-            Add Menu Resto
-          </p>
-          <>
-            <Form.Item name="remeFaciId" label="Facility"
-              rules={[{ required: true, message: 'Please select restaurant!!' }]}>
-              <Select placeholder={'Select restaurant'} onChange={(e) => handleSelection(e, 'remeFaci')} value={list_restaurant.faci_name}>
-                {
-                  list_restaurant.map((resto: any) => (
-                    <Select.Option value={resto.faci_id}>{resto.faci_name} - {resto.hotel_name}</Select.Option>
-                  ))
-                }
-              </Select>
-              {/* <select value={(getMenu.remeFaciId).toString()} placeholder={(getMenu.remeFaciId).toString()} onChange={eventHandler('remeFaciId')}>
+            >
+              <Form
+                onFinish={onFinish}
+                labelCol={{ span: 8 }}
+                wrapperCol={{ span: 14 }}
+                layout="horizontal"
+                style={{ maxWidth: 900 }}
+                className="mx-auto"
+              >
+                <p className='text-center text-xl py-5 font-bold'>
+                  Add Menu Resto
+                </p>
+                <>
+                  <Form.Item name="remeFaciId" label="Facility"
+                    rules={[{ required: true, message: 'Please select restaurant!!' }]}>
+                    <Select placeholder={'Select restaurant'} onChange={(e) => handleSelection(e, 'remeFaci')} value={list_restaurant.faci_name}>
+                      {
+                        list_restaurant.map((resto: any) => (
+                          <Select.Option value={resto.faci_id}>{resto.faci_name} - {resto.hotel_name}</Select.Option>
+                        ))
+                      }
+                    </Select>
+                    {/* <select value={(getMenu.remeFaciId).toString()} placeholder={(getMenu.remeFaciId).toString()} onChange={eventHandler('remeFaciId')}>
                   <option value={1}>1</option>
                   <option value={2}>2</option>
                   <option value={3}>3</option>
                 </select> */}
-            </Form.Item>
+                  </Form.Item>
 
-            <Form.Item
-              name={"remeName"} label='Name Menu'
-              rules={[{ required: true, message: 'Please input name menu!' }]}
-            >
-              <Input type="text" onChange={eventHandler('remeName')} />
-              {/* <Input /> */}
-              {/* <Input value={getMenu.remeName} /> */}
+                  <Form.Item
+                    name={"remeName"} label='Name Menu'
+                    rules={[{ required: true, message: 'Please input name menu!' }]}
+                  >
+                    <Input type="text" onChange={eventHandler('remeName')} />
+                    {/* <Input /> */}
+                    {/* <Input value={getMenu.remeName} /> */}
 
-            </Form.Item>
+                  </Form.Item>
 
-            <Form.Item
-              name="remeDescription" label='Description'
-              rules={[{ required: true, message: 'Please input description!' }]}
-            >
-              {/* <textarea rows={3} value={getMenu.remeDescription} onChange={eventHandler('remeDescription')} > </textarea> */}
-              <Input.TextArea onChange={eventHandler('remeDescription')} rows={3} placeholder={getMenu.remeDescription} />
-            </Form.Item>
+                  <Form.Item
+                    name="remeDescription" label='Description'
+                    rules={[{ required: true, message: 'Please input description!' }]}
+                  >
+                    {/* <textarea rows={3} value={getMenu.remeDescription} onChange={eventHandler('remeDescription')} > </textarea> */}
+                    <Input.TextArea onChange={eventHandler('remeDescription')} rows={3} placeholder={getMenu.remeDescription} />
+                  </Form.Item>
 
 
-            <Form.Item
-              name="remePrice" label='Price'
-              rules={[{ required: true, message: 'Please input price!' }]}
-            >
-              <Input onChange={eventHandler('remePrice')} placeholder={(getMenu.remePrice).toString()} />
-            </Form.Item>
+                  <Form.Item
+                    name="remePrice" label='Price'
+                    rules={[{ required: true, message: 'Please input price!' }]}
+                  >
+                    <Input onChange={eventHandler('remePrice')} placeholder={(getMenu.remePrice).toString()} />
+                  </Form.Item>
 
-            <Form.Item
-              name="remeStatus" label='Status'
-              rules={[{ required: true, message: 'Please select status!' }]}
-            >
-              <Switch onChange={switchMenu} className='bg-slate-400' />
-              {/* <Select placeholder={getMenu.remeStatus} onChange={(e) => handleSelection2(e, 'remeStatus')}>
+                  <Form.Item
+                    name="remeStatus" label='Status'
+                    rules={[{ required: true, message: 'Please select status!' }]}
+                  >
+                    <Switch onChange={switchMenu} className='bg-slate-400' />
+                    {/* <Select placeholder={getMenu.remeStatus} onChange={(e) => handleSelection2(e, 'remeStatus')}>
                   <Select.Option value='AVAILABLE'>AVAILABLE</Select.Option>
                   <Select.Option value='EMPTY'>EMPTY</Select.Option>
                 </Select> */}
-            </Form.Item>
-          </>
-          {/* <div className='flex justify-center'>
+                  </Form.Item>
+                </>
+                {/* <div className='flex justify-center'>
                 <Link href=''>
                   <div className='bg-slate-600 hover:bg-slate-500 text-white rounded-lg py-2 w-40 text-center'>
                       Update Menu
                   </div>
                 </Link>
               </div> */}
-        </Form>
+              </Form>
 
-      </Modal>
+            </Modal>
 
-      {/* ------------------------------------------ MODAL PHOTO---------------------------- */}
+            {/* ------------------------------------------ MODAL PHOTO---------------------------- */}
 
-      <Modal
-        title="Upload Photo"
-        open={isModalPhoto}
-        onOk={handlePhoto}
-        onCancel={handleCancelPhoto}
-        width={1000}
-        footer={[
-          <>
-            <Button key="back" onClick={handleCancelPhoto}>Cancel</Button>
-            <Button key="submit" onClick={handlePhoto}>OK</Button>
-          </>
-        ]}
-      >
-        <p className='text-xl text-center font-bold'> {getPhoto.remeName} </p>
+            <Modal
+              title="Upload Photo"
+              open={isModalPhoto}
+              onOk={handlePhoto}
+              onCancel={handleCancelPhoto}
+              width={1000}
+              footer={[
+                <>
+                  <Button key="back" onClick={handleCancelPhoto}>Cancel</Button>
+                  <Button key="submit" onClick={handlePhoto}>OK</Button>
+                </>
+              ]}
+            >
+              <p className='text-xl text-center font-bold'> {getPhoto.remeName} </p>
 
-        <Form
-          onFinish={saveNewPhoto}
-          // labelCol={{ span:8 }}  
-          // wrapperCol={{ span:14 }}
-          layout="horizontal"
-          // style={{ maxWidth: 600}}
-          className="py-5 mx-auto"
-          encType='multipart/form-data'
-        // onSubmitCapture={onFinish}
+              <Form
+                onFinish={saveNewPhoto}
+                // labelCol={{ span:8 }}  
+                // wrapperCol={{ span:14 }}
+                layout="horizontal"
+                // style={{ maxWidth: 600}}
+                className="py-5 mx-auto"
+                encType='multipart/form-data'
+              // onSubmitCapture={onFinish}
 
-        >
-          {/* menampilkan photo, tombol delete belum berfungsi*/}
-          {getPhoto.rempUrl ?
-            <div className='flex'>
-              {/* menampilkan gambar 
+              >
+                {/* menampilkan photo, tombol delete belum berfungsi*/}
+                {getPhoto.rempUrl ?
+                  <div className='flex'>
+                    {/* menampilkan gambar 
               {viewPhoto && viewPhoto.map((photo: any, index: number) =>
                 <div key={photo.rempId} className='border shadow rounded-lg w-80 mx-auto text-center object-cover object-center mr-4'>
                   <div className='h-64 bg-red-500 object-center'>
@@ -1068,11 +1082,11 @@ export default function restoMenu() {
 
                 </div>
               )}*/}
-            </div>
-            :
-            <img src={addImage[0]} width='300px' height='300px'></img>
-          }
-          {/* <Form.Item name='rempUrl' label={'Upload Image Here'}>
+                  </div>
+                  :
+                  <img src={addImage[0]} width='300px' height='300px'></img>
+                }
+                {/* <Form.Item name='rempUrl' label={'Upload Image Here'}>
             <Upload id='upload' accept="image/*"  onChange={handleUploadChange}>
               
                   <div className=' p-6 border border-dashed border-slate-500 text-center'>
@@ -1086,136 +1100,142 @@ export default function restoMenu() {
             </a>
           </Form.Item> */}
 
-          {/* upload gambar udah berhasil nih */}
-          
-          <Form.Item name='rempUrl' label={''}>
+                {/* upload gambar udah berhasil nih */}
 
-            
-              {image ? 
-                  <img src={image} className='h-80 w-96 object-cover mx-auto'></img> 
-                : ' '
-              }
-            <input  className='file:w-24 file:border file:border-dashed file:border-slate-500 file:bg-white ' type="file" 
-                    id='primary' 
-                    accept="image/*" 
+                <Form.Item name='rempUrl' label={''}>
+
+
+                  {image ?
+                    <img src={image} className='h-80 w-96 object-cover mx-auto'></img>
+                    : ' '
+                  }
+                  <input className='file:w-24 file:border file:border-dashed file:border-slate-500 file:bg-white ' type="file"
+                    id='primary'
+                    accept="image/*"
                     onChange={handleUploadChange}>
-            </input>
-            <br /> <br />
-            <Buttons funcs={saveNewPhoto}>
-              Save Photo
-            </Buttons>
-            {/* <button type='button' onClick={saveNewPhoto}>Save my photo</button> */}
-          </Form.Item>
-          
-          {/* add more pict */}
-          <Form.List name={'rempUrl'}>
-            {(fields, { add, remove }) => (
-              <>
-                {fields.map((field, index) => {
-                  return (
+                  </input>
+                  <br /> <br />
+                  <Buttons funcs={saveNewPhoto}>
+                    Save Photo
+                  </Buttons>
+                  {/* <button type='button' onClick={saveNewPhoto}>Save my photo</button> */}
+                </Form.Item>
+
+                {/* add more pict */}
+                <Form.List name={'rempUrl'}>
+                  {(fields, { add, remove }) => (
                     <>
-                      <div>
-                        <img src={addImage[index]} width='200px' height='200px'></img>
-                      </div>
-                      <Form.Item name={[field.name, 'rempUrl']} label={'first photo'}>
-                        <label htmlFor="formFile">Upload Image Here</label>
-                        <input type="file" id={index.toString()} accept="image/*" onChange={handleUploadChange}>
-                        </input>
-                        <button type='button'>Save my photo</button>
+                      {fields.map((field, index) => {
+                        return (
+                          <>
+                            <div>
+                              <img src={addImage[index]} width='200px' height='200px'></img>
+                            </div>
+                            <Form.Item name={[field.name, 'rempUrl']} label={'first photo'}>
+                              <label htmlFor="formFile">Upload Image Here</label>
+                              <input type="file" id={index.toString()} accept="image/*" onChange={handleUploadChange}>
+                              </input>
+                              <button type='button'>Save my photo</button>
+                            </Form.Item>
+                            <button onClick={() => { remove(field.name); }}>Delete</button>
+                          </>
+
+
+                          // <Form.Item
+                          //   key={field.key}
+                          //   name={[field.name, 'photo']}
+                          //   label={'Add photo'}
+                          // >
+                          // </Form.Item>
+
+                          // <Form.Item name={[field.name, 'first']} label={'1 student'}>
+                          //   <Input placeholder='First name'></Input>
+                          // </Form.Item>
+
+                          // <Form.Item label="Add Photo">
+                          //     <Form.Item name="dragger" valuePropName="fileList" getValueFromEvent={normFile} required noStyle >
+                          //         <Upload.Dragger name="files" action="/upload.do">
+                          //         <p className="ant-upload-drag-icon">
+                          //             <InboxOutlined />
+                          //         </p>
+                          //         <p className="ant-upload-text">Click or drag 1 picture here</p>
+                          //         <p className="ant-upload-hint">Support for a single upload</p>
+                          //         </Upload.Dragger>
+                          //     </Form.Item>
+                          // </Form.Item>
+                        );
+                      })}
+                      <Form.Item>
+                        <Button type='dashed' block icon={<PlusOutlined></PlusOutlined>}
+                          onClick={() => { add() }}
+                        >Add Photo</Button>
                       </Form.Item>
-                      <button onClick={() => { remove(field.name); }}>Delete</button>
                     </>
 
+                  )}
 
-                    // <Form.Item
-                    //   key={field.key}
-                    //   name={[field.name, 'photo']}
-                    //   label={'Add photo'}
-                    // >
-                    // </Form.Item>
-
-                    // <Form.Item name={[field.name, 'first']} label={'1 student'}>
-                    //   <Input placeholder='First name'></Input>
-                    // </Form.Item>
-
-                    // <Form.Item label="Add Photo">
-                    //     <Form.Item name="dragger" valuePropName="fileList" getValueFromEvent={normFile} required noStyle >
-                    //         <Upload.Dragger name="files" action="/upload.do">
-                    //         <p className="ant-upload-drag-icon">
-                    //             <InboxOutlined />
-                    //         </p>
-                    //         <p className="ant-upload-text">Click or drag 1 picture here</p>
-                    //         <p className="ant-upload-hint">Support for a single upload</p>
-                    //         </Upload.Dragger>
-                    //     </Form.Item>
-                    // </Form.Item>
-                  );
-                })}
-                <Form.Item>
-                  <Button type='dashed' block icon={<PlusOutlined></PlusOutlined>}
-                    onClick={() => { add() }}
-                  >Add Photo</Button>
-                </Form.Item>
-              </>
-
-            )}
-
-          </Form.List>
-        </Form>
-      </Modal>
+                </Form.List>
+              </Form>
+            </Modal>
 
 
-      {/* // --------------------------------------------------------------------------------------- THUMBNAIL PHOTO  */}
-      <Modal
-        title="SET THUMBNAIL PHOTO"
-        open={isThumbnail}
-        onOk={updatePhoto} // belum tau mau diisi apa sama di button ok jga benerin
-        onCancel={handleCancelThumbnail}
-        width={1000}
-        footer={[
-          <>
-            <Button key="back" onClick={handleCancelThumbnail}>Cancel</Button>
-            <Button key="submit" onClick={updatePhoto}>Update Photo</Button>
-          </>
-        ]}
-      >
-        <div className='my-4'>
-          <div className='text-center w-full '>
-            <p className='font-bold text-xl py-4'>Thumbnail Photo - {getPhoto.remeName}</p>
-            <img src={newPrimary.rempurl} className='h-64 object-center text-center mx-auto'></img>
-          </div>
-        </div>
-        <hr className='mb-4'/>
-        <div className='mb-4'>
-          Guides:
-          <ul>
-            <li>
-              - Select photo to set new thumbnail photo
-            </li>
-            <li>
-              - Klik delete to delete permanent photo 
-            </li>
-          </ul>
-        </div>
-        <div className='flex'>
-          {
-            viewThumbnailPhoto.map((photo: any, i:number) => (
-              <div className=' border rounded-lg mr-3 transition ease-in-out delay-150 hover:scale-110 duration-300 hover:bg-slate-200'>
-                <a onClick={()=>setPrimary(photo)}>
-                  <div  className=' p-2'>
-                    <img src={photo.rempurl} alt={photo.rempthumbnailfilename} className='h-32' />
-                    <p className='text-base text-center'>Photo {i+1}</p> 
-                  </div>
-                </a>
-                <div className='text-center pb-2'>
-                  <a onClick={() => deletePhoto(photo.rempid)} className='text-red-500 text-center'><CloseOutlined /> Delete</a>
+            {/* // --------------------------------------------------------------------------------------- THUMBNAIL PHOTO  */}
+            <Modal
+              title="SET THUMBNAIL PHOTO"
+              open={isThumbnail}
+              onOk={updatePhoto} // belum tau mau diisi apa sama di button ok jga benerin
+              onCancel={handleCancelThumbnail}
+              width={1000}
+              footer={[
+                <>
+                  <Button key="back" onClick={handleCancelThumbnail}>Cancel</Button>
+                  <Button key="submit" onClick={updatePhoto}>Update Photo</Button>
+                </>
+              ]}
+            >
+              <div className='my-4'>
+                <div className='text-center w-full '>
+                  <p className='font-bold text-xl py-4'>Thumbnail Photo - {getPhoto.remeName}</p>
+                  <img src={newPrimary.rempurl} className='h-64 object-center text-center mx-auto'></img>
                 </div>
               </div>
-            ))
-          }
-        </div>
-      </Modal>
+              <hr className='mb-4' />
+              <div className='mb-4'>
+                Guides:
+                <ul>
+                  <li>
+                    - Select photo to set new thumbnail photo
+                  </li>
+                  <li>
+                    - Klik delete to delete permanent photo
+                  </li>
+                </ul>
+              </div>
+              <div className='flex'>
+                {
+                  viewThumbnailPhoto.map((photo: any, i: number) => (
+                    <div className=' border rounded-lg mr-3 transition ease-in-out delay-150 hover:scale-110 duration-300 hover:bg-slate-200'>
+                      <a onClick={() => setPrimary(photo)}>
+                        <div className=' p-2'>
+                          <img src={photo.rempurl} alt={photo.rempthumbnailfilename} className='h-32' />
+                          <p className='text-base text-center'>Photo {i + 1}</p>
+                        </div>
+                      </a>
+                      <div className='text-center pb-2'>
+                        <a onClick={() => deletePhoto(photo.rempid)} className='text-red-500 text-center'><CloseOutlined /> Delete</a>
+                      </div>
+                    </div>
+                  ))
+                }
+              </div>
+            </Modal>
 
-    </Dashboard>
+          </Dashboard>
+          :
+          <Unauthorized />
+
+      }
+
+    </>
   )
 }

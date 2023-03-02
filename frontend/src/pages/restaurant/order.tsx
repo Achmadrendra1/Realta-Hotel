@@ -1,4 +1,5 @@
 import Layouts from '@/layouts/layout'
+import withAuth from '@/PrivateRoute/WithAuth'
 import { doGetUserOrder } from '@/Redux/Action/Resto/userOrderAction'
 import { configuration } from '@/Redux/Configs/url'
 import { Breadcrumb, Button, Card, Col, Dropdown, Form, Input, InputNumber, Radio, Row, Select } from 'antd'
@@ -8,13 +9,11 @@ import { useRouter } from 'next/router'
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 
-export default function Order() {
+function Order() {
   let dispatch = useDispatch();
   let router = useRouter();
   const userLoggedIn = useSelector((state: any) => state.GetUserReducer.getUser);
-  const orderFromUser = useSelector((state:any)=> state.userOrderReducer.userOrder);
-  console.log(orderFromUser,'user');
-  
+  const orderFromUser = useSelector((state:any)=> state.userOrderReducer.userOrder); 
 
   let [cart, setCart] = useState([]);
   let [result, setResult] = useState({
@@ -42,10 +41,6 @@ export default function Order() {
     dispatch(doGetUserOrder(data));
   }, []);
 
-
-  // let userOrder = useSelector((state:any) => state.userOrderReducer.userOrder);
-
-  // console.log('orderNumber', userOrder[0].orme_order_number);
 
 
   // payment versi soffie
@@ -151,224 +146,7 @@ export default function Order() {
                 </p>
 
                 <div className='border rounded p-5 bg-slate-100 my-4'>
-                  {/* // --------------------- PAYMENT DR RENRA--------------- */}
-                  {/* <div className={`${payment ? "block" : "hidden"}`}>
-                    <div className="font-bold text-2xl">
-                      <p>3. Payment</p>
-                    </div>
-                    <div className="w-full h-screen p-8">
-                      <p className="text-md text-center text-red-600">{payMsg}</p>
-                      <Row gutter={16}>
-                        <Col span={8}>
-                          <Card
-                            size="small"
-                            className="m-4 font-bold text-[14px]"
-                            hoverable
-                            onClick={
-                              () => {
-                                setIsCash(true),
-                                  setDataPayment({
-                                    ...dataPayment,
-                                    sourceNumber: "",
-                                    targetNumber: "",
-                                  }),
-                                  setDataOrder({
-                                    ...dataOrder,
-                                    ormePayType: 'C'
-                                  })
-                              }
-                            }
-                          >
-                            Cash
-                          </Card>
-                          <Card
-                            size="small"
-                            className="m-4 font-bold text-[14px]"
-                            hoverable
-                            onClick={
-                              () => {
-                                setIsCash(false), setSelectCard({ accNumber: '', balance: '' });
-                                setDataPayment({
-                                  ...dataPayment,
-                                  sourceNumber: "",
-                                  targetNumber: "",
-                                  trxType: "TRB",
-                                  secureCode: "",
-                                })
-                                setDataOrder({
-                                  ...dataOrder,
-                                  ormePayType: 'C'
-                                })
-                              }
-                            }
-                          >
-                            Pay Now
-                          </Card>
-                        </Col>
-                        <Col span={16}>
-                          {isCash ? (
-                            <div className="w-full text-center mt-6">
-                              <div>
-                                <p className="text-lg font-semibold">
-                                  No payment is needed at the moment.
-                                </p>
-                                <p>
-                                  We will confirm your stay without any charge. Pay
-                                  directly at the hotel during your stay.
-                                </p>
-                              </div>
-                              <Button
-                                onClick={onCompleteCash}
-                                className="mt-6 bg-blue-600 text-white w-full h-10"
-                              >
-                                Complete Order
-                              </Button>
-                            </div>
-                          ) : (
-                            <div className="mt-6 w-full ">
-                              <p className="m-4">Fintech</p>
-                              {isActive ? (
-                                <Card
-                                  size={"small"}
-                                  className={`mb-2 ${selectCard.accNumber === accDompet?.usacAccountNumber &&
-                                    "bg-slate-500 text-white"
-                                    }`}
-                                  hoverable
-                                  onClick={
-                                    () => {
-                                      setSelectCard({ accNumber: accDompet?.usacAccountNumber, balance: accDompet?.usacSaldo })
-                                      setDataPayment({
-                                        ...dataPayment,
-                                        sourceNumber: accDompet?.usacAccountNumber,
-                                        targetNumber: "13198989898"
-                                      })
-                                      setDataBooking({
-                                        ...dataBooking,
-                                        boor_pay_type: 'PG',
-                                        boor_cardnumber: accDompet?.usacAccountNumber
-                                      })
-                                    }
-                                  }
-                                >
-                                  <div className="flex justify-between items-center px-6">
-                                    <p className="text-[16px] font-semibold">
-                                      Dompet Realta
-                                    </p>
-                                    <p className="text-[16px] font-semibold">
-                                      {saldoDompet}
-                                    </p>
-                                  </div>
-                                </Card>
-                              ) : (
-                                <Card size={"small"}>
-                                  <div className="flex justify-between items-center px-6">
-                                    <p className="text-[16px] font-semibold">
-                                      Dompet Realta
-                                    </p>
-                                    <p
-                                      className={`${selectCard.accNumber === accDompet?.usacAccountNumber
-                                          ? "text-white"
-                                          : "text-blue-700"
-                                        }`}
-                                      onClick={() => setShowActivation(true)}
-                                    >
-                                      Activate
-                                    </p>
-                                  </div>
-                                </Card>
-                              )}
-
-                              <Card
-                                size={"small"}
-                                className={`mb-2 ${selectCard.accNumber === accGoto?.usacAccountNumber &&
-                                  "bg-slate-500 text-white"
-                                  }`}
-                                hoverable
-                                onClick={() =>
-                                  isLinked
-                                    ? setSelectCard({ accNumber: accGoto?.usacAccountNumber, balance: accGoto?.usacSaldo })
-                                    : ""
-                                }
-                              >
-                                <div className="flex justify-between px-6">
-                                  <p className="text-[16px] font-semibold">GOTO</p>
-                                  {isLinked ? (
-                                    <p className="text-[16px] font-semibold">
-                                      {saldoGoto}
-                                    </p>
-                                  ) : (
-                                    <p
-                                      className={`${selectCard.accNumber === accGoto?.usacAccountNumber
-                                          ? "text-white"
-                                          : "text-blue-700"
-                                        }`}
-                                      onClick={() => setShowLinked(true)}
-                                    >
-                                      Link Account
-                                    </p>
-                                  )}
-                                </div>
-                              </Card>
-
-                              <p className="m-4">Debet/Credit Card</p>
-                              {bankAcc.map((item: any) => (
-                                <Card
-                                  size={"small"}
-                                  className={`mb-2 ${selectCard.accNumber === item.usacAccountNumber &&
-                                    "bg-slate-500 text-white"
-                                    }`}
-                                  hoverable
-                                  onClick={
-                                    () => {
-                                      setSelectCard({ accNumber: item.usacAccountNumber, balance: item.usacSaldo })
-                                      setDataPayment({
-                                        ...dataPayment,
-                                        sourceNumber: item.usacAccountNumber,
-                                        targetNumber: "13198989898"
-                                      })
-                                      setDataBooking({
-                                        ...dataBooking,
-                                        boor_pay_type: item.usacType == "Debet" ? "D" : "CR",
-                                        boor_cardnumber: item.usacAccountNumber
-                                      })
-                                    }}
-                                >
-                                  <div className="flex justify-between px-6">
-                                    <p className="text-[16px] font-semibold">
-                                      {maskCardNumber(item.usacAccountNumber)}
-                                    </p>
-                                    <p>
-                                      {
-                                        payBank?.find(
-                                          (obj: any) =>
-                                            obj.bankEntityId == item.usacEntityId
-                                        )?.bankName
-                                      }{" "}
-                                      - {item.usacType}
-                                    </p>
-                                  </div>
-                                </Card>
-                              ))}
-
-                              <p
-                                className="mt-2 px-2 cursor-pointer"
-                                onClick={() => setOpenAdd(true)}
-                              >
-                                Add New Card
-                              </p>
-                              <Button
-                                disabled={disabled}
-                                onClick={onComplete}
-                                className="mt-6 bg-blue-600 text-white w-full h-12"
-                              >
-                                Complete Order
-                              </Button>
-                            </div>
-                          )}
-                        </Col>
-                      </Row>
-                    </div>
-                  </div> */}
+                  
 
                   <Form layout='vertical'>
                       <Form.Item label={'Payment Type'}>
@@ -468,3 +246,5 @@ export default function Order() {
     </>
   )
 }
+
+export default withAuth(Order)

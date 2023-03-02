@@ -27,7 +27,7 @@ export class UsersController {
   findByEmail(@Param('email') email: string ){
     return this.UsersService.findByEmail(email);
   }
-
+ 
 
   @Put(':id')
   ChangePassword(@Param('id') id :string,@Body() body){
@@ -35,7 +35,7 @@ export class UsersController {
   }
 
   @Post()
-  async register(@Body() data,): Promise<any> {
+  async register(@Body() data): Promise<any> {
     return await this.UsersService.register(data);
   }
 

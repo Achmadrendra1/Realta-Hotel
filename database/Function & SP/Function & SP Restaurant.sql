@@ -165,7 +165,6 @@ set lc_monetary = 'Indonesian_Indonesia.1252';
 			FROM resto.order_menus 
 			RIGHT JOIN resto.order_menu_detail ON resto.order_menus.orme_id = resto.order_menu_detail.omde_orme_id
 			JOIN resto.resto_menus ON resto.resto_menus.reme_id = resto.order_menu_detail.omde_reme_id
-			
 			WHERE 	resto.order_menus.orme_order_number = orderNumber
 					AND order_menus.orme_user_id = user_id
 		);
@@ -223,3 +222,29 @@ CREATE OR REPLACE VIEW resto.restomenu_dashboard AS
 -- 	WHERE 	resto_menu_photos.remp_primary = B'1'
 	ORDER BY resto.resto_menus.reme_id;
 	
+-- resto detail
+CREATE VIEW resto.resto_detail AS
+	SELECT 	hotel.hotels.hotel_id, hotel.hotels.hotel_name, hotel.facilities.faci_id, 
+			hotel.facilities.faci_name, hotel.facilities.faci_description,
+			hotel.facility_photo.fapho_thumbnail_filename, hotel.facility_photo.fapho_primary, hotel.facility_photo.fapho_url
+	FROM hotel.facilities
+	LEFT JOIN hotel.hotels ON hotel.facilities.faci_hotel_id = hotel.hotels.hotel_id
+	LEFT JOIN hotel.facility_photo ON hotel.facility_photo.fapho_faci_id = hotel.facilities.faci_id
+	WHERE hotel.facilities.faci_cagro_id = 2;
+	
+
+
+
+
+
+SELECT	resto.order_menus.orme_id, resto.order_menus.orme_order_number, resto.order_menus.orme_order_date, resto.order_menus.orme_total_item, resto.order_menus.orme_total_discount, resto.order_menus.orme_total_amount, 
+				resto.order_menus.orme_pay_type, resto.order_menus.orme_cardnumber, resto.order_menus.orme_is_paid, resto.order_menus.orme_modified_date, resto.order_menus.orme_user_id ,
+				resto.order_menu_detail.omde_id, resto.order_menu_detail.orme_price, resto.order_menu_detail.orme_qty, resto.order_menu_detail.orme_subtotal,
+				resto.order_menu_detail.omde_orme_id, resto.order_menu_detail.omde_reme_id,
+				resto.resto_menus.reme_name
+			FROM resto.order_menus 
+			RIGHT JOIN resto.order_menu_detail ON resto.order_menus.orme_id = resto.order_menu_detail.omde_orme_id
+			JOIN resto.resto_menus ON resto.resto_menus.reme_id = resto.order_menu_detail.omde_reme_id
+			JOIN payment.payment_transaction ON resto.order_menus.orme_order_number = payment.payment_transaction.patr_order_number
+			WHERE 	resto.order_menus.orme_order_number = orderNumber
+					AND order_menus.orme_user_id = user_id

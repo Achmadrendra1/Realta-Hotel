@@ -1,4 +1,5 @@
 import Layouts from '@/layouts/layout'
+import WithAuth from '@/PrivateRoute/WithAuth'
 import { doGetUserOrder } from '@/Redux/Action/Resto/userOrderAction'
 import { Breadcrumb } from 'antd'
 import Head from 'next/head'
@@ -6,7 +7,7 @@ import { useRouter } from 'next/router'
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 
-export default function Bill() {
+function Bill() {
     let router = useRouter();
     const dispatch = useDispatch();
     const [result, setResult] = useState({
@@ -118,3 +119,5 @@ export default function Bill() {
         </>
     )
 }
+
+export default WithAuth(Bill);

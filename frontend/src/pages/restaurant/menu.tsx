@@ -15,6 +15,7 @@ import { doAddOrder, doOrder } from '@/Redux/Action/Resto/orderAction'
 import { doOrderNumberReq } from '@/Redux/Action/Resto/numberOrderAction'
 import axios from 'axios'
 import { API } from '@/Redux/Configs/consumeApi'
+import Buttons from '@/components/Button'
 
 // const cartFromLocalStorage = JSON.parse(localStorage.getItem("cart") || "[]" )
 
@@ -123,11 +124,8 @@ export default function menu({ restaurant }) {
         let newCart = [...cart];
         let itemInCart = cart.find(
             (item:any) => menu.remename === item.remename
-        );
-
-        console.log(code(), 'isi code');
+        ); 
         
-
         if(!itemInCart){
             let itemInCart = {
                 ...menu,
@@ -137,7 +135,8 @@ export default function menu({ restaurant }) {
                 orderNumber: code()
             }
             let numberOfPrice = Number(menu.remeprice.replace(/[^0-9.-]+/g,""));
-
+            console.log('numberOfPrice',menu.remeprice);
+            
            
             // let numberString = menu.remeprice.toString().replace(/[^0-9.-]+/g,"")
             // const numberOfPrice = parseInt(numberString)
@@ -249,7 +248,7 @@ export default function menu({ restaurant }) {
   const [menuDetail, setMenuDetail] = useState({
     nama: '',
     desc: '',
-    harga: 0,
+    harga: '',
     status: ''
   })
 
@@ -378,6 +377,11 @@ export default function menu({ restaurant }) {
     })
   }
 
+  // ---- LOGIN
+  function login(){
+    router.push('/users/login');
+  }
+
   return (
     <>
       <Head>
@@ -442,7 +446,7 @@ export default function menu({ restaurant }) {
                             </div>
                         </div>
                         
-                        <div className='flex flex-wrap ml-5 item-center'>
+                        <div className='flex flex-wrap ml-5 item-center mx-auto'>
                       {
                         menusWPagination.filter((menu:any)=>{
                             if(menu.remename.toLowerCase().includes(search.toLowerCase())){
@@ -458,7 +462,7 @@ export default function menu({ restaurant }) {
                                         <div className='ml-3 mt-3 h-40'>
                                           <p className='text-lg font-bold'>{menu.remename}</p>
                                           <p>{menu.remedescription}</p>
-                                          <p>{menu.remeprice}</p>
+                                          <p>{menu.remeprice.replace('$','Rp.')}</p>
                                           <p className='text-amber-600'>{menu.remestatus}</p>
                                         </div>
                                     </a>
@@ -503,6 +507,18 @@ export default function menu({ restaurant }) {
                    <Affix className='w-2/5'>
                     <div className='border rounded shadow py-20 ml-2 text-xl text-center'>
                         Welcome to hotel realta! <br/>
+
+                        { !userid ? 
+                          <div>
+                            Please sign in to order food
+                            <br /><br />
+                            <Buttons funcs={login}>
+                              Login
+                            </Buttons> 
+                          </div> 
+                        
+                          : 'Please click add to cart to order your favorite food!'
+                        }
                     </div> 
                    </Affix>
                     :
@@ -634,11 +650,11 @@ export default function menu({ restaurant }) {
                 {/* </Carousel> */}
 
 
-                <p>
+                <p className='text-xl'>
                     Nama menu: {menuDetail.nama}
                 </p>
                 <p>
-                    Harga: {menuDetail.harga}
+                    Harga: {menuDetail.harga.replace('$','Rp.')}
                 </p>
                 <p>
                     Desc: {menuDetail.desc}
