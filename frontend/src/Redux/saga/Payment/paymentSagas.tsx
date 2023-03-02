@@ -217,12 +217,13 @@ function* handleTopUp(action: any): any {
 }
 
 function* handleCreateTransaction(action:any):any {
+  console.log(action.payload)
   const delay = (time: any) =>
   new Promise((resolve) => setTimeout(resolve, time));
   yield axios(API('POST', '/payment-transaction', action.payload))
   yield put(doCreateTransactionSuccess({message : 'Transaksi Berhasil'}))
   yield call(delay, 3000)
-  yield put(doCreateAccountSuccess({message : null}))
+  yield put(doCreateTransactionSuccess({message : null}))
 }
 
 function* handleGetHistoryTrx():any{

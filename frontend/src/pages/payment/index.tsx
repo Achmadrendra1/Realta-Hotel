@@ -45,7 +45,7 @@ export default withAuth(function index() {
 
   //Filter History By User
   const dataTrx = payHistoryTrx?.filter(
-    (obj: any) => obj.patrUserId === user[0]?.user_id
+    (obj: any) => obj.userId === user[0]?.user_id
   );
 
   //Get User Account By User Id yang login
@@ -93,7 +93,7 @@ export default withAuth(function index() {
   const handleCancell = (data: boolean) => {
     setOpenAct(data);
   };
-  console.log(dataTrx)
+  console.log(dataTrx);
   return (
     <>
       <Head>
@@ -208,27 +208,41 @@ export default withAuth(function index() {
               {dataTrx.map((item: any) => (
                 <Card
                   type="inner"
-                  title={item.patrTrxId}
-                  extra={item.patrModifiedDate?.split("T")[0]}
+                  title={item.transactionNumber}
+                  extra={item.trxDate?.split("T")[0]}
                   className="mb-4"
                 >
                   <div>
                     <div className="flex justify-between">
-                      <p className="font-bold text-lg">{item.patrNote}</p>
-                      <p className="text-md">Rp. 500.000</p>
+                      <p className="font-bold text-lg">
+                        {item.transactionNote}
+                      </p>
+                      {item.debit != 0 ? (
+                        <p className="text-md text-green-600 font-semibold">
+                          {parseInt(item.debit).toLocaleString("id-ID", {
+                            style: "currency",
+                            currency: "IDR",
+                            minimumFractionDigits: 0,
+                            maximumFractionDigits: 0,
+                          })}
+                        </p>
+                      ) : (
+                        <p className="text-md text-red-600 font-semibold">
+                          {parseInt(item.credit).toLocaleString("id-ID", {
+                            style: "currency",
+                            currency: "IDR",
+                            minimumFractionDigits: 0,
+                            maximumFractionDigits: 0,
+                          })}
+                        </p>
+                      )}
                     </div>
                     <div className="flex justify-between">
-                      <p className="text-md">{item.patrOrderNumber}</p>
-                      <p className="text-md text-green-600 font-semibold">
-                        {
-                         payPaga.find((obje:any)=> obje.pagaEntityId == userAcc?.find(
-                          (obj: any) => obj.usacAccountNumber == item.patrSourceId
-                          )?.usacEntityId)?.pagaName
-                          ||
-                          payBank.find((obje:any)=> obje.bankEntityId == userAcc?.find(
-                            (obj: any) => obj.usacAccountNumber == item.patrSourceId
-                            )?.usacEntityId)?.bankName
-                        }
+                      <p className="text-md">{item.orderNumber}</p>
+                      <p className="text-md font-semibold">
+                        {item.sourcePaymentName == null
+                          ? "Cash"
+                          : item.sourcePaymentName}
                       </p>
                     </div>
                   </div>
@@ -266,4 +280,4 @@ export default withAuth(function index() {
       </main>
     </>
   );
-})
+});

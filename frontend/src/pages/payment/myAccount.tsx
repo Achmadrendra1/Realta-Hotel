@@ -257,12 +257,11 @@ export default function MyAccount() {
                           />
                         </Tooltip>
                         <Tooltip title="Show More">
+                          <Link href={'/payment'}>
                           <RightCircleOutlined
-                            onClick={() => {
-                              setShowTopUp(true);
-                            }}
                             className="mt-1 ml-2 hover:text-sky-600"
                           />
+                          </Link>
                         </Tooltip>
                       </div>
                     </div>
