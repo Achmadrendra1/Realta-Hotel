@@ -35,6 +35,14 @@ import VendorReducer from './Purchasing/vendorReducer';
 import VeproReducer from './Purchasing/veproReducer';
 import PoheReducer from './Purchasing/poheReducer';
 import PodeReducer from './Purchasing/podeReducer';
+import restoMenuReducer from './Resto/restoMenuReducer';
+import menuReducer from './Resto/menuReducer';
+import menuPhotoReducer from './Resto/menuPhotoReducer';
+import restoReducer from './Resto/restoReducer';
+import orderReducer from './Resto/orderReducer';
+import numberOrderReducer from './Resto/numberOrderReducer';
+import userOrderReducer from './Resto/userOrderReducer';
+import userMenuReducer from './Resto/userMenuReducer';
 
 export default combineReducers({
   DeptReducer,
@@ -83,5 +91,16 @@ export default combineReducers({
   VendorReducer,
   VeproReducer,
   PoheReducer,
-  PodeReducer
+  PodeReducer,
+  
+  //Resto
+  restoMenuReducer,
+  menuReducer,
+  menuPhotoReducer,
+  restoReducer,
+  orderReducer,
+  numberOrderReducer,
+  userOrderReducer,
+  userMenuReducer,
+
 });

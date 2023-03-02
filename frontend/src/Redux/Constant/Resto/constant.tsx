@@ -1,0 +1,7 @@
+const constant = {
+    GET_MENU_DETAIL: 'GET_MENU_DETAIL',
+    GET_MENU_DETAIL_SUCCEED: 'GET_MENU_DETAIL_SUCCEED',
+    GET_MENU_DETAIL_FAILED: 'GET_MENU_DETAIL_FAILED',
+}
+
+export default constant;
