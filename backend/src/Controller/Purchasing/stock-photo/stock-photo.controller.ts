@@ -5,9 +5,13 @@ import {
     Get,
     Post,
     Put,
-    Delete
+    Delete,
+    UseInterceptors,
+    UploadedFiles
 } from '@nestjs/common';
 import { SphoService } from 'src/service/Purchasing/stock-photo/stock-photo.service';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { diskStorage } from 'multer';
 
 @Controller('stock-photo')
 export class SphoController {
@@ -29,6 +33,29 @@ export class SphoController {
     getSphoName(@Param() params: any) {
         return this.sphoService.findSphoName(params.name);
     }
+
+    @Post('')
+    @UseInterceptors(
+        FileInterceptor('image', {
+            storage: diskStorage({
+                destination: './employeephoto',
+                filename(req, file, callback) {
+                    const filenames = file.originalname.split('.');
+                    callback(
+                        null,
+                        req.body.fullName + '.' + filenames[filenames.length - 1],
+                    );
+                },
+            }),
+        }),
+    )
+
+    // @Post()
+    // @UseInterceptors(FilesInterceptor('files'))
+    // async uploadFile(@UploadedFiles() files: Array<Express.Multer.File>) {
+    //     console.log(files);
+    //     return `File's uploaded successfully`;
+    // }
 
     @Post()
     createSpho(@Body() body: any) {
