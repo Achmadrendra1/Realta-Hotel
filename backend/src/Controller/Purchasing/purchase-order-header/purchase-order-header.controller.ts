@@ -1,34 +1,47 @@
-import { Controller, Param, Body, Get, Post, Put, Delete } from '@nestjs/common';
-import { PurchaseOrderHeaderService } from 'src/Service/Purchasing/purchase-order-header/purchase-order-header.service';
+import {
+    Controller,
+    Param,
+    Body,
+    Get,
+    Post,
+    Put,
+    Delete
+} from '@nestjs/common';
+import { PoheService } from 'src/Service/Purchasing/purchase-order-header/purchase-order-header.service';
 
 @Controller('purchase-order-header')
-export class PurchaseOrderHeaderController {
+export class PoheController {
     constructor(
-        private poheService: PurchaseOrderHeaderService
+        private poheService: PoheService
     ) { }
 
     @Get()
-    getPurchaseOrderHeader() {
+    getPohe() {
         return this.poheService.findAllPohe();
     }
 
-    @Get(':poheNumber')
-    getPoheNumber(@Param() poheNumber: any) {
-        return this.poheService.findPoheNumber(poheNumber);
+    @Get(':id')
+    getPoheId(@Param() params: any) {
+        return this.poheService.findPoheId(params.id);
+    }
+
+    @Get(':number')
+    getPoheNumber(@Param() params: any) {
+        return this.poheService.findPoheNumber(params.number);
     }
 
     @Post()
-    createPurchaseOrderHeader(@Body() pohe: any) {
-        return this.poheService.addPohe(pohe);
+    createPohe(@Body() body: any) {
+        return this.poheService.addPohe(body);
     }
 
-    @Put(':poheNumber')
-    updatePurchaseOrderHeader(@Body() poheNumber: any) {
-        return this.poheService.editPohe(poheNumber);
+    @Put(':id')
+    updatePohe(@Param() params: any, @Body() body: any) {
+        return this.poheService.editPohe(params.id, body);
     }
 
-    @Delete(':poheNumber')
-    deletePurchaseOrderHeader(@Param() poheNumber: any) {
-        return this.poheService.dropPohe(poheNumber);
+    @Delete(':id')
+    deletePohe(@Param() params: any) {
+        return this.poheService.dropPohe(params.id);
     }
 }

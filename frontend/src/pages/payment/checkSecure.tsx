@@ -1,37 +1,89 @@
+import { insertBooking } from "@/Redux/Action/Booking/BookingAction";
+import {
+  doCheckSecureCode,
+  doCreateTransaction,
+} from "@/Redux/Action/Payment/paymentUserAction";
 import Buttons from "@/components/Button";
-import { Input, Modal } from "antd";
+import { Input, Modal, Spin, message } from "antd";
+import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 
 export default function CheckSecure(props: any) {
-  const { data } = props;
+  const { dataPayment, dataBooking } = props;
   const [pin, setPin] = useState(["", "", "", ""]);
-  const [cvv, setCVV] = useState(["", "", ""])
+  const [cvv, setCVV] = useState(["", "", ""]);
+  const dispacth = useDispatch();
 
-  const [finalForm, setFinalForm] = useState({
-    userId: 0,
-    payType: "", //Buat booking/resto
-    amount: "",
-    sourceNumber: "",
-    targetNumber: "",
-    trxType: "",
-    secureCode: "",
-    orderNumber: "",
-  });
-
-//   useEffect(()=>{
-//     setFinalForm({...data, secureCode: data.payType != 'PG' ? cvv : pin})
-//   }, [cvv, pin])
+  const [finalForm, setFinalForm] = useState(dataPayment);
+  // console.log(dataPayment)
 
   const onComplete = () => {
-    console.log(finalForm)
-  }
+    dispacth(doCheckSecureCode(finalForm));
+  };
 
+  const { error, messages, validate } = useSelector(
+    (state: any) => state.payUserAccReducer
+  );
+
+  const [msgValidate, setMsgValidate] = useState("");
+  const [isLoading, setLoading] = useState(false);
+  const [messageApi, contextHolder] = message.useMessage();
+  const router = useRouter();
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (messages != null) {
+      setLoading(true);
+      if (validate == true) {
+        setMsgValidate(messages);
+        setLoading(true);
+        // setTimeout(() => props.handleCancell(false), 5000);
+        if(dataPayment.trxType == 'ORM'){
+          dispacth(doCreateTransaction(dataPayment));
+          {
+            messageApi
+            .open({
+                type: "loading",
+                content: "Payment Is Processing",
+                duration: 3,
+              })
+              .then(() => props.handleCancell(false))
+              .then(() => message.success("Payment Success", 3))
+              .then(() => router.push('/restaurant/bill'));
+          }
+        } else {
+          const boor_id = dataBooking.boor_order_number;
+          dispacth(doCreateTransaction(dataPayment));
+          dispatch(insertBooking(dataBooking));
+          {
+            messageApi
+            .open({
+                type: "loading",
+                content: "Payment Is Processing",
+                duration: 3,
+              })
+              .then(() => props.handleCancell(false))
+              .then(() => message.success("Payment Success", 3))
+              .then(() => router.push({
+                pathname: `/booking/room/invoice`,
+                query: { id: boor_id },
+              }));
+          }
+        }
+       
+      } else {
+        setLoading(false);
+        setMsgValidate(messages);
+      }
+    }
+  }, [messages, validate]);
 
   const handleChangeCVV = (index: number, event: any) => {
     const newCVV = [...cvv];
     newCVV[index] = event.target.value;
     setCVV(newCVV);
-    setFinalForm({ ...data, secureCode: newCVV.join("") });
+    setFinalForm({ ...dataPayment, secureCode: newCVV.join("") });
     // setFormValues({...formValues, usacSecureCode: newPin.join("")})
     if (event.target.value.length === 1) {
       const nextIndex = index + 1;
@@ -61,7 +113,7 @@ export default function CheckSecure(props: any) {
     const newPin = [...pin];
     newPin[index] = event.target.value;
     setPin(newPin);
-    setFinalForm({ ...data, secureCode: newPin.join("") });
+    setFinalForm({ ...dataPayment, secureCode: newPin.join("") });
     // setFormValues({...formValues, usacSecureCode: newPin.join("")})
     if (event.target.value.length === 1) {
       const nextIndex = index + 1;
@@ -88,6 +140,7 @@ export default function CheckSecure(props: any) {
   };
   return (
     <>
+    {contextHolder}
       <Modal
         title="Verify Your Payment"
         open={props.show}
@@ -97,36 +150,46 @@ export default function CheckSecure(props: any) {
         centered
         footer={null}
       >
-        {finalForm.secureCode}
-        <p className="text-lg font-bold mb-4 text-center">Input Your {data.payType != 'PG' ? 'CVV' : 'PIN'}</p>
-        <div className="flex justify-center">
-          {data.payType != 'PG' ? cvv.map((value, index) => (
-            <Input
-              key={index}
-              id={`pin-${index + 1}`}
-              type="text"
-              maxLength={1}
-              value={value}
-                onChange={(event) => handleChangeCVV(index, event)}
-                onKeyDown={(event) => handleBackspaceCVV(index, event)}
-              className="h-[45px] mx-4 focus:border-sky-500 w-[45px] text-center"
-            />
-          )) : pin.map((value, index) => (
-            <Input
-              key={index}
-              id={`pin-${index + 1}`}
-              type="text"
-              maxLength={1}
-              value={value}
-                onChange={(event) => handleChangePin(index, event)}
-                onKeyDown={(event) => handleBackspace(index, event)}
-              className="h-[45px] mx-4 focus:border-sky-500 w-[45px] text-center"
-            />
-          ))}
-        </div>
-        <div className="text-center mt-6">
-              <Buttons funcs={onComplete}>Submit</Buttons>
-            </div>
+        <Spin spinning={isLoading} size="large">
+          <p className="text-lg font-bold mb-4 text-center">
+            Input Your {dataPayment?.payType || dataBooking?.boor_pay_type != "PG" ? "CVV" : "PIN"}
+          </p>
+          <div className="flex justify-center">
+            {dataPayment?.payType || dataBooking?.boor_pay_type != "PG"
+              ? cvv.map((value, index) => (
+                  <Input
+                    key={index}
+                    id={`pin-${index + 1}`}
+                    type="text"
+                    maxLength={1}
+                    value={value}
+                    onChange={(event) => handleChangeCVV(index, event)}
+                    onKeyDown={(event) => handleBackspaceCVV(index, event)}
+                    className="h-[45px] mx-4 focus:border-sky-500 w-[45px] text-center"
+                  />
+                ))
+              : pin.map((value, index) => (
+                  <Input
+                    key={index}
+                    id={`pin-${index + 1}`}
+                    type="text"
+                    maxLength={1}
+                    value={value}
+                    onChange={(event) => handleChangePin(index, event)}
+                    onKeyDown={(event) => handleBackspace(index, event)}
+                    className="h-[45px] mx-4 focus:border-sky-500 w-[45px] text-center"
+                  />
+                ))}
+          </div>
+          {msgValidate == "Your PIN is correct! Please Wait" ? (
+            <p className="text-center mt-4 text-green-500">{msgValidate}</p>
+          ) : (
+            <p className="text-center mt-4 text-red-500">{msgValidate}</p>
+          )}
+          <div className="text-center mt-6">
+            <Buttons funcs={onComplete}>Submit</Buttons>
+          </div>
+        </Spin>
       </Modal>
     </>
   );

@@ -15,7 +15,9 @@ export class PaymentTransactionService {
   ) {}
 
   async getAll() {
-    return await this.payRepository.find();
+    return await this.payRepository.query(
+      'select * from payment.user_transactions',
+    );
   }
 
   async getHistoryTransaction() {
@@ -32,32 +34,19 @@ export class PaymentTransactionService {
 
   async createData(items: any) {
     await this.payRepository.query(
-      'call payment.insertPaymentTrx($1, $2, $3, $4, $5)',
-      [items.userId, items.amount, items.sourceNumber, items.targetNumber, items.trxType],
+      'call payment.insertPaymentTrx($1, $2, $3, $4, $5, $6, $7)',
+      [
+        items.userId,
+        items.amount,
+        items.sourceNumber,
+        items.targetNumber,
+        items.trxType,
+        items.payType,
+        items.orderNumber,
+      ],
     );
-    const res = await this.usacService.getByAccNumber(items.targetNumber)
-    return res
-    // const lastCode = await this.getLastCode()
-    // const code = this.generateCode(lastCode[0].patrTrxId, 'BO#20230410-0013')
-    // const type = code[0].split('#')
-    // this.payRepository.createQueryBuilder()
-    // console.log(code[0], type[0])
-    // return "Cek Log"
-    // return await this.payRepository.save(
-    //   {
-    //     patrTrxId : code[0],
-    //     patrDebet : items.patrDebet,
-    //     patrCredit : items.patrCredit,
-    //     patrType : type[0]
-    //     patrNote : items.patrNote,
-    //     patrModifiedDate : new Date(),
-    //     patrOrderNumber : items.patrOrderNumber,
-    //     patrSourceId : items.patrSourceId,
-    //     patrTargetId : items.patrTargetId,
-    //     patrTrxNumberRef : items.patrTrxNumberRef,
-    //     patrUserId : items.patrUserId
-    //   }
-    // )
+    const res = await this.usacService.getByAccNumber(items.targetNumber);
+    return res;
   }
 
   async updateData(id: number, items: PaymentTransaction) {
@@ -77,7 +66,7 @@ export class PaymentTransactionService {
           patrSourceId: items.patrSourceId,
           patrTargetId: items.patrTargetId,
           patrTrxNumberRef: items.patrTrxNumberRef,
-          patrUser : items.patrUser
+          patrUser: items.patrUser,
         },
       )
       .catch((err) => {

@@ -9,7 +9,7 @@ import payBankReducer from './Payment/payBankReducer';
 import payPagaReducer from './Payment/payPagaReducer';
 import payUserAccReducer from './Payment/payUserAccReducer';
 import { selectReducer } from './HR/select';
-//Master
+// Master
 import regionsReducer from './Master/regionsReducer';
 import provincesReducer from './Master/provincesReducer';
 import countryReducer from './Master/countryReducer';
@@ -30,6 +30,22 @@ import ReviewBoorReducer from './Booking/ReviewBoorReducer';
 import { workorderReducer } from './HR/workorder';
 import { workorderDetailReducer } from './HR/workDetail';
 import { serviceListReducer } from './HR/serviceList';
+import BoorInvoiceReducer from './Booking/BoorInvoiceReducer';
+// Purchasing
+import StockReducer from './Purchasing/stockReducer';
+import StodReducer from './Purchasing/stodReducer';
+import VendorReducer from './Purchasing/vendorReducer';
+import VeproReducer from './Purchasing/veproReducer';
+import PoheReducer from './Purchasing/poheReducer';
+import PodeReducer from './Purchasing/podeReducer';
+import restoMenuReducer from './Resto/restoMenuReducer';
+import menuReducer from './Resto/menuReducer';
+import menuPhotoReducer from './Resto/menuPhotoReducer';
+import restoReducer from './Resto/restoReducer';
+import orderReducer from './Resto/orderReducer';
+import numberOrderReducer from './Resto/numberOrderReducer';
+import userOrderReducer from './Resto/userOrderReducer';
+import userMenuReducer from './Resto/userMenuReducer';
 
 export default combineReducers({
   DeptReducer,
@@ -69,6 +85,26 @@ export default combineReducers({
   FaciBoorReducer,
   HotelBoorReducer,
   ReviewBoorReducer,
+  BoorInvoiceReducer,
+
+
+  //Purchasing
+  StockReducer,
+  StodReducer,
+  VendorReducer,
+  VeproReducer,
+  PoheReducer,
+  PodeReducer,
+  
+  //Resto
+  restoMenuReducer,
+  menuReducer,
+  menuPhotoReducer,
+  restoReducer,
+  orderReducer,
+  numberOrderReducer,
+  userOrderReducer,
+  userMenuReducer,
 
   workorderReducer,
   workorderDetailReducer,

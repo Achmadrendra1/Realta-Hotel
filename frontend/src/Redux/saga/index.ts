@@ -28,6 +28,7 @@ import {
   handleTopUp,
   handleCheckSecure,
   handleGetHistoryTrx,
+  handleCreateTransaction,
 } from "./Payment/paymentSagas";
 
 //Master
@@ -130,9 +131,32 @@ import {
   handleUpdateHotel,
 } from "./Hotel/HotelSaga";
 import BookingConstant from "../Constant/Booking/BookingConstant";
-import { handleBoorCreateFinal, handleBoorLast, handleSpFacilities, handleSpHotel, handleSpHotelReviews, handleSpof } from "./Booking/BookingSaga";
 import { workType } from "../Constant/HR/workType";
 import { handleServicesList, handleWorkDetail, handleWorkorder } from "./HR/workorder";
+import { handleBoorCreateFinal, handleBoorLast, handleSpBoorInvoice, handleSpFacilities, handleSpHotel, handleSpHotelReviews, handleSpof } from "./Booking/BookingSaga";
+
+// Purchasing
+import PurchasingConst from '../Constant/Purchasing/PurchasingConst'
+import { handleStock, handleStockAdd, handleStockUpdate, handleStockDelete } from './Purchasing/stockSaga'
+import { handleStod, handleStodAdd, handleStodDelete, handleStodUpdate } from './Purchasing/stodSaga'
+import { handleVendor, handleVendorAdd, handleVendorDelete, handleVendorUpdate } from './Purchasing/vendorSaga'
+import { handleVepro, handleVeproAdd, handleVeproDelete, handleVeproUpdate } from './Purchasing/veproSaga'
+import { handlePohe, handlePoheAdd, handlePoheDelete, handlePoheUpdate } from './Purchasing/poheSaga'
+import { handlePode, handlePodeAdd, handlePodeDelete, handlePodeUpdate } from './Purchasing/podeSaga'
+import menuConstant from "../Constant/Resto/menuConstant";
+import { handleAddMenu, handleDeleteMenu, handleMenu, handleUpdateMenu } from "./Resto/menuProcess";
+import restoConstant from "../Constant/Resto/restoConstant";
+import { handleResto } from "./Resto/restoProcess";
+import photoConstant from "../Constant/Resto/photoConstant";
+import { handleAddMenuPhoto, handleDeletePhoto, handleGetPhoto, handleUpdatePrimary } from "./Resto/menuPhotoProcess";
+import orderConstant from "../Constant/Resto/orderConstant";
+import numberOrderConst from "../Constant/Resto/numberOrderConstant";
+import userOrderConstant from "../Constant/Resto/userOrderConstant";
+import { handleAddOrder, handleOrder } from "./Resto/orderProcess";
+import { handleOrderNumber } from "./Resto/orderNumberProcess";
+import { handleUserOrder } from "./Resto/userOrderProcess";
+import userMenuConstant from "../Constant/Resto/userMenuConstant";
+import { handleUserMenu } from "./Resto/userMenuProcess";
 
 export default function* rootSaga() {
   yield all([
@@ -147,6 +171,7 @@ export default function* rootSaga() {
     takeEvery(empType.GET_DATA, handleGetEmployees),
     takeEvery(empType.GET_DETAIL, handleDetailEmployee),
 
+    //Payment
     takeEvery(PaymentConst.GET_PAYMENT_HISTORY_DASH, handleTrxDashRequest),
     takeEvery(PaymentConst.GET_PAYMENT_GATEWAY_REQUEST, handlePagaRequest),
     takeEvery(PaymentConst.ADD_PAYMENT_GATEWAY, handlePagaCreate),
@@ -162,6 +187,7 @@ export default function* rootSaga() {
     takeEvery(PaymentConst.TOP_UP_WALLET, handleTopUp),
     takeEvery(PaymentConst.CHECK_SECURE_CODE, handleCheckSecure),
     takeEvery(PaymentConst.GET_HISTORY_PAYMENT, handleGetHistoryTrx),
+    takeEvery(PaymentConst.CREATE_TRANSACTION, handleCreateTransaction),
 
     //Master Regions
     takeEvery(ActionTypes.GET_REGIONS, handlerRegions),
@@ -259,7 +285,33 @@ export default function* rootSaga() {
     takeEvery(HotelConstant.UPDATE_FAPH, handleUpdateFaph),
     takeEvery(HotelConstant.DEL_FAPH, handleDeleteFaph),
     takeEvery(HotelConstant.GET_ADDRESS, handleAddress),
-    takeEvery(HotelConstant.GET_PROVINCE, handleProvince),
+    takeEvery(HotelConstant.GET_PROVINCE, handleProvince), ,
+
+    // Purchasing
+    takeEvery(PurchasingConst.GET_STOCKS, handleStock),
+    takeEvery(PurchasingConst.ADD_STOCKS, handleStockAdd),
+    takeEvery(PurchasingConst.EDIT_STOCKS, handleStockUpdate),
+    takeEvery(PurchasingConst.DEL_STOCKS, handleStockDelete),
+    takeEvery(PurchasingConst.GET_STOD, handleStod),
+    takeEvery(PurchasingConst.ADD_STOD, handleStodAdd),
+    takeEvery(PurchasingConst.EDIT_STOD, handleStodUpdate),
+    takeEvery(PurchasingConst.DEL_STOD, handleStodDelete),
+    takeEvery(PurchasingConst.GET_VENDOR, handleVendor),
+    takeEvery(PurchasingConst.ADD_VENDOR, handleVendorAdd),
+    takeEvery(PurchasingConst.EDIT_VENDOR, handleVendorUpdate),
+    takeEvery(PurchasingConst.DEL_VENDOR, handleVendorDelete),
+    takeEvery(PurchasingConst.GET_VEPRO, handleVepro),
+    takeEvery(PurchasingConst.ADD_VEPRO, handleVeproAdd),
+    takeEvery(PurchasingConst.EDIT_VEPRO, handleVeproUpdate),
+    takeEvery(PurchasingConst.DEL_VEPRO, handleVeproDelete),
+    takeEvery(PurchasingConst.GET_POHE, handlePohe),
+    takeEvery(PurchasingConst.ADD_POHE, handlePoheAdd),
+    takeEvery(PurchasingConst.EDIT_POHE, handlePoheUpdate),
+    takeEvery(PurchasingConst.DEL_POHE, handlePoheDelete),
+    takeEvery(PurchasingConst.GET_PODE, handlePode),
+    takeEvery(PurchasingConst.ADD_PODE, handlePodeAdd),
+    takeEvery(PurchasingConst.EDIT_PODE, handlePodeUpdate),
+    takeEvery(PurchasingConst.DEL_PODE, handlePodeDelete),
 
 
     //Booking
@@ -268,6 +320,24 @@ export default function* rootSaga() {
     takeEvery(BookingConstant.INSERT_BOOKING_ORDER, handleBoorCreateFinal),
     takeEvery(BookingConstant.GET_SP_FACILITIES, handleSpFacilities),
     takeEvery(BookingConstant.GET_SP_HOTEL, handleSpHotel),
-    takeEvery(BookingConstant.GET_SP_REVIEW, handleSpHotelReviews)
+    takeEvery(BookingConstant.GET_SP_REVIEW, handleSpHotelReviews),
+    takeEvery(BookingConstant.GET_SP_INVOICE, handleSpBoorInvoice),
+
+    //Resto
+    takeEvery(menuConstant.GET_MENUS, handleMenu),
+    takeEvery(menuConstant.UPDATE_MENU, handleUpdateMenu),
+    takeEvery(menuConstant.ADD_MENU, handleAddMenu),
+    takeEvery(menuConstant.DELETE_MENU, handleDeleteMenu),
+    takeEvery(restoConstant.GET_RESTOS, handleResto),
+    takeEvery(photoConstant.ADD_PHOTO, handleAddMenuPhoto),
+    takeEvery(photoConstant.DELETE_PHOTO, handleDeletePhoto),
+    takeEvery(photoConstant.GET_PHOTO, handleGetPhoto),
+    takeEvery(photoConstant.UPDATE_PRIMARY, handleUpdatePrimary),
+    takeEvery(orderConstant.GET_ORDERS, handleOrder),
+    takeEvery(orderConstant.ADD_ORDERS, handleAddOrder),
+    takeEvery(numberOrderConst.GET_NUMBER_ORDER, handleOrderNumber),
+    takeEvery(userOrderConstant.GET_ORDER_COMPLETE, handleUserOrder),
+    takeEvery(userMenuConstant.GET_MENU_USER, handleUserMenu),
+
   ]);
 }

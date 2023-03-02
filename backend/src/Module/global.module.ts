@@ -125,16 +125,20 @@ import { PurchaseOrderHeader } from 'src/entities/PurchaseOrderHeader';
 import { PurchaseOrderDetail } from 'src/entities/PurchaseOrderDetail';
 // Purchasing Service
 import { StockService } from 'src/service/Purchasing/stock/stock.service';
-import { StockPhotoService } from 'src/service/Purchasing/stock-photo/stock-photo.service';
+import { StodService } from 'src/Service/Purchasing/stock-detail/stock-detail.service';
+import { SphoService } from 'src/service/Purchasing/stock-photo/stock-photo.service';
 import { VendorService } from 'src/service/Purchasing/vendor/vendor.service';
-import { PurchaseOrderHeaderService } from 'src/Service/Purchasing/purchase-order-header/purchase-order-header.service';
-import { PurchaseOrderDetailService } from 'src/Service/Purchasing/purchase-order-detail/purchase-order-detail.service';
+import { VeproService } from 'src/Service/Purchasing/vendor-product/vendor-product.service';
+import { PoheService } from 'src/Service/Purchasing/purchase-order-header/purchase-order-header.service';
+import { PodeService } from 'src/Service/Purchasing/purchase-order-detail/purchase-order-detail.service';
 // Purchasing Controller
 import { StockController } from 'src/Controller/Purchasing/stock/stock.controller';
-import { StockPhotoController } from 'src/Controller/Purchasing/stock-photo/stock-photo.controller';
+import { StodController } from 'src/Controller/Purchasing/stock-detail/stock-detail.controller';
+import { SphoController } from 'src/Controller/Purchasing/stock-photo/stock-photo.controller';
 import { VendorController } from 'src/Controller/Purchasing/vendor/vendor.controller';
-import { PurchaseOrderHeaderController } from 'src/Controller/Purchasing/purchase-order-header/purchase-order-header.controller';
-import { PurchaseOrderDetailController } from 'src/Controller/Purchasing/purchase-order-detail/purchase-order-detail.controller';
+import { VeproController } from 'src/Controller/Purchasing/vendor-product/vendor-product.controller';
+import { PoheController } from 'src/Controller/Purchasing/purchase-order-header/purchase-order-header.controller';
+import { PodeController } from 'src/Controller/Purchasing/purchase-order-detail/purchase-order-detail.controller';
 import { DepartmentService } from 'src/Service/HR/department/department.service';
 import { DepartmentController } from 'src/Controller/HR/department/department.controller';
 import { PolicyCategoryGroup } from 'src/entities/PolicyCategoryGroup';
@@ -153,6 +157,12 @@ import { UserBreakfeastService } from 'src/Service/Booking/user-breakfeast/user-
 import { SpecialOfferCoupons } from 'src/entities/SpecialOfferCoupons';
 import { WorkorderController } from 'src/Controller/HR/workorder/workorder.controller';
 import { WorkorderService } from 'src/Service/HR/workorder/workorder.service';
+import { RestoMenuDetailController } from 'src/Controller/Resto/resto-menu-detail/resto-menu-detail.controller';
+import { ListRestaurantController } from 'src/Controller/Resto/list-restaurant/list-restaurant.controller';
+import { OrderMenuDetailController } from 'src/Controller/Resto/order-menu-detail/order-menu-detail.controller';
+import { RestoMenuDetailService } from 'src/Service/Resto/resto-menu-detail/resto-menu-detail.service';
+import { ListRestaurantService } from 'src/Service/Resto/list-restaurant/list-restaurant.service';
+import { OrderMenuDetailService } from 'src/Service/Resto/order-menu-detail/order-menu-detail.service';
 
 //Booking Service
 
@@ -194,14 +204,16 @@ import { WorkorderService } from 'src/Service/HR/workorder/workorder.service';
       UserBreakfeast,
 
       JobRole,
-      OrderMenus,
-      OrderMenuDetail,
       PaymentGateway,
       PaymentTransaction,
-      RestoMenus,
-      RestoMenuPhotos,
       Shift,
       UserAccounts,
+
+      // Restaurant
+      OrderMenus,
+      OrderMenuDetail,
+      RestoMenus,
+      RestoMenuPhotos,
 
       // Users
       UserBonusPoints,
@@ -271,16 +283,27 @@ import { WorkorderService } from 'src/Service/HR/workorder/workorder.service';
 
     // Purchasing
     StockController,
-    StockPhotoController,
+    StodController,
+    SphoController,
     VendorController,
-    PurchaseOrderHeaderController,
-    PurchaseOrderDetailController,
+    VeproController,
+    PoheController,
+    PodeController,
 
     // HR
     EmployeeController,
     DepartmentController,
     JobRoleController,
     WorkorderController,
+
+    // Resto
+
+    RestoMenusController,
+    RestoMenuPhotosController,
+    OrderMenusController,
+    RestoMenuDetailController,
+    ListRestaurantController,
+    OrderMenuDetailController,
   ],
   providers: [
     AppService,
@@ -327,16 +350,26 @@ import { WorkorderService } from 'src/Service/HR/workorder/workorder.service';
 
     // Purchasing
     StockService,
-    StockPhotoService,
+    StodService,
+    SphoService,
     VendorService,
-    PurchaseOrderHeaderService,
-    PurchaseOrderDetailService,
+    VeproService,
+    PoheService,
+    PodeService,
 
     // HR
     EmployeeService,
     DepartmentService,
     JobRoleService,
     WorkorderService,
+
+    // Resto
+    RestoMenusService,
+    RestoMenuPhotosService,
+    OrderMenusService,
+    RestoMenuDetailService,
+    ListRestaurantService,
+    OrderMenuDetailService,
   ],
   // controllers: [AppController, EntitysController, BankController, PaymentGatewayController, UserAccountController, PaymentTransactionController],
   // providers: [AppService, EntitysService, BankService, PaymentGatewayService, UserAccountService, PaymentTransactionService],

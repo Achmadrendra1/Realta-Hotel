@@ -34,7 +34,6 @@ function payUserAccReducer(state = initialState, action: any) {
       return {...state, messages : action.payload.message, validate:action.payload.status}
     case PaymentConst.CHECK_SECURE_CODE_FAILED :
       return {...state, messages : action.payload.message, validate : action.payload.status}
-
     case PaymentConst.TOP_UP_WALLET:
       return {...state}
     case PaymentConst.TOP_UP_WALLET_SUCCESS:
@@ -45,12 +44,14 @@ function payUserAccReducer(state = initialState, action: any) {
         messages : action.payload.message,
         validate : action.payload.status
       }
-      
-      
     case PaymentConst.TOP_UP_WALLET_FAILED:
       return {...state, message : action.payload}
+    case PaymentConst.CREATE_TRANSACTION : 
+      return {...state}
+    case PaymentConst.CREATE_TRANSACTION_SUCCESS :
+      return {...state, message : action.payload}
     default:
-      return { ...state };
+      return state;
   }
 }
 

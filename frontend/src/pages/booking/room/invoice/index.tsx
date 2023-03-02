@@ -1,309 +1,262 @@
-import Buttons from '@/components/Button'
-import Layouts from '@/layouts/layout'
-import { LeftOutlined } from '@ant-design/icons'
-import { Col, Divider, Row } from 'antd'
-import React from 'react'
+import { getSpInvoice } from "@/Redux/Action/Booking/BookingAction";
+import Buttons from "@/components/Button";
+import { LeftCircleOutlined, LeftOutlined } from "@ant-design/icons";
+import { Col, Divider, QRCode, Row } from "antd";
+import Link from "next/link";
+import { useRouter } from "next/router";
+import React, { useEffect, useRef, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 
 export default function index() {
+  let root = useRouter();
+  const { id } = root.query || {};
+  const dispatch = useDispatch();
 
-    //Array Object untuk title and field
-    const invoice1 = [
-        {
-            title : 'Booking Order',
-            field : 'BO-20230123-0001'
-        },
-        {
-            title : 'Order Date',
-            field : '23 January 2023'
-        },
-        {
-            title : 'Invoice Number',
-            field : 'TRX#2023224-0002'
-        },
-        {
-            title : 'Invoice Date',
-            field : '24 January 2023'
-        },
-        {
-            title : 'Status',
-            field : 'Paid'
-        },
-        {
-            title : 'Payment Type',
-            field : 'Debet'
-        }
-    ]
+  const router = useRouter()
 
-    const invoice2 = [
-        {
-            title : 'Full Name',
-            field : 'Ricky Dimas'
-        },
-        {
-            title : 'Contact Number',
-            field : '087808130857'
-        },
-        {
-            title : 'Member',
-            field : 'Wizard'
-        },
-        {
-            title : 'Member Date',
-            field : '23 May 2022'
-        },
-        {
-            title : 'Remaining Points',
-            field : '+150'
-        },
-    ]
+  const invoiceView = useSelector(
+    (state: any) => state.BoorInvoiceReducer.invoice
+  );
+
+  useEffect(() => {
+    dispatch(getSpInvoice());
+  }, [id]);
+
+  const Invoice = invoiceView?.filter(
+    (item: any) => item.boor_order_number == id
+  );
+  const boor_order_number =
+    Invoice?.length > 0 ? Invoice[0].boor_order_number : "";
+  const boor_order_date = Invoice?.length > 0 ? Invoice[0].boor_order_date : "";
+  const boor_is_paid = Invoice[0]?.boor_is_paid;
+  const boor_pay_type = Invoice?.length > 0 ? Invoice[0].boor_pay_type : "";
+  const user_full_name = Invoice?.length > 0 ? Invoice[0].user_full_name : "";
+  const user_phone_number =
+    Invoice?.length > 0 ? Invoice[0].user_phone_number : "";
+  const usme_memb_name = Invoice?.length > 0 ? Invoice[0].usme_memb_name : "";
+  const usme_promote_date =
+    Invoice?.length > 0 ? Invoice[0].usme_promote_date : "";
+  const usme_points = Invoice?.length > 0 ? Invoice[0].usme_points : 0;
+  const faci_name = Invoice?.length > 0 ? Invoice[0].faci_name : "";
+  const boor_total_room = Invoice?.length > 0 ? Invoice[0].boor_total_room : 0;
+  const borde_adults = Invoice?.length > 0 ? Invoice[0].borde_adults : 0;
+  const borde_kids = Invoice?.length > 0 ? Invoice[0].borde_kids : 0;
+  const borde_price = Invoice?.length > 0 ? Invoice[0].borde_price : "";
+  const borde_discount = Invoice?.length > 0 ? Invoice[0].borde_discount : "";
+  const borde_subtotal = Invoice?.length > 0 ? Invoice[0].borde_subtotal : "";
+  const inv_number = Invoice?.length > 0 ? Invoice[0].patr_trx_id : "";
+  const inv_date = Invoice?.length > 0 ? Invoice[0].patr_modified_date : "";
+
+  const [getInvoice, setGetinvoice] = useState({
+    boor_order_number: "",
+    boor_order_date: "",
+    invoice_number: "",
+    invoice_date: "",
+    boor_is_paid: "",
+    boor_pay_type: "",
+    user_full_name: "",
+    user_phone_number: "",
+    usme_memb_name: "",
+    usme_promote_date: "",
+    usme_points: 0,
+    faci_name: "",
+    boor_total_room: 0,
+    borde_adults: 0,
+    borde_kids: 0,
+    borde_price: "",
+    borde_discount: "",
+    borde_subtotal: "",
+  });
+
+  useEffect(() => {
+    setGetinvoice({
+      ...getInvoice,
+      boor_order_number: boor_order_number,
+      boor_order_date: boor_order_date,
+      boor_is_paid: boor_is_paid,
+      boor_pay_type: boor_pay_type,
+      user_full_name: user_full_name,
+      user_phone_number: user_phone_number,
+      usme_memb_name: usme_memb_name,
+      usme_promote_date: usme_promote_date,
+      usme_points: usme_points,
+      faci_name: faci_name,
+      boor_total_room: boor_total_room,
+      borde_adults: borde_adults,
+      borde_kids: borde_kids,
+      borde_price: borde_price,
+      borde_discount: borde_discount,
+      borde_subtotal: borde_subtotal,
+      invoice_number: inv_number,
+      invoice_date: inv_date,
+    });
+  }, [boor_order_number]);
+
+  // console.log(getInvoice);
+
+  // const email = "aryasamiftah@gmail.com"
+
+  // const handleEmailClick = () => {
+  //   window.location.href = `mailto:${email}`;
+  // };
+
+  //Array Object untuk title and field
+  const invoice1 = [
+    {
+      title: "Booking Order",
+      field: getInvoice.boor_order_number,
+    },
+    {
+      title: "Order Date",
+      field: getInvoice.boor_order_date?.split("T")[0],
+    },
+    {
+      title: "Invoice Number",
+      field: getInvoice.invoice_number,
+    },
+    {
+      title: "Invoice Date",
+      field: getInvoice.invoice_date?.split("T")[0],
+    },
+    {
+      title: "Status",
+      field: getInvoice.boor_is_paid,
+    },
+    {
+      title: "Payment Type",
+      field: getInvoice?.boor_pay_type,
+    },
+  ];
+
+  const invoice2 = [
+    {
+      title: "Full Name",
+      field: getInvoice.user_full_name,
+    },
+    {
+      title: "Contact Number",
+      field: getInvoice.user_phone_number,
+    },
+    {
+      title: "Member",
+      field: getInvoice.usme_memb_name,
+    },
+    {
+      title: "Member Date",
+      field: getInvoice.usme_promote_date?.split("T")[0],
+    },
+    {
+      title: "Remaining Points",
+      field: getInvoice.usme_points,
+    },
+  ];
 
   return (
-    <Layouts>
-        <div>
-            <h1 className='text-xl mb-5'><LeftOutlined/>Kembali </h1>
+    <>
+      <div className="px-6 pt-4 flex justify-between">
+        <Link href={"/booking"} className="text-xl mb-5">
+          <LeftCircleOutlined /> Kembali
+        </Link>
+        <div className="mr-12 flex justify-end">
+          <div className="mr-2">
+            <Buttons funcs={''}>Print</Buttons>
+          </div>
+          <div>
+            <Buttons funcs={""}>Send To Email</Buttons>
+          </div>
         </div>
-        <div>
-            <h1 className='text-2xl mb-3 font-bold' >Invoice </h1>
-        </div>
-        <Row>
-            {
-                invoice1.map((item:any, index : any) =>
-                <Col span={4} key={index}>
-                    <h2 className='text-xl'>{item.title}</h2>
-                    <h3 className='text-l'>{item.field}</h3>
-                </Col>
-                )  
-            }
-        </Row>
-        <Divider dashed style={{borderColor : 'black'}} />
-        <div>
-            <h1 className='text-2xl mb-3 font-bold' >Customer </h1>
-        </div>
-        <Row>
-            {
-                invoice2.map((item:any, index : any) =>
-                <Col span={4} key={index}>
-                    <h2 className='text-xl'>{item.title}</h2>
-                    <h3 className='text-l'>{item.field}</h3>
-                </Col>
-                )  
-            }
-        </Row>
-        <Divider dashed style={{borderColor : 'black'}} />
-        <div>
-            <h1 className='text-2xl mb-3 font-bold' >Billing </h1>
-        </div>
-        <Row className='flex'>
-            <Col span={4} className='flex'>
-                <div>
-                    <h2 className='text-xl'>Facilities</h2>
-                    <h3 className='text-l'>Deluxe Twin Bed</h3>
-                </div>
-            </Col>
-            <Col span={4} className='flex'>
-                <div>
-                    <h2 className='text-xl'>Qty</h2>
-                    <h3 className='text-l'>1</h3>
-                </div>
-            </Col>
-            <Col span={4} className='flex'>
-                <div>
-                    <h2 className='text-xl'>Total Guests</h2>
-                    <h3 className='text-l'>2 Guests</h3>
-                </div>
-            </Col>
-            <Col span={4} className='flex'>
-                <div>
-                    <h2 className='text-xl'>Price</h2>
-                    <h3 className='text-l'>Rp.300,000</h3>
-                </div>
-            </Col>
-            <Col span={4} className='flex'>
-                <div>
-                    <h2 className='text-xl'>Discount</h2>
-                    <h3 className='text-l'>- Rp.15,000</h3>
-                </div>
-            </Col>
-            <Col span={4} className='flex'>
-                <div>
-                    <h2 className='text-xl'>Sub Total</h2>
-                    <h3 className='text-l'>Rp.270,000</h3>
-                </div>
-            </Col>
-        </Row>
-        <Divider dashed style={{borderColor : 'black'}} />
-        <Row>
-            <Col span={16}>
-            </Col>
-            <Col span={8}>
-                <div className='flex'>
-                    <Col span={12}>
-                        <div className='flex text-xl mr-5'>
-                            <h2>Total Amount</h2>
-                        </div>
-                    </Col>
-                    <Col span={12}>
-                        <div className='flex text-xl'>
-                            <h2>Rp. 335,000</h2>
-                        </div>
-                    </Col>
-                </div>
-            </Col>
-        </Row>
-        <Row>
-            <Col span={16}>
-            </Col>
-            <Col span={8}>
-                <div className='flex'>
-                    <Col span={12}>
-                        <div className='flex text-xl mr-5'>
-                            <h2>Tax</h2>
-                        </div>
-                    </Col>
-                    <Col span={12}>
-                        <div className='flex text-xl'>
-                            <h2>10%</h2>
-                        </div>
-                    </Col>
-                </div>
-            </Col>
-        </Row>
-        <Row>
-            <Col span={8}>
-            </Col>
-            <Col span={16}>
-                <div className='flex'>
-                    <Col span={6}>
-                        <div className='flex text-xl mr-5'>
-                            <Buttons funcs={''}>Send To Email</Buttons>
-                        </div>
-                    </Col>
-                    <Col span={6}>
-                        <div className='flex text-xl'>
-                        <Buttons funcs={''}>Print</Buttons>
-                        </div>
-                    </Col>
-                    <Col span={6}>
-                        <div className='flex text-xl mr-5'>
-                            <h2>Payment Amount</h2>
-                        </div>
-                    </Col>
-                    <Col span={6}>
-                        <div className='flex text-xl'>
-                            <h2>Rp. 400,000</h2>
-                        </div>
-                    </Col>
-                </div>
-            </Col>
-        </Row>
-    </Layouts>
-  )
-}
+      </div>
 
-{/* <div className='flex items-center mb-5'>
-            <div className='flex text-2xl items-center mr-3'>
-                <LeftOutlined />
-            </div>
-            <div className='flex font-semibold text-2xl items-center'>
-                Invoice
-            </div>
-        </div>
+      <div id="invoice" className=" w-11/12 shadow-lg m-auto p-4">
+        <h1 className="text-2xl mb-3 font-bold">Invoice {id}</h1>
+
         <Row>
-            
+          {invoice1.map((item: any, index: any) => (
+            <Col span={4} key={index}>
+              <p className="text-lg font-semibold mb-1">{item.title}</p>
+              <p className="text-md">{item.field}</p>
+            </Col>
+          ))}
         </Row>
-        <div className='mb-3'>
-            <div className='flex justify-between text-l font-semibold'>
-                <div>
-                    <p>Booking Order</p>
-                </div>
-                <div>
-                    <p>Order Date</p>
-                </div>
-                <div>
-                    <p>Invoice Number</p>
-                </div>
-                <div>
-                    <p>Invoice Date</p>
-                </div>
-                <div>
-                    <p>Status</p>
-                </div>
-                <div>
-                    <p>Payment</p>
-                </div>
+        <Divider dashed style={{ borderColor: "black" }} />
+
+        <h1 className="text-2xl mb-3 font-bold">Customer </h1>
+
+        <Row>
+          {invoice2.map((item: any, index: any) => (
+            <Col span={4} key={index}>
+              <h2 className="text-lg font-semibold mb-1">{item.title}</h2>
+              <h3 className="text-md">{item.field}</h3>
+            </Col>
+          ))}
+        </Row>
+        <Divider dashed style={{ borderColor: "black" }} />
+
+        <h1 className="text-2xl mb-3 font-bold">Billing </h1>
+
+        <Row className="flex">
+          <Col span={4} className="flex">
+            <div>
+              <h2 className="text-lg font-semibold mb-1">Facilities</h2>
+              <h3 className="text-md">{getInvoice.faci_name}</h3>
             </div>
+          </Col>
+          <Col span={4} className="flex">
+            <div>
+              <h2 className="text-lg font-semibold mb-1">Qty</h2>
+              <h3 className="text-md">{getInvoice.boor_total_room}</h3>
+            </div>
+          </Col>
+          <Col span={4} className="flex">
+            <div>
+              <h2 className="text-lg font-semibold mb-1">Total Guests</h2>
+              <h3 className="text-md">
+                {getInvoice.borde_adults} Adults {getInvoice.borde_kids} Kids
+              </h3>
+            </div>
+          </Col>
+          <Col span={4} className="flex">
+            <div>
+              <h2 className="text-lg font-semibold mb-1">Price</h2>
+              <h3 className="text-md">{getInvoice.borde_price}</h3>
+            </div>
+          </Col>
+          <Col span={4} className="flex">
+            <div>
+              <h2 className="text-lg font-semibold mb-1">Discount</h2>
+              <h3 className="text-md">{getInvoice.borde_discount}</h3>
+            </div>
+          </Col>
+          <Col span={4} className="flex">
+            <div>
+              <h2 className="text-lg font-semibold mb-1">Sub Total</h2>
+              <h3 className="text-md">{getInvoice.borde_subtotal}</h3>
+            </div>
+          </Col>
+        </Row>
+        <Divider dashed style={{ borderColor: "black" }} />
+        <div className="w-10/12 flex justify-between items-center">
+          <QRCode value={id} size={96} className="ml-14" />
+          <div className="w-1/4">
+            <div className="flex justify-between min-w-[350px]">
+              <h2 className="flex text-lg font-semibold mb-1 mr-5">
+                Total Amount
+              </h2>
+              <h2 className="flex text-lg font-semibold mb-1">
+                {getInvoice.borde_subtotal}
+              </h2>
+            </div>
+            <div className="flex justify-between min-w-[350px]">
+              <h2 className="flex text-lg font-semibold mb-1 mr-5">
+                Payment Amount
+              </h2>
+              <h2 className="flex text-lg font-semibold mb-1">
+                {getInvoice.borde_subtotal}
+              </h2>
+            </div>
+          </div>
         </div>
-        <div className='mb-5'>
-            <div className='flex justify-between text-l font-semibold'>
-                <div>
-                    <p>BO-20230123-0001</p>
-                </div>
-                <div>
-                    <p>23 January 2023</p>
-                </div>
-                <div>
-                    <p>TRX#2023224-0002</p>
-                </div>
-                <div>
-                    <p>24 January 2023</p>
-                </div>
-                <div>
-                    <p>Paid</p>
-                </div>
-                <div>
-                    <p>Pay at Hotel</p>
-                </div>
-            </div>
-        </div>
-        <div className='flex items-center mb-5'>
-            <div className='flex text-xl items-center mr-3'>
-                
-            </div>
-            <div className='flex font-semibold text-2xl items-center'>
-                Customer
-            </div>
-        </div>
-        <div className='mb-3'>
-            <div className='flex justify-between text-l font-semibold'>
-                <div>
-                    <p>Booking Order</p>
-                </div>
-                <div>
-                    <p>Order Date</p>
-                </div>
-                <div>
-                    <p>Invoice Number</p>
-                </div>
-                <div>
-                    <p>Invoice Date</p>
-                </div>
-                <div>
-                    <p>Status</p>
-                </div>
-                <div>
-                    <p>Payment</p>
-                </div>
-            </div>
-        </div>
-        <div className='mb-5'>
-            <div className='flex justify-between text-l font-semibold'>
-                <div>
-                    <p>BO-20230123-0001</p>
-                </div>
-                <div>
-                    <p>23 January 2023</p>
-                </div>
-                <div>
-                    <p>TRX#2023224-0002</p>
-                </div>
-                <div>
-                    <p>24 January 2023</p>
-                </div>
-                <div>
-                    <p>Paid</p>
-                </div>
-                <div>
-                    <p>Pay at Hotel</p>
-                </div>
-            </div>
-        </div>        */}
+      </div>
+    </>
+  );
+}
