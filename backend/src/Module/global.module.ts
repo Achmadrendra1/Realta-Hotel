@@ -151,6 +151,8 @@ import { BookingOrderDetailExtraService } from 'src/Service/Booking/booking-orde
 import { SpecialOffersService } from 'src/Service/Booking/special-offers/special-offers.service';
 import { UserBreakfeastService } from 'src/Service/Booking/user-breakfeast/user-breakfeast.service';
 import { SpecialOfferCoupons } from 'src/entities/SpecialOfferCoupons';
+import { WorkorderController } from 'src/Controller/HR/workorder/workorder.controller';
+import { WorkorderService } from 'src/Service/HR/workorder/workorder.service';
 
 //Booking Service
 
@@ -278,6 +280,7 @@ import { SpecialOfferCoupons } from 'src/entities/SpecialOfferCoupons';
     EmployeeController,
     DepartmentController,
     JobRoleController,
+    WorkorderController,
   ],
   providers: [
     AppService,
@@ -333,6 +336,7 @@ import { SpecialOfferCoupons } from 'src/entities/SpecialOfferCoupons';
     EmployeeService,
     DepartmentService,
     JobRoleService,
+    WorkorderService,
   ],
   // controllers: [AppController, EntitysController, BankController, PaymentGatewayController, UserAccountController, PaymentTransactionController],
   // providers: [AppService, EntitysService, BankService, PaymentGatewayService, UserAccountService, PaymentTransactionService],

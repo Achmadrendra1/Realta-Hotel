@@ -43,7 +43,7 @@ export class EmployeeController {
   @UseInterceptors(
     FileInterceptor('image', {
       storage: diskStorage({
-        destination: './employeephoto',
+        destination: './public/employeephoto',
         filename(req, file, callback) {
           const filenames = file.originalname.split('.');
           callback(
