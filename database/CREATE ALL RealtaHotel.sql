@@ -349,6 +349,7 @@ CREATE TABLE resto.resto_menus(
 	reme_name VARCHAR(55),
 	reme_description VARCHAR(255),
 	reme_price MONEY,
+	reme_discount money,
 	reme_status VARCHAR(15), --AVAILABLE | EMPTY
 	reme_modified_date TIMESTAMP,
 	reme_discount MONEY,
