@@ -27,18 +27,18 @@ export class EmployeeService {
   }
 
   async getDeptHistory(id: number): Promise<any> {
-    return await this.departmentHist.find({
-      where: { edhiEmpId: id },
-      relations: {
-        edhiDept: true,
-      },
-    });
+    // return await this.departmentHist.find({
+    //   where: { edhiEmpId: id },
+    //   relations: {
+    //     edhiDept: true,
+    //   },
+    // });
   }
 
   async getPayHistory(id: number): Promise<any> {
-    return await this.paymentHist.find({
-      where: { ephiEmp: { empId: id } },
-    });
+    // return await this.paymentHist.find({
+    //   where: { ephiEmp: id },
+    // });
   }
 
   async employeeDetail(id: number): Promise<any> {

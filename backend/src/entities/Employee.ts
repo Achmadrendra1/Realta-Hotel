@@ -5,14 +5,10 @@ import {
   JoinColumn,
   ManyToOne,
   OneToMany,
-  OneToOne,
   PrimaryGeneratedColumn,
 } from "typeorm";
 import { JobRole } from "./JobRole";
-import { EmployeeDepartmentHistory } from "./EmployeeDepartmentHistory";
-import { EmployeePayHistory } from "./EmployeePayHistory";
-import { PurchaseOrderHeader } from "./PurchaseOrderHeader";
-import { WorkOrderDetail } from "./WorkOrderDetail";
+import { Users } from "./Users";
 
 @Index("employee_pkey", ["empId"], { unique: true })
 @Entity("employee", { schema: "hr" })
@@ -96,27 +92,10 @@ export class Employee {
   @JoinColumn([{ name: "emp_joro_id", referencedColumnName: "joroId" }])
   empJoro: JobRole;
 
-  @OneToOne(
-    () => EmployeeDepartmentHistory,
-    (employeeDepartmentHistory) => employeeDepartmentHistory.edhiEmp
-  )
-  employeeDepartmentHistory: EmployeeDepartmentHistory;
-
-  @OneToMany(
-    () => EmployeePayHistory,
-    (employeePayHistory) => employeePayHistory.ephiEmp
-  )
-  employeePayHistories: EmployeePayHistory[];
-
-  @OneToMany(
-    () => PurchaseOrderHeader,
-    (purchaseOrderHeader) => purchaseOrderHeader.poheEmp
-  )
-  purchaseOrderHeaders: PurchaseOrderHeader[];
-
-  @OneToMany(
-    () => WorkOrderDetail,
-    (workOrderDetail) => workOrderDetail.wodeEmp
-  )
-  workOrderDetails: WorkOrderDetail[];
+  @ManyToOne(() => Users, (users) => users.employees, {
+    onDelete: "CASCADE",
+    onUpdate: "CASCADE",
+  })
+  @JoinColumn([{ name: "emp_user_id", referencedColumnName: "userId" }])
+  empUser: Users;
 }

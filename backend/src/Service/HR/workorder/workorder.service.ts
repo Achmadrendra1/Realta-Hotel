@@ -21,34 +21,33 @@ export class WorkorderService {
   }
 
   async getDeatils(id: number): Promise<any> {
-    return await this.workorderdetail.find({
-      where: { wodeWoro: { woroUser: { userId: id } } },
-      relations: { wodeEmp: true, wodeWoro: { woroUser: true } },
-    });
+    // return await this.workorderdetail.find({
+    //   where: { wodeWoro: { woroUser: { userId: id } } },
+    //   relations: { wodeEmp: true, wodeWoro: { woroUser: true } },
+    // });
   }
 
   async getService(): Promise<any> {
-    const data = await this.service.find();
-    const employeeName = await this.workorderdetail.find({
-      relations: { wodeEmp: true, wodeWoro: { woroUser: true } },
-    });
-    const newData = [];
-    const employeData = [];
-
-    employeeName.map((item: any) => {
-      employeData.push({
-        label: item.wodeWoro.woroUser.userFullName,
-        value: item.wodeEmp.empId,
-      });
-    });
-    data.map((item: any) => {
-      newData.push({
-        value: item.setaName,
-      });
-    });
-    return {
-      task: newData,
-      employeeName: employeData,
-    };
+    // const data = await this.service.find();
+    // const employeeName = await this.workorderdetail.find({
+    //   relations: { wodeEmp: true, wodeWoro: { woroUser: true } },
+    // });
+    // const newData = [];
+    // const employeData = [];
+    // employeeName.map((item: any) => {
+    //   employeData.push({
+    //     label: item.wodeWoro.woroUser.userFullName,
+    //     value: item.wodeEmp.empId,
+    //   });
+    // });
+    // data.map((item: any) => {
+    //   newData.push({
+    //     value: item.setaName,
+    //   });
+    // });
+    // return {
+    //   task: newData,
+    //   employeeName: employeData,
+    // };
   }
 }

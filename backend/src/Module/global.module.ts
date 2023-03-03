@@ -15,7 +15,6 @@ import { BookingOrderDetailExtra } from 'src/entities/BookingOrderDetailExtra';
 import { BookingOrders } from 'src/entities/BookingOrders';
 import { CategoryGroup } from 'src/entities/CategoryGroup';
 import { Country } from 'src/entities/Country';
-import { Department } from 'src/entities/Department';
 import { Employee } from 'src/entities/Employee';
 import { EmployeeDepartmentHistory } from 'src/entities/EmployeeDepartmentHistory';
 import { EmployeePayHistory } from 'src/entities/EmployeePayHistory';
@@ -163,6 +162,7 @@ import { OrderMenuDetailController } from 'src/Controller/Resto/order-menu-detai
 import { RestoMenuDetailService } from 'src/Service/Resto/resto-menu-detail/resto-menu-detail.service';
 import { ListRestaurantService } from 'src/Service/Resto/list-restaurant/list-restaurant.service';
 import { OrderMenuDetailService } from 'src/Service/Resto/order-menu-detail/order-menu-detail.service';
+import { Department } from 'src/entities/Department';
 
 //Booking Service
 
