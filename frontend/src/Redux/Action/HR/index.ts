@@ -1,6 +1,7 @@
 import { deptType } from "@/Redux/Constant/HR/deptType"
 import { empType } from "@/Redux/Constant/HR/empType"
 import { jobType } from "@/Redux/Constant/HR/jobType"
+import { workType } from "@/Redux/Constant/HR/workType"
 import { retry } from "redux-saga/effects"
 
 export const GetDeptAll = () => {
@@ -60,5 +61,31 @@ export const delEmployee = ( payload:number ) => {
     return{
         type: empType.DEL_DATA,
         payload: payload
+    }
+}
+
+export const updateEmployee = ( payload:any ) => {
+    return{
+        type: empType.UPDATE_DATA,
+        payload: payload
+    }
+}
+
+export const getWorkOrder = () => {
+    return{
+        type: workType.GET_WORK_ORDER
+    }
+}
+
+export const getWorkDetail = ( id:any ) => {
+    return{
+        type: workType.GET_DETAIL,
+        payload: +id
+    }
+}
+
+export const getServiceWork = () => {
+    return{
+        type: workType.SERVICE_WORK
     }
 }

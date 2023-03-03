@@ -27,18 +27,18 @@ export class EmployeeService {
   }
 
   async getDeptHistory(id: number): Promise<any> {
-    return await this.departmentHist.find({
-      where: { edhiEmpId: id },
-      relations: {
-        edhiDept: true,
-      },
-    });
+    // return await this.departmentHist.find({
+    //   where: { edhiEmpId: id },
+    //   relations: {
+    //     edhiDept: true,
+    //   },
+    // });
   }
 
   async getPayHistory(id: number): Promise<any> {
-    return await this.paymentHist.find({
-      where: { ephiEmp: { empId: id } },
-    });
+    // return await this.paymentHist.find({
+    //   where: { ephiEmp: id },
+    // });
   }
 
   async employeeDetail(id: number): Promise<any> {
@@ -118,8 +118,8 @@ export class EmployeeService {
     await this.employeeStore.query(
       `call hr.updateEmp($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16)`,
       [
-        +data.userId,
-        +data.empId,
+        data.userId,
+        data.empId,
         data.fullName,
         data.nationalId,
         data.birthDate,
@@ -127,18 +127,23 @@ export class EmployeeService {
         data.marital,
         data.gender,
         data.salaryFlag,
-        +data.status,
-        +data.vacation,
-        +data.sick,
+        data.status,
+        data.vacation,
+        data.sick,
         data.jobId,
-        +data.salary,
+        data.salary,
         data.frequenltyPay,
         dept.deptId,
       ],
     );
 
     return {
-      message: 'Success',
+      id: +data.empId,
+      nationalid: data.nationalId,
+      birthdate: data.birthDate,
+      fullname: data.fullName,
+      hire: data.hireDate,
+      status: data.status,
     };
   }
 }

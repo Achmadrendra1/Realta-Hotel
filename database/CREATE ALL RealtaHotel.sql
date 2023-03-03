@@ -486,6 +486,8 @@ create table HR.employee(
 	emp_modified_date timestamp,
 	emp_emp_id int,
 	emp_joro_id int,
+	emp_user_id int,
+	constraint fk_user_id foreign key (emp_user_id) references users.users(user_id) on delete cascade on update cascade,
 	constraint fk_emp_id foreign key(emp_emp_id) references HR.employee (emp_id) on delete cascade on update cascade,
 	constraint fk_joro_id foreign key(emp_joro_id) references HR.job_role (joro_id) on delete cascade on update cascade
 );

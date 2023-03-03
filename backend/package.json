@@ -18,7 +18,7 @@
         "test:cov": "jest --coverage",
         "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
         "test:e2e": "jest --config ./test/jest-e2e.json",
-        "pg": "typeorm-model-generator -o model -h localhost -d RealtaHotelv2 -p 5432 -u postgres -x root -s master,users,booking,hotel,hr,payment,purchasing,resto -e postgres"
+        "pg": "typeorm-model-generator -o model -h localhost -d realtaHotel -p 5432 -u postgres -x admin -s master,users,booking,hotel,hr,payment,purchasing,resto -e postgres"
 
     },
     "dependencies": {
@@ -29,7 +29,6 @@
         "@nestjs/passport": "^9.0.0",
         "@nestjs/platform-express": "^9.0.0",
         "@nestjs/typeorm": "^9.0.1",
-        "@types/multer": "^1.4.7",
         "bcrypt": "^5.1.0",
         "dotenv": "^16.0.3",
         "jsonwebtoken": "^9.0.0",
@@ -51,6 +50,7 @@
         "@types/bcrypt": "^5.0.0",
         "@types/express": "^4.17.13",
         "@types/jest": "29.2.4",
+        "@types/multer": "^1.4.7",
         "@types/node": "18.11.18",
         "@types/supertest": "^2.0.11",
         "@typescript-eslint/eslint-plugin": "^5.0.0",
