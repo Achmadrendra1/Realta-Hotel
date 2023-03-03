@@ -1966,27 +1966,27 @@ insert into hr.work_orders values (19, '2023-01-11 15:21:35.238554-08', 'OPEN', 
 insert into hr.work_orders values (20, '2023-01-11 15:21:35.238554-08', 'CLOSED', 20);
 
 -- Employees
-insert into hr.employee values (1, 'IDN', '2023-01-12', 'M', 'M', '2016-01-11 20:35:11.679331-08', '1', 5, 0, 1, NULL, now(), NULL, 20);
-insert into hr.employee values (2, 'IDN', '2023-01-12', 'M', 'M', '2017-01-01 22:09:54.390584-08', '1', 5, 0, 1, NULL, now(), 1, 5);
-insert into hr.employee values (3, 'IDN', '2023-01-12', 'M', 'F', '2018-04-11 22:09:31.194324-08', '1', 4, 1, 1, NULL, now(), 2, 5);
-insert into hr.employee values (4, 'IDN', '2023-01-12', 'M', 'M', '2018-05-11 22:09:31.194324-08', '1', 4, 1, 1, NULL, now(), 2, 5);
-insert into hr.employee values (5, 'IDN', '2023-01-12', 'S', 'M', '2019-07-11 22:13:15.547295-07', '1', 4, 1, 1, NULL, now(), 2, 5);
-insert into hr.employee values (6, 'IDN', '2023-01-12', 'M', 'M', '2019-07-11 22:25:14.906377-07', '1', 4, 1, 1, NULL, now(), 2, 5);
-insert into hr.employee values (7, 'IDN', '2023-01-12', 'M', 'F', '2019-07-11 22:25:14.906377-07', '1', 4, 1, 1, NULL, now(), 2, 5);
-insert into hr.employee values (8, 'IDN', '2023-01-12', 'S', 'F', '2017-01-01 22:09:54.390584-08', '1', 5, 0, 1, NULL, now(), 1, 7);
-insert into hr.employee values (9, 'IDN', '2023-01-12', 'M', 'F', '2018-04-11 22:09:31.194324-08', '1', 4, 1, 1, NULL, now(), 8, 7);
-insert into hr.employee values (10, 'IDN', '2023-01-12', 'M', 'M', '2018-05-11 22:09:31.194324-08', '1', 4, 1, 1, NULL, now(), 8, 7);
-insert into hr.employee values (11, 'IDN', '2023-01-12', 'S', 'M', '2019-07-11 22:13:15.547295-07', '1', 4, 1, 1, NULL, now(), 8, 7);
-insert into hr.employee values (12, 'IDN', '2023-01-12', 'M', 'F', '2017-01-01 22:09:54.390584-08', '1', 5, 0, 1, NULL, now(), 1, 6);
-insert into hr.employee values (13, 'IDN', '2023-01-12', 'S', 'F', '2018-04-11 22:09:31.194324-08', '1', 3, 1, 1, NULL, now(), 12, 6);
-insert into hr.employee values (14, 'IDN', '2023-01-12', 'M', 'M', '2018-05-11 22:09:31.194324-08', '1', 2, 2, 1, NULL, now(), 12, 6);
-insert into hr.employee values (15, 'IDN', '2023-01-12', 'S', 'M', '2019-07-11 22:13:15.547295-07', '1', 4, 0, 1, NULL, now(), 12, 6);
+insert into hr.employee values (1, 'IDN', '2023-01-12', 'M', 'M', '2016-01-11 20:35:11.679331-08', '1', 5, 0, 1, NULL, now(), NULL, 20, 1);
+insert into hr.employee values (2, 'IDN', '2023-01-12', 'M', 'M', '2017-01-01 22:09:54.390584-08', '1', 5, 0, 1, NULL, now(), 1, 5, 2);
+insert into hr.employee values (3, 'IDN', '2023-01-12', 'M', 'F', '2018-04-11 22:09:31.194324-08', '1', 4, 1, 1, NULL, now(), 2, 5, 3);
+insert into hr.employee values (4, 'IDN', '2023-01-12', 'M', 'M', '2018-05-11 22:09:31.194324-08', '1', 4, 1, 1, NULL, now(), 2, 5, 4);
+insert into hr.employee values (5, 'IDN', '2023-01-12', 'S', 'M', '2019-07-11 22:13:15.547295-07', '1', 4, 1, 1, NULL, now(), 2, 5, 5);
+insert into hr.employee values (6, 'IDN', '2023-01-12', 'M', 'M', '2019-07-11 22:25:14.906377-07', '1', 4, 1, 1, NULL, now(), 2, 5, 6);
+insert into hr.employee values (7, 'IDN', '2023-01-12', 'M', 'F', '2019-07-11 22:25:14.906377-07', '1', 4, 1, 1, NULL, now(), 2, 5, 7);
+insert into hr.employee values (8, 'IDN', '2023-01-12', 'S', 'F', '2017-01-01 22:09:54.390584-08', '1', 5, 0, 1, NULL, now(), 1, 7, 8);
+insert into hr.employee values (9, 'IDN', '2023-01-12', 'M', 'F', '2018-04-11 22:09:31.194324-08', '1', 4, 1, 1, NULL, now(), 8, 7, 9);
+insert into hr.employee values (10, 'IDN', '2023-01-12', 'M', 'M', '2018-05-11 22:09:31.194324-08', '1', 4, 1, 1, NULL, now(), 8, 7, 10);
+insert into hr.employee values (11, 'IDN', '2023-01-12', 'S', 'M', '2019-07-11 22:13:15.547295-07', '1', 4, 1, 1, NULL, now(), 8, 7, 11);
+insert into hr.employee values (12, 'IDN', '2023-01-12', 'M', 'F', '2017-01-01 22:09:54.390584-08', '1', 5, 0, 1, NULL, now(), 1, 6, 12);
+insert into hr.employee values (13, 'IDN', '2023-01-12', 'S', 'F', '2018-04-11 22:09:31.194324-08', '1', 3, 1, 1, NULL, now(), 12, 6, 13);
+insert into hr.employee values (14, 'IDN', '2023-01-12', 'M', 'M', '2018-05-11 22:09:31.194324-08', '1', 2, 2, 1, NULL, now(), 12, 6, 14);
+insert into hr.employee values (15, 'IDN', '2023-01-12', 'S', 'M', '2019-07-11 22:13:15.547295-07', '1', 4, 0, 1, NULL, now(), 12, 6, 15);
 
-insert into hr.employee values (16, 'IDN', '2023-01-12', 'M', 'F', '2017-01-01 22:09:54.390584-08', '1', 5, 0, 1, NULL, now(), 1, 8);
-insert into hr.employee values (17, 'IDN', '2023-01-12', 'S', 'F', '2018-04-11 22:09:31.194324-08', '1', 3, 1, 1, NULL, now(), 16, 8);
-insert into hr.employee values (18, 'IDN', '2023-01-12', 'M', 'M', '2018-05-11 22:09:31.194324-08', '1', 2, 2, 1, NULL, now(), 1, 3);
-insert into hr.employee values (19, 'IDN', '2023-01-12', 'S', 'M', '2019-07-11 22:13:15.547295-07', '1', 4, 0, 1, NULL, now(), 18, 3);
-insert into hr.employee values (20, 'IDN', '2023-01-12', 'S', 'M', '2019-07-11 22:13:15.547295-07', '1', 4, 0, 1, NULL, now(), 18, 11);
+insert into hr.employee values (16, 'IDN', '2023-01-12', 'M', 'F', '2017-01-01 22:09:54.390584-08', '1', 5, 0, 1, NULL, now(), 1, 8, 16);
+insert into hr.employee values (17, 'IDN', '2023-01-12', 'S', 'F', '2018-04-11 22:09:31.194324-08', '1', 3, 1, 1, NULL, now(), 16, 8, 17);
+insert into hr.employee values (18, 'IDN', '2023-01-12', 'M', 'M', '2018-05-11 22:09:31.194324-08', '1', 2, 2, 1, NULL, now(), 1, 3, 18);
+insert into hr.employee values (19, 'IDN', '2023-01-12', 'S', 'M', '2019-07-11 22:13:15.547295-07', '1', 4, 0, 1, NULL, now(), 18, 3, 19);
+insert into hr.employee values (20, 'IDN', '2023-01-12', 'S', 'M', '2019-07-11 22:13:15.547295-07', '1', 4, 0, 1, NULL, now(), 18, 11, 20);
 
 -- Work order detail
 insert into hr.work_order_detail values (1, NULL, NULL, NULL, NULL, NULL, 1, NULL, NULL, 1);
