@@ -10,8 +10,9 @@ export class HotelsService {
     private hotelRepository: Repository<Hotels>,
   ) {}
 
-  async findAllHotels(): Promise<any> {
-    return await this.hotelRepository.find({
+  async findAllHotels(page = 1, limit = 5): Promise<any> {
+    const skip = (page - 1) * limit;
+    const [hotels, count] = await this.hotelRepository.findAndCount({
       // order: {
       //   hotelName: 'ASC',
       // },
@@ -24,7 +25,15 @@ export class HotelsService {
         hotelReviews: true,
         hotelAddr: true,
       },
+      take: limit,
+      skip: skip,
     });
+    return {
+      data: hotels,
+      total: count,
+      page: page,
+      limit: limit,
+    };
   }
 
   async findByNameId(hotelId: number): Promise<any> {
