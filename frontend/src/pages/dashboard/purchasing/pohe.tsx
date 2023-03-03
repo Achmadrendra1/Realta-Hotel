@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useRouter } from 'next/router';
-import { Modal, Table, Tooltip } from 'antd';
-import { EditOutlined, DeleteOutlined, MoreOutlined, PlusCircleOutlined } from '@ant-design/icons';
+import { Input, Modal, Table, Tooltip } from 'antd';
+import { EditOutlined, DeleteOutlined, MoreOutlined, PlusCircleOutlined, SearchOutlined } from '@ant-design/icons';
 import { AllPohe, DelPohe } from '@/Redux/Action/Purchasing/purchasingAction';
 import EditPohes from './edit-pohe';
 
@@ -13,6 +13,15 @@ export default function Pohe() {
     const [id, setId] = useState(0)
     const [addPohe, setAddPohe] = useState(false)
     const [updatePohe, setUpdatePohe] = useState(false)
+
+    const [search, setSearch] = useState('')
+    const filterData = pohes.filter((item: any) => {
+        if (search === "") {
+            return item;
+        } else {
+            return item.pove_number.toLowerCase().includes(search.toLocaleLowerCase()) || item.pove_name.toLowerCase().includes(search.toLocaleLowerCase());
+        }
+    });
 
     const handleOk = () => {
         setTimeout(() => {
@@ -141,7 +150,14 @@ export default function Pohe() {
                 />
                 : null}
 
-            <Table columns={columnsPohe} dataSource={pohes} />
+            <Input
+                className="w-96 py-2 rounded-full my-5"
+                value={search}
+                placeholder="Order Number / Vendor Name"
+                prefix={<SearchOutlined />}
+                onChange={e => setSearch(e.target.value)} />
+
+            <Table columns={columnsPohe} dataSource={filterData.sort((a:any, b:any) => a.pove_id - b.pove_id)} />
         </>
     )
 }

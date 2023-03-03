@@ -10,6 +10,11 @@ import { useDispatch, useSelector} from "react-redux";
 import { getSpHotel } from "@/Redux/Action/Booking/BookingAction"; 
 import { useRouter } from "next/router";
 
+//OnChange checkbox
+const onChange = (checkedValues: CheckboxValueType[]) => {
+  console.log('checked = ', checkedValues);
+};
+
 export default function index() {
   
   const root = useRouter()
@@ -19,25 +24,40 @@ export default function index() {
     dispatch(getSpHotel())
   }, []);
   
-  //Get data Hotel
-  let hotel = useSelector((state : any) => state.HotelBoorReducer.hotel)
-  console.log(hotel)
-
-  //Hook untuk View More Filter
-  const [filter, setFilter] = useState(false)
-
-  //OnChange checkbox
-  const onChange = (checkedValues: CheckboxValueType[]) => {
-    console.log('checked = ', checkedValues);
-  };
-  
   //View detail hotel by id
   const viewDetailId = (id : any) => {
     root.push({
       pathname : ('/booking/room/' + id)
     })
   }
+
+  //Get data Hotel
+  let hotel = useSelector((state : any) => state.HotelBoorReducer.hotel)
+  //Hook untuk View More
+  const [more, setMore] = useState(false)
   
+  //Hook untuk Filter
+  const [filter, setFilter] = useState({
+    lowest : 0,
+    highest : 0
+  })
+
+  const filterHotel = hotel?.filter((items : any) => 
+  parseInt((items.faci_rateprice).substring(3).replace(".","")) >= filter.lowest
+  &&
+  parseInt((items.faci_rateprice).substring(3).replace(".","")) <= filter.highest
+  )
+
+  const handleChangePrice = (event : any) => {
+    const { name, value } = event.target;
+    setFilter(items => ({...items, [name] : value})) 
+  }
+
+  const handleClear = () => {
+    setFilter({...filter, highest : 0, lowest : 0})
+  }
+
+
   return (
     <Layouts>
       <div>
@@ -49,18 +69,18 @@ export default function index() {
                       <p>Filters</p>
                   </div>
                   <div>
-                    <button className='text-decoration-line: underline font-semibold'>Clear All</button>
+                    <button className='text-decoration-line: underline font-semibold' onClick={handleClear}>Clear All</button>
                   </div>
               </div>
               <div>
                   <p className="text-xl py-3 font-semibold">Price Range</p>
                   <div className="flex justift-between items-center">
                     <Col span={10}>
-                      <Input/>
+                      <Input type="number" name="lowest" value={filter.lowest} onChange={handleChangePrice}/>
                     </Col>
                       <p className="px-1">Sampai</p>
                     <Col span={10}>
-                      <Input/>
+                      <Input type="number" name="highest" value={filter.highest} onChange={handleChangePrice}/>
                     </Col>
                   </div>
               </div>
@@ -78,21 +98,21 @@ export default function index() {
                           <Col span={24}>
                             <Checkbox value="Swimming Pool">Swimming Pool</Checkbox>
                           </Col>
-                          <Col span={24} className={`${filter ? "block" : "hidden"}`}>
+                          <Col span={24} className={`${more ? "block" : "hidden"}`}>
                             <Checkbox value="Ballroom">Ballroom</Checkbox>
                           </Col>
-                          <Col span={24} className={`${filter ? "block" : "hidden"}`}>
+                          <Col span={24} className={`${more ? "block" : "hidden"}`}>
                             <Checkbox value="Gym">Gym</Checkbox>
                           </Col>
-                          <Col span={24} className={`${filter ? "block" : "hidden"}`}>
+                          <Col span={24} className={`${more ? "block" : "hidden"}`}>
                             <Checkbox value="Aula">Aula</Checkbox>
                           </Col>
                         </Row>
                       </Checkbox.Group>
                   </div>
                 <div className="py-1 font-bold">
-                  <button onClick={()=> setFilter(!filter)} className={`${filter ? "hidden" : "block"}`}>+ View More</button>
-                  <button onClick={()=> setFilter(!filter)} className={`${!filter ? "hidden" : "block"}`}>- Less More</button>
+                  <button onClick={()=> setMore(!more)} className={`${more ? "hidden" : "block"}`}>+ View More</button>
+                  <button onClick={()=> setMore(!more)} className={`${!more ? "hidden" : "block"}`}>- Less More</button>
                 </div>
                 <div className="text-center">
                   <Button className="">Filter</Button>
@@ -124,22 +144,17 @@ export default function index() {
                     let arrHighPrice = highPrice.split('-')
                     let pict = hotel.url
                     let arrPict = pict.split(",")
-                    console.log(pict)
-
                     return (
                       <Card>
                         <Row>
-                          <Col span={6}>
-                            <div>
-                              <Row>
+                          <Col span={6} className="flex items-center">
+                              <Row gutter={10}>
                                 <Col span={18}>
-                                  <div className="w-5/6 p-2">
-                                    <Carousel autoplay autoplaySpeed={5000}>
-                                      {arrPict.map((each : any) => (
-                                          <img className="w-full" src={each.slice(1)} alt="hotels"/>
-                                      ))}
-                                    </Carousel>
-                                  </div>
+                                      <Carousel autoplay autoplaySpeed={5000}>
+                                        {arrPict.map((each : any) => (
+                                            <img className="w-full" src={each.slice(1)} alt="hotels"/>
+                                        ))}
+                                      </Carousel>
                                 </Col>
                                 <Col span={6}>
                                     {arrPict.map((image : any, index : any)=> (
@@ -147,7 +162,6 @@ export default function index() {
                                     ))}
                                 </Col>
                               </Row>
-                            </div>
                           </Col>
                           <Col span={18}>
                             <Card>
