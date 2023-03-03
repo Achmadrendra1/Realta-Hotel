@@ -24,7 +24,10 @@ const Headers = ({nav, logo, click, queries} : {nav?:any, logo?:string, click?:a
 
     const [isActive, setIsActive] = useState(false);
     const user = useSelector((state:any) => state.GetUserReducer.getUser);
+    // console.log(user)
+    
   const accNumber = `131${user[0]?.user_phone_number}`
+  
   const {account} = useSelector((state:any) => state.payUserAccReducer)
   const userAcc = account?.filter((obj:any) => obj.usacUserId === user[0]?.user_id)
   const fintechAcc = userAcc?.filter((obj:any) => obj.usacType === 'Payment')
@@ -179,7 +182,7 @@ function isTokenExpired() {
                     <WalletOutlined /> Activate
                   </p>}
                 </div>
-               <Dropdown overlay={isLogin && user[0]?.user_role=='User' && user[0]?.user_role=='Guest' ? menuUser :  menu2} trigger={["click"]} className="h-8">
+               <Dropdown overlay={isLogin && user[0]?.user_role=='User' || user[0]?.user_role=='Guest' ? menuUser :  menu2} trigger={["click"]} className="h-8">
                 <Avatar size="default" icon={<UserOutlined />} className="ml-4 hover:cursor-pointer" />
               </Dropdown>
               </div>

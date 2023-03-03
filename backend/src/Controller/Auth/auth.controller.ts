@@ -21,7 +21,7 @@ export class AuthController {
 
   @Get('/:token')
   async verif(@Param() params): Promise<any> {
-    const result = jwt.verify(params.token, process.env.SECRET_KEY);
-    return `Result : ${result}`;
+    return jwt.verify(params.token, process.env.SECRET_KEY);
+     
   }
 }

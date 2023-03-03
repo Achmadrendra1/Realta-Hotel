@@ -104,7 +104,6 @@ export default function EditProfile(props: any) {
           <Row style={{ marginTop: 20 }}>
             <Col span={12}>
               <Form.Item
-              
                 label="Name"
                 style={{ width: 250 }}
                
@@ -172,7 +171,16 @@ export default function EditProfile(props: any) {
                     <Select.Option value="5">User</Select.Option>
                   </Select>
                 </Form.Item>
-              ) : null}
+              ) :
+              <Form.Item
+              label="Role Type"
+              style={{ width: 250 }}
+              name="role_name"
+                      >
+                <Input  disabled style={{ marginLeft: 10 }} /> 
+
+              </Form.Item>
+                }
             </Col>
           </Row>
           <h1 className="text-bold">Profile</h1>
@@ -211,12 +219,11 @@ export default function EditProfile(props: any) {
             </Col>
 
             <Col>
-              <Form.Item label="BirthDate" name="uspro_birt_date">
+              <Form.Item label="Birth Date" name="uspro_birt_date">
                 <DatePicker
                   style={{ marginLeft: 8 }}
                   format="DD-MM-YY"
                   // value={formValues.uspro_birth_date}
-                  onChange={handleSelectDateChange}
                 />
               </Form.Item>
 

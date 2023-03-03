@@ -8,7 +8,6 @@ export class AuthService {
   constructor(private UserService: UsersService) {}
 
   async Login(userEmail: any, password: any): Promise<any> {
-    try {
         const users = await this.UserService.findByEmail(userEmail);
         if (users.length == 0) {
           throw new HttpException(
@@ -30,12 +29,7 @@ export class AuthService {
             );
           }
         }
-    } catch (error) {
-        throw new HttpException(
-            { message: error.message },
-            HttpStatus.BAD_REQUEST,
-          );
-    }
+    
  
   }
 }

@@ -20,3 +20,10 @@ export const doLoginFailed = (payload : any) =>{
         payload
     }
 }
+
+export const doLogout = (payload : any) =>{
+    return{
+        type: UserConst.LOGOUT_USER,
+        payload
+    }
+}
