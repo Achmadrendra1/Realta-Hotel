@@ -16,17 +16,7 @@ const Dashboard = ({children} : {children:any}) => {
         {
             name: 'Home',
             icon: <HomeOutlined />,
-            href: '/'
-        },
-        {
-            name: 'Task',
-            icon: <CarryOutOutlined />,
-            href: '/dashboard/hr/officeboy'
-        },
-        {
-            name: 'Resepsionis',
-            icon: <BookOutlined />,
-            href: '/'
+            href: '/dashboard/master'
         },
         {
             name: 'Resto',
@@ -41,7 +31,7 @@ const Dashboard = ({children} : {children:any}) => {
         {
             name: 'Hotels',
             icon: <ShopOutlined />,
-            href: '/'
+            href: '/dashboard/hotel'
         },
         {
             name: 'Payments',
