@@ -23,22 +23,23 @@ export class EmployeeService {
   ) {}
 
   async getEmployee(): Promise<any> {
-    return await this.employeeStore.query(`select * from hr.empProfile()`);
+    return await this.employeeStore.find({
+      relations: {
+        empUser: true,
+      },
+    });
   }
 
   async getDeptHistory(id: number): Promise<any> {
-    // return await this.departmentHist.find({
-    //   where: { edhiEmpId: id },
-    //   relations: {
-    //     edhiDept: true,
-    //   },
-    // });
+    return await this.departmentHist.find({
+      where: { edhiEmpId: id },
+    });
   }
 
   async getPayHistory(id: number): Promise<any> {
-    // return await this.paymentHist.find({
-    //   where: { ephiEmp: id },
-    // });
+    return await this.paymentHist.find({
+      where: { ephiEmpId: id },
+    });
   }
 
   async employeeDetail(id: number): Promise<any> {
@@ -98,12 +99,7 @@ export class EmployeeService {
   }
 
   async deleteEmployee(id: number): Promise<any> {
-    const userDetail = await this.employeeStore.query(
-      `select * from hr.profileDetail(${id})`,
-    );
-
-    await this.employeeStore.delete({ empId: id });
-    await this.users.delete({ userId: userDetail.userid });
+    await this.users.delete({ userId: id });
     return {
       id: id,
       message: 'Delete Success',
