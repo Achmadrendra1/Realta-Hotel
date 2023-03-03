@@ -1,4 +1,5 @@
 -- Function Stock Detail
+-- Menampilkan Data Stock Detail dengan PO Number(Purchase Order Header) dan Used In (Hotel Facilities)
 
 CREATE OR REPLACE FUNCTION purchasing.getALLStod()
 	RETURNS TABLE (
@@ -41,6 +42,7 @@ LANGUAGE 'plpgsql';
 
 
 -- Function Vendor Product
+-- Menampilkan Data Vendor Product dengan Stock Name
 
 CREATE OR REPLACE FUNCTION purchasing.getALLVendorStock()
 	RETURNS TABLE (
@@ -79,6 +81,7 @@ LANGUAGE 'plpgsql';
 
 
 -- Function Purchase Order Header
+-- Menampilkan Data Purchase Order Header dengan nama Vendor
 
 CREATE OR REPLACE FUNCTION purchasing.getALLPoheVendor()
 	RETURNS TABLE (
@@ -117,6 +120,7 @@ LANGUAGE 'plpgsql';
 
 
 -- Function Purchase Order Detail
+-- Menampilkan data Purchase Order Detail dengan Nama Stock
 
 CREATE OR REPLACE FUNCTION purchasing.getALLPode()
 	RETURNS TABLE (
