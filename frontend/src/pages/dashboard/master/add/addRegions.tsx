@@ -9,16 +9,13 @@ export default function AddRegions(props: any) {
   const { handleClose } = props;
 
   const onFinish = (data: any) => {
-    // console.log('Success Region:', data);
     dispatch(doAddRegions(data));
-    // console.log('add region data :', data);
 
     handleClose(false);
     alert;
   };
 
   const onFinishFailed = (errorInfo: any) => {
-    // console.log('Failed Region:', errorInfo);
   };
 
   //Alert

@@ -114,53 +114,32 @@ export default function menuMaster() {
   //GET DATA FROM DATABASE
 
   let dataRegions = useSelector((state: any) => state.regionsReducer.regions);
-  // // console.log('Selector Regions :', dataRegions);
-
   let dataCountry = useSelector((state: any) => state.countryReducer.country);
-  // console.log('Selector Country :', dataCountry);
-
   let dataProvinces = useSelector(
     (state: any) => state.provincesReducer.provinces
   );
-  // console.log('Selector Provinces :', dataProvinces);
-
   let dataCity = useSelector((state: any) => state.addressReducer.address);
-  // console.log('Selector City :', dataCity);
   let dataJalan = useSelector((state: any) => state.addressReducer.address);
-  // console.log('S electorJalan :', dataJalan);
-
   let dataPolicy = useSelector((state: any) => state.policyReducer.policy);
-  // console.log('Selector policy :', dataPolicy);
-
   let dataCategory = useSelector(
     (state: any) => state.categoryGroupReducer.categoryGroup
   );
-
-  // console.log('Selector categoryGroup :', dataCategory);
   let dataPrice = useSelector(
     (state: any) => state.priceItemsReducer.priceItems
   );
-  // console.log('Selector priceItems :', dataPrice);
   let dataService = useSelector(
     (state: any) => state.serviceTaskReducer.serviceTask
   );
-  // console.log('Selector serviceTask :', dataPolicy);
   let dataLocationsAll = useSelector(
     (state: any) => state.locationsReducer.locations
   );
-  // console.log('Selector locationsAll :', dataLocationsAll);
   let dataLocationsRC = useSelector(
     (state: any) => state.locationsRCReducer.locationsRC
   );
-  // console.log('Selector locationsRC :', dataLocationsRC);
   let dataLocationsRCP = useSelector(
     (state: any) => state.locationsRCPReducer.locationsRCP
   );
-  // console.log('Selector locationsRCP :', dataLocationsRCP);
 
-  //-------------------------------------------------------------------------------
-  //-------------------------------------------------------------------------------
-  //-------------------------------------------------------------------------------
   /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   //ADD DATA FROM DATABASE
 
@@ -222,44 +201,36 @@ export default function menuMaster() {
   const editDataRegions = (idRegions: number) => {
     setOpenEditRegions(true);
     setIdRegions(idRegions);
-    // console.log('click edit region :', idRegions);
   };
   const editDataCountry = (idCountry: number) => {
     setOpenEditCountry(true);
     setIdCountry(idCountry);
-    // console.log(idCountry);
   };
   const editDataProvinces = (idProvinces: number) => {
     setOpenEditProvinces(true);
     setIdProvinces(idProvinces);
-    // console.log(idProvinces);
   };
   const editDataCity = (idCity: number) => {
     setOpenEditCity(true);
     setIdCity(idCity);
-    // console.log(idCity);
   };
   const editDataJalan = (idJalan: number) => {
     setOpenEditJalan(true);
     setIdJalan(idJalan);
-    // console.log(idJalan);
   };
 
   const editDataPolicy = (idPolicy: number) => {
     setOpenEditPolicy(true);
     setIdPolicy(idPolicy);
-    // console.log('click poli :', idPolicy);
   };
 
   /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   //Visible
-
   const [visibleCategory, setVisibleCategory] = useState(false);
   const editDataCategory = (idCategory: number) => {
     setOpenEditCategory(true);
     setIdCategory(idCategory);
     setVisibleCategory(!visibleCategory);
-    // console.log(idCategory);
   };
 
   const [visiblePrice, setVisiblePrice] = useState(false);
@@ -267,29 +238,25 @@ export default function menuMaster() {
     setOpenEditPrice(true);
     setIdPrice(idPrice);
     setVisiblePrice(!visiblePrice);
-
-    // console.log(idPrice);
   };
+
   const editDataService = (idService: number) => {
     setOpenEditService(true);
     setIdService(idService);
-    // console.log(idService);
   };
 
   const viewDataPolicy = (idPolicy: number) => {
     setViewPolicy(true);
     setIdPolicy(idPolicy);
-    // console.log('button poli view click: ', idPolicy);
   };
   const viewDataCategory = (idCategory: number) => {
     setViewCategory(true);
     setIdCategory(idCategory);
-    // console.log('button cate view click:', idCategory);
   };
+
   const viewDataPrice = (idPrice: number) => {
     setViewPrice(true);
     setIdPrice(idPrice);
-    // console.log('button cate view click:', idPrice);
   };
 
   //----------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -329,7 +296,6 @@ export default function menuMaster() {
   //Cancel
 
   const handleCancel = () => {
-    // console.log('Clicked cancel button');
     setOpenAddRegions(false);
     setOpenAddCountry(false);
     setOpenAddProvinces(false);
@@ -360,7 +326,6 @@ export default function menuMaster() {
   //Close
 
   const handleClose = (data: boolean) => {
-    // console.log('button Close : ', data);
 
     setOpenAddRegions(data);
     setOpenAddCountry(data);
@@ -406,11 +371,8 @@ export default function menuMaster() {
         dispatch(doDelRegions(id));
       },
       onCancel() {
-        // console.log('Cancel');
       },
     });
-
-    // console.log('delete id :', id);
   };
 
   const showDeleteCountry = (id: any) => {
@@ -426,10 +388,8 @@ export default function menuMaster() {
         window.location.reload();
       },
       onCancel() {
-        // console.log('Cancel');
       },
     });
-    // console.log('delete country id  :', id);
   };
 
   const showDeleteProvinces = (id: any) => {
@@ -445,7 +405,6 @@ export default function menuMaster() {
         window.location.reload();
       },
       onCancel() {
-        // console.log('Cancel');
       },
     });
   };
@@ -460,10 +419,8 @@ export default function menuMaster() {
       cancelText: 'No',
       onOk() {
         dispatch(doDelAddress(id)), window.location.reload();
-        // console.log('OK');
       },
       onCancel() {
-        // console.log('Cancel');
       },
     });
   };
@@ -476,10 +433,9 @@ export default function menuMaster() {
       okType: 'danger',
       cancelText: 'No',
       onOk() {
-        dispatch(doDelAddress(id)); // console.log('OK');
+        dispatch(doDelAddress(id)); 
       },
       onCancel() {
-        // console.log('Cancel');
       },
     });
   };
@@ -492,10 +448,9 @@ export default function menuMaster() {
       okType: 'danger',
       cancelText: 'No',
       onOk() {
-        dispatch(doDelPolicy(id)); // console.log('OK');
+        dispatch(doDelPolicy(id)); 
       },
       onCancel() {
-        // console.log('Cancel');
       },
     });
   };
@@ -509,10 +464,9 @@ export default function menuMaster() {
       okType: 'danger',
       cancelText: 'No',
       onOk() {
-        dispatch(doDelCategoryGroup(id)); // console.log('OK');
+        dispatch(doDelCategoryGroup(id)); 
       },
       onCancel() {
-        // console.log('Cancel');
       },
     });
   };
@@ -526,10 +480,9 @@ export default function menuMaster() {
       okType: 'danger',
       cancelText: 'No',
       onOk() {
-        dispatch(doDelPriceItems(id)); // console.log('OK');
+        dispatch(doDelPriceItems(id)); 
       },
       onCancel() {
-        // console.log('Cancel');
       },
     });
   };
@@ -543,13 +496,11 @@ export default function menuMaster() {
       okType: 'danger',
       cancelText: 'No',
       onOk() {
-        dispatch(doDelServiceTask(id)); // console.log('OK');
+        dispatch(doDelServiceTask(id)); 
       },
       onCancel() {
-        // console.log('Cancel');
       },
     });
-    // console.log('id :', id);
   };
 
   /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -561,7 +512,6 @@ export default function menuMaster() {
   const handleSearchPrice = (e: any) => {
     const input = e.target.value.toLowerCase().replace(/\s/g, '');
     setQueryPrice(input);
-    // console.log('price input:', input);
   };
   // searchResultsPrice
   const searchResultsPrice = dataPrice.filter((item: any) =>
@@ -578,7 +528,6 @@ export default function menuMaster() {
   const filterPrice = searchResultsPrice.filter((item: any) =>
     selectType ? item.pritType === selectType : true
   );
-  // console.log('filterPrice :', filterPrice);
 
   //-------------------------------------------------------------------------------
   // Radio  Select Regions
@@ -589,7 +538,6 @@ export default function menuMaster() {
 
   const handleRadioClick = (record: any) => {
     setSelectedRow(record);
-    // console.log('nih record region:', record);
 
     const filterRC = dataLocationsRC
       .filter((item: any) => item.region_code == record.region_code)
@@ -597,11 +545,8 @@ export default function menuMaster() {
     setFilterRCP(filterRCP);
 
     setFilterRC(filterRC);
-    // console.log('filterRC :', filterRC);
     setRegionNamee(record.region_name);
     setRegionId(record.region_code);
-
-    // console.log('record.region_code :', record.region_code);
   };
 
   //
@@ -613,13 +558,11 @@ export default function menuMaster() {
 
   const handleRadioClickCountry = (record: any) => {
     setSelectedRowCountry(record);
-    // console.log('nih record country:', record);
 
     const filterRCP = dataLocationsRCP
       .filter((item: any) => item.country_id == record.country_id)
       .sort((az: any, za: any) => az.prov_id - za.prov_id);
     setFilterRCP(filterRCP);
-    // console.log('nih filterRCP :', filterRCP);
     setCountryNamee(record.country_name);
     setCountryId(record.country_id);
   };
@@ -632,13 +575,11 @@ export default function menuMaster() {
 
   const handleRadioClickprovinces = (record: any) => {
     setSelectedRowProvince(record);
-    // console.log('nih record province:', record);
     const filterRCPA = dataLocationsAll.filter(
       (item: any) => item.prov_id == record.prov_id
     );
 
     setFilterRCPA(filterRCPA);
-    // console.log('nih filterRCPA :', filterRCPA);
     setProvNamee(record.prov_name);
     setProvId(record.prov_id);
   };
@@ -650,22 +591,14 @@ export default function menuMaster() {
 
   const handleRadioClickCity = (record: any) => {
     setSelectedRowCity(record);
-    // console.log('nih record city:', record);
-
     const filterRCPCJ = filterRCPA.filter(
       (item: any) => item.addr_line2 == record.addr_line2
     );
 
     setFilterRCPCJ(filterRCPCJ);
-    // console.log('nih filterRCPAJ :', filterRCPCJ);
     setCityNamee(record.addr_line2);
     setCityId(record.addr_line2);
-
-    // console.log('record.addr_line2 :', record.addr_line2);
   };
-
-  //-------------------------------------------------------------------------------
-  //-------------------------------------------------------------------------------
 
   /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   // Data TABLE REGIONS

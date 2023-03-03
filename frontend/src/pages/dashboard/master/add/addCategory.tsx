@@ -22,14 +22,12 @@ export default function AddCategory(props: any) {
   const { handleClose } = props;
 
   const onFinish = (data: any) => {
-    // console.log('Success:', data);
     dispatch(doAddCategoryGroup(data));
     handleClose(false);
     alert;
   };
 
   const onFinishFailed = (errorInfo: any) => {
-    // console.log('Failed:', errorInfo);
   };
 
   //Alert
@@ -44,10 +42,8 @@ export default function AddCategory(props: any) {
 
   const [file, setFile] = useState('');
   const { Search } = Input;
-  // const onSearch = (value: string) => // console.log(value);
 
   //PICTURE
-  
   const [form] = Form.useForm();
 
   const getSrcFromFile = (file: any) => {

@@ -12,16 +12,11 @@ export default function EditCountry(props: any) {
   const details = dataCountry.find((item: any) => item.country_id == idCountry);
   const [formValues, setFormValues] = useState(details);
 
-  // console.log('id idCountry : ', idCountry);
-  // console.log('data dataCountry :', dataCountry);
-  // console.log('detail Country : ', details);
-  // console.log('formValues Country :', formValues);
   const handleInputChange = (input: any) => (e: any) => {
     setFormValues({ ...formValues, [input]: e.target.value });
   };
 
   const onFinish = () => {
-    // console.log('Success:', formValues);
     dispatch(doUpdateCountry(formValues));
     handleClose(false);
     window.location.reload();
