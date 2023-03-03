@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useRouter } from 'next/router';
-import { Button, Modal, Table, Tooltip } from 'antd';
-import { DeleteOutlined, EditOutlined, MoreOutlined, PlusCircleOutlined, PlusOutlined } from '@ant-design/icons';
+import { Button, Input, Modal, Table, Tooltip } from 'antd';
+import { DeleteOutlined, EditOutlined, MoreOutlined, PlusCircleOutlined, PlusOutlined, SearchOutlined } from '@ant-design/icons';
 import { AllVendor, DelVendor } from '@/Redux/Action/Purchasing/purchasingAction';
 import AddVendors from './add-vendor';
 import EditVendors from './edit-vendor';
@@ -15,30 +15,14 @@ export default function Vendor() {
     const [updateVendor, setUpdateVendor] = useState(false)
     const router = useRouter()
 
-    const product = () => {
-        router.push('/dashboard/purchasing/add-product')
-    }
-    const active = [
-        {
-            value: 0,
-            label: "InActive"
-        },
-        {
-            value: 1,
-            label: "Active"
+    const [search, setSearch] = useState('')
+    const filterData = vendors.filter((item: any) => {
+        if (search === "") {
+            return item;
+        } else {
+            return item.vendorName.toLowerCase().includes(search.toLocaleLowerCase());
         }
-    ]
-
-    const priority = [
-        {
-            value: 0,
-            label: "Lowest"
-        },
-        {
-            value: 1,
-            label: "Highest"
-        }
-    ]
+    });
 
     const handleOk = () => {
         setTimeout(() => {
@@ -181,7 +165,14 @@ export default function Vendor() {
                 />
                 : null}
 
-            <Table columns={columnsVendor} dataSource={vendors} />
+            <Input
+                className="w-96 py-2 rounded-full my-5"
+                value={search}
+                placeholder="Vendor Name"
+                prefix={<SearchOutlined />}
+                onChange={e => setSearch(e.target.value)} />
+
+            <Table columns={columnsVendor} dataSource={filterData.sort((a:any, b:any) => a.vendorId - b.vendorId)} />
         </>
     )
 }
