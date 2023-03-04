@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Link from 'next/link';
-import { Table, MenuProps, Modal, Button, Tooltip, Dropdown } from 'antd';
-import { PlusOutlined, EditOutlined, DeleteOutlined, MoreOutlined, PlusCircleOutlined } from '@ant-design/icons';
+import { Table, MenuProps, Modal, Button, Tooltip, Dropdown, Input } from 'antd';
+import { PlusOutlined, EditOutlined, DeleteOutlined, MoreOutlined, PlusCircleOutlined, SearchOutlined } from '@ant-design/icons';
 import { AllStock, DelStock } from '@/Redux/Action/Purchasing/purchasingAction';
 import AddStocks from './add-stock';
 import EditStocks from './edit-stock';
@@ -18,6 +18,15 @@ export default function Stock() {
     const [updateStock, setUpdateStock] = useState(false)
 
     const [addSpho, setAddSpho] = useState(false)
+
+    const [search, setSearch] = useState('')
+    const filterData = stocks.filter((item: any) => {
+        if (search === "") {
+            return item;
+        } else {
+            return item.stockName.toLowerCase().includes(search.toLocaleLowerCase());
+        }
+    });
 
     const handleOk = () => {
         setTimeout(() => {
@@ -189,7 +198,14 @@ export default function Stock() {
                     handleClose={handleClose}
                 /> : null}
 
-            <Table columns={columnsStock} dataSource={stocks} />
+            <Input
+                className="w-96 py-2 rounded-full my-5"
+                value={search}
+                placeholder="Stock Name"
+                prefix={<SearchOutlined />}
+                onChange={e => setSearch(e.target.value)} />
+
+            <Table columns={columnsStock} dataSource={filterData.sort((a:any, b:any) => a.stockId - b.stockId)} />
         </>
     )
 }

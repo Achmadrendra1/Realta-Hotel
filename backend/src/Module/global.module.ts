@@ -15,7 +15,6 @@ import { BookingOrderDetailExtra } from 'src/entities/BookingOrderDetailExtra';
 import { BookingOrders } from 'src/entities/BookingOrders';
 import { CategoryGroup } from 'src/entities/CategoryGroup';
 import { Country } from 'src/entities/Country';
-import { Department } from 'src/entities/Department';
 import { Employee } from 'src/entities/Employee';
 import { EmployeeDepartmentHistory } from 'src/entities/EmployeeDepartmentHistory';
 import { EmployeePayHistory } from 'src/entities/EmployeePayHistory';
@@ -138,7 +137,8 @@ import { SphoController } from 'src/Controller/Purchasing/stock-photo/stock-phot
 import { VendorController } from 'src/Controller/Purchasing/vendor/vendor.controller';
 import { VeproController } from 'src/Controller/Purchasing/vendor-product/vendor-product.controller';
 import { PoheController } from 'src/Controller/Purchasing/purchase-order-header/purchase-order-header.controller';
-import { PodeController } from 'src/Controller/Purchasing/purchase-order-detail/purchase-order-detail.controller'; import { DepartmentService } from 'src/Service/HR/department/department.service';
+import { PodeController } from 'src/Controller/Purchasing/purchase-order-detail/purchase-order-detail.controller';
+import { DepartmentService } from 'src/Service/HR/department/department.service';
 import { DepartmentController } from 'src/Controller/HR/department/department.controller';
 import { PolicyCategoryGroup } from 'src/entities/PolicyCategoryGroup';
 import { JobRoleController } from 'src/Controller/HR/job-role/job-role.controller';
@@ -156,12 +156,15 @@ import { UserBreakfeastService } from 'src/Service/Booking/user-breakfeast/user-
 import { SpecialOfferCoupons } from 'src/entities/SpecialOfferCoupons';
 import { UsersPasswordController } from 'src/Controller/Users/userPassword/userPassword.controller';
 import { UserPasswordService } from 'src/Service/Users/user-password/userPassword.service';
+import { WorkorderController } from 'src/Controller/HR/workorder/workorder.controller';
+import { WorkorderService } from 'src/Service/HR/workorder/workorder.service';
 import { RestoMenuDetailController } from 'src/Controller/Resto/resto-menu-detail/resto-menu-detail.controller';
 import { ListRestaurantController } from 'src/Controller/Resto/list-restaurant/list-restaurant.controller';
 import { OrderMenuDetailController } from 'src/Controller/Resto/order-menu-detail/order-menu-detail.controller';
 import { RestoMenuDetailService } from 'src/Service/Resto/resto-menu-detail/resto-menu-detail.service';
 import { ListRestaurantService } from 'src/Service/Resto/list-restaurant/list-restaurant.service';
 import { OrderMenuDetailService } from 'src/Service/Resto/order-menu-detail/order-menu-detail.service';
+import { Department } from 'src/entities/Department';
 
 //Booking Service
 
@@ -294,9 +297,10 @@ import { OrderMenuDetailService } from 'src/Service/Resto/order-menu-detail/orde
     EmployeeController,
     DepartmentController,
     JobRoleController,
+    WorkorderController,
 
     // Resto
-    
+
     RestoMenusController,
     RestoMenuPhotosController,
     OrderMenusController,
@@ -361,6 +365,7 @@ import { OrderMenuDetailService } from 'src/Service/Resto/order-menu-detail/orde
     EmployeeService,
     DepartmentService,
     JobRoleService,
+    WorkorderService,
 
     // Resto
     RestoMenusService,
@@ -369,7 +374,6 @@ import { OrderMenuDetailService } from 'src/Service/Resto/order-menu-detail/orde
     RestoMenuDetailService,
     ListRestaurantService,
     OrderMenuDetailService,
-
   ],
   // controllers: [AppController, EntitysController, BankController, PaymentGatewayController, UserAccountController, PaymentTransactionController],
   // providers: [AppService, EntitysService, BankService, PaymentGatewayService, UserAccountService, PaymentTransactionService],
