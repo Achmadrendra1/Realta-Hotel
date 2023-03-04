@@ -41,3 +41,14 @@ export function* handleDelEmployee(action:any): any{
         yield put({ type: empType.DEL_DATA_FAILED })
     }
 }
+
+export function* handleUpdateEmployee(action:any): any{
+    const { payload } = action
+    try {
+        const res = yield axios(API('put', '/employee', payload))
+        yield put({ type: empType.UPDATE_DATA_SUCCES, payload: res.data })
+        yield put({ type: empType.UPDATE_DATA_DETAIL, payload: payload })
+    } catch (e:any) {
+        yield put({ type: empType.UPDATE_DATA_FAILED });
+    }
+}

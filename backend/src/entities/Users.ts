@@ -18,6 +18,7 @@ import { UserPassword } from "./UserPassword";
 import { UserProfiles } from "./UserProfiles";
 import { UserRoles } from "./UserRoles";
 import { WorkOrders } from "./WorkOrders";
+import { Employee } from "./Employee";
 
 @Index("user_id_pk", ["userId"], { unique: true })
 @Index("users_user_phone_number_key", ["userPhoneNumber"], { unique: true })
@@ -112,4 +113,7 @@ export class Users {
 
   @OneToMany(() => WorkOrders, (workOrders) => workOrders.woroUser)
   workOrders: WorkOrders[];
+
+  @OneToMany(() => Employee, (employee) => employee.empUser)
+  employees: Employee[];
 }

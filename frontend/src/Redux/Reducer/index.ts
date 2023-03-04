@@ -27,6 +27,9 @@ import SpofReducer from './Booking/SpofReducer';
 import FaciBoorReducer from './Booking/FaciBoorReducer';
 import HotelBoorReducer from './Booking/HotelBoorReducer';
 import ReviewBoorReducer from './Booking/ReviewBoorReducer';
+import { workorderReducer } from './HR/workorder';
+import { workorderDetailReducer } from './HR/workDetail';
+import { serviceListReducer } from './HR/serviceList';
 import BoorInvoiceReducer from './Booking/BoorInvoiceReducer';
 // Purchasing
 import StockReducer from './Purchasing/stockReducer';
@@ -103,4 +106,7 @@ export default combineReducers({
   userOrderReducer,
   userMenuReducer,
 
+  workorderReducer,
+  workorderDetailReducer,
+  serviceListReducer
 });

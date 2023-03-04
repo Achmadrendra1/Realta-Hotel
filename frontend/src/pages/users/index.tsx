@@ -6,8 +6,9 @@ import Link from 'next/link';
 import { useState } from 'react';
 import Userprofile from './userProfile';
 import MyAccount from '../payment/myAccount';
+import withAuth from '@/PrivateRoute/WithAuth';
 
-export default function Index() {
+export default withAuth( function Index() {
   const { Header, Content, Footer, Sider } = Layout;
   const items1: MenuProps['items'] = ['1', '2', '3'].map((key) => ({
     key,
@@ -80,4 +81,4 @@ export default function Index() {
           
   </Layouts>
 );
-}
+})
