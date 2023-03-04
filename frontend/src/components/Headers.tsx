@@ -8,6 +8,7 @@ import { useRouter } from "next/router";
 import { useDispatch, useSelector } from "react-redux";
 import { doUsacRequest } from "@/Redux/Action/Payment/paymentDashAction";
 import { doGetUser } from "@/Redux/Action/User/GetDataUser";
+import { doLogout } from "@/Redux/Action/User/auth";
 
 const { Item } = List
 const { RangePicker } = DatePicker
@@ -72,7 +73,7 @@ function isTokenExpired() {
     }, [])
   
     const logout =()=>{ 
-      localStorage.removeItem("token");
+      dispatch(doLogout())
       setIsLogin(false)
       window.location.href = "/users/login"
     }
