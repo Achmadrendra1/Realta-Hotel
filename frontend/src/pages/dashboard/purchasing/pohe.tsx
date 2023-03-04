@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useRouter } from 'next/router';
-import { Input, Modal, Table, Tooltip } from 'antd';
+import { Col, Input, Modal, Row, Select, Space, Table, Tooltip } from 'antd';
 import { EditOutlined, DeleteOutlined, MoreOutlined, PlusCircleOutlined, SearchOutlined } from '@ant-design/icons';
 import { AllPohe, DelPohe } from '@/Redux/Action/Purchasing/purchasingAction';
 import EditPohes from './edit-pohe';
@@ -13,6 +13,28 @@ export default function Pohe() {
     const [id, setId] = useState(0)
     const [addPohe, setAddPohe] = useState(false)
     const [updatePohe, setUpdatePohe] = useState(false)
+
+    const [value, setValue] = useState<string | number>('Status')
+    const filterPohes = pohes.filter((item: any) => item.pove_status == (value == 'Pending' ? 1 : value == "Approve" ? 2 : value == "Rejected" ? 3 : value == "Received" ? 4 : 5))
+
+    const status = [
+        {
+            value: 1,
+            label: "Pending"
+        },
+        {
+            value: 2,
+            label: "Approve"
+        },
+        {
+            value: 3,
+            label: "Rejected"
+        },
+        {
+            value: 4,
+            label: "Complete"
+        }
+    ]
 
     const [search, setSearch] = useState('')
     const filterData = pohes.filter((item: any) => {
@@ -150,14 +172,31 @@ export default function Pohe() {
                 />
                 : null}
 
-            <Input
-                className="w-96 py-2 rounded-full my-5"
-                value={search}
-                placeholder="Order Number / Vendor Name"
-                prefix={<SearchOutlined />}
-                onChange={e => setSearch(e.target.value)} />
 
-            <Table columns={columnsPohe} dataSource={filterData.sort((a:any, b:any) => a.pove_id - b.pove_id)} />
+
+            <Row justify='space-between' className="my-5">
+                <Col>
+                    <Space size={17}>
+                        <Input
+                            className="w-96 py-2 rounded-full my-5"
+                            value={search}
+                            placeholder="Order Number / Vendor Name"
+                            prefix={<SearchOutlined />}
+                            onChange={e => setSearch(e.target.value)} />
+                    </Space>
+                </Col>
+                <Col>
+                    <Space size={15}>
+                        <Select
+                            className='w-40'
+                            options={status}
+                            value={value}
+                            onChange={setValue} />
+                    </Space>
+                </Col>
+            </Row>
+
+            <Table columns={columnsPohe} dataSource={filterData.sort((a: any, b: any) => a.pove_id - b.pove_id)} />
         </>
     )
 }

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useRouter } from 'next/router';
-import { Button, Input, Modal, Table, Tooltip } from 'antd';
+import { Button, Col, Input, Modal, Row, Segmented, Space, Table, Tooltip } from 'antd';
 import { DeleteOutlined, EditOutlined, MoreOutlined, PlusCircleOutlined, PlusOutlined, SearchOutlined } from '@ant-design/icons';
 import { AllVendor, DelVendor } from '@/Redux/Action/Purchasing/purchasingAction';
 import AddVendors from './add-vendor';
@@ -15,8 +15,11 @@ export default function Vendor() {
     const [updateVendor, setUpdateVendor] = useState(false)
     const router = useRouter()
 
+    const [value, setValue] = useState<string | number>('Priority')
+    const filterVendors = vendors.filter((item: any) => item.vendorPriority == (value == 'Priority' ? 1 : 0))
+
     const [search, setSearch] = useState('')
-    const filterData = vendors.filter((item: any) => {
+    const filterData = filterVendors.filter((item: any) => {
         if (search === "") {
             return item;
         } else {
@@ -93,7 +96,7 @@ export default function Vendor() {
             dataIndex: 'vendorPriority',
             render: (record: any) => {
                 return (
-                    <span>{record === 0 ? "Lowest" : "Highest"}</span>
+                    <span>{record === 0 ? "Non Priority" : "Priority"}</span>
                 )
             },
             sorter: {
@@ -165,14 +168,28 @@ export default function Vendor() {
                 />
                 : null}
 
-            <Input
-                className="w-96 py-2 rounded-full my-5"
-                value={search}
-                placeholder="Vendor Name"
-                prefix={<SearchOutlined />}
-                onChange={e => setSearch(e.target.value)} />
+            <Row justify='space-between' className="my-5">
+                <Col>
+                    <Space size={17}>
+                        <Input
+                            className="w-96 py-2 rounded-full my-5"
+                            value={search}
+                            placeholder="Vendor Name"
+                            prefix={<SearchOutlined />}
+                            onChange={e => setSearch(e.target.value)} />
+                    </Space>
+                </Col>
+                <Col>
+                    <Space size={15}>
+                        <Segmented
+                            options={['Priority', 'Non Priority']}
+                            value={value}
+                            onChange={setValue} />
+                    </Space>
+                </Col>
+            </Row>
 
-            <Table columns={columnsVendor} dataSource={filterData.sort((a:any, b:any) => a.vendorId - b.vendorId)} />
+            <Table columns={columnsVendor} dataSource={search ? filterData : filterVendors} />
         </>
     )
 }
