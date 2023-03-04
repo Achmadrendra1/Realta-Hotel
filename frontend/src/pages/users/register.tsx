@@ -49,7 +49,7 @@ export default function Register(): any {
 
   return (
     <Layouts>
-     <div className="flex  justify-center items-center bg-gray-100">
+     <div className="flex  justify-center items-center bg-gray-100 py-8">
       <form className="bg-white mt-3 mb-3 p-10 rounded shadow-md">
         <h1 className="text-3xl font-bold mb-5 text-gray-800">Create Account</h1>
         <div className="mb-5">

@@ -73,7 +73,7 @@ export default function Login() {
   const { Meta } = Card;
   return (
     <Layouts>
-     <div className="flex h-screen justify-center items-center bg-gray-100 m-0">
+     <div className="flex h-screen justify-center items-center bg-gray-100 py-8">
       {contextHolder}
       <Form className="bg-white p-10 rounded shadow-md padding"  initialValues={{ remember: true }}
       onFinish={onFinish}>
