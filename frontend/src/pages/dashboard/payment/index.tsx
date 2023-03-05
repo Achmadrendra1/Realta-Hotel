@@ -30,6 +30,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { doBankRequest, doDeleteBank, doPagaRequest, doTransactionRequest, doUsacRequest } from "@/Redux/Action/Payment/paymentDashAction";
 import Bank from "./bank";
 import Fintech from "./fintech";
+import withAuth from "@/PrivateRoute/WithAuth";
 
 interface DataType {
   key: React.Key;
@@ -43,7 +44,7 @@ interface DataType {
 }
 
 
-export default function index() {  
+export default withAuth( function index() {  
   const [filteredData, setFilteredData] = useState([]);
   const dataTrx = useSelector(
     (state: any) => state.payTrxHistoryReducer.payDashTrx
@@ -229,4 +230,4 @@ export default function index() {
       </Tabs>
     </Dashboard>
   );
-}
+})
