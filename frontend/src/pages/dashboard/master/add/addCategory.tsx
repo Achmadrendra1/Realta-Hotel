@@ -12,22 +12,53 @@ import {
 } from 'antd';
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { InboxOutlined } from '@ant-design/icons';
-
-//image
-import ImgCrop, { ImgCropProps } from 'antd-img-crop';
 
 export default function AddCategory(props: any) {
   const dispatch = useDispatch();
   const { handleClose } = props;
 
-  const onFinish = (data: any) => {
-    dispatch(doAddCategoryGroup(data));
+  //D  versi
+  const onFinish = (e: any) => {
+    console.log('Success:', e);
+    dispatch(doAddCategoryGroup(dataUp));
     handleClose(false);
+    window.location.reload();
+
     alert;
   };
 
   const onFinishFailed = (errorInfo: any) => {
+    console.log('Failed:', errorInfo);
+  };
+
+  //D PICTURE
+
+  const [dataUp, setDataUp] = useState(new FormData());
+  const [selectedImage, setSelectedImage] = useState('');
+  // body inputan
+  const [namaCagro, setNamaCagro] = useState('');
+  const [tipeCagro, setTipeCagro] = useState('');
+  const [deskCagro, setDeskCagro] = useState('');
+
+  const handleInputNama = (value: any) => {
+    setNamaCagro(value.target.value);
+  };
+  const handleInputType = (value: any) => {
+    setTipeCagro(value);
+  };
+  const handleInputDesk = (value: any) => {
+    setDeskCagro(value.target.value);
+  };
+
+  const onUploadLogo = (e: any) => {
+    const img = e.target.files[0];
+
+    let formData = new FormData();
+    formData.append('file', img);
+    formData.append('cagroName', namaCagro);
+    formData.append('cagroDescription', tipeCagro);
+    formData.append('cagroType', deskCagro);
+    setDataUp(formData);
   };
 
   //Alert
@@ -38,45 +69,6 @@ export default function AddCategory(props: any) {
     setTimeout(() => {
       setVisible('hidden');
     }, 777);
-  };
-
-  const [file, setFile] = useState('');
-  const { Search } = Input;
-
-  //PICTURE
-  const [form] = Form.useForm();
-
-  const getSrcFromFile = (file: any) => {
-    return new Promise((resolve) => {
-      const reader = new FileReader();
-      reader.readAsDataURL(file.originFileObj);
-      reader.onload = () => resolve(reader.result);
-    });
-  };
-
-  const [fileList, setFileList] = useState([
-    {
-      name: '',
-      uid: '-1',
-      url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
-    },
-  ]);
-
-  const onChange = ({ fileList: newFileList }: any) => {
-    setFileList(newFileList);
-  };
-
-  const onPreview = async (file: any) => {
-    const src = file.url || (await getSrcFromFile(file));
-    const imgWindow = window.open(src);
-
-    if (imgWindow) {
-      const image = new Image();
-      image.src = src;
-      imgWindow.document.write(image.outerHTML);
-    } else {
-      window.location.href = src;
-    }
   };
 
   return (
@@ -112,6 +104,7 @@ export default function AddCategory(props: any) {
                 marginTop: '1%',
               }}
               placeholder="Input Group Name"
+              onChange={handleInputNama}
             />
           </Form.Item>
           <Form.Item
@@ -127,24 +120,11 @@ export default function AddCategory(props: any) {
                 marginTop: '1%',
               }}
               placeholder="Select a Category Type"
+              onChange={handleInputType}
             >
               <Select.Option value="Facility">Facility</Select.Option>
               <Select.Option value="Service">Service</Select.Option>
             </Select>
-          </Form.Item>
-          <Form.Item
-            style={{ marginTop: '3%' }}
-            label="Policy Rules"
-            name={'poliName'}
-          >
-            <Search
-              style={{
-                width: '80%',
-                marginLeft: '10%',
-                marginTop: '1%',
-              }}
-              placeholder="Search Policy Rules"
-            />
           </Form.Item>
           <Form.Item
             style={{ marginTop: '3%' }}
@@ -159,19 +139,13 @@ export default function AddCategory(props: any) {
                 marginTop: '1%',
               }}
               placeholder="  Descriptions"
+              onChange={handleInputDesk}
               autoSize={{ minRows: 5 }}
             />
           </Form.Item>
-          <ImgCrop grid rotate>
-            <Upload
-              action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
-              listType="picture-card"
-              onChange={onChange}
-              onPreview={onPreview}
-            >
-              {fileList.length && '+ Upload'}
-            </Upload>
-          </ImgCrop>
+          <Form.Item label="Upload">
+            <Input type="file" onChange={onUploadLogo} accept="image/*" />
+          </Form.Item>
           <Form.Item label=" " colon={false} style={{ textAlign: 'right' }}>
             <Button htmlType="reset" onClick={props.clickCancel}>
               <UndoOutlined style={{ color: '#FF8002' }} />
