@@ -17,22 +17,23 @@ export class UsersController {
   findAll(): Promise<any> {
     return this.UsersService.findAll();
   }
-
+  
   // @Get(':id')
   // findOne(@Param('id') id: string) {
   //   return this.UsersService.findOne(+id);
   // }
-
+  
   @Get(':email')
   findByEmail(@Param('email') email: string ){
     return this.UsersService.findByEmail(email);
   }
-
-
+  
+  
   @Put(':id')
-  ChangePassword(@Param('id') id :string,@Body() body){
-    return this.UsersService.ChangePassword(+id,body);
+  updateProfile(@Param('id') id: string, @Body() Body) {
+    return this.UsersService.updateProfile(+id, Body);
   }
+  
 
   @Post()
   async register(@Body() data,): Promise<any> {
@@ -50,10 +51,6 @@ export class UsersController {
 //     return await this.UsersService.register(userID, userFullName, userEmail, userPhoneNumber, UserPassword);
 //   }
 
-  @Put(':id')
-  updateProfile(@Param('id') id: string, @Body() Body) {
-    return this.UsersService.updateProfile(+id, Body);
-  }
 
   @Delete(':id')
   Delete(@Param('id') id: string) {

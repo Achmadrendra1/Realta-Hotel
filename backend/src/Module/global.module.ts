@@ -154,6 +154,8 @@ import { BookingOrderDetailExtraService } from 'src/Service/Booking/booking-orde
 import { SpecialOffersService } from 'src/Service/Booking/special-offers/special-offers.service';
 import { UserBreakfeastService } from 'src/Service/Booking/user-breakfeast/user-breakfeast.service';
 import { SpecialOfferCoupons } from 'src/entities/SpecialOfferCoupons';
+import { UsersPasswordController } from 'src/Controller/Users/userPassword/userPassword.controller';
+import { UserPasswordService } from 'src/Service/Users/user-password/userPassword.service';
 import { WorkorderController } from 'src/Controller/HR/workorder/workorder.controller';
 import { WorkorderService } from 'src/Service/HR/workorder/workorder.service';
 import { RestoMenuDetailController } from 'src/Controller/Resto/resto-menu-detail/resto-menu-detail.controller';
@@ -280,6 +282,7 @@ import { Department } from 'src/entities/Department';
     UserBonusPointsController,
     RolesController,
     AuthController,
+    UsersPasswordController,
 
     // Purchasing
     StockController,
@@ -347,6 +350,7 @@ import { Department } from 'src/entities/Department';
     RolesService,
     UserRolesService,
     AuthService,
+    UserPasswordService,
 
     // Purchasing
     StockService,

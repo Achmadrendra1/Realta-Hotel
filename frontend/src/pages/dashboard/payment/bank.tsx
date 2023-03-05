@@ -24,6 +24,7 @@ import { useDispatch, useSelector } from "react-redux";
 import AddBank from "./addBank";
 import EditBank from "./editBank";
 import Buttons from "@/components/Button";
+import withAuth from "@/PrivateRoute/WithAuth";
 
 interface DataType {
   key: React.Key;
@@ -32,7 +33,7 @@ interface DataType {
   bankEntityId: number;
 }
 
-export default function Bank() {
+export default withAuth( function Bank() {
   const dispatch = useDispatch();
   const [isOpenAddBank, setOpenAddBank] = useState(false);
   const [isOpenEditBank, setOpenEditBank] = useState(false);
@@ -217,4 +218,4 @@ export default function Bank() {
       </Row>
     </div>
   );
-}
+})

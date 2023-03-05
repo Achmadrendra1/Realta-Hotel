@@ -45,7 +45,6 @@ export const doAddDataUserSuccess =(payload :any)=> {
 export const doUpdate = (payload: any)=>{
     // console.log(payload)
     return{
-
         type: UserConst.EDIT_DATA_PROFILE,
         payload
     }
@@ -64,3 +63,24 @@ export const doUpdateFailed = (error : any) =>{
         payload :error
     }
 }   
+ 
+// UPDATE PASSWORD
+
+export const doUpdatePassword = (payload: any)=>{
+    return{
+        type: UserConst.UPDATE_PASSWORD,
+        payload
+    }
+}
+export const doUpdatePasswordSuccess = (payload: any)=>{
+    return{
+        type: UserConst.UPDATE_PASSWORD_SUCCESS,
+        payload
+    }
+}
+export const doUpdatePasswordFailed = (error: any)=>{
+    return{
+        type: UserConst.UPDATE_PASSWORD_FAILED,
+        error
+    }
+}
