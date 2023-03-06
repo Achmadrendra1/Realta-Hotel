@@ -16,6 +16,28 @@ export class PaymentGatewayService {
     return await this.payRepository.find();
   }
 
+  async getPagination(query){
+    const take = query?.take || 10;
+    const page = query?.page || 1;
+    const skip = (page - 1) * take;
+    const keyword = query?.keyword || '';
+    
+    const [data, total] = await this.payRepository
+      .createQueryBuilder('paymentGateway')
+      .where('LOWER(paymentGateway.pagaName) LIKE LOWER(:keyword)', {
+        keyword: `%${keyword.toLowerCase()}%`,
+      })
+      .skip(skip)
+      .take(take)
+      .getManyAndCount();
+
+      return {
+        data: data,
+        count: total,
+        currentPage: +page,
+      };
+  }
+
   async getbyId(id: number) {
     return await this.payRepository.find({
       where: {

@@ -15,16 +15,138 @@ export class PaymentTransactionService {
   ) {}
 
   async getAll() {
-    return await this.payRepository.query(
-      'select * from payment.user_transactions',
+    return this.payRepository.query(
+      'select * from payment.user_transactions'
     );
   }
 
-  async getHistoryTransaction() {
-    return await this.payRepository.query(
-      'select * from payment.getTransactionList()',
+  async getPagination(query) {
+    const take = query.take || 10;
+    const page = query.page || 1;
+    const skip = (page - 1) * take;
+    const keyword = query.keyword || '';
+    const startDate = query.startDate || '';
+    const endDate = query.endDate || '';
+    const totalData = await this.payRepository.query(
+      `SELECT * FROM payment.user_transactions`,
     );
+    let filterData;
+    let data;
+    if(startDate && endDate){
+      filterData = await this.payRepository.query(
+        `SELECT * FROM payment.user_transactions
+        WHERE (LOWER("transactionType") LIKE LOWER($1)
+        OR LOWER("userFullName") LIKE LOWER($1)
+        OR LOWER("debit"::text) LIKE LOWER($1)
+        OR LOWER("credit"::text) LIKE LOWER($1))
+        AND "trxDate" BETWEEN $2 AND $3`,
+        [`%${keyword}%`, startDate, endDate],
+      );
+      data = await this.payRepository.query(
+        `SELECT * FROM payment.user_transactions
+         WHERE (LOWER("transactionType") LIKE LOWER($1)
+         OR LOWER("userFullName") LIKE LOWER($1)
+         OR LOWER("debit"::text) LIKE LOWER($1)
+         OR LOWER("credit"::text) LIKE LOWER($1))
+         AND "trxDate" BETWEEN $2 AND $3
+         OFFSET $4 LIMIT $5`,
+        [`%${keyword}%`, startDate, endDate, skip, take],
+      );
+    } else {
+      filterData = await this.payRepository.query(
+        `SELECT * FROM payment.user_transactions
+        WHERE (LOWER("transactionType") LIKE LOWER($1)
+        OR LOWER("userFullName") LIKE LOWER($1)
+        OR LOWER("debit"::text) LIKE LOWER($1)
+        OR LOWER("credit"::text) LIKE LOWER($1))`,
+        [`%${keyword}%`],
+      );
+      data = await this.payRepository.query(
+        `SELECT * FROM payment.user_transactions
+         WHERE (LOWER("transactionType") LIKE LOWER($1)
+         OR LOWER("userFullName") LIKE LOWER($1)
+         OR LOWER("debit"::text) LIKE LOWER($1)
+         OR LOWER("credit"::text) LIKE LOWER($1))
+         OFFSET $2 LIMIT $3`,
+        [`%${keyword}%`, skip, take],
+      );
+    }
+    
+
+    const isQueryDefined = query && query.keyword || query.startDate;
+    const total = isQueryDefined ? filterData.length : totalData.length;
+
+    return {
+      data,
+      count: total,
+      currentPage: +page,
+    };
   }
+
+  // async getHistoryTransaction(query) {
+  //   const take = query.take || 10;
+  //   const page = query.page || 1;
+  //   const skip = (page - 1) * take;
+  //   const keyword = query.keyword || '';
+  //   const startDate = query.startDate || '';
+  //   const endDate = query.endDate || '';
+  //   const totalData = await this.payRepository.query(
+  //     'select * from payment.payments_order',
+  //   );
+  //   let filterData;
+  //   let data;
+  //   if (startDate && endDate) {
+  //     filterData = await this.payRepository.query(
+  //       `SELECT * FROM payment.payments_order
+  //       WHERE trx_date BETWEEN $2 AND $3
+  //       AND (LOWER(patr_trx_id) LIKE LOWER($1)
+  //       OR LOWER(user_full_name) LIKE LOWER($1)
+  //       OR boor_total_amount::text LIKE LOWER($1))
+  //       ORDER BY trx_date DESC`,
+  //       [`%${keyword}%`, startDate, endDate],
+  //     );
+  //     data = await this.payRepository.query(
+  //       `SELECT * FROM payment.payments_order
+  //         WHERE trx_date::date BETWEEN $2 AND $3
+  //         AND (LOWER(patr_trx_id) LIKE LOWER($1)
+  //         OR LOWER(user_full_name) LIKE LOWER($1)
+  //         OR boor_total_amount::text LIKE LOWER($1))
+  //         ORDER BY trx_date DESC
+  //         OFFSET $4 LIMIT $5`,
+  //       [`%${keyword}%`, startDate, endDate, skip, take],
+  //     );
+  //   } else {
+  //     filterData = await this.payRepository.query(
+  //       `SELECT * FROM payment.payments_order
+  //       WHERE LOWER(patr_trx_id) LIKE LOWER($1)
+  //       OR LOWER(user_full_name) LIKE LOWER($1)
+  //       OR boor_total_amount::text LIKE LOWER($1)
+  //       ORDER BY trx_date DESC`,
+  //       [`%${keyword}%`],
+  //     );
+  //     data = await this.payRepository.query(
+  //       `SELECT * FROM payment.payments_order
+  //         WHERE LOWER(patr_trx_id) LIKE LOWER($1)
+  //         OR LOWER(user_full_name) LIKE LOWER($1)
+  //         OR boor_total_amount::text LIKE LOWER($1)
+  //         ORDER BY trx_date DESC
+  //         OFFSET $2 LIMIT $3`,
+  //       [`%${keyword}%`, skip, take],
+  //     );
+  //   }
+
+  //   const isQueryDefined = (query && query.keyword) || query.startDate;
+  //   const total = isQueryDefined ? filterData.length : totalData.length;
+
+  //   return {
+  //     data,
+  //     count: total,
+  //     currentPage: +page,
+  //     // nextPage,
+  //     // prevPage,
+  //     // lastPage,
+  //   };
+  // }
 
   async getById(id: number) {
     return await this.payRepository.findOneBy({
