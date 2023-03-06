@@ -9,8 +9,8 @@ import { deptType } from "../Constant/HR/deptType";
 import { empType } from "../Constant/HR/empType";
 import { handleAddEmployee, handleDelEmployee, handleDetailEmployee, handleGetEmployees, handleUpdateEmployee } from "./HR/employees";
 import UserConst from "../Constant/User/UserConst";
-import { HandleLoginUser } from "./User/auth";
-import { HandleEditProfile, HandleGetUser } from "./User/getUser";
+import { HandleLoginUser, HandleLogoutUser } from "./User/auth";
+import { HandleEditProfile, HandleGetUser, HandleUpdatePassword } from "./User/getUser";
 import PaymentConst from "../Constant/Payment/PaymentConst";
 import {
   handleTrxDashRequest,
@@ -160,9 +160,13 @@ import { handleUserMenu } from "./Resto/userMenuProcess";
 
 export default function* rootSaga() {
   yield all([
+    //user and auth
     takeEvery(UserConst.LOGIN_USER, HandleLoginUser),
     takeEvery(UserConst.GET_DATA_USER, HandleGetUser),
-    takeEvery(UserConst.EDIT_DATA_PROFILE, HandleEditProfile),
+    takeEvery(UserConst.EDIT_DATA_PROFILE,HandleEditProfile),
+    takeEvery(UserConst.UPDATE_PASSWORD,HandleUpdatePassword),
+    takeEvery(UserConst.LOGOUT_USER,HandleLogoutUser),
+
 
     takeEvery(deptType.GET_DATA, handleGetDept),
     takeEvery(deptType.ADD_DATA, handleAddDept),
