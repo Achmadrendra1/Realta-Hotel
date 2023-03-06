@@ -25,6 +25,7 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   getSpFacilities,
   getSpHotel,
+  getSpInvoice,
   getSpReview,
 } from "@/Redux/Action/Booking/BookingAction";
 import { useRouter } from "next/router";
@@ -82,20 +83,20 @@ export default function bookingRoom() {
   
   //useSelector Get User
   let getUser = useSelector((state: any) => state.GetUserReducer.getUser);
-  const userSpof = getUser.filter((item: any) => item.user_id == id);
 
   //useSelector Get Special Offers
   let spof = useSelector((state: any) => state.SpofReducer.spof);
   const typeSpof = spof?.filter((item : any) => {
-    if (userSpof[0]?.user_type === "C" && item.spofType === "Corporate") {
+    if (getUser[0].user_type === "C" && item.spofType === "Corporate") {
       return true;
-    } else if (userSpof[0]?.user_type === "I" && item.spofType === "Individual") {
+    } else if (getUser[0].user_type === "I" && item.spofType === "Individual") {
       return true;
-    } else if (userSpof[0]?.user_type === "T" && item.spofType === "Travel Agent") {
+    } else if (getUser[0].user_type === "T" && item.spofType === "Travel Agent") {
       return true;
     }
     return false;
   });
+  console.log(typeSpof)
 
   
   //useSelector Get Price Items for Booking Extra
@@ -351,10 +352,6 @@ export default function bookingRoom() {
   });
 
   useEffect(() => {
-    setTotalPrice(0);
-  }, [id]);
-
-  useEffect(() => {
     setDataBooking({
       ...dataBooking,
       borde_price: ratePriceInt,
@@ -374,17 +371,9 @@ export default function bookingRoom() {
   //     })
   // }, [faci_name])
 
-  //UseEffect untuk change auto totalPrice di booking
   useEffect(() => {
-    const subTotal = () => {
-        const sumDays = numDays * ratePriceInt
-        const sumRoom = sumDays * dataBooking.boor_total_room
-        const sumPriceSpof = sumRoom - spofDiscInt
-        setTotalPrice(sumPriceSpof)
-    };
-    subTotal();
-  }, [faciRoom.faci_rate_price, spofPrice.spofDiscount]);
-
+    setTotalPrice(0);
+  }, [id]);
 
   useEffect(() => {
     setTotalPrice(ratePriceInt);
@@ -412,28 +401,6 @@ export default function bookingRoom() {
       });
     }
   }, [spofPrice]);
-
-  //useEffect untuk auto munculin perhitungan extra
-  useEffect(() => {
-    // const totalExtra = () => {
-    const sumEx = valueExtra.pritPrice.map((a) =>
-      parseInt(a.substring(2).replace(".", ""))
-    );
-    const sumExTotal = sumEx.reduce((a, b) => a + b, 0);
-    const sumTotal = sumExTotal.toLocaleString("id-ID", {
-      style: "currency",
-      currency: "IDR",
-    });
-    setExtraTotal({ ...extraTotal, extraSubTotal: sumTotal });
-    // };
-    // totalExtra();
-    // // const empTotalPrice = parseInt(totalPrice.substring(2).replace('.',''))
-    // const empTotalPrice = totalPrice
-    // const newExtraTotal = parseInt(extraTotal.extraSubTotal.substring(2).replace('.',''))
-    // const moneyTotal = (totalPrice + sumExTotal).toLocaleString("id-ID", {style : "currency", currency:"IDR"})
-    // // setTotalPrice((moneyTotal))
-    // console.log(moneyTotal, sumTotal)
-  }, [valueExtra.pritPrice]);
 
   //Handle button selected room into booking
   const handleButtonSelected = (index: any) => {
@@ -470,17 +437,36 @@ export default function bookingRoom() {
     setAddExtra(false);
   };
 
-  // const handleValueExtra = (id : any) => {
-  //     const selected = extra.find(item => item.idExtra === id);
-  //     if (selected) {
-  //         const newValueExtraName = [...valueExtra.pritName, selected.pritName];
-  //         const newValueExtraPrice = [...valueExtra.pritPrice, selected.pritPrice];
-  //         setValueExtra({
-  //         pritName: newValueExtraName,
-  //         pritPrice: newValueExtraPrice
-  //         });
-  //     }
-  // }
+  //UseEffect untuk change auto totalPrice di booking
+  useEffect(() => {
+    const subTotal = () => {
+        const sumDays = numDays * ratePriceInt
+        const sumRoom = sumDays * dataBooking.boor_total_room
+        const sumPriceSpof = sumRoom - spofDiscInt
+        setTotalPrice(sumPriceSpof)
+    };
+    subTotal();
+  }, [faciRoom.faci_rate_price, spofPrice.spofDiscount]);
+
+  //useEffect untuk auto munculin perhitungan extra
+  useEffect(() => {
+    const totalExtra = () => {
+    const sumEx = valueExtra.pritPrice.map((a) =>
+      parseInt(a.substring(2).replace(".", ""))
+    );
+    const sumExTotal = sumEx.reduce((a, b) => a + b, 0);
+    const sumTotal = sumExTotal.toLocaleString("id-ID", {
+      style: "currency",
+      currency: "IDR",
+    });
+    setExtraTotal({ ...extraTotal, extraSubTotal: sumTotal });
+    setDataBooking({...dataBooking, borde_extra : sumExTotal})
+    const newExtraTotal = parseInt(extraTotal.extraSubTotal.substring(2).replace('.',''))
+    const moneyTotal = (totalPrice + newExtraTotal)
+    setTotalPrice((moneyTotal))
+    };
+  totalExtra();
+  }, [valueExtra.pritPrice]);
 
   //Handle delete untuk tabel extra
   const handleDelete = (index: any) => {
@@ -601,13 +587,13 @@ export default function bookingRoom() {
     const id = boor_id + 1;
     dispatch(insertBooking(dataBooking));
     dispacth(doCreateTransaction(dataPayment));
-    
+
     setTimeout(() =>
       router.push({
         pathname: `/booking/room/invoice`,
         query: {id : dataBooking.boor_order_number},
       })
-    );
+    , 1000);
   };
 
   //   useEffect(() => {

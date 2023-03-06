@@ -1,10 +1,27 @@
 import { ArrowRightOutlined } from "@ant-design/icons/lib"
-import { Layout, Row, Col } from "antd"
+import { Layout, Row, Col, DatePicker } from "antd"
+import Link from "next/link"
+import { useState } from "react"
 
 const Hero = () => {
     const heros = "relative w-full h-96 bg-[url('/assets/content-1.jpg')] m-auto rounded-3xl bg-center bg-cover bg-no-repeat text-center flex items-center mb-6"
     const float = "absolute bg-white rounded-lg drop-shadow-lg py-5 px-8 w-2/3"
     const input = "outline-0 text-md py-2"
+
+    const [hero, setHero] = useState({
+        location : '',
+        start : '',
+        end : '',
+        guests : ''
+    })
+
+    const handleHero = (event : any) => {
+        const {name, value} = event.target;
+        setHero (items => ({...hero, [name] : value }))
+    }
+
+    console.log(hero)
+
     return(
         <Layout className="bg-white py-10">
             <div className={heros}>
@@ -18,26 +35,25 @@ const Hero = () => {
                     <Row justify='space-between' align='middle'>
                         <Col span={4} className="text-start">
                             <label htmlFor="location">Location</label>
-                            <input type="text" className={input} placeholder="Find here" id="location"/>
+                            <input type="text" name="location" className={input} onChange={handleHero} placeholder="Find here" id="location"/>
                         </Col>
-                        <Col span={4} className="text-start">
+                        {/* <Col span={4} className="text-start">
                             <label htmlFor="faci">Hotel</label>
                             <input type="text" className={input} placeholder="Find here" id="faci"/>
-                        </Col>
-                        <Col span={4} className="text-start">
-                            <label htmlFor="guest">Guest</label>
-                            <input type="number" className={input} placeholder="Find here" id="guest"/>
-                        </Col>
+                        </Col> */}
                         <Col span={9} className="text-start">
                             <label htmlFor="date">Date</label>
                             <div className="flex gap-4">
-                                <input type="date" className={input} placeholder="Check In" id="date"/>
-                                <input type="date" className={input} placeholder="Check Out" id="date1"/>
+                                <DatePicker name="checkIn" className={input} onChange={(date)=> handleHero({target : {name : "checkIn", value : date?.format('DD MM YYYY') }})} placeholder="Check In" id="date"/>
+                                <DatePicker name="checkOut" className={input} onChange={(date)=> handleHero({target : {name : "checkOut", value : date?.format('DD MM YYYY') }})} placeholder="Check Out" id="date1"/>
                             </div>
-
+                        </Col>
+                        <Col span={4} className="text-start">
+                            <label htmlFor="guest">Guest</label>
+                            <input type="number" name="guest" className={input} placeholder="Find here" id="guest"/>
                         </Col>
                         <Col span={3} className="flex justify-end">
-                            <button className="bg-slate-700 p-4 text-white rounded-full flex items-center justify-end"><ArrowRightOutlined /></button>
+                            <Link href={"/booking"}><button className="bg-slate-700 p-4 text-white rounded-full flex items-center justify-end"><ArrowRightOutlined /></button></Link>
                         </Col>
                     </Row>
                 </form>

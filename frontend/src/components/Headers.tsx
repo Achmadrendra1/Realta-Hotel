@@ -155,7 +155,7 @@ function isTokenExpired() {
                                         <Input placeholder="Guest" className="w-full" type="number" onChange={e => setGuest(parseInt(e.target.value))}/>
                                     </Col>
                                     <Col>
-                                        <Link href={`/hotel/${location}/${date.length > 0 ? date[0] + ' ' + date[1] : ''}/${guest ? guest : ''}`} className="bg-sky-500 py-2 rounded px-5 text-white hover:text-white" onClick={() => setOpen(false)}>Search</Link>
+                                        <Link href={`/Booking/${location}/${date.length > 0 ? date[0] + ' ' + date[1] : ''}/${guest ? guest : ''}`} className="bg-sky-500 py-2 rounded px-5 text-white hover:text-white" onClick={() => setOpen(false)}>Search</Link>
                                     </Col>
                                 </Row>
                             </div>

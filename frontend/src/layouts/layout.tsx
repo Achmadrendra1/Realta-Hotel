@@ -24,7 +24,7 @@ const Layouts = ({children}:Props) => {
         },
         {
             name: 'Hotels',
-            href: '/hotel'
+            href: '/booking'
         },
         {
             name: 'Restaurants',
