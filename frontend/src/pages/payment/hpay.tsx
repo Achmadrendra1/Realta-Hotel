@@ -1,11 +1,13 @@
 import Layouts from "@/layouts/layout";
 import { LeftOutlined, RightOutlined } from "@ant-design/icons";
-import { Button, Card } from "antd";
+import { Button, Card, DatePicker, List } from "antd";
 import Head from "next/head";
 import Link from "next/link";
-import {use, useState} from 'react';
-import TopUp from './topup'
+import { use, useEffect, useState } from "react";
+import TopUp from "./topup";
 import DetailTransHpay from "./detailTransHpay";
+import { useDispatch, useSelector } from "react-redux";
+import { doTransactionRequest } from "@/Redux/Action/Payment/paymentDashAction";
 
 export default function hpay() {
   const addIcon = (
@@ -43,13 +45,45 @@ export default function hpay() {
       </g>
     </svg>
   );
-
-  const [isOpenTP, setOpenTP] = useState(false)
-  const [isOpenDetail, setOpenDetail] = useState(false)
+  
+  const dispacth = useDispatch();
+  const [isOpenTP, setOpenTP] = useState(false);
+  const [isOpenDetail, setOpenDetail] = useState(false);
   const [confirmLoading, setConfirmLoading] = useState(false);
-  const [msg, setMsg] = useState('')
+  const [msg, setMsg] = useState("");
+
+  const { account, error } = useSelector(
+    (state: any) => state.payUserAccReducer
+  );
+
+  const { payDashTrx, total, currentPage } = useSelector(
+    (state: any) => state.payTrxHistoryReducer
+  );
+
+  useEffect(()=>{
+    dispacth(doTransactionRequest());
+  }, [])
+  const user = useSelector((state: any) => state.GetUserReducer.getUser);
+  const accNumber = `131${user[0]?.user_phone_number}`;
+
+  //Filter Account Number untuk mencari account number Dompet Realta
+  const bankAcc = account?.filter(
+    (obj: any) => obj.usacType === "Credit Card" || obj.usacType === "Debet"
+  );
+  const fintechAcc = account?.filter((obj: any) => obj.usacType === "Payment");
+  const acc = fintechAcc?.find(
+    (item: any) => item.usacAccountNumber == accNumber
+  );
+
+  //Variabel Saldo Dompet Realta
+  const saldo = parseInt(acc?.usacSaldo).toLocaleString("id-ID", {
+    style: "currency",
+    currency: "IDR",
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 0,
+  });
   const handleOk = () => {
-    setMsg('The modal will be closed after two seconds');
+    setMsg("The modal will be closed after two seconds");
     setConfirmLoading(true);
     setTimeout(() => {
       setOpenTP(false);
@@ -59,10 +93,16 @@ export default function hpay() {
   };
 
   const handleCancel = () => {
-    console.log('Clicked cancel button');
+    console.log("Clicked cancel button");
     setOpenTP(false);
-    setOpenDetail(false)
+    setOpenDetail(false);
   };
+
+  const handleClose = (data: boolean) => {
+    setOpenTP(data)
+  }
+
+  const { RangePicker } = DatePicker;
 
   return (
     <>
@@ -74,22 +114,24 @@ export default function hpay() {
       </Head>
       <main>
         <Layouts>
-          <div className="relative w-full h-48 drop-shadow-lg p-4 bg-blue-700 m-auto rounded-xl bg-center bg-cover bg-no-repeat mb-6">
-            <div className="flex justify-start mb-8">
-              <Link href={'/payment'}><LeftOutlined className="text-lg text-white mr-4" /></Link>
-              <p className="pt-px text-lg text-white font-bold">
-                H-Pay Balance
-              </p>
+          <div className="relative w-full h-48 drop-shadow-lg p-4 bg-[#4728ae] m-auto rounded-xl bg-center bg-cover bg-no-repeat mb-6">
+            <div className="flex justify-start items-center mb-8">
+              <Link href={"/payment"}>
+                <LeftOutlined className="text-md font-semibold pt-1 text-white mr-4" />
+              </Link>
+              <p className="text-lg text-white font-bold">H-Pay Balance</p>
             </div>
             <div className="w-2/4 h-36 mt-4 m-auto p-6 bg-white rounded-lg">
               <div className="flex justify-between">
                 <div>
                   <p className="text-md">Balance</p>
-                  <p className="text-3xl mt-2 font-bold">Rp. 0</p>
+                  <p className="text-3xl mt-2 font-bold">{saldo}</p>
                 </div>
                 <Button
-                  className="bg-blue-500 hover:bg-blue-700 text-white px-4 flex"
-                  onClick={()=>{setOpenTP(true)}}
+                  className="bg-[#4728ae] text-white px-4 flex"
+                  onClick={() => {
+                    setOpenTP(true);
+                  }}
                 >
                   {addIcon}
                   <p className="ml-2 text-md hover:text-white"> Top Up </p>
@@ -97,59 +139,104 @@ export default function hpay() {
               </div>
             </div>
           </div>
-          
-          <div className=" w-3/4 m-auto mt-12">
-          <div className="flex justify-center m-auto mb-2">
-            <Card style={{ width: 250 }} className="bg-white mr-4">
-              <p className="text-md font-bold">In</p>
-              <p className="text-green-600">Rp. 500.000</p>
-            </Card>
-            <Card style={{ width: 250 }} className=" bg-white">
-              <p className="text-md font-bold">Out</p>
-              <p >Rp. 500.000</p>
-            </Card>
-          </div>
-              <Card title="History Transaction">
+
+          <div className="mt-16 mb-6 drop-shadow-lg m-auto border-b-md rounded-md ">
+            <div className="flex justify-between p-6 bg-white rounded-lg">
+              <p className="text-lg font-semibold text-[#252525]">History Transaction</p>
+              <RangePicker  />
+            </div>
+            <List className="pb-4" pagination={{
+                    current: currentPage,
+                    total: total,
+                    pageSize: 10,}}>
+              {payDashTrx.map((item: any) => (
                 <Card
-                  type="inner"
-                  title="TP#20230123-0001"
-                  extra={'23-01-2023'}
-                  className="mb-4"
+                  title={item.transactionNumber}
+                  extra={item.trxDate?.split("T")[0]}
+                  className="m-4"
                 >
                   <div>
-                  <p className="font-bold text-lg">Top Up</p>
-                  <p className="text-md">H-Pay User</p>
-                  <p className="text-right text-md text-green-600">Rp. 500.000</p>
+                    <div className="flex justify-between">
+                      <p className="font-bold text-lg">
+                        {item.transactionNote}
+                      </p>
+                      {item.debit != 0 ? (
+                        <p className="text-md text-green-600 font-semibold">
+                          {parseInt(item.debit).toLocaleString("id-ID", {
+                            style: "currency",
+                            currency: "IDR",
+                            minimumFractionDigits: 0,
+                            maximumFractionDigits: 0,
+                          })}
+                        </p>
+                      ) : (
+                        <p className="text-md text-red-600 font-semibold">
+                          {parseInt(item.credit).toLocaleString("id-ID", {
+                            style: "currency",
+                            currency: "IDR",
+                            minimumFractionDigits: 0,
+                            maximumFractionDigits: 0,
+                          })}
+                        </p>
+                      )}
+                    </div>
+                    <div className="flex justify-between">
+                      <p className="text-md">{item.orderNumber ? item.orderNumber : 'Dompet Realta'}</p>
+                      <p className="text-md font-semibold">
+                        {item.sourcePaymentName == null
+                          ? "Cash"
+                          : item.sourcePaymentName}
+                      </p>
+                    </div>
                   </div>
                 </Card>
-                <Card
+              ))}
+              {/* <Card
                   type="inner"
                   title="TRB#20230123-0001"
                   extra={'23-01-2023'}
                   className="mb-4"
                 >
                   <div>
-                  <p className="font-bold text-lg">Booking Order BO#20230123-0002</p>
+                  <p className="font-bold text-lg">Booking</p>
                   <p className="text-md">Hotel ABC</p>
-                  <p className="text-right text-md text-red-600">Rp. 500.000</p>
+                  <p className="text-right text-md">Rp. 500.000</p>
+                  <p className="text-right text-md text-green-600 font-semibold">Credit Card</p>
                   </div>
                 </Card>
                 <Card
                   type="inner"
                   title="RF#20230123-0001"
                   extra={'23-01-2023'}
-                  className="mb-4 hover:cursor-pointer"
-                  onClick={()=>setOpenDetail(true)}
+                  className="mb-4"
                 >
                   <div>
-                  <p className="font-bold text-lg">Refund BO#20230123-0002</p>
-                  <p className="text-right text-md text-green-600">Rp. 500.000</p>
+                  <p className="font-bold text-lg">Refund</p>
+                  <p className="text-md">For Transaction BO#20230123-0002</p>
+                  <p className="text-right text-md">Rp. 500.000</p>
+                  <p className="text-right text-md text-green-600 font-semibold">Debet Card</p>
                   </div>
-                </Card>
-              </Card>
+                </Card> */}
+            </List>
           </div>
-          {isOpenTP ? <TopUp show={isOpenTP} clickOk={handleOk} clickCancel={handleCancel}/> : null}
-          {isOpenDetail ? <DetailTransHpay show={isOpenDetail} clickOk={handleOk} clickCancel={handleCancel}/> : null}
+          {isOpenTP ? (
+            <TopUp
+              show={isOpenTP}
+              clickOk={handleOk}
+              clickCancel={handleCancel}
+              dataUser={user}
+              phone={accNumber}
+              card = {bankAcc}
+              handleCancell={handleClose}
+            />
+          ) : null}
+          {isOpenDetail ? (
+            <DetailTransHpay
+              show={isOpenDetail}
+              clickOk={handleOk}
+              clickCancel={handleCancel}
+            />
+          ) : null}
         </Layouts>
       </main>
     </>

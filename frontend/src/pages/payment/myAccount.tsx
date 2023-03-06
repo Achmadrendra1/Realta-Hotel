@@ -60,7 +60,7 @@ export default function MyAccount() {
 
   useEffect(() => {
     dispacth(doBankRequest());
-    dispacth(doUsacRequest());
+    // dispacth(doUsacRequest());
     dispacth(doPagaRequest());
   }, []);
 
