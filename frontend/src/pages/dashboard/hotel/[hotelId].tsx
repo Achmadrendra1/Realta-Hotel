@@ -13,8 +13,9 @@ import { useDispatch, useSelector } from "react-redux";
 import AddFacilities from "./AddFacility";
 import EditFacilityHotel from "./EditFacility";
 import AddPhoto from "./AddPhoto";
+import withAuth from "@/PrivateRoute/WithAuth";
 
-export default function HotelDetails() {
+export default withAuth( function HotelDetails() {
   const dispatch = useDispatch();
   const router = useRouter();
   const { hotelId } = router.query;
@@ -230,3 +231,4 @@ export default function HotelDetails() {
     </Dashboard>
   );
 }
+)
