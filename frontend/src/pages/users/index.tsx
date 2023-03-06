@@ -1,34 +1,47 @@
-import { ArrowLeftOutlined, CreditCardOutlined, HistoryOutlined, LaptopOutlined, LogoutOutlined, NotificationOutlined, UserOutlined } from '@ant-design/icons';
-import { Card, MenuProps } from 'antd';
-import { Breadcrumb, Layout, Menu, theme } from 'antd';
-import Layouts from '@/layouts/layout';
-import Link from 'next/link';
-import { useState } from 'react';
-import Userprofile from './userProfile';
-import MyAccount from '../payment/myAccount';
+import {
+  ArrowLeftOutlined,
+  CreditCardOutlined,
+  HistoryOutlined,
+  LaptopOutlined,
+  LogoutOutlined,
+  NotificationOutlined,
+  UserOutlined,
+} from "@ant-design/icons";
+import { Card, MenuProps, Space } from "antd";
+import { Breadcrumb, Layout, Menu, theme } from "antd";
+import Layouts from "@/layouts/layout";
+import Link from "next/link";
+import { useState } from "react";
+import Userprofile from "./userProfile";
+import MyAccount from "../payment/myAccount";
+import { useRouter } from "next/router";
 
 export default function Index() {
   const { Header, Content, Footer, Sider } = Layout;
-  const items1: MenuProps['items'] = ['1', '2', '3'].map((key) => ({
-    key,
-    label: `nav ${key}`,
-  }));
-  
-  const items: MenuProps["items"] = [
+  // const items1: MenuProps["items"] = ["1", "2", "3"].map((key) => ({
+  //   key,
+  //   label: `nav ${key}`,
+  // }));
+
+  const items = [
     {
       icon: <UserOutlined />,
-      label: <Link href="#">My Profile</Link>,
+      href: "/users#profile",
+      label: "My Profile",
       key: "0",
     },
     {
-      label: <Link href="#">My History</Link>,
+      href: "/users#history",
+      label: "My History",
       key: "1",
-      icon : <HistoryOutlined />
+      icon: <HistoryOutlined />,
     },
-    { 
-      label: <Link href="#">My Account</Link>,
+    {
+      href: "/users#account",
+      label: "My Account",
       key: "2",
-      icon : <CreditCardOutlined />
+      icon: <CreditCardOutlined />,
+      // url: '#account'
     },
     {
       label: (
@@ -36,48 +49,74 @@ export default function Index() {
           <span className="text-red-600">Log Out</span>
         </Link>
       ),
+      href: '',
       key: "3",
-      icon : <LogoutOutlined style={{color : 'red'}} />
+      icon: <LogoutOutlined style={{ color: "red" }} />,
     },
   ];
 
-  const [content, setContent] = useState('0')
+  const [content, setContent] = useState("0");
 
-  const onClick: MenuProps['onClick'] = (e) => {
-    console.log('click ', e);
-    setContent(e.key)
-  };
+  // const onClick: MenuProps["onClick"] = (e) => {
+  //   console.log("click ", e);
+  //   setContent(e.key);
+  // };
 
+  const router = useRouter();
 
   return (
     <Layouts>
-
-    <Layout style={{background: 'white'}}>
-    <Content style={{ padding: '0 50px' }}>
-      <Breadcrumb style={{ margin: '16px 0' }}>
-        <Breadcrumb.Item>Home</Breadcrumb.Item>
-        <Breadcrumb.Item>Profile</Breadcrumb.Item>
-      </Breadcrumb>
-      <Layout style={{ padding: '24px 0', background: 'white'}}>
-        <Sider width={250} theme='light'>
-         <Card>
-         <Menu
-            mode="inline"
-            defaultSelectedKeys={['0']}
-            defaultOpenKeys={['0']}
-            items={items}
-            style={{border: 0}}
-            onClick={onClick}
-          />
-         </Card>
-        </Sider>
-        <Content style={{ padding: '0 24px', minHeight: 280 }}>
-            {content === '0' ? <Userprofile /> : content === '1' ? 'History' : content === '2' && <MyAccount />}
+      <Layout style={{ background: "#F2F1FA" }}>
+        <Content style={{ padding: "0 50px" }}>
+          <Breadcrumb style={{ margin: "16px 0" }}>
+            <Breadcrumb.Item>Home</Breadcrumb.Item>
+            <Breadcrumb.Item>Profile</Breadcrumb.Item>
+          </Breadcrumb>
+          <Layout style={{ padding: "24px 0", background: "#F2F1FA" }}>
+            <Sider width={250} theme="light" style={{ background: "#F2F1FA" }}>
+              <Card style={{ background: "white" }}>
+                <Menu
+                  mode="inline"
+                  // defaultSelectedKeys={["0"]}
+                  // defaultOpenKeys={["0"]}
+                  // // items={items}
+                  style={{ border: 0 }}
+                  // onClick={onClick}
+                  className={`bg-white text-[#754cff]`}
+                >
+                  {items.map((item: any, index: any) => (
+                    <Menu.Item
+                      key={item.key}
+                      style={{
+                        backgroundColor:
+                          router.asPath === item.href ? "#754CFF" : "",
+                        color: router.asPath === item.href ? "#F1F2FA" : "",
+                      }}
+                    >
+                      <Link
+                        href={item.href}
+                        className="flex gap-2 items-center"
+                      >
+                        {item.icon}
+                        <span>{item.label}</span>
+                      </Link>
+                    </Menu.Item>
+                  ))}
+                </Menu>
+              </Card>
+            </Sider>
+            <Content style={{ padding: "0 24px", minHeight: 280 }}>
+              {router.asPath === "/users#profile" ? (
+                <Userprofile />
+              ) : router.asPath === "/users#history" ? (
+                "History"
+              ) : (
+                router.asPath === "/users#account" && <MyAccount />
+              )}
+            </Content>
+          </Layout>
         </Content>
       </Layout>
-    </Content>
-  </Layout>
-          
-  </Layouts>
-);
+    </Layouts>
+  );
 }

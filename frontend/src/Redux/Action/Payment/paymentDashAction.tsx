@@ -1,8 +1,9 @@
 import PaymentConst from "@/Redux/Constant/Payment/PaymentConst"
 
-export const doTransactionRequest = () => {
+export const doTransactionRequest = (payload?: any) => {
     return {
-        type: PaymentConst.GET_PAYMENT_HISTORY_DASH
+        type: PaymentConst.GET_PAYMENT_HISTORY_DASH,
+        payload
     }
 }
 export const doTransactionRequestSuccess = (payload: any) => {
@@ -19,9 +20,10 @@ export const doTransactionRequestFailed = (payload: any) => {
 }
 
 //Bank Request
-export const doBankRequest = () => {
+export const doBankRequest = (payload?: any) => {
     return {
-        type: PaymentConst.GET_BANK_REQUEST
+        type: PaymentConst.GET_BANK_REQUEST,
+        payload
     }
 }
 export const doBankRequestSuccess = (payload: any) => {
@@ -98,9 +100,10 @@ export const doDeleteBankFailed = (payload:any)=>{
 }
 
 //Get Payment Gateway
-export const doPagaRequest = ()=>{
+export const doPagaRequest = (payload? :any)=>{
     return {
-        type : PaymentConst.GET_PAYMENT_GATEWAY_REQUEST
+        type : PaymentConst.GET_PAYMENT_GATEWAY_REQUEST,
+        payload
     }
 }
 export const doPagaRequestSuccess = (payload:any)=>{
@@ -177,9 +180,10 @@ export const doPagaDeleteFailed = (payload:any) => {
 }
 
 //Get User Account
-export const doUsacRequest = ()=>{
+export const doUsacRequest = (payload: any)=>{
     return {
-        type : PaymentConst.GET_ACCOUNT_ACTIVE
+        type : PaymentConst.GET_ACCOUNT_ACTIVE,
+        payload
     }
 }
 export const doUsacRequestSuccess = (payload:any) => {

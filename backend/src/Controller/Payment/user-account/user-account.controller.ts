@@ -10,9 +10,9 @@ export class UserAccountController {
         return this.accountService.getAll()
     }
 
-    @Get('/paga')
-    getPaga(){
-        return this.accountService.getPayment()
+    @Get(':id')
+    getPaga(@Param() params){
+        return this.accountService.getAccount(params.id)
     }
 
     @Get('/join')

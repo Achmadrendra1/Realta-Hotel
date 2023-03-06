@@ -9,7 +9,7 @@ export default function AddBank(props: any) {
 
   const onFinish = (data: any) => {
     console.log("Success:", data);
-    // dispatch(doAddBank(data));
+    dispatch(doAddBank(data));
     handleClose(false)
   };
   

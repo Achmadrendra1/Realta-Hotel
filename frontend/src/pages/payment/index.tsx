@@ -4,7 +4,7 @@ import {
   DollarCircleOutlined,
   RightOutlined,
 } from "@ant-design/icons";
-import { Button, Card, Col, Row } from "antd";
+import { Button, Card, Col, DatePicker, List, Row } from "antd";
 import Head from "next/head";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
@@ -13,6 +13,7 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   doBankRequest,
   doPagaRequest,
+  doTransactionRequest,
   doUsacRequest,
 } from "@/Redux/Action/Payment/paymentDashAction";
 import { doGetHistory } from "@/Redux/Action/Payment/paymentUserAction";
@@ -27,7 +28,7 @@ export default withAuth(function index() {
   const user = useSelector((state: any) => state.GetUserReducer.getUser);
   const { payBank } = useSelector((state: any) => state.payBankReducer);
   const { payPaga } = useSelector((state: any) => state.payPagaReducer);
-  const { payHistoryTrx } = useSelector(
+  const { payDashTrx, total, currentPage } = useSelector(
     (state: any) => state.payTrxHistoryReducer
   );
   const { account, error } = useSelector(
@@ -38,25 +39,24 @@ export default withAuth(function index() {
 
   useEffect(() => {
     dispacth(doBankRequest());
-    dispacth(doUsacRequest());
     dispacth(doPagaRequest());
-    dispacth(doGetHistory());
+    dispacth(doTransactionRequest());
   }, []);
 
   //Filter History By User
-  const dataTrx = payHistoryTrx?.filter(
-    (obj: any) => obj.userId === user[0]?.user_id
-  );
+  // const dataTrx = payHistoryTrx?.filter(
+  //   (obj: any) => obj.userId === user[0]?.user_id
+  // );
 
   //Get User Account By User Id yang login
-  const userAcc = account?.filter(
-    (obj: any) => obj.usacUserId === user[0]?.user_id
-  );
+  // const userAcc = account?.filter(
+  //   (obj: any) => obj.usacUserId === user[0]?.user_id
+  // );
   //Di filter by Type buat misah antara bank/fintech
-  const bankAcc = userAcc?.filter(
+  const bankAcc = account?.filter(
     (obj: any) => obj.usacType === "Credit Card" || obj.usacType === "Debet"
   );
-  const fintechAcc = userAcc?.filter((obj: any) => obj.usacType === "Payment");
+  const fintechAcc = account?.filter((obj: any) => obj.usacType === "Payment");
 
   //Check Status Account Dompet Realta
   const accDompet = fintechAcc?.find(
@@ -93,7 +93,8 @@ export default withAuth(function index() {
   const handleCancell = (data: boolean) => {
     setOpenAct(data);
   };
-  console.log(dataTrx);
+  // console.log(dataTrx);
+  const { RangePicker } = DatePicker;
   return (
     <>
       <Head>
@@ -113,7 +114,7 @@ export default withAuth(function index() {
               handleCancell={handleCancell}
             />
           ) : null}
-          <div className="relative w-full h-60 justify-center p-4 bg-blue-700 m-auto rounded-xl bg-center bg-cover bg-no-repeat flex mb-6">
+          <div className="relative w-full h-60 justify-center p-4 bg-[#4728ae] text-[#F2F1FA] m-auto rounded-xl bg-center bg-cover bg-no-repeat flex mb-6">
             <div className="p-4 flex justify-center w-full pl-28 pr-28">
               <Row gutter={16} className="w-full ">
                 <Col span={12} className="pt-4 ml-28">
@@ -125,7 +126,7 @@ export default withAuth(function index() {
                     future of travel payments. Book your next stay with ease and
                     enjoy a stress-free travel experience.
                   </p>
-                  <Button className="text-white mt-4 hover:text-white">
+                  <Button className="text-white mt-4 hover:text-white hover:border-[#F7C934]">
                     Learn More
                   </Button>
                 </Col>
@@ -143,10 +144,10 @@ export default withAuth(function index() {
                       <Link href={"payment/hpay"}>
                         <Row gutter={8}>
                           <Col>
-                            <DollarCircleOutlined className="text-xl mt-2 mr-2" />
+                            <DollarCircleOutlined className="text-xl mt-2 mr-2 text-[#4728ae]" />
                           </Col>
                           <Col span={16}>
-                            <p className="text-md text-blue-700 font-bold">
+                            <p className="text-md text-[#4728ae] font-bold">
                               H-Pay Balance
                             </p>
                             <p className="text-md text-gray-700">
@@ -154,13 +155,13 @@ export default withAuth(function index() {
                             </p>
                           </Col>
                           <Col>
-                            <RightOutlined className="text-xl mt-2" />
+                            <RightOutlined className="text-xl mt-2 text-[#4728ae]" />
                           </Col>
                         </Row>
                       </Link>
                     ) : (
                       <div className="text-center">
-                        <p className="text-md text-blue-700 font-bold">
+                        <p className="text-md text-[#4728ae] font-bold">
                           Activate Seamless Transactions with H-Pay Now!
                         </p>
                         <Button
@@ -179,10 +180,10 @@ export default withAuth(function index() {
                     <Link href={"payment/cards"}>
                       <Row gutter={8}>
                         <Col>
-                          <CreditCardOutlined className="text-xl mt-2 mr-2" />
+                          <CreditCardOutlined className="text-xl mt-2 mr-2 text-[#4728ae]" />
                         </Col>
                         <Col span={16}>
-                          <p className="text-md text-blue-700 font-bold">
+                          <p className="text-md text-[#4728ae] font-bold">
                             My Cards
                           </p>
                           {bankAcc.length < 0 ? (
@@ -194,7 +195,7 @@ export default withAuth(function index() {
                           )}
                         </Col>
                         <Col>
-                          <RightOutlined className="text-xl mt-2" />
+                          <RightOutlined className="text-xl mt-2 text-[#4728ae]" />
                         </Col>
                       </Row>
                     </Link>
@@ -203,14 +204,20 @@ export default withAuth(function index() {
               </div>
             </div>
           </div>
-          <div className="mt-32 mb-6 w-3/4 drop-shadow-lg m-auto border-b-md bg-gray-200">
-            <Card title="History Transaction" extra={<RightOutlined />}>
-              {dataTrx.map((item: any) => (
+          <div className="mt-32 mb-6 drop-shadow-lg m-auto border-b-md rounded-md ">
+            <div className="flex justify-between p-6 bg-white rounded-lg">
+              <p className="text-lg font-semibold text-[#252525]">History Transaction</p>
+              <RangePicker  />
+            </div>
+            <List className="pb-4" pagination={{
+                    current: currentPage,
+                    total: total,
+                    pageSize: 10,}}>
+              {payDashTrx.map((item: any) => (
                 <Card
-                  type="inner"
                   title={item.transactionNumber}
                   extra={item.trxDate?.split("T")[0]}
-                  className="mb-4"
+                  className="m-4"
                 >
                   <div>
                     <div className="flex justify-between">
@@ -238,7 +245,7 @@ export default withAuth(function index() {
                       )}
                     </div>
                     <div className="flex justify-between">
-                      <p className="text-md">{item.orderNumber}</p>
+                      <p className="text-md">{item.orderNumber ? item.orderNumber : 'Dompet Realta'}</p>
                       <p className="text-md font-semibold">
                         {item.sourcePaymentName == null
                           ? "Cash"
@@ -274,7 +281,7 @@ export default withAuth(function index() {
                   <p className="text-right text-md text-green-600 font-semibold">Debet Card</p>
                   </div>
                 </Card> */}
-            </Card>
+            </List>
           </div>
         </Layouts>
       </main>
