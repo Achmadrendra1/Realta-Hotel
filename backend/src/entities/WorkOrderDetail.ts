@@ -6,7 +6,6 @@ import {
   ManyToOne,
   PrimaryGeneratedColumn,
 } from "typeorm";
-import { Employee } from "./Employee";
 import { Facilities } from "./Facilities";
 import { ServiceTask } from "./ServiceTask";
 import { WorkOrders } from "./WorkOrders";
@@ -50,12 +49,8 @@ export class WorkOrderDetail {
   })
   wodeNotes: string | null;
 
-  @ManyToOne(() => Employee, (employee) => employee.workOrderDetails, {
-    onDelete: "CASCADE",
-    onUpdate: "CASCADE",
-  })
-  @JoinColumn([{ name: "wode_emp_id", referencedColumnName: "empId" }])
-  wodeEmp: Employee;
+  @Column("integer", { name: "wode_emp_id", nullable: true })
+  wodeEmpId: number | null;
 
   @ManyToOne(() => Facilities, (facilities) => facilities.workOrderDetails, {
     onDelete: "CASCADE",

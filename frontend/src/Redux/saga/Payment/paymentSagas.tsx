@@ -223,7 +223,7 @@ function* handleCreateTransaction(action:any):any {
   yield axios(API('POST', '/payment-transaction', action.payload))
   yield put(doCreateTransactionSuccess({message : 'Transaksi Berhasil'}))
   yield call(delay, 3000)
-  yield put(doCreateAccountSuccess({message : null}))
+  yield put(doCreateTransactionSuccess({message : null}))
 }
 
 function* handleGetHistoryTrx():any{

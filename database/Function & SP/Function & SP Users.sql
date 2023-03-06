@@ -123,3 +123,28 @@ BEGIN
 	
 END;
 $$;
+
+-- New Role 
+INSERT INTO users.roles(
+	role_id, role_name)
+	VALUES (6, 'Finance');
+
+-- User finance & admin
+INSERT INTO users.users(
+	user_id, user_full_name, user_type, user_company_name, user_email, user_phone_number, user_modified_date)
+	VALUES ( '44','Finance','C', 'Hotel Realta', 'Finance@gmail.com', '08228882828','2023-01-19' );
+
+INSERT INTO users.users(
+	user_id, user_full_name, user_type, user_company_name, user_email, user_phone_number, user_modified_date)
+	VALUES ( '55','Admin','C', 'Hotel Realta', 'Admin@gmail.com', '08228929292','2023-01-20' );
+
+-- New User Roles
+INSERT INTO users.user_roles(usro_user_id, usro_role_id) VALUES (44,6);
+INSERT INTO users.user_roles(usro_user_id, usro_role_id) VALUES (55,4);
+
+--New User Password
+INSERT INTO users.user_password(uspa_user_id, uspa_passwordhash, uspa_passwordsalt)
+VALUES (44, '$2a$12$gjaHnpIPGhQHokozo0urWOViHx9nkUjj1nJH6T.tTYGanEtkcSz7S', 'P@ssword144');
+
+INSERT INTO users.user_password(uspa_user_id, uspa_passwordhash, uspa_passwordsalt)
+VALUES (55, '$2a$12$y90LlOedo9hZqVYsQI0YeeEIV3w7cyo4/6T3tpQaqS.4uVTPYud56', 'P@ssword66');

@@ -46,12 +46,12 @@ function payUserAccReducer(state = initialState, action: any) {
       }
     case PaymentConst.TOP_UP_WALLET_FAILED:
       return {...state, message : action.payload}
-    case PaymentConst.CREATE_ACCOUNT : 
+    case PaymentConst.CREATE_TRANSACTION : 
       return {...state}
     case PaymentConst.CREATE_TRANSACTION_SUCCESS :
       return {...state, message : action.payload}
     default:
-      return { ...state };
+      return state;
   }
 }
 

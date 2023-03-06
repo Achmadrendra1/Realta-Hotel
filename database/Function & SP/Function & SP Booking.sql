@@ -145,10 +145,10 @@ BEGIN
         );
     END LOOP;
 COMMIT;
-END;$$
-CALL booking.InsertBooking()
+END;$$;
 
 --Get Booking Invoice
+<<<<<<< HEAD
 CREATE VIEW booking.getBookingInvoice 
 AS 
 SELECT users.user_id, 
@@ -259,6 +259,131 @@ on hr.hore_user_id = u.user_id;
 
 SELECT * FROM hotel.userreview
 
+=======
+CREATE OR REPLACE PROCEDURE booking.getBookingInvoice()
+AS $$
+BEGIN
+	CREATE VIEW booking.getBookingInvoice 
+	AS 
+	SELECT users.user_id, 
+	users.user_full_name, 
+	users.user_phone_number, 
+	usme.usme_memb_name, 
+	usme.usme_promote_date, 
+	usme.usme_points,
+	boor.boor_id,
+	boor.boor_order_number,
+	boor.boor_order_date,
+	boor.boor_is_paid,
+	boor.boor_pay_type,
+	boor.boor_total_room,
+	boor.boor_total_amount,
+	borde.borde_adults,
+	borde.borde_kids,
+	borde.borde_price,
+	borde.borde_discount,
+	borde.borde_subtotal,
+	faci.faci_name,
+    patr.patr_trx_id,
+	patr.patr_modified_date
+	
+	FROM users.users users
+	JOIN users.user_members usme
+	ON users.user_id = usme.usme_user_id
+	JOIN booking.booking_orders boor
+	ON users.user_id = boor.boor_user_id
+	JOIN booking.booking_order_detail borde
+	ON boor.boor_id = borde.border_boor_id
+	JOIN hotel.facilities faci
+	ON borde.borde_faci_id = faci.faci_id
+    JOIN payment.payment_transaction patr
+	ON boor.boor_order_number = patr.patr_order_number;
+END; $$
+LANGUAGE plpgsql;
+
+
+--Get Hotel
+CREATE OR REPLACE PROCEDURE hotel.viewHotel()
+AS $$
+BEGIN
+    CREATE VIEW hotel.viewHotel AS 
+	select h.hotel_id, h.hotel_name, h.hotel_description, h.hotel_rating_star, h.hotel_phonenumber,
+		  faci_group.faci_hotelall,faci_group_rprice.faci_rateprice,faci_group_lprice.faci_lowprice,faci_group_hprice.faci_highprice,string_agg(photo_hotel.url, ',')as url, addrees.place,faci_room_group.faci_hotelroom
+   from hotel.hotels h 
+   join 
+   (select faci_hotel_id, string_agg(faci_name, ', ')as faci_hotelall
+   from hotel.facilities group by faci_hotel_id)faci_group
+   on h.hotel_id = faci_group.faci_hotel_id
+   join
+   (select faci_hotel_id, string_agg(concat(' ',faci_rate_price), '- ')as faci_rateprice
+   from hotel.facilities 
+	where faci_cagro_id = 1
+	group by faci_hotel_id)faci_group_rprice
+   on h.hotel_id = faci_group_rprice.faci_hotel_id
+   join
+   (select faci_hotel_id, string_agg(concat(' ',faci_low_price), '- ')as faci_lowprice
+   from hotel.facilities 
+	where faci_cagro_id = 1
+	group by faci_hotel_id)faci_group_lprice
+   on h.hotel_id = faci_group_lprice.faci_hotel_id
+   join 
+    (select faci_hotel_id, string_agg(concat(' ',faci_high_price), '- ')as faci_highprice
+   from hotel.facilities
+	where faci_cagro_id = 1
+	group by faci_hotel_id)faci_group_hprice
+   on h.hotel_id = faci_group_hprice.faci_hotel_id
+   join 
+   (select (f.faci_hotel_id) as hotel_id, faci_cagro_id, f.faci_name, (ph.fapho_url) as url, ph.fapho_primary 
+   from hotel.facility_photo ph
+   join hotel.facilities f on ph.fapho_faci_id = f.faci_id 
+   where ph.fapho_primary = '1' and f.faci_cagro_id=1)photo_hotel
+   on h.hotel_id = photo_hotel.hotel_id
+   join
+   (select faci_hotel_id, string_agg(faci_name, ', ')as faci_hotelroom
+   from hotel.facilities 
+	where faci_cagro_id = 1
+	group by faci_hotel_id
+  	)faci_room_group
+   on h.hotel_id = faci_room_group.faci_hotel_id
+   join
+   (select (a.addr_id)hotel_addr_id, concat(a.addr_line1,' ',p.prov_name,' ',c.country_name,' ',r.region_name)place 
+	from master.address a
+	join master.proviences p on a.addr_prov_id = p.prov_id
+	join master.country c on p.prov_country_id = c.country_id
+	join master.regions r on r.region_code = c.country_region_id)addrees
+	on h.hotel_addr_id = addrees.hotel_addr_id group by h.hotel_id, faci_group_rprice.faci_rateprice, faci_group.faci_hotelall,faci_group_lprice.faci_lowprice,faci_group_hprice.faci_highprice, addrees.place,faci_room_group.faci_hotelroom;
+END; $$
+LANGUAGE plpgsql;
+
+--Get Facility
+CREATE OR REPLACE PROCEDURE hotel.viewRoom()
+AS $$
+BEGIN
+    CREATE VIEW hotel.viewRoom AS
+	select *
+	from hotel.hotels h join hotel.facilities f 
+	on h.hotel_id = f.faci_hotel_id
+	join (select fapho_faci_id, string_agg(fapho_url,', ')as fapho_url
+			from hotel.facility_photos group by fapho_faci_id) fap
+	on f.faci_id = fap.fapho_faci_id
+	where faci_cagro_id = 1;
+END; $$
+LANGUAGE plpgsql;
+
+--Get User Review
+CREATE OR REPLACE PROCEDURE hotel.userreview()
+AS $$
+BEGIN
+    CREATE VIEW hotel.userreview AS
+	select hr.hore_hotel_id, u.user_full_name, u.user_email, hr.hore_user_review, hr.hore_created_on, hr.hore_rating
+  	from hotel.hotel_reviews hr
+	join users.users u
+	on hr.hore_user_id = u.user_id;
+END; $$
+LANGUAGE plpgsql;
+-- call hotel.user_review()
+-- select * from hotel.userreview
+>>>>>>> 2b09b6c55cdbdd2cdc8daa5876ccf7948953a7d6
 
 --Payment Insert
 CREATE OR REPLACE PROCEDURE  payment.insertPaymentTrx(

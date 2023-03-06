@@ -349,6 +349,7 @@ CREATE TABLE resto.resto_menus(
 	reme_name VARCHAR(55),
 	reme_description VARCHAR(255),
 	reme_price MONEY,
+	reme_discount money,
 	reme_status VARCHAR(15), --AVAILABLE | EMPTY
 	reme_modified_date TIMESTAMP,
 	reme_discount MONEY,
@@ -485,6 +486,8 @@ create table HR.employee(
 	emp_modified_date timestamp,
 	emp_emp_id int,
 	emp_joro_id int,
+	emp_user_id int,
+	constraint fk_user_id foreign key (emp_user_id) references users.users(user_id) on delete cascade on update cascade,
 	constraint fk_emp_id foreign key(emp_emp_id) references HR.employee (emp_id) on delete cascade on update cascade,
 	constraint fk_joro_id foreign key(emp_joro_id) references HR.job_role (joro_id) on delete cascade on update cascade
 );

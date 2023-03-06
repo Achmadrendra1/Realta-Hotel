@@ -4,11 +4,8 @@ import {
   Index,
   JoinColumn,
   ManyToOne,
-  OneToOne,
   PrimaryGeneratedColumn,
 } from "typeorm";
-import { Department } from "./Department";
-import { Employee } from "./Employee";
 import { Shift } from "./Shift";
 
 @Index("employee_department_history_edhi_emp_id_key", ["edhiEmpId"], {
@@ -41,20 +38,8 @@ export class EmployeeDepartmentHistory {
   })
   edhiModifiedDate: Date | null;
 
-  @ManyToOne(
-    () => Department,
-    (department) => department.employeeDepartmentHistories,
-    { onDelete: "CASCADE", onUpdate: "CASCADE" }
-  )
-  @JoinColumn([{ name: "edhi_dept_id", referencedColumnName: "deptId" }])
-  edhiDept: Department;
-
-  @OneToOne(() => Employee, (employee) => employee.employeeDepartmentHistory, {
-    onDelete: "CASCADE",
-    onUpdate: "CASCADE",
-  })
-  @JoinColumn([{ name: "edhi_emp_id", referencedColumnName: "empId" }])
-  edhiEmp: Employee;
+  @Column("integer", { name: "edhi_dept_id", nullable: true })
+  edhiDeptId: number | null;
 
   @ManyToOne(() => Shift, (shift) => shift.employeeDepartmentHistories, {
     onDelete: "CASCADE",
