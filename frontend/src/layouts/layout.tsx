@@ -11,7 +11,7 @@ import {
     VideoCameraOutlined,
   } from '@ant-design/icons';
 import Head from 'next/head'
-import { useRouter } from 'next/router'
+import  {useRouter}  from 'next/router'
 
 const Layouts = ({children}:Props) => {
     const router = useRouter()

@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import Buttons from "./Button";
 import Image from "next/image";
-import { useRouter } from "next/router";
+import  {useRouter}  from "next/router";
 import { useDispatch, useSelector } from "react-redux";
 import { doUsacRequest } from "@/Redux/Action/Payment/paymentDashAction";
 import { doGetUser } from "@/Redux/Action/User/GetDataUser";
@@ -74,8 +74,7 @@ function isTokenExpired() {
   
     const logout =()=>{ 
       dispatch(doLogout())
-      setIsLogin(false)
-      window.location.href = "/users/login"
+      
     }
 
     //Pisahin isAdmin atau user
