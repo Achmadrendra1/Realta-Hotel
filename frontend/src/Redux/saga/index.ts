@@ -137,7 +137,7 @@ import { handleBoorCreateFinal, handleBoorLast, handleSpBoorInvoice, handleSpFac
 
 // Purchasing
 import PurchasingConst from '../Constant/Purchasing/PurchasingConst'
-import { handleStock, handleStockAdd, handleStockUpdate, handleStockDelete } from './Purchasing/stockSaga'
+import { handleStock, handleStockAdd, handleStockUpdate, handleStockDelete, handleStockCart } from './Purchasing/stockSaga'
 import { handleStod, handleStodAdd, handleStodDelete, handleStodUpdate } from './Purchasing/stodSaga'
 import { handleVendor, handleVendorAdd, handleVendorDelete, handleVendorUpdate } from './Purchasing/vendorSaga'
 import { handleVepro, handleVeproAdd, handleVeproDelete, handleVeproUpdate } from './Purchasing/veproSaga'
@@ -163,9 +163,9 @@ export default function* rootSaga() {
     //user and auth
     takeEvery(UserConst.LOGIN_USER, HandleLoginUser),
     takeEvery(UserConst.GET_DATA_USER, HandleGetUser),
-    takeEvery(UserConst.EDIT_DATA_PROFILE,HandleEditProfile),
-    takeEvery(UserConst.UPDATE_PASSWORD,HandleUpdatePassword),
-    takeEvery(UserConst.LOGOUT_USER,HandleLogoutUser),
+    takeEvery(UserConst.EDIT_DATA_PROFILE, HandleEditProfile),
+    takeEvery(UserConst.UPDATE_PASSWORD, HandleUpdatePassword),
+    takeEvery(UserConst.LOGOUT_USER, HandleLogoutUser),
 
 
     takeEvery(deptType.GET_DATA, handleGetDept),
@@ -289,29 +289,37 @@ export default function* rootSaga() {
     takeEvery(HotelConstant.UPDATE_FAPH, handleUpdateFaph),
     takeEvery(HotelConstant.DEL_FAPH, handleDeleteFaph),
     takeEvery(HotelConstant.GET_ADDRESS, handleAddress),
-    takeEvery(HotelConstant.GET_PROVINCE, handleProvince), ,
+    takeEvery(HotelConstant.GET_PROVINCE, handleProvince),
+
 
     // Purchasing
+    // STOCK
     takeEvery(PurchasingConst.GET_STOCKS, handleStock),
+    takeEvery(PurchasingConst.GET_STOCK_CART, handleStockCart),
     takeEvery(PurchasingConst.ADD_STOCKS, handleStockAdd),
     takeEvery(PurchasingConst.EDIT_STOCKS, handleStockUpdate),
     takeEvery(PurchasingConst.DEL_STOCKS, handleStockDelete),
+    // STOCK DETAIL
     takeEvery(PurchasingConst.GET_STOD, handleStod),
     takeEvery(PurchasingConst.ADD_STOD, handleStodAdd),
     takeEvery(PurchasingConst.EDIT_STOD, handleStodUpdate),
     takeEvery(PurchasingConst.DEL_STOD, handleStodDelete),
+    // VENDOR
     takeEvery(PurchasingConst.GET_VENDOR, handleVendor),
     takeEvery(PurchasingConst.ADD_VENDOR, handleVendorAdd),
     takeEvery(PurchasingConst.EDIT_VENDOR, handleVendorUpdate),
     takeEvery(PurchasingConst.DEL_VENDOR, handleVendorDelete),
+    // VENDOR PRODUCT
     takeEvery(PurchasingConst.GET_VEPRO, handleVepro),
     takeEvery(PurchasingConst.ADD_VEPRO, handleVeproAdd),
     takeEvery(PurchasingConst.EDIT_VEPRO, handleVeproUpdate),
     takeEvery(PurchasingConst.DEL_VEPRO, handleVeproDelete),
+    // PURCHASE ORDER HEADER
     takeEvery(PurchasingConst.GET_POHE, handlePohe),
     takeEvery(PurchasingConst.ADD_POHE, handlePoheAdd),
     takeEvery(PurchasingConst.EDIT_POHE, handlePoheUpdate),
     takeEvery(PurchasingConst.DEL_POHE, handlePoheDelete),
+    // PURCHASE ORDER DETAIL
     takeEvery(PurchasingConst.GET_PODE, handlePode),
     takeEvery(PurchasingConst.ADD_PODE, handlePodeAdd),
     takeEvery(PurchasingConst.EDIT_PODE, handlePodeUpdate),

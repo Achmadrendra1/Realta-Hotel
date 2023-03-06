@@ -11,7 +11,11 @@ export class StockService {
   ) { }
 
   async findAllStock(): Promise<any> {
-    return await this.stockRepository.find()
+    return await this.stockRepository.find({ order: { stockId: 'desc' } })
+  }
+
+  async stockCart(): Promise<any> {
+    return await this.stockRepository.query('select * from purchasing.getALLStockCart()')
   }
 
   async findStockId(id: number): Promise<any> {
@@ -47,26 +51,46 @@ export class StockService {
   }
 
   async editStock(id: number, stock: Stocks): Promise<any> {
-    try {
-      await this.stockRepository.update({
-        stockId: id
-      }, {
-        stockName: stock.stockName,
-        stockDescription: stock.stockDescription,
-        stockQuantity: stock.stockQuantity,
-        stockReorderPoint: stock.stockReorderPoint,
-        stockUsed: stock.stockUsed,
-        stockScrap: stock.stockScrap,
-        stockSize: stock.stockSize,
-        stockColor: stock.stockColor,
-        stockModifiedDate: new Date()
-      })
-      return { message: `Congrats, you're Stock has been changed` }
-    } catch (error) {
-      throw new HttpException({
-        message: error.message
-      }, HttpStatus.BAD_REQUEST)
-    }
+    return await this.stockRepository.update({
+      stockId: id
+    }, {
+      stockName: stock.stockName,
+      stockDescription: stock.stockDescription,
+      stockQuantity: stock.stockQuantity,
+      stockReorderPoint: stock.stockReorderPoint,
+      stockUsed: stock.stockUsed,
+      stockScrap: stock.stockScrap,
+      stockSize: stock.stockSize,
+      stockColor: stock.stockColor,
+      stockModifiedDate: new Date()
+    })
+    // const res = await this.findStockId(id)
+    // if (res[0]) {
+    //   try {
+    //     await this.stockRepository.update({
+    //       stockId: id
+    //     }, {
+    //       stockName: stock.stockName,
+    //       stockDescription: stock.stockDescription,
+    //       stockQuantity: stock.stockQuantity,
+    //       stockReorderPoint: stock.stockReorderPoint,
+    //       stockUsed: stock.stockUsed,
+    //       stockScrap: stock.stockScrap,
+    //       stockSize: stock.stockSize,
+    //       stockColor: stock.stockColor,
+    //       stockModifiedDate: new Date()
+    //     })
+    //     return { message: `Congrats, you're Stock has been changed`, result: res}
+    //   } catch (error) {
+    //     throw new HttpException({
+    //       message: error.message
+    //     }, HttpStatus.BAD_REQUEST)
+    //   }
+    // } else {
+    //   throw new HttpException({
+    //     message: `Data Stock does'nt Exist`
+    //   }, HttpStatus.BAD_REQUEST)
+    // }
   }
 
   async dropStock(id: number): Promise<any> {

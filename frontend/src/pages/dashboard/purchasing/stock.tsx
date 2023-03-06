@@ -22,11 +22,11 @@ export default function Stock() {
     const [search, setSearch] = useState('')
     const filterData = stocks.filter((item: any) => {
         if (search === "") {
-            return item;
+            return item
         } else {
-            return item.stockName.toLowerCase().includes(search.toLocaleLowerCase());
+            return item.stockName.toLowerCase().includes(search.toLocaleLowerCase())
         }
-    });
+    })
 
     const handleOk = () => {
         setTimeout(() => {

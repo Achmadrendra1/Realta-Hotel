@@ -144,7 +144,7 @@ INSERT INTO users.user_roles(usro_user_id, usro_role_id) VALUES (55,4);
 
 --New User Password
 INSERT INTO users.user_password(uspa_user_id, uspa_passwordhash, uspa_passwordsalt)
-VALUES (44, '$2a$12$gjaHnpIPGhQHokozo0urWOViHx9nkUjj1nJH6T.tTYGanEtkcSz7S', 'P@ssword144');
+VALUES (44, '$2a$12$gjaHnpIPGhQHokozo0urWOViHx9nkUjj1nJH6T.tTYGanEtkcSz7S', 'P@ssword14');
 
 INSERT INTO users.user_password(uspa_user_id, uspa_passwordhash, uspa_passwordsalt)
 VALUES (55, '$2a$12$y90LlOedo9hZqVYsQI0YeeEIV3w7cyo4/6T3tpQaqS.4uVTPYud56', 'P@ssword66');

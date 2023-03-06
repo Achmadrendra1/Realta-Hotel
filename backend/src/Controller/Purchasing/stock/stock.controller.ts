@@ -19,6 +19,11 @@ export class StockController {
   getStocks() {
     return this.stockService.findAllStock();
   }
+  
+  @Get('cart')
+  getStockCart() {
+    return this.stockService.stockCart();
+  }
 
   @Get(':id')
   getStockId(@Param() params: any) {
