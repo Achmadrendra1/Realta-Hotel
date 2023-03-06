@@ -1,31 +1,30 @@
-import {
-  ArrowLeftOutlined,
-  CreditCardOutlined,
-  HistoryOutlined,
-  LaptopOutlined,
-  LogoutOutlined,
-  NotificationOutlined,
-  UserOutlined,
-} from "@ant-design/icons";
-import { Card, MenuProps, Space } from "antd";
-import { Breadcrumb, Layout, Menu, theme } from "antd";
-import Layouts from "@/layouts/layout";
-import Link from "next/link";
-import { useState } from "react";
-import Userprofile from "./userProfile";
-import MyAccount from "../payment/myAccount";
-import { useRouter } from "next/router";
-import withAuth from "@/PrivateRoute/WithAuth";
-import { doLogout } from "@/Redux/Action/User/auth";
-import { useDispatch } from "react-redux";
+import { ArrowLeftOutlined, CreditCardOutlined, HistoryOutlined, LaptopOutlined, LogoutOutlined, NotificationOutlined, UserOutlined } from '@ant-design/icons';
+import { Button, Card, MenuProps } from 'antd';
+import { Breadcrumb, Layout, Menu, theme } from 'antd';
+import Layouts from '@/layouts/layout';
+import Link from 'next/link';
+import { useState } from 'react';
+import Userprofile from './userProfile';
+import MyAccount from '../payment/myAccount';
+import withAuth from '@/PrivateRoute/WithAuth';
+import { useDispatch } from 'react-redux';
+import { doLogout } from '@/Redux/Action/User/auth';
+import { useRouter } from 'next/router';
 
 export default  function Index() {
   const { Header, Content, Footer, Sider } = Layout;
-  // const items1: MenuProps["items"] = ["1", "2", "3"].map((key) => ({
-  //   key,
-  //   label: `nav ${key}`,
-  // }));
+  const items1: MenuProps['items'] = ['1', '2', '3'].map((key) => ({
+    key,
+    label: `nav ${key}`,
+  }));
+  const dispatch = useDispatch();
 
+  const logOut=() =>{
+    dispatch(doLogout())
+    // setIsLogin(false)
+    window.location.href = "/users/login"
+  }
+  
   const items = [
     {
       icon: <UserOutlined />,
@@ -54,7 +53,7 @@ export default  function Index() {
   // };
 
   const router = useRouter();
-  const dispatch = useDispatch();
+
 
   const logout = () => {
     localStorage.removeItem("token");

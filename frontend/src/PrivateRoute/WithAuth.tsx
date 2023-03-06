@@ -1,6 +1,6 @@
 import { NextPage } from 'next';
 import { useRouter } from 'next/router';
-import React, { useState } from 'react';
+import React from 'react';
 import { useEffect } from 'react';
 
 const withAuth = <P extends object>(WrappedComponent: NextPage<P>) => {
