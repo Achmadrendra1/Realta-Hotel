@@ -220,9 +220,10 @@ export default function EditProfile(props: any) {
 
             <Col>
               <Form.Item label="Birth Date" name="uspro_birt_date">
-                <DatePicker
+                <Input
+                  type="date"
                   style={{ marginLeft: 8 }}
-                  format="DD-MM-YY"
+                  // format="DD-MM-YY"
                   // value={formValues.uspro_birth_date}
                 />
               </Form.Item>
