@@ -16,9 +16,9 @@ export class UserAccountService {
     return await this.uacRepository.find();
   }
 
-  async getPayment() {
+  async getAccount(id) {
     return await this.uacRepository.find({
-      where: { usacUserId: 1 },
+      where: { usacUserId: id},
     });
   }
 

@@ -12,6 +12,7 @@ import {
   Button,
   Card,
   Col,
+  DatePicker,
   Input,
   message,
   Modal,
@@ -27,100 +28,177 @@ import { useState, useEffect } from "react";
 import AddBank from "./addBank";
 import EditBank from "./editBank";
 import { useDispatch, useSelector } from "react-redux";
-import { doBankRequest, doDeleteBank, doPagaRequest, doTransactionRequest, doUsacRequest } from "@/Redux/Action/Payment/paymentDashAction";
+import {
+  doBankRequest,
+  doDeleteBank,
+  doPagaRequest,
+  doTransactionRequest,
+  doUsacRequest,
+} from "@/Redux/Action/Payment/paymentDashAction";
 import Bank from "./bank";
 import Fintech from "./fintech";
 import withAuth from "@/PrivateRoute/WithAuth";
 
 interface DataType {
   key: React.Key;
-  patr_id : number;
-  patr_trx_id: string;
+  transactionNumber: any;
+  trxDate: any;
   patr_order_number: any;
-  total_amount: number;
-  patr_trx_: number;
-  patr_trx_number_ref : any;
-  user_full_name:string
+  debit: number;
+  credit: number;
+  transactionNote: any;
+  orderNumber: any;
+  userFullName: any;
+  sourceNumber:any;
+  targetNumber:any;
+  transactionRef:any;
+  transactionType: any;
 }
 
 
 export default withAuth( function index() {  
   const [filteredData, setFilteredData] = useState([]);
-  const dataTrx = useSelector(
-    (state: any) => state.payTrxHistoryReducer.payDashTrx
+  const {payDashTrx, total, currentPage} = useSelector(
+    (state: any) => state.payTrxHistoryReducer
   );
-
 
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(doTransactionRequest());
   }, []);
-  
 
-  let countResto = dataTrx.filter((obj:any) => obj.patr_order_number.split('#')[0] === "MENUS").length
-  let amountResto = dataTrx.filter((obj:any) => obj.patr_order_number.split('#')[0] === "MENUS")
-  let totalMENUS = 0
-  for (const item of amountResto) {
-    totalMENUS += parseInt(item.total_amount.split(',')[0].replace(/[^0-9]/g, ''))
-  }
-  let totalAmountResto = totalMENUS.toLocaleString("id-ID", {style:"currency", currency:"IDR"})
+  // let countResto = dataTrx.filter(
+  //   (obj: any) => obj.patr_order_number.split("#")[0] === "MENUS"
+  // ).length;
+  // let amountResto = dataTrx.filter(
+  //   (obj: any) => obj.patr_order_number.split("#")[0] === "MENUS"
+  // );
+  // let totalMENUS = 0;
+  // for (const item of amountResto) {
+  //   totalMENUS += parseInt(
+  //     item.boor_total_amount.split(",")[0].replace(/[^0-9]/g, "")
+  //   );
+  // }
+  // let totalAmountResto = totalMENUS.toLocaleString("id-ID", {
+  //   style: "currency",
+  //   currency: "IDR",
+  // });
 
-  let countBooking = dataTrx.filter((obj:any) => obj.patr_order_number.split('#')[0] === "BO").length
-  let amountBooking = dataTrx.filter((obj:any) => obj.patr_order_number.split('#')[0] === "BO")
-  let totalAmountBO = 0
-  for (const item of amountBooking) {
-    totalAmountBO += parseInt(item.total_amount.split(',')[0].replace(/[^0-9]/g, ''))
-  }
-  let totalAmountBooking = totalAmountBO.toLocaleString("id-ID", {style:"currency", currency:"IDR"})
-
- 
+  // let countBooking = dataTrx.filter(
+  //   (obj: any) => obj.patr_order_number.split("#")[0] === "BO"
+  // ).length;
+  // let amountBooking = dataTrx.filter(
+  //   (obj: any) => obj.patr_order_number.split("#")[0] === "BO"
+  // );
+  // let totalAmountBO = 0;
+  // for (const item of amountBooking) {
+  //   totalAmountBO += parseInt(
+  //     item.boor_total_amount.split(",")[0].replace(/[^0-9]/g, "")
+  //   );
+  // }
+  // let totalAmountBooking = totalAmountBO.toLocaleString("id-ID", {
+  //   style: "currency",
+  //   currency: "IDR",
+  // });
 
   const columnsTrans: ColumnsType<DataType> = [
     {
-      title: "ID",
-      dataIndex: "patr_id",
+      title: "Transaction Number",
+      dataIndex: "transactionNumber",
+      width: 170,
       sorter: {
-        compare: (a, b) => a.patr_id - b.patr_id,
+        compare: (a, b) => (a.transactionNumber < b.transactionNumber ? -1 : 1),
         multiple: 1,
       },
     },
     {
-      title: "Transaction Number",
-      dataIndex: "patr_trx_id",
+      title: "Trx Date",
+      dataIndex: "trxDate",
+      width: 110,
       sorter: {
-        compare: (a, b) => (a.patr_trx_id < b.patr_trx_id ? -1 : 1),
-        multiple: 2,
-      },
-    },
-    {
-      title: "Order Number",
-      dataIndex: "patr_order_number",
-      sorter: {
-        compare: (a, b) => (a.patr_order_number < b.patr_order_number ? -1 : 1),
-        multiple: 3,
-      },
-    },
-    {
-      title: "Amount",
-      dataIndex: "total_amount",
-      sorter: {
-        compare: (a, b) => (a.total_amount < b.total_amount ? -1 : 1),
-        multiple: 4,
-      },
-    },
-    {
-      title: "Trx Ref Number",
-      dataIndex: "patr_trx_number_ref",
-      sorter: {
-        compare: (a, b) => (a.patr_trx_number_ref < b.patr_trx_number_ref ? -1 : 1),
+        compare: (a, b) =>
+          a.trxDate < b.trxDate ? -1 : 1,
         multiple: 5,
       },
     },
     {
-      title: "User",
-      dataIndex: "user_full_name",
+      title: "Debet",
+      dataIndex: "debit",
+      width: 110,
       sorter: {
-        compare: (a, b) => (a.user_full_name < b.user_full_name ? -1 : 1),
+        compare: (a, b) =>
+          a.debit < b.debit ? -1 : 1,
+        multiple: 5,
+      },
+    },
+    {
+      title: "Credit",
+      dataIndex: "credit",
+      width: 110,
+      sorter: {
+        compare: (a, b) =>
+          a.credit < b.credit ? -1 : 1,
+        multiple: 5,
+      },
+    },
+    {
+      title: "Note",
+      dataIndex: "transactionNote",
+      width: 110,
+      sorter: {
+        compare: (a, b) =>
+          a.transactionNote < b.transactionNote ? -1 : 1,
+        multiple: 5,
+      },
+    },
+    {
+      title: "Order Number",
+      dataIndex: "orderNumber",
+      width: 170,
+      sorter: {
+        compare: (a, b) => (a.orderNumber < b.orderNumber ? -1 : 1),
+        multiple: 2,
+      },
+    },
+    {
+      title: "Source",
+      dataIndex: "sourceNumber",
+      sorter: {
+        compare: (a, b) => (a.sourceNumber < b.sourceNumber ? -1 : 1),
+        multiple: 3,
+      },
+    },
+    {
+      title: "Target",
+      dataIndex: "targetNumber",
+      sorter: {
+        compare: (a, b) => (a.targetNumber < b.targetNumber ? -1 : 1),
+        multiple: 3,
+      },
+    },
+    {
+      title: "Trx Ref Number",
+      dataIndex: "transactionRef",
+      sorter: {
+        compare: (a, b) =>
+          a.transactionRef < b.transactionRef ? -1 : 1,
+        multiple: 4,
+      },
+    },
+    {
+      title: "Type",
+      dataIndex: "transactionType",
+      sorter: {
+        compare: (a, b) =>
+          a.transactionType < b.transactionType ? -1 : 1,
+        multiple: 4,
+      },
+    },
+    {
+      title: "User",
+      dataIndex: "userFullName",
+      sorter: {
+        compare: (a, b) => (a.userFullName < b.userFullName ? -1 : 1),
         multiple: 6,
       },
     },
@@ -134,60 +212,90 @@ export default withAuth( function index() {
   ) => {
     console.log("params", pagination, filters, sorter, extra);
   };
-  
+
   const { Search } = Input;
-  const handleChange = (value: string) => {
-    console.log(`selected ${value}`);
-    const data = dataTrx.filter((obj:any) => obj.patr_trx_id.split('#')[0] === value)
-    setFilteredData(data)
+  const { RangePicker } = DatePicker;
+
+
+  // const onSearch = (value: string) => {
+  //   const filteredData = dataTrx.filter((item: any) => {
+  //     const values = Object.values(item).map((x: any) =>
+  //       x.toString().toLowerCase()
+  //     );
+  //     return values.some((x) => x.includes(value.toLowerCase()));
+  //   });
+  //   setFilteredData(filteredData);
+  // };
+
+
+  const handleDateChange = (value:any, dateString:any) => {
+    console.log("Selected Time: ", value);
+    console.log("Formatted Selected Time: ", dateString);
+    dispatch(doTransactionRequest({startDate: dateString[0], endDate: dateString[1]}))
+    // setDateRange(dateString);
   };
 
-  const onSearch = (value: string) => {
-    const filteredData = dataTrx.filter((item:any) => {
-      const values = Object.values(item).map((x:any) =>
-        x.toString().toLowerCase()
-      );
-      return values.some(x => x.includes(value.toLowerCase()));
-    });
-    setFilteredData(filteredData)
+  const handleTableChange = (pagination: any) => {
+    dispatch(doTransactionRequest({ page: pagination }));
   };
-  const tableData = filteredData.length > 0 ? filteredData : dataTrx;
+
+  const handleSearch = (event: any) => {
+    event
+      ? dispatch(doTransactionRequest({ page: 1, keyword: event.target.value }))
+      : dispatch(doTransactionRequest());
+  };
+
+    const handleChange = (value: string) => {
+    console.log(`selected ${value}`);
+    dispatch(doTransactionRequest({keyword : value}))
+  };
 
   return (
     <Dashboard>
-   
       <p className="text-xl font-bold mb-6">Payments Dashboard</p>
       <Tabs>
         <Tabs.TabPane tab="List Transaction" key={"list"}>
           <div className="flex-col">
-            <Row gutter={16}>
-              <Col span={18}>
+            {/* <Row gutter={16}>
+              <Col span={18}> */}
                 <div className="mb-4 flex justify-between">
-                <p className="mb-4 text-lg">List Transaction</p>
-                <div>
-                <Search placeholder="Search" onSearch={onSearch} style={{ width: 200 }} className="mr-2"/>
-                  <Select
-                     placeholder="Filter"
-                    style={{ width: 150 }}
-                    onChange={handleChange}
-                    options={[
-                      // { value: "TP", label: "Top Up" },
-                      { value: "TRB", label: "Transfer Booking" },
-                      // { value: "RPY", label: "Repayment" },
-                      // { value: "RF", label: "Refund" },
-                      { value: "ORM", label: "Order Menu" },
-                      
-                    ]}
-                  />
-                </div>
+                  <RangePicker onChange={handleDateChange} />
+                  <div>
+                    <Search
+                      placeholder="Search"
+                      onChange={handleSearch}
+                      style={{ width: 200 }}
+                      className="mr-2"
+                    />
+                    <Select
+                      placeholder="Filter"
+                      style={{ width: 150 }}
+                      onChange={handleChange}
+                      allowClear
+                      options={[
+                        // { value: "TP", label: "Top Up" },
+                        { value: "TRB", label: "Transfer Booking" },
+                        // { value: "RPY", label: "Repayment" },
+                        // { value: "RF", label: "Refund" },
+                        { value: "ORM", label: "Order Menu" },
+                      ]}
+                    />
+                  </div>
                 </div>
                 <Table
                   columns={columnsTrans}
-                  dataSource={tableData}
-                  onChange={onChange}
+                  dataSource={payDashTrx}
+                  pagination={{
+                    current: currentPage,
+                    total: total,
+                    pageSize: 10,
+                    showQuickJumper: true,
+                    showTotal: (total) => `${total} items`,
+                    onChange: handleTableChange,
+                  }}
                 />
-              </Col>
-              <Col span={6}>
+              {/* </Col> */}
+              {/* <Col span={6}>
                 <Space direction="vertical">
                   <p className="mb-4 text-lg">Data Transaction</p>
                   <Card bordered={false} hoverable>
@@ -218,14 +326,14 @@ export default withAuth( function index() {
                   </Card>
                 </Space>
               </Col>
-            </Row>
+            </Row> */}
           </div>
         </Tabs.TabPane>
         <Tabs.TabPane tab="Bank" key={"bank"}>
-            <Bank />
+          <Bank />
         </Tabs.TabPane>
-        <Tabs.TabPane tab="Fintech" key={'fintech'}>
-         <Fintech />
+        <Tabs.TabPane tab="Fintech" key={"fintech"}>
+          <Fintech />
         </Tabs.TabPane>
       </Tabs>
     </Dashboard>
