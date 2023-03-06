@@ -17,8 +17,9 @@ import dayjs from 'dayjs';
 import 'dayjs/locale/id'; // impor lokalisasi untuk bahasa Indonesia
 import Buttons from '@/components/Button';
 import { doRestoRequest } from '@/Redux/Action/Resto/restoAction';
+import withAuth from '@/PrivateRoute/WithAuth';
 
-export default function restoMenu() {
+export default withAuth( function restoMenu() {
   const dispatch = useDispatch();
 
   let photos = useSelector((state: any) => state.menuPhotoReducer.menuPhoto);
@@ -1218,4 +1219,4 @@ export default function restoMenu() {
 
     </Dashboard>
   )
-}
+})

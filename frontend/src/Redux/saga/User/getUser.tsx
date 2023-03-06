@@ -33,7 +33,7 @@ export function* HandleCreateUser(action:any):any {
 export function* HandleEditProfile(action:any):any{
     try {
       const result = yield axios (API("PUT","/users/"+ action.payload.user_id, action.payload))
-      console.log(result);
+    //   console.log(result);
         yield put (doUpdateSuccess(action.payload))
     } catch (error :any) {
         // yield put (doUpdateFailed(error))
@@ -43,4 +43,19 @@ export function* HandleEditProfile(action:any):any{
       yield call(delay, 6000);
       yield put(doUpdateFailed(null));
     }
+}
+
+export function* HandleUpdatePassword(action:any):any{
+    try {
+        yield axios (API("PUT","/password/"+ action.payload.uspa_user_id, action.payload))
+        // console.log(result);
+          yield put (doUpdateSuccess(action.payload))
+      } catch (error :any) {
+          // yield put (doUpdateFailed(error))
+          const delay = (time: any) =>
+          new Promise((resolve) => setTimeout(resolve, time));
+        yield put(doUpdateFailed(error.response.data.message));
+        yield call(delay, 6000);
+        yield put(doUpdateFailed(null));
+      }
 }

@@ -40,7 +40,7 @@ const Layouts = ({children}:Props) => {
             </Head>
             <Layout className='bg-[#F2F1FA]'>
                 <Headers nav={nav} queries={queries} logo="/assets/icons.png"/>
-                <main className='border-0 align-items-center container m-auto min-h-screen'>
+                <main className=' border-0 align-items-center container m-auto min-h-screen'>
                     {children}
                 </main>
                 <Footer service={nav}/>

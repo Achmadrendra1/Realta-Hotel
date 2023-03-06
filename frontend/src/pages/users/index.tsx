@@ -15,8 +15,11 @@ import { useState } from "react";
 import Userprofile from "./userProfile";
 import MyAccount from "../payment/myAccount";
 import { useRouter } from "next/router";
+import withAuth from "@/PrivateRoute/WithAuth";
+import { doLogout } from "@/Redux/Action/User/auth";
+import { useDispatch } from "react-redux";
 
-export default function Index() {
+export default  function Index() {
   const { Header, Content, Footer, Sider } = Layout;
   // const items1: MenuProps["items"] = ["1", "2", "3"].map((key) => ({
   //   key,
@@ -41,21 +44,9 @@ export default function Index() {
       label: "My Account",
       key: "2",
       icon: <CreditCardOutlined />,
-      // url: '#account'
-    },
-    {
-      label: (
-        <Link href={""}>
-          <span className="text-red-600">Log Out</span>
-        </Link>
-      ),
-      href: '',
-      key: "3",
-      icon: <LogoutOutlined style={{ color: "red" }} />,
     },
   ];
 
-  const [content, setContent] = useState("0");
 
   // const onClick: MenuProps["onClick"] = (e) => {
   //   console.log("click ", e);
@@ -63,6 +54,14 @@ export default function Index() {
   // };
 
   const router = useRouter();
+  const dispatch = useDispatch();
+
+  const logout = () => {
+    localStorage.removeItem("token");
+    dispatch(doLogout())
+    // setIsLogin(false);
+    router.push("../");
+  };
 
   return (
     <Layouts>
@@ -88,8 +87,7 @@ export default function Index() {
                     <Menu.Item
                       key={item.key}
                       style={{
-                        backgroundColor:
-                          router.asPath === item.href ? "#754CFF" : "",
+                        backgroundColor: router.asPath === item.href ? "#754CFF" : "",
                         color: router.asPath === item.href ? "#F1F2FA" : "",
                       }}
                     >
@@ -102,6 +100,12 @@ export default function Index() {
                       </Link>
                     </Menu.Item>
                   ))}
+                  <Menu.Item>
+                    <Link href={''} className="flex gap-2 items-center" onClick={logout}>
+                    <LogoutOutlined style={{ color: "red" }} />
+                    <span style={{color: 'red'}}>Log Out</span>
+                    </Link>
+                  </Menu.Item>
                 </Menu>
               </Card>
             </Sider>

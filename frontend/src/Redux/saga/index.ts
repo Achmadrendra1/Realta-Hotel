@@ -7,10 +7,10 @@ import {
 } from "./HR/department";
 import { deptType } from "../Constant/HR/deptType";
 import { empType } from "../Constant/HR/empType";
-import { handleAddEmployee, handleDelEmployee, handleDetailEmployee, handleGetEmployees } from "./HR/employees";
+import { handleAddEmployee, handleDelEmployee, handleDetailEmployee, handleGetEmployees, handleUpdateEmployee } from "./HR/employees";
 import UserConst from "../Constant/User/UserConst";
-import { HandleLoginUser } from "./User/auth";
-import { HandleEditProfile, HandleGetUser } from "./User/getUser";
+import { HandleLoginUser, HandleLogoutUser } from "./User/auth";
+import { HandleEditProfile, HandleGetUser, HandleUpdatePassword } from "./User/getUser";
 import PaymentConst from "../Constant/Payment/PaymentConst";
 import {
   handleTrxDashRequest,
@@ -131,6 +131,8 @@ import {
   handleUpdateHotel,
 } from "./Hotel/HotelSaga";
 import BookingConstant from "../Constant/Booking/BookingConstant";
+import { workType } from "../Constant/HR/workType";
+import { handleServicesList, handleWorkDetail, handleWorkorder } from "./HR/workorder";
 import { handleBoorCreateFinal, handleBoorLast, handleSpBoorInvoice, handleSpFacilities, handleSpHotel, handleSpHotelReviews, handleSpof } from "./Booking/BookingSaga";
 
 // Purchasing
@@ -158,9 +160,13 @@ import { handleUserMenu } from "./Resto/userMenuProcess";
 
 export default function* rootSaga() {
   yield all([
+    //user and auth
     takeEvery(UserConst.LOGIN_USER, HandleLoginUser),
     takeEvery(UserConst.GET_DATA_USER, HandleGetUser),
-    takeEvery(UserConst.EDIT_DATA_PROFILE, HandleEditProfile),
+    takeEvery(UserConst.EDIT_DATA_PROFILE,HandleEditProfile),
+    takeEvery(UserConst.UPDATE_PASSWORD,HandleUpdatePassword),
+    takeEvery(UserConst.LOGOUT_USER,HandleLogoutUser),
+
 
     takeEvery(deptType.GET_DATA, handleGetDept),
     takeEvery(deptType.ADD_DATA, handleAddDept),
@@ -258,6 +264,11 @@ export default function* rootSaga() {
     takeEvery(jobType.GET_SELECT_JOB, handleSelectJob),
     takeEvery(empType.ADD_DATA, handleAddEmployee),
     takeEvery(empType.DEL_DATA, handleDelEmployee),
+    takeEvery(empType.UPDATE_DATA, handleUpdateEmployee),
+    takeEvery(workType.GET_WORK_ORDER, handleWorkorder),
+    takeEvery(workType.GET_DETAIL, handleWorkDetail),
+    takeEvery(workType.SERVICE_WORK, handleServicesList),
+
     //Hotel
     takeEvery(HotelConstant.GET_HOTEL, handleHotel),
     takeEvery(HotelConstant.GET_HOTEL_ID, handleHotelID),

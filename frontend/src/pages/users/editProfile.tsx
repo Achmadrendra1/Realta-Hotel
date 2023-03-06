@@ -22,6 +22,8 @@ export default function EditProfile(props: any) {
   const [form] = Form.useForm();
   const [messageApi, contextHolder] = message.useMessage();
   const user = data.find((item: any) => item[0]?.user_id == id);
+
+  
   // console.log(user);
 
   const [formValues, setFormValues] = useState({
@@ -31,12 +33,12 @@ export default function EditProfile(props: any) {
     user_email:"",
     user_phone_number:"",
     uspro_national_id:"",
-    uspro_birth_date:moment(),
+    uspro_birt_date:moment(),
     uspro_job_title:"",
     uspro_marital_status:"",
     uspro_gender:"",
     usro_role:"",
-    role_name:"",
+    role_name:null,
   });
 // console.log('t',formValues)
   useEffect (()=>{
@@ -48,15 +50,17 @@ export default function EditProfile(props: any) {
     console.log("Success:", formValues);
     dispatch(doUpdate(formValues));
     handleClose(false);
-   message.success("Data Berhasil Diubah!", 0.5);
+    message.success("Login Berhasil", 1.5)
   };
+
+ 
 
   const handleInputChange = (input: any) => (e: any) => {
     setFormValues({ ...formValues, [input]: e.target.value });
   };
 
   const handleSelectRoleChange = (value: any) => {
-    setFormValues({ ...formValues, role_name: value });
+    setFormValues({ ...formValues, usro_role: value });
   };
   const handleSelectGenderChange = (value: any) => {
     setFormValues({ ...formValues, uspro_gender: value });
@@ -68,7 +72,7 @@ export default function EditProfile(props: any) {
     setFormValues({ ...formValues, uspro_marital_status: value });
   };
   const handleSelectDateChange = (value: any,dateString :any) => {
-    setFormValues({ ...formValues, uspro_birth_date: dateString });
+    setFormValues({ ...formValues, uspro_birt_date: dateString });
   };
 
 
@@ -100,7 +104,6 @@ export default function EditProfile(props: any) {
           <Row style={{ marginTop: 20 }}>
             <Col span={12}>
               <Form.Item
-              
                 label="Name"
                 style={{ width: 250 }}
                
@@ -157,8 +160,8 @@ export default function EditProfile(props: any) {
                   style={{ width: 250 }}
                 >
                   <Select
-                  value={formValues.role_name}
                     style={{ marginLeft: 10 }}
+                    value={formValues.role_name}
                     onChange={handleSelectRoleChange}
                   >
                     <Select.Option value="1">Guest</Select.Option>
@@ -168,7 +171,16 @@ export default function EditProfile(props: any) {
                     <Select.Option value="5">User</Select.Option>
                   </Select>
                 </Form.Item>
-              ) : null}
+              ) :
+              <Form.Item
+              label="Role Type"
+              style={{ width: 250 }}
+              name="role_name"
+                      >
+                <Input  disabled style={{ marginLeft: 10 }} /> 
+
+              </Form.Item>
+                }
             </Col>
           </Row>
           <h1 className="text-bold">Profile</h1>
@@ -207,12 +219,11 @@ export default function EditProfile(props: any) {
             </Col>
 
             <Col>
-              <Form.Item label="BirthDate" name="uspro_birth_date">
+              <Form.Item label="Birth Date" name="uspro_birt_date">
                 <DatePicker
                   style={{ marginLeft: 8 }}
                   format="DD-MM-YY"
                   // value={formValues.uspro_birth_date}
-                  onChange={handleSelectDateChange}
                 />
               </Form.Item>
 

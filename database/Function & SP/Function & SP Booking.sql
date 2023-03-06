@@ -125,8 +125,7 @@ BEGIN
         );
     END LOOP;
 COMMIT;
-END;$$
-CALL booking.InsertBooking()
+END;$$;
 
 --Get Booking Invoice
 CREATE OR REPLACE PROCEDURE booking.getBookingInvoice()
@@ -166,10 +165,9 @@ BEGIN
 	JOIN hotel.facilities faci
 	ON borde.borde_faci_id = faci.faci_id
     JOIN payment.payment_transaction patr
-	ON boor.boor_order_number = patr.patr_order_number
+	ON boor.boor_order_number = patr.patr_order_number;
 END; $$
 LANGUAGE plpgsql;
-CALL booking.getBookingInvoice()
 
 
 --Get Hotel
@@ -224,7 +222,6 @@ BEGIN
 	on h.hotel_addr_id = addrees.hotel_addr_id group by h.hotel_id, faci_group_rprice.faci_rateprice, faci_group.faci_hotelall,faci_group_lprice.faci_lowprice,faci_group_hprice.faci_highprice, addrees.place,faci_room_group.faci_hotelroom;
 END; $$
 LANGUAGE plpgsql;
-CALL hotel.viewHotel()
 
 --Get Facility
 CREATE OR REPLACE PROCEDURE hotel.viewRoom()
@@ -236,11 +233,10 @@ BEGIN
 	on h.hotel_id = f.faci_hotel_id
 	join (select fapho_faci_id, string_agg(fapho_url,', ')as fapho_url
 			from hotel.facility_photos group by fapho_faci_id) fap
-	on f.faci_id = fap.fapho_faci_id;
-	where faci_cagro_id = 1
+	on f.faci_id = fap.fapho_faci_id
+	where faci_cagro_id = 1;
 END; $$
 LANGUAGE plpgsql;
-CALL hotel.viewRoom()
 
 --Get User Review
 CREATE OR REPLACE PROCEDURE hotel.userreview()
@@ -253,8 +249,8 @@ BEGIN
 	on hr.hore_user_id = u.user_id;
 END; $$
 LANGUAGE plpgsql;
-call hotel.user_review()
-select * from hotel.userreview
+-- call hotel.user_review()
+-- select * from hotel.userreview
 
 --Payment Insert
 CREATE OR REPLACE PROCEDURE  payment.insertPaymentTrx(

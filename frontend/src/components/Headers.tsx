@@ -27,6 +27,7 @@ import { useRouter } from "next/router";
 import { useDispatch, useSelector } from "react-redux";
 import { doUsacRequest } from "@/Redux/Action/Payment/paymentDashAction";
 import { doGetUser } from "@/Redux/Action/User/GetDataUser";
+import { doLogout } from "@/Redux/Action/User/auth";
 
 const { Item } = List;
 const { RangePicker } = DatePicker;
@@ -117,6 +118,7 @@ const Headers = ({
 
   const logout = () => {
     localStorage.removeItem("token");
+    dispatch(doLogout())
     setIsLogin(false);
     router.push("../");
   };
@@ -125,10 +127,10 @@ const Headers = ({
   const menuUser = (
     <Menu>
       <Menu.Item key="0">
-        <Link href="/users">Profile</Link>
+        <Link href="/users#profile">Profile</Link>
       </Menu.Item>
       <Menu.Item key="1">
-        <Link href="/users">History</Link>
+        <Link href="/users#history">History</Link>
       </Menu.Item>
       <Menu.Item key="2">
         <Link href={""} onClick={logout}>
@@ -140,10 +142,10 @@ const Headers = ({
   const menuAdmin = (
     <Menu>
       <Menu.Item key="0">
-        <Link href="/users">Profile</Link>
+        <Link href="/users#profile">Profile</Link>
       </Menu.Item>
       <Menu.Item key="1">
-        <Link href="/users">History</Link>
+        <Link href="/users#history">History</Link>
       </Menu.Item>
       <Menu.Item key="2">
         <Link href="/dashboard">Dashboard</Link>
@@ -198,8 +200,8 @@ const Headers = ({
                   key={index}
                   className={`px-7 py-2 leading-5 text-md rounded-full transition ease-in ${
                     item.href == "/" + splits[1]
-                      ? "bg-sky-500 text-white hover:text-white"
-                      : null
+                      ? " text-[#754CFF] hover:text-black font-semibold text-[14px]"
+                      : 'hover:text-[#754cff] font-semibold text-[14px]'
                   }`}
                 >
                   {item.name}

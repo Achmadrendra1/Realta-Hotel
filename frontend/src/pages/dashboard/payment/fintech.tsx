@@ -29,6 +29,7 @@ import { useDispatch, useSelector } from "react-redux";
 import AddFintech from "./addFintech";
 import Buttons from "@/components/Button";
 import EditFintech from "./editFintech";
+import withAuth from "@/PrivateRoute/WithAuth";
 
 interface DataType {
   key: React.Key;
@@ -36,7 +37,7 @@ interface DataType {
   pagaCode: number;
   pagaEntityId: number;
 }
-export default function Fintech() {
+export default withAuth( function Fintech() {
   const dispatch = useDispatch();
   const [isOpenAddFin, setOpenAddFin] = useState(false);
   const [isOpenEditFin, setOpenEditFin] = useState(false);
@@ -230,3 +231,4 @@ export default function Fintech() {
     </div>
   );
 }
+)
