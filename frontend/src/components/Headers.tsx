@@ -133,7 +133,7 @@ function isTokenExpired() {
                                 <button onClick={() => setOpen(!open)}>{queries ? ('Guest : ' + queries[2] ) : 'Guest'}</button>
                             </div>
                             {
-                                open && <div className="absolute right-0 bg-white drop-shadow-md px-5 py-2" style={{ width: '55vw'}}>
+                                open && <div className="absolute right-0 bg-white drop-shadow-md px-5 py-2 z-20" style={{ width: '55vw'}}>
                                 <Row gutter={5} align='stretch' justify='space-between'>
                                     <Col span={6}>
                                         <AutoComplete
