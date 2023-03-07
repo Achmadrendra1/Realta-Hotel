@@ -16,6 +16,7 @@ import {
   doTransactionRequestSuccess,
   doUpdateBankFailed,
   doUpdateBankSuccess,
+  doUsacRequestFailed,
   doUsacRequestSuccess,
 } from "@/Redux/Action/Payment/paymentDashAction";
 import {
@@ -25,6 +26,8 @@ import {
   doCreateAccountSuccess,
   doCreateTransactionSuccess,
   doDeleteAccountSuccess,
+  doGetAllBankFailed,
+  doGetAllBankSuccess,
   doGetHistoryFailed,
   doGetHistorySuccess,
   doTopUpFailed,
@@ -59,6 +62,15 @@ function* handleBankRequest(action: any): any {
   } catch (error) {
     console.log(error)
     yield put(doBankRequestFailed(error));
+  }
+}
+
+function* handleBankAllRequest(): any{
+  try {
+    const res = yield axios(API("GET", "/bank/all"))
+    yield put(doGetAllBankSuccess(res.data))
+  } catch (error) {
+    yield put(doGetAllBankFailed(error))
   }
 }
 
@@ -161,10 +173,9 @@ function* handlePagaDelete(action: any): any {
 function* handleUsacRequest(action: any): any {
   try {
     const res = yield axios(API("GET", `/user-account/${action.payload}`));
-    console.log(res)
     yield put(doUsacRequestSuccess(res.data));
   } catch (error) {
-    console.log(error);
+    yield put(doUsacRequestFailed(error))
   }
 }
 
@@ -260,5 +271,6 @@ export {
   handleTopUp,
   handleCheckSecure,
   handleGetHistoryTrx,
-  handleCreateTransaction
+  handleCreateTransaction,
+  handleBankAllRequest
 };

@@ -5,10 +5,8 @@ import { put } from "redux-saga/effects";
 
 function* handleUserOrder(action:any):any{
     try{
-        console.log('action di process', action);
         // debugger;
-        const result = yield axios(API('Post', '/order-menus/order', action.payload))
-        console.log(result,'user order process');
+        const result = yield axios(API('Post', '/order-menus/order', {orderNumber : action.payload}))
         yield put(doGetUserOrderSucceed(result.data))
         return result.data;
     }catch(err:any){
