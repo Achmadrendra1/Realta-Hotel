@@ -12,4 +12,7 @@ module.exports = {
     extend: {},
   },
   plugins: [],
+  devIndicators: {
+    buildActivity: false
+}
 }

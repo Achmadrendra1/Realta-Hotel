@@ -1,30 +1,47 @@
+import { doBankRequest } from "@/Redux/Action/Payment/paymentDashAction";
 import { doCreateAccount } from "@/Redux/Action/Payment/paymentUserAction";
 import Buttons from "@/components/Button";
-import { Button, Col, Form, Input, InputNumber, Modal, Row, Select } from "antd";
-import { useState } from "react";
-import { useDispatch } from "react-redux";
+import {
+  Button,
+  Col,
+  Form,
+  Input,
+  InputNumber,
+  Modal,
+  Row,
+  Select,
+} from "antd";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 
 export default function AddCard(props: any) {
-  const dispacth = useDispatch()
+  const dispacth = useDispatch();
   const [cardNumber, setCardNumber] = useState("");
   const [displayValue, setDisplayValue] = useState("");
-  const {dataUser, dataBank, handleCancell} = props
-  const optionsBank = dataBank?.map((items:any) => ({ label: items.bankName, value: items.bankEntityId }));
+  const { dataUser, dataBank, handleCancell } = props;
+  const {payBank} = useSelector((state:any) => state.payBankReducer)
+  useEffect(()=>{
+    dispacth(doBankRequest())
+  }, [])
+  const optionsBank = payBank?.map((items: any) => ({
+    label: items.bankName,
+    value: items.bankEntityId,
+  }));
   const [formValues, setFormValues] = useState({
     usacAccountNumber: "",
     usacEntityId: "",
     usacType: "",
     usacExpmonth: "",
     usacExpyear: "",
-    usacSaldo: '',
-    usacSecureCode : '',
-    usacUserId : dataUser[0].user_id
+    usacSaldo: "",
+    usacSecureCode: "",
+    usacUserId: dataUser[0].user_id,
   });
-  
+
   const onFinish = () => {
     console.log("Success:", formValues);
     dispacth(doCreateAccount(formValues));
-    handleCancell(false)
+    handleCancell(false);
   };
 
   const onFinishFailed = (errorInfo: any) => {
@@ -35,16 +52,16 @@ export default function AddCard(props: any) {
     setFormValues({ ...formValues, [input]: e.target.value });
   };
 
-  const handleMonth = (e:any) => {
-    const value = parseInt(e.target.value)
+  const handleMonth = (e: any) => {
+    const value = parseInt(e.target.value);
     if (value < 1) {
       e.target.value = "1";
-      setFormValues({...formValues, usacExpmonth : '1'})
+      setFormValues({ ...formValues, usacExpmonth: "1" });
     } else if (value > 12) {
       e.target.value = "12";
-      setFormValues({...formValues, usacExpmonth : '12'})
+      setFormValues({ ...formValues, usacExpmonth: "12" });
     }
-  }
+  };
 
   return (
     <>
@@ -87,16 +104,21 @@ export default function AddCard(props: any) {
                 <Select
                   showSearch
                   placeholder="Select Bank"
+                  // mode="multiple"
                   style={{ width: 200 }}
                   optionFilterProp="children"
                   filterOption={(input, option) =>
-                    (option?.label.toString() ?? "").toLowerCase().includes(input)
-                  }
-                  filterSort={(optionA, optionB) =>
-                    (optionA?.label.toString() ?? "")
+                    (option?.label.toString() ?? "")
                       .toLowerCase()
-                      .localeCompare((optionB?.label.toString() ?? "").toLowerCase())
+                      .includes(input)
                   }
+                  // filterSort={(optionA, optionB) =>
+                  //   (optionA?.label.toString() ?? "")
+                  //     .toLowerCase()
+                  //     .localeCompare(
+                  //       (optionB?.label.toString() ?? "").toLowerCase()
+                  //     )
+                  // }
                   options={optionsBank}
                   value={formValues.usacType}
                   onChange={(value) => {
@@ -116,7 +138,9 @@ export default function AddCard(props: any) {
                 <Select
                   placeholder="Select Card Type"
                   style={{ width: 200 }}
-                  onChange={(value) => setFormValues({...formValues, usacType : value})}
+                  onChange={(value) =>
+                    setFormValues({ ...formValues, usacType: value })
+                  }
                 >
                   <Option value="Debet">Debet</Option>
                   <Option value="Credit Card">Credit Card</Option>
@@ -136,7 +160,11 @@ export default function AddCard(props: any) {
                   },
                 ]}
               >
-                <Input placeholder="MM" maxLength={2} onChange={handleInputChange("usacExpmonth")}/>
+                <Input
+                  placeholder="MM"
+                  maxLength={2}
+                  onChange={handleInputChange("usacExpmonth")}
+                />
               </Form.Item>
             </Col>
             <Col span={4}>
@@ -150,7 +178,11 @@ export default function AddCard(props: any) {
                   },
                 ]}
               >
-                <Input placeholder="YY" maxLength={2} onChange={handleInputChange("usacExpyear")}/>
+                <Input
+                  placeholder="YY"
+                  maxLength={2}
+                  onChange={handleInputChange("usacExpyear")}
+                />
               </Form.Item>
             </Col>
             <Col span={4}>
@@ -164,11 +196,15 @@ export default function AddCard(props: any) {
                   },
                 ]}
               >
-                <Input placeholder="CVV" maxLength={3} onChange={handleInputChange("usacSecureCode")}/>
+                <Input
+                  placeholder="CVV"
+                  maxLength={3}
+                  onChange={handleInputChange("usacSecureCode")}
+                />
               </Form.Item>
             </Col>
             <Col>
-            <Form.Item
+              <Form.Item
                 label="Saldo"
                 name={"usacSaldo"}
                 rules={[
@@ -178,7 +214,11 @@ export default function AddCard(props: any) {
                   },
                 ]}
               >
-                <Input placeholder="0" prefix='Rp.' onChange={handleInputChange("usacSaldo")}/>
+                <Input
+                  placeholder="0"
+                  prefix="Rp."
+                  onChange={handleInputChange("usacSaldo")}
+                />
               </Form.Item>
             </Col>
           </Row>

@@ -9,7 +9,7 @@ import { deptType } from "../Constant/HR/deptType";
 import { empType } from "../Constant/HR/empType";
 import { handleAddEmployee, handleDelEmployee, handleDetailEmployee, handleGetEmployees, handleUpdateEmployee } from "./HR/employees";
 import UserConst from "../Constant/User/UserConst";
-import { HandleLoginUser, HandleLogoutUser } from "./User/auth";
+import { HandleLoginUser } from "./User/auth";
 import { HandleEditProfile, HandleGetUser, HandleUpdatePassword } from "./User/getUser";
 import PaymentConst from "../Constant/Payment/PaymentConst";
 import {
@@ -165,7 +165,6 @@ export default function* rootSaga() {
     takeEvery(UserConst.GET_DATA_USER, HandleGetUser),
     takeEvery(UserConst.EDIT_DATA_PROFILE,HandleEditProfile),
     takeEvery(UserConst.UPDATE_PASSWORD,HandleUpdatePassword),
-    takeEvery(UserConst.LOGOUT_USER,HandleLogoutUser),
 
 
     takeEvery(deptType.GET_DATA, handleGetDept),

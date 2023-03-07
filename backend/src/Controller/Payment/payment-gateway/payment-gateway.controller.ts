@@ -6,6 +6,7 @@ import {
   Param,
   Post,
   Put,
+  Query,
 } from '@nestjs/common';
 import { PaymentGatewayService } from 'src/Service/Payment/payment-gateway/payment-gateway.service';
 
@@ -13,9 +14,14 @@ import { PaymentGatewayService } from 'src/Service/Payment/payment-gateway/payme
 export class PaymentGatewayController {
   constructor(private payService: PaymentGatewayService) {}
 
-  @Get()
+  @Get('all')
   getAllBank() {
     return this.payService.getAll();
+  }
+
+  @Get()
+  getPagination(@Query() query){
+    return this.payService.getPagination(query)
   }
 
   @Get(':id')

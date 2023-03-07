@@ -6,13 +6,14 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import React, { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import ReactToPrint from "react-to-print";
 
 export default function index() {
   let root = useRouter();
   const { id } = root.query || {};
   const dispatch = useDispatch();
 
-  const router = useRouter()
+  const router = useRouter();
 
   const invoiceView = useSelector(
     (state: any) => state.BoorInvoiceReducer.invoice
@@ -27,6 +28,8 @@ export default function index() {
   const Invoice = invoiceView?.filter(
     (item: any) => item.boor_order_number == id
   );
+
+  console.log(invoiceView, id)
   const boor_order_number =
     Invoice?.length > 0 ? Invoice[0].boor_order_number : "";
   const boor_order_date = Invoice?.length > 0 ? Invoice[0].boor_order_date : "";
@@ -153,6 +156,8 @@ export default function index() {
     },
   ];
 
+  const componentRef = React.useRef(null);
+
   return (
     <>
       <div className="px-6 pt-4 flex justify-between">
@@ -160,16 +165,25 @@ export default function index() {
           <LeftCircleOutlined /> Kembali
         </Link>
         <div className="mr-12 flex justify-end">
-          <div className="mr-2">
-            <Buttons funcs={''}>Print</Buttons>
-          </div>
+          <ReactToPrint
+            trigger={() => (
+              <div className="mr-2">
+                <Buttons funcs={()=>''}>Print</Buttons>
+              </div>
+            )}
+            content={() => componentRef.current}
+          />
           <div>
             <Buttons funcs={""}>Send To Email</Buttons>
           </div>
         </div>
       </div>
 
-      <div id="invoice" className=" w-11/12 shadow-lg m-auto p-4">
+      <div
+        id="invoice"
+        ref={componentRef}
+        className=" w-11/12 shadow-lg m-auto p-4"
+      >
         <h1 className="text-2xl mb-3 font-bold">Invoice {id}</h1>
 
         <Row>

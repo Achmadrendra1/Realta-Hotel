@@ -1,36 +1,71 @@
 import Layouts from "@/layouts/layout";
-import { CreditCardOutlined, LeftOutlined, PlusCircleOutlined } from "@ant-design/icons";
+import {
+  CreditCardOutlined,
+  LeftOutlined,
+  PlusCircleOutlined,
+} from "@ant-design/icons";
 import { Avatar, Button, Card, Carousel, Col, List, Row } from "antd";
 import Head from "next/head";
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import AddCard from "./addCard";
 import DetailCards from "./detailCard";
 import DetailTransCards from "./detailTransCard";
+import { useDispatch, useSelector } from "react-redux";
+import { doUsacRequest } from "@/Redux/Action/Payment/paymentDashAction";
 
 export default function Cards() {
-    const [isOpenAdd, setOpenAdd] = useState(false)
-    const [isOpenDetCard, setOpenDetCard] = useState(false)
-    const [isOpenDetTrans, setOpenDetTrans] = useState(false)
-    const [confirmLoading, setConfirmLoading] = useState(false);
-    const [msg, setMsg] = useState('')
-    const handleOk = () => {
-        setMsg('The modal will be closed after two seconds');
-        setConfirmLoading(true);
-        setTimeout(() => {
-          setOpenAdd(false);
-          setOpenDetCard(false);
-          setOpenDetTrans(false);
-          setConfirmLoading(false);
-        }, 2000);
-      };
-    
-      const handleCancel = () => {
-        console.log('Clicked cancel button');
-        setOpenAdd(false);
-        setOpenDetCard(false);
-        setOpenDetTrans(false);
-      };
+  const dispatch = useDispatch();
+  const [isOpenAdd, setOpenAdd] = useState(false);
+  const [isOpenDetCard, setOpenDetCard] = useState(false);
+  const [isOpenDetTrans, setOpenDetTrans] = useState(false);
+  const [confirmLoading, setConfirmLoading] = useState(false);
+  const [msg, setMsg] = useState("");
+
+
+  const { account, error } = useSelector(
+    (state: any) => state.payUserAccReducer
+  );
+
+  // useEffect(() => {
+  //   // user[0]?.role_name != "Guest" ? setIsAdmin(true) : setIsAdmin(false);
+  //   dispatch(doUsacRequest(user[0]?.user_id));
+  // }, [user]);
+
+  const bankAcc = account?.filter(
+    (obj: any) => obj.usacType === "Credit Card" || obj.usacType === "Debet"
+  );
+
+  function maskCardNumber(cardNumber: number) {
+    // Mengambil 4 digit terakhir
+    const lastFourDigits = cardNumber.toString().slice(-4);
+    // Mengganti semua digit, kecuali 4 digit terakhir, dengan karakter "*"
+    const maskedDigits = cardNumber
+      .toString()
+      .slice(0, -4)
+      .replace(/\d{4}/g, (str) => `${str} `)
+      .replace(/\d/g, "*");
+    // Menggabungkan digit yang telah diubah dengan 4 digit terakhir
+    const maskedCardNumber = `${maskedDigits} ${lastFourDigits}`;
+    return maskedCardNumber;
+  }
+  const handleOk = () => {
+    setMsg("The modal will be closed after two seconds");
+    setConfirmLoading(true);
+    setTimeout(() => {
+      setOpenAdd(false);
+      setOpenDetCard(false);
+      setOpenDetTrans(false);
+      setConfirmLoading(false);
+    }, 2000);
+  };
+
+  const handleCancel = () => {
+    console.log("Clicked cancel button");
+    setOpenAdd(false);
+    setOpenDetCard(false);
+    setOpenDetTrans(false);
+  };
   return (
     <>
       <Head>
@@ -43,28 +78,130 @@ export default function Cards() {
         <Layouts>
           <div className="relative w-full h-48 drop-shadow-lg p-4 bg-blue-700 m-auto rounded-xl bg-center bg-cover bg-no-repeat mb-6">
             <div className="flex justify-between mb-8">
-            <div className="flex justify-start">
-              <Link href={"/payment"}>
-                <LeftOutlined className="text-lg text-white mr-4" />
-              </Link>
-              <p className="pt-px text-lg text-white font-bold">My Cards</p>
-            </div>
-            <div>
-                <Button className="bg-white text-blue-600 font-bold mr-4" onClick={()=>setOpenAdd(true)}><CreditCardOutlined />Add Card</Button>
-            </div>
+              <div className="flex justify-start">
+                <Link href={"/payment"}>
+                  <LeftOutlined className="text-lg text-white mr-4" />
+                </Link>
+                <p className="pt-px text-lg text-white font-bold">My Cards</p>
+              </div>
+              <div>
+                <Button
+                  className="bg-white text-blue-600 font-bold mr-4"
+                  onClick={() => setOpenAdd(true)}
+                >
+                  <CreditCardOutlined />
+                  Add Card
+                </Button>
+              </div>
             </div>
             <div className="flex overflow-x-scroll pb-10 overflow-hidden no-scrollbar">
               <div className="flex flex-nowrap lg:ml-40 md:ml-20 ml-10 ">
-                <div className="inline-block px-3">
+                {bankAcc.map((item: any) => (
+                  <div className="inline-block px-3">
+                    <div className="h-44 w-80 max-w-xs overflow-hidden rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300 ease-in-out">
+                      <Card bordered={true} hoverable className="bg-blue-200">
+                        <div className="flex justify-between items-center">
+                          <p className="font-semibold">
+                            {/* {
+                              dataBank?.find(
+                                (obj: any) =>
+                                  obj.bankEntityId == data.usacEntityId
+                              )?.bankName
+                            } */}
+                          </p>
+                          <p className="font-semibold text-right">
+                            {item.usacType}
+                          </p>
+                        </div>
+
+                        <p className="text-2xl font-bold mt-4">
+                          {maskCardNumber(item.usacAccountNumber)}
+                        </p>
+
+                        <div className="flex justify-between mt-6 items-center">
+                          <div>
+                            <p className="text-[12px]">Valid Date :</p>
+                            <p className="font-semibold">{`${item.usacExpmonth}/${item.usacExpyear}`}</p>
+                          </div>
+                          <div>
+                            <p className="text-[12px]">Balance</p>
+                            <p className="font-semibold">
+                              {parseInt(item.usacSaldo).toLocaleString(
+                                "id-ID",
+                                {
+                                  style: "currency",
+                                  currency: "IDR",
+                                  minimumFractionDigits: 0,
+                                  maximumFractionDigits: 0,
+                                }
+                              )}
+                            </p>
+                          </div>
+                        </div>
+                      </Card>
+                    </div>
+                  </div>
+                ))}
+                {bankAcc.map((item: any) => {
+                  //   <div className="inline-block px-3">
+                  //   <div className="h-44 w-80 max-w-xs overflow-hidden rounded-lg shadow-md bg-white hover:shadow-xl transition-shadow duration-300 ease-in-out">
+                  //     <Card bordered={true} hoverable className="bg-blue-200">
+                  //       <div className="flex justify-between items-center">
+                  //         <p className="font-semibold">
+                  //           uuu
+                  //           {/* {
+                  //             bankAcc.find(
+                  //               (obj: any) =>
+                  //                 obj.bankEntityId == item.usacEntityId
+                  //             )?.bankName
+                  //           } */}
+                  //         </p>
+                  //         <p className="font-semibold text-right">
+                  //           {item.usacType}
+                  //         </p>
+                  //       </div>
+                  //       <p className="text-2xl font-bold mt-4">
+                  //         {maskCardNumber(item.usacAccountNumber)}
+                  //       </p>
+                  //       <div className="flex justify-between mt-6 items-center">
+                  //         <div>
+                  //           <p className="text-[12px]">Valid Date :</p>
+                  //           <p className="font-semibold">{`${item.usacExpmonth}/${item.usacExpyear}`}</p>
+                  //         </div>
+                  //         <div>
+                  //           <p className="text-[12px]">Balance</p>
+                  //           <p className="font-semibold">
+                  //             {parseInt(item.usacSaldo).toLocaleString(
+                  //               "id-ID",
+                  //               {
+                  //                 style: "currency",
+                  //                 currency: "IDR",
+                  //                 minimumFractionDigits: 0,
+                  //                 maximumFractionDigits: 0,
+                  //               }
+                  //             )}
+                  //           </p>
+                  //         </div>
+                  //       </div>
+                  //     </Card>
+                  //   </div>
+                  // </div>
+                })}
+
+                {/* <div className="inline-block px-3">
                   <div className="h-44 w-80 max-w-xs overflow-hidden rounded-lg shadow-md bg-white hover:shadow-xl transition-shadow duration-300 ease-in-out">
-                  <Card bordered={true} onClick={()=>setOpenDetCard(true)} className="cursor-pointer">
+                    <Card
+                      bordered={true}
+                      onClick={() => setOpenDetCard(true)}
+                      className="cursor-pointer"
+                    >
                       <div className="flex justify-between">
                         <p className="text-2xl font-bold">**** 1345</p>
                         <p className="font-bold">Credit Card</p>
                       </div>
                       <p className="mt-12">01/2027</p>
                       <div className="flex justify-between">
-                      <p className="font-bold text-lg">Achmad Rendra</p>
+                        <p className="font-bold text-lg">Achmad Rendra</p>
                         <p>MANDIRI</p>
                       </div>
                     </Card>
@@ -72,56 +209,47 @@ export default function Cards() {
                 </div>
                 <div className="inline-block px-3">
                   <div className="h-44 w-80 max-w-xs overflow-hidden rounded-lg shadow-md bg-white hover:shadow-xl transition-shadow duration-300 ease-in-out">
-                  <Card bordered={true} onClick={()=>setOpenDetCard(true)} className="cursor-pointer">
+                    <Card
+                      bordered={true}
+                      onClick={() => setOpenDetCard(true)}
+                      className="cursor-pointer"
+                    >
                       <div className="flex justify-between">
                         <p className="text-2xl font-bold">**** 1345</p>
                         <p className="font-bold">Credit Card</p>
                       </div>
                       <p className="mt-12">01/2027</p>
                       <div className="flex justify-between">
-                      <p className="font-bold text-lg">Achmad Rendra</p>
+                        <p className="font-bold text-lg">Achmad Rendra</p>
                         <p>MANDIRI</p>
                       </div>
                     </Card>
                   </div>
-                </div>
-                <div className="inline-block px-3">
-                  <div className="h-44 w-80 max-w-xs overflow-hidden rounded-lg shadow-md bg-white hover:shadow-xl transition-shadow duration-300 ease-in-out">
-                  <Card bordered={true} onClick={()=>setOpenDetCard(true)} className="cursor-pointer">
-                      <div className="flex justify-between">
-                        <p className="text-2xl font-bold">**** 1345</p>
-                        <p className="font-bold">Credit Card</p>
-                      </div>
-                      <p className="mt-12">01/2027</p>
-                      <div className="flex justify-between">
-                      <p className="font-bold text-lg">Achmad Rendra</p>
-                        <p>MANDIRI</p>
-                      </div>
-                    </Card>
-                  </div>
-                </div>
-                <div className="inline-block px-3">
-                  <div className="h-44 w-80 max-w-xs overflow-hidden rounded-lg shadow-md bg-white hover:shadow-xl transition-shadow duration-300 ease-in-out">
-                  <Card bordered={true} onClick={()=>setOpenDetCard(true)} className="cursor-pointer">
-                      <div className="flex justify-between">
-                        <p className="text-2xl font-bold">**** 1345</p>
-                        <p className="font-bold">Credit Card</p>
-                      </div>
-                      <p className="mt-12">01/2027</p>
-                      <div className="flex justify-between">
-                      <p className="font-bold text-lg">Achmad Rendra</p>
-                        <p>MANDIRI</p>
-                      </div>
-                    </Card>
-                  </div>
-                </div>
-                
+                </div> */}
               </div>
             </div>
           </div>
-          {isOpenAdd ? <AddCard show={isOpenAdd} clickOk={handleOk} clickCancel={handleCancel}/> : null}
-          {isOpenDetCard ? <DetailCards show={isOpenDetCard} clickOk={handleOk} clickCancel={handleCancel}/> : null}
-          {isOpenDetTrans ? <DetailTransCards show={isOpenDetTrans} clickOk={handleOk} clickCancel={handleCancel}/> : null}
+          {isOpenAdd ? (
+            <AddCard
+              show={isOpenAdd}
+              clickOk={handleOk}
+              clickCancel={handleCancel}
+            />
+          ) : null}
+          {isOpenDetCard ? (
+            <DetailCards
+              show={isOpenDetCard}
+              clickOk={handleOk}
+              clickCancel={handleCancel}
+            />
+          ) : null}
+          {isOpenDetTrans ? (
+            <DetailTransCards
+              show={isOpenDetTrans}
+              clickOk={handleOk}
+              clickCancel={handleCancel}
+            />
+          ) : null}
           <Card title="History Transaction" className="mt-24">
             <Card
               type="inner"
@@ -157,7 +285,7 @@ export default function Cards() {
               title="RF#20230123-0001"
               extra={"23-01-2023"}
               className="mb-4 hover:cursor-pointer"
-                onClick={()=>setOpenDetTrans(true)}
+              onClick={() => setOpenDetTrans(true)}
             >
               <div>
                 <p className="font-bold text-lg">Refund BO#20230123-0002</p>

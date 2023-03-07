@@ -35,9 +35,12 @@ import axios from "axios";
 import { call, put } from "redux-saga/effects";
 
 //List Transaction
-function* handleTrxDashRequest(): any {
+function* handleTrxDashRequest(action : any): any {
   try {
-    const result = yield axios(API("GET", `/payment-transaction/history`));
+    const pageQueryParam = action.payload?.page ? `page=${action.payload.page}` : '';
+    const keywordQueryParam = action.payload?.keyword ? `&keyword=${action.payload.keyword}` : '';
+    const dateQueryParam = action.payload?.startDate ? `&startDate=${action.payload.startDate}&endDate=${action.payload.endDate}` : '';
+    const result = yield axios(API("GET", `/payment-transaction?${pageQueryParam}${keywordQueryParam}${dateQueryParam}`));
     yield put(doTransactionRequestSuccess(result.data));
     return result.data;
   } catch (e: any) {
@@ -46,12 +49,15 @@ function* handleTrxDashRequest(): any {
 }
 
 //Bank
-function* handleBankRequest(): any {
+function* handleBankRequest(action: any): any {
   try {
-    const result = yield axios(API("GET", "/bank"));
+    const pageQueryParam = action.payload?.page ? `page=${action.payload.page}` : '';
+    const keywordQueryParam = action.payload?.keyword ? `&keyword=${action.payload.keyword}` : '';
+    const result = yield axios(API("GET", `/bank?${pageQueryParam}${keywordQueryParam}`));
     yield put(doBankRequestSuccess(result.data));
     return result.data;
   } catch (error) {
+    console.log(error)
     yield put(doBankRequestFailed(error));
   }
 }
@@ -95,9 +101,11 @@ function* handleDeleteBank(action: any): any {
 }
 
 //Payment Gateway
-function* handlePagaRequest(): any {
+function* handlePagaRequest(action: any): any {
   try {
-    const res = yield axios(API("GET", "/payment-gateway"));
+    const pageQueryParam = action.payload?.page ? `page=${action.payload.page}` : '';
+    const keywordQueryParam = action.payload?.keyword ? `&keyword=${action.payload.keyword}` : '';
+    const res = yield axios(API("GET", `/payment-gateway?${pageQueryParam}${keywordQueryParam}`));
     yield put(doPagaRequestSuccess(res.data));
     return res.data;
   } catch (error) {
@@ -150,9 +158,10 @@ function* handlePagaDelete(action: any): any {
 }
 
 //User Account
-function* handleUsacRequest(): any {
+function* handleUsacRequest(action: any): any {
   try {
-    const res = yield axios(API("GET", "/user-account"));
+    const res = yield axios(API("GET", `/user-account/${action.payload}`));
+    console.log(res)
     yield put(doUsacRequestSuccess(res.data));
   } catch (error) {
     console.log(error);
