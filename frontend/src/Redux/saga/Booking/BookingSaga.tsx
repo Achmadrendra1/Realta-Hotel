@@ -86,6 +86,7 @@ function* handleSpFacilities() : any {
   function* handleSpBoorInvoice () : any {
     try{
       const result = yield axios (API('Get', '/booking-orders/invoice', null))
+      console.log('test', result)
       yield put(getSpInvoiceSuccess(result.data))
       return result.data
     }catch(e : any) {
