@@ -19,11 +19,7 @@ export default  function Index() {
   }));
   const dispatch = useDispatch();
 
-  const logOut=() =>{
-    dispatch(doLogout())
-    // setIsLogin(false)
-    window.location.href = "/users/login"
-  }
+
   
   const items = [
     {

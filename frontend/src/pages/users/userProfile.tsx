@@ -130,7 +130,7 @@ export default withAuth( function Userprofile() {
             <Avatar
               size={120}
               icon={
-                <UserOutlined />
+                 !user[0]?.emp_photo ? <UserOutlined /> : user[0]?.emp_photo 
               }
             />
           </Col>

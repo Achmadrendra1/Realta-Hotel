@@ -53,15 +53,15 @@ export default function Login() {
 
   //Pas click submit dispatch langsung, kalo formnya masih kosong validasi muncul
   const onFinish = (values: any) => {
-    console.log("Success:", values);
+    // console.log("Success:", values);
     dispatch(doLogin(values));
   };
 
   const contentStyle: React.CSSProperties = {
     height: "160px",
-    color: "#fff",
+    color: "#252525",
     // textAlign: 'center',
-    backgroundColor: "#252525",
+    backgroundColor: "#FFFFFF",
     backdropFilter: "blur(10px)",
     borderRadius: "8px",
   };
@@ -72,7 +72,7 @@ export default function Login() {
     
     <Layouts>
       {contextHolder}
-      <Card className="m-12 mx-52 drop-shadow-md  bg-sky-100 ">
+      <Card className="m-12 mx-52 drop-shadow-md  bg-[#8662FF] ">
         <Row>
           <Col span={14}>
             <Card className={`p-2 mr-3  ${loginStyle.cardLogin} no-border`}>
@@ -80,11 +80,11 @@ export default function Login() {
                 <img src="/assets/icons.png" alt="" style={{ width: 60 }} />
 
                 <div className="container my-12">
-                  <h1 className="font-semibold text-2xl">
+                  <h1 className="font-semibold text-2xl text-white">
                     Experience unmatched luxury and exceptional hospitality at
                     our hotel.
                   </h1>
-                  <p className="text-gray-600 mt-3">
+                  <p className="text-[#252525] mt-3">
                     Immerse yourself in a world of unrivaled sophistication and
                     impeccable service.
                   </p>
@@ -97,7 +97,7 @@ export default function Login() {
                       <div style={contentStyle}>
                         <Row>
                           <div className="container mt-4 mx-6 mb-2 ">
-                            <p>
+                            <p className="text-[#000000]">
                               "Being able to book a hotel without having to
                               physically go to the destination has made me more
                               efficient."
@@ -112,10 +112,10 @@ export default function Login() {
                             />
                           </Col>
                           <Col className="ml-3">
-                            <h1 className="font-semibold text-sm ">
+                            <h1 className="font-semibold text-sm text-[#000000] ">
                               Aryasa Miftah Mubaraq Siagian
                             </h1>
-                            <p className="font-normal text-xs text-gray-400">
+                            <p className="font-normal text-xs text-[#000000]">
                               Quality Assurance
                             </p>
                           </Col>
@@ -126,7 +126,7 @@ export default function Login() {
                     <div>
                       <div style={contentStyle}>
                         <Row>
-                          <div className="container mt-4 mx-6 mb-2 ">
+                          <div className="container mt-4 mx-6 mb-2 text-[#000000]">
                             <p>
                               " I can easily book a hotel without any hassle and just one Click, that impresive me!"
                             </p>
@@ -137,10 +137,10 @@ export default function Login() {
                             <Avatar size={45} src="/img/loginpict/poto2.jpg" />
                           </Col>
                           <Col className="ml-3 ">
-                            <h1 className="font-semibold text-sm ">
+                            <h1 className="font-semibold text-sm text-[#000000] ">
                               Shoffie Anastasya
                             </h1>
-                            <p className="font-normal text-xs text-gray-400">
+                            <p className="font-normal text-xs text-[#000000]">
                               Traveller
                             </p>
                           </Col>
@@ -151,7 +151,7 @@ export default function Login() {
                     <div>
                       <div style={contentStyle}>
                       <Row>
-                          <div className="container mt-4 mx-6 mb-2 ">
+                          <div className="container mt-4 mx-6 mb-2 text-[#000000] ">
                             <p>
                               "The fast registration process makes it easy for me as someone who always wants things done quickly."
                             </p>
@@ -162,10 +162,10 @@ export default function Login() {
                             <Avatar size={45} src="/img/loginpict/poto3.jpg" />
                           </Col>
                           <Col className="ml-3">
-                            <h1 className="font-semibold text-sm ">
+                            <h1 className="font-semibold text-sm text-[#000000] ">
                               Reynaldi Renolds
                             </h1>
-                            <p className="font-normal text-xs text-gray-400">
+                            <p className="font-normal text-xs text-[#000000]">
                               Influencer
                             </p>
                           </Col>
@@ -180,10 +180,10 @@ export default function Login() {
           {/* Form */}
           <Col className="ml-3">
             <div className="container mt-16 mb-12  ">
-              <h1 className="text-3xl font-bold text-gray-700 mb-2">
+              <h1 className="text-3xl font-bold text-white mb-2">
                 Welcome back.
               </h1>
-              <p className="font-semibold text-gray-500">
+              <p className="font-semibold text-white">
                 Login to your account now
               </p>
             </div>
@@ -194,7 +194,7 @@ export default function Login() {
             >
               <label
                 htmlFor="Email"
-                className="block text-gray-500 font-semibold"
+                className="block text-white font-semibold"
               >
                 Email
               </label>
@@ -213,7 +213,7 @@ export default function Login() {
               </Form.Item>
               <label
                 htmlFor="Password"
-                className="block text-gray-500 font-semibold"
+                className="block text-white font-semibold"
               >
                 Password
               </label>
@@ -231,13 +231,13 @@ export default function Login() {
               </Form.Item>
               <button
                 type="submit"
-                className="bg-[#252525] text-white px-4 py-3 my-2 rounded-lg font-medium w-80"
+                className="bg-purple-400 hover:bg-purple-500 text-white px-4 py-3 my-2 rounded-lg font-medium w-80"
               >
                 Login
               </button>
-              <p className="text-gray-500 mx-12 mt-3 font-semibold">
+              <p className="text-white mx-12 mt-3 font-semibold">
                 Don't have an account?
-                <Link href="/users/register" className="ml-1 text-blue-700">
+                <Link href="/users/register" className="ml-1 text-[#F7C934]">
                   <motion.button
                    whileHover={{ scale: 1.1 }}
                    whileTap={{ scale: 0.9 }}

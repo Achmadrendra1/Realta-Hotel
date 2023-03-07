@@ -34,17 +34,17 @@ export default function GetUserReducer(state = initialState, action:any) {
     case UserConst.EDIT_DATA_PROFILE_FAILED:
       return {...state,error : action.payload};
     case UserConst.UPDATE_PASSWORD:
+      localStorage.clear();
       return{ ...state}
     case UserConst.UPDATE_PASSWORD_SUCCESS:
-      state.getUser.splice(
+        state.getUser.splice(
         state.getUser.findIndex(
           (i: any) => i.uspa_user_id == action.payload.uspa_user_id
         ),
         action.payload
       );
       return {
-        ...state,
-        getUser: [...state.getUser],
+      error :null,
       };
     case UserConst.UPDATE_PASSWORD_FAILED:
       return {...state,error : action.payload};

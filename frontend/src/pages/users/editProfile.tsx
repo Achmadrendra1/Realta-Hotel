@@ -22,7 +22,7 @@ export default function EditProfile(props: any) {
   const [form] = Form.useForm();
   const [messageApi, contextHolder] = message.useMessage();
   const user = data.find((item: any) => item[0]?.user_id == id);
-
+  const [selectedDate, setSelectedDate] = useState(null);
   
   // console.log(user);
 
@@ -50,7 +50,7 @@ export default function EditProfile(props: any) {
     console.log("Success:", formValues);
     dispatch(doUpdate(formValues));
     handleClose(false);
-    message.success("Login Berhasil", 1.5)
+    message.success("Data Berhasil Diubah", 1.5)
   };
 
  
@@ -71,8 +71,8 @@ export default function EditProfile(props: any) {
   const handleSelectMaritalChange = (value: any) => {
     setFormValues({ ...formValues, uspro_marital_status: value });
   };
-  const handleSelectDateChange = (value: any,dateString :any) => {
-    setFormValues({ ...formValues, uspro_birt_date: dateString });
+  const handleSelectDateChange = (dateString :any) => {
+    setFormValues({ ...formValues, uspro_birt_date:dateString });
   };
 
 
@@ -220,11 +220,12 @@ export default function EditProfile(props: any) {
 
             <Col>
               <Form.Item label="Birth Date" name="uspro_birt_date">
-                <Input
-                  type="date"
+                <DatePicker
                   style={{ marginLeft: 8 }}
-                  // format="DD-MM-YY"
-                  // value={formValues.uspro_birth_date}
+                  value={selectedDate}
+                  format="YYYY-MM-DD"
+                  onChange={handleSelectDateChange}
+                  // onChange={(date:any) => handleSelectDateChange(date)}
                 />
               </Form.Item>
 
@@ -244,12 +245,13 @@ export default function EditProfile(props: any) {
             </Col>
           </Row>
 
-          <Button
-            htmlType="submit"
+          <button
+            type="submit"
+            className="bg-[#754CFF] hover:bg-purple-500 text-white px-4 py-3 my-2 rounded-lg font-medium w-30"
             style={{ marginBlockEnd: 10, marginLeft: 520 }}
           >
             Save
-          </Button>
+          </button>
         </Form>
       </Modal>
     </>
