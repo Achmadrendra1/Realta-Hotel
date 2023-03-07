@@ -19,9 +19,11 @@ export default function index() {
     (state: any) => state.BoorInvoiceReducer.invoice
   );
 
+  console.log(invoiceView)
+
   useEffect(() => {
     dispatch(getSpInvoice());
-  }, [id]);
+  }, []);
 
   const Invoice = invoiceView.filter(
     (item: any) => item.boor_order_number === id

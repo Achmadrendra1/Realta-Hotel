@@ -1,10 +1,11 @@
+import withAuth from "@/PrivateRoute/WithAuth";
 import { getHotelID, updateHotel } from "@/Redux/Action/Hotel/HotelAction";
 import { Form, Input, Typography } from "antd";
 import { useFormik } from "formik";
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
-export default function EditHotelRealta(props: any) {
+export default withAuth( function EditHotelRealta(props: any) {
   const dispatch = useDispatch();
   const { Title, Text } = Typography;
   const { hotelById } = useSelector((state: any) => state.HotelReducer);
@@ -136,3 +137,4 @@ export default function EditHotelRealta(props: any) {
     </Form>
   );
 }
+)
