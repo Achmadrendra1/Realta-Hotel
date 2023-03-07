@@ -9,6 +9,16 @@ const initialState = {
 export const detailEmpReducer = ( state:object = initialState, action:any ) => {
     const { type, payload } = action
     switch(type){
+        case empType.ADD_PAYHIST_SUCCESS:
+            return{
+                ...state,
+                payHist: [...state.payHist, payload]
+            }
+        case empType.ADD_MUTATION_SUCCESS:
+            return{
+                ...state,
+                deptHist: [...state.deptHist, payload]
+            }
         case empType.UPDATE_DATA_DETAIL:
             const newData = {
                 userid: payload.userId,
@@ -38,6 +48,8 @@ export const detailEmpReducer = ( state:object = initialState, action:any ) => {
                 deptHist: payload.deptHist,
                 payHist: payload.payHist
             }
+        case empType.ADD_PAYHIST:
+        case empType.ADD_MUTATION:
         case empType.GET_DETAIL:
         default:
             return state

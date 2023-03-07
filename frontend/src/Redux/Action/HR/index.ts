@@ -89,3 +89,23 @@ export const getServiceWork = () => {
         type: workType.SERVICE_WORK
     }
 }
+
+export const getDeptSelect = () => {
+    return{
+        type: deptType.GET_SELECT
+    }
+}
+
+export const addDeptHist = (payload:any) => {
+    return{
+        type: empType.ADD_MUTATION,
+        payload: payload
+    }
+}
+
+export const addPayHist = (payload:any) => {
+    return{
+        type: empType.ADD_PAYHIST,
+        payload: payload
+    }
+}

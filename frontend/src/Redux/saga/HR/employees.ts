@@ -52,3 +52,23 @@ export function* handleUpdateEmployee(action:any): any{
         yield put({ type: empType.UPDATE_DATA_FAILED });
     }
 }
+
+export function* handleDeptHist(action:any): any{
+    const { payload } = action
+    try {
+        const res = yield axios(API('post', '/employee/mutation', payload))
+        yield put({ type: empType.ADD_MUTATION_SUCCESS, payload: res.data})
+    } catch (e:any) {
+        yield put({ type: empType.ADD_MUTATION_FAILED });
+    }
+}
+
+export function* handleAddPayhist(action:any): any{
+    const { payload } = action
+    try {
+        const res = yield axios(API('post', '/employee/payhist', payload))
+        yield put({ type: empType.ADD_PAYHIST_SUCCESS, payload: res.data})
+    } catch (e:any) {
+        yield put({ type: empType.ADD_PAYHIST_FAILED });
+    }
+}

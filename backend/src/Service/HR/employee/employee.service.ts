@@ -4,8 +4,9 @@ import { Department } from 'src/entities/Department';
 import { Employee } from 'src/entities/Employee';
 import { EmployeeDepartmentHistory } from 'src/entities/EmployeeDepartmentHistory';
 import { EmployeePayHistory } from 'src/entities/EmployeePayHistory';
+import { JobRole } from 'src/entities/JobRole';
 import { Users } from 'src/entities/Users';
-import { Like, Repository } from 'typeorm';
+import { IsNull, Like, Repository } from 'typeorm';
 
 @Injectable()
 export class EmployeeService {
@@ -20,6 +21,8 @@ export class EmployeeService {
     private department: Repository<Department>,
     @InjectRepository(Users)
     private users: Repository<Users>,
+    @InjectRepository(JobRole)
+    private job: Repository<JobRole>,
   ) {}
 
   async getEmployee(): Promise<any> {
@@ -49,14 +52,14 @@ export class EmployeeService {
     );
   }
 
-  async updatePhotos(data: any): Promise<any> {
+  async updatePhotos(id: number, file: any): Promise<any> {
     await this.employeeStore
       .createQueryBuilder()
       .update(Employee)
-      .set({ empPhoto: data.photo })
-      .where({ empId: data.id })
+      .set({ empPhoto: file.filename })
+      .where({ empId: id })
       .execute();
-    return this.employeeStore.find({ where: { empId: data.id } });
+    return this.employeeStore.find({ where: { empId: id } });
   }
 
   async addEmployee(data: any, file: any, jobs: any): Promise<any> {
@@ -169,5 +172,62 @@ export class EmployeeService {
       hire: data.hireDate,
       status: data.status,
     };
+  }
+
+  async addMutations(data: any): Promise<any> {
+    const datas = {
+      edhiId: null,
+      edhiEmpId: data.empId,
+      edhiStartDate: new Date(),
+      edhiEndDate: null,
+      edhiShift: data.shiftId,
+      edhiDept: data.deptId,
+      edhiModifiedDate: new Date(),
+    };
+    await this.departmentHist
+      .createQueryBuilder()
+      .update()
+      .set({
+        edhiEndDate: new Date(),
+      })
+      .where({ edhiEndDate: IsNull() })
+      .execute();
+
+    const newDeptHist = await this.departmentHist.save(datas);
+
+    const departments = await this.department.findOne({
+      where: { deptId: data.deptId },
+    });
+
+    const deptNames = departments.deptName.split(' ');
+    const jobRoles = await this.job.findOne({
+      where: { joroName: Like(`%${deptNames[0]}%`) },
+    });
+
+    await this.employeeStore
+      .createQueryBuilder()
+      .update(Employee)
+      .set({
+        empJoro: { joroId: +jobRoles.joroId },
+        empModifiedDate: new Date(),
+      })
+      .where({ empId: data.empId })
+      .execute();
+
+    return await this.departmentHist.findOne({
+      where: { edhiId: newDeptHist.edhiId },
+      relations: { edhiDept: true },
+    });
+  }
+
+  async addPay(data: any): Promise<any> {
+    const datas = {
+      ephiEmpId: data.empId,
+      ephiRateChangeDate: new Date(),
+      ephiRateSalary: data.salary,
+      ephiPayFrequence: data.payFrequence,
+      ephiModifiedDate: new Date(),
+    };
+    return this.paymentHist.save(datas);
   }
 }

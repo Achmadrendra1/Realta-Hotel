@@ -1,8 +1,8 @@
-import { getDetailEmp, updateEmployee } from "@/Redux/Action/HR"
+import { addDeptHist, addPayHist, getDeptSelect, getDetailEmp, updateEmployee } from "@/Redux/Action/HR"
 import Buttons from "@/components/Button"
 import Dashboard from "@/layouts/dashboard"
 import { ArrowLeftOutlined, EditOutlined, UserOutlined } from "@ant-design/icons"
-import { Avatar, Col, DatePicker, Divider, Input, List, Modal, Row, Select, Space } from "antd"
+import { AutoComplete, Avatar, Col, DatePicker, Divider, Form, Input, List, Modal, Row, Select, Space } from "antd"
 import Image from "next/image"
 import Link from "next/link"
 import { useRouter } from "next/router"
@@ -18,7 +18,7 @@ const EmployeeDetail = () => {
     const dispatch = useDispatch()
     const router = useRouter()
     const { details, deptHist, payHist } = useSelector((state:any) => state.detailEmpReducer)
-    const { selectJob } = useSelector((state:any) => state.selectReducer)
+    const { selectJob, selectDept } = useSelector((state:any) => state.selectReducer)
     const { employee } : any = router.query
     const jobId = !parseInt(details?.jobname) ? selectJob.find((item:any) => item.label.toLocaleLowerCase() == details?.jobname?.toLocaleLowerCase()) : selectJob.find((item:any) => item.value == details?.jobname)
     const [ update, setUpdate ] = useState({
@@ -39,8 +39,41 @@ const EmployeeDetail = () => {
         jobId: ''
     })
 
+    const [mutation, setMutation] = useState({
+        empId: 0 || '',
+        shiftId: '',
+        deptId: ''
+    })
+
+    const [payment, setPayment] = useState({
+        empId: 0 || '',
+        salary: '',
+        payFrequence: ''
+    })
+
+    const mutationDept = () => {
+        dispatch(addDeptHist(mutation))
+        setMutation({
+            ...mutation,
+            shiftId: '',
+            deptId: ''
+        })
+        isDept(false)
+    }
+
+    const addPayment = () => {
+        dispatch(addPayHist(payment))
+        setPayment({
+            ...payment,
+            salary: '',
+            payFrequence: ''
+        })
+        isPay(false)
+    }
+
     useEffect(() => {
         dispatch(getDetailEmp(parseInt(employee[0])))
+        dispatch(getDeptSelect())
     }, [])
 
     useEffect(() => {
@@ -61,6 +94,10 @@ const EmployeeDetail = () => {
             sick: details?.sickleave,
             jobId: jobId?.value
         })
+        
+        setMutation({ ...mutation, empId: details?.empid})
+        setPayment({ ...payment, empId: details?.empid})
+
     }, [details])
 
     const submitForm = (e:any) => {
@@ -68,6 +105,8 @@ const EmployeeDetail = () => {
         dispatch(updateEmployee(update))
     }
 
+    const addCommas = (num:any) => num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    const removeNonNumeric = (num:any) => num.toString().replace(/[^0-9]/g, "");
     return(
         <Dashboard>
             <Row gutter={32}>
@@ -176,12 +215,12 @@ const EmployeeDetail = () => {
                         </div>
                         <Space direction="vertical" size={15} className="w-full my-4">
                             {
-                                deptHist.map((item:any, index:any) =>
-                                    <div key={index} className="flex border justify-between p-5 rounded bg-white drop-shadow-none hover:drop-shadow-md">
-                                        <div><span className="font-medium">Department : </span>{item?.edhiDept?.deptName}</div>
-                                        <div><span className="font-medium">Start Date : </span>{item.edhiStartDate?.split('T')[0]}</div>
-                                        <div><span className="font-medium">End Date : </span>{item.edhiEndDate !== null ? item.edhiEndDate?.split('T')[0] : 'None'}</div>
-                                    </div>
+                                deptHist.sort((a:any, b:any) => new Date(a.edhiEndDate) - new Date(b.edhiEndDate)).map((item:any, index:any) =>
+                                    <Row justify='space-between' align='middle' key={index} className="border p-5 rounded bg-[#F2F1FA] drop-shadow-none hover:drop-shadow-md">
+                                        <Col span={11}><span className="font-medium">Department : </span>{item?.edhiDept?.deptName}</Col>
+                                        <Col span={7}><span className="font-medium">Start Date : </span>{item.edhiStartDate?.split('T')[0]}</Col>
+                                        <Col span={6}><span className="font-medium">End Date : </span>{item.edhiEndDate !== null ? item.edhiEndDate?.split('T')[0] : 'None'}</Col>
+                                    </Row>
                                 )
                             }
                         </Space>
@@ -195,8 +234,9 @@ const EmployeeDetail = () => {
                         <Space direction="vertical" size={15} className="w-full my-4">
                             {
                                 payHist.map((item:any, index:any) =>
-                                    <div key={index} className="flex border justify-between p-5 rounded bg-white drop-shadow-none hover:drop-shadow-md">
-                                        <div><span className="font-medium">Salary : </span>{item.ephiRateSalary}</div>
+                                    <div key={index} className="flex border justify-between p-5 bg-[#F2F1FA] rounded drop-shadow-none hover:drop-shadow-md">
+                                        <div><span className="font-medium">Salary : </span>
+                                        {isNaN(+item.ephiRateSalary) ? item.ephiRateSalary : `Rp${addCommas(item.ephiRateSalary)},00`}</div>
                                         <div><span className="font-medium">Pay Date : </span>{item.ephiRateChangeDate?.split('T')[0]}</div>
                                         <div><span className="font-medium">Pay Frequence : </span>{item.ephiPayFrequence == 1 ? 'Mothly' : 'Weekly'}</div>
                                     </div>
@@ -208,19 +248,63 @@ const EmployeeDetail = () => {
                 <Col span={6}>
                     <h1 className="mb-5 text-2xl font-semibold">Photo Profile</h1>
                     <div className="p-2 border-2 relative rounded">
-                        <Avatar className="bg-[#754CFF]" alt={details.fullName} icon={<UserOutlined />} shape="square" size={250} src={`${configuration.BASE_URL}/employee/public/${details.photourl}`} />
+                        <Avatar className="bg-[#754CFF]" icon={<UserOutlined />} shape="square" size={250} src={`${configuration.BASE_URL}/employee/public/${details?.photourl}`} />
                         <button className="transition ease-in-out absolute bottom-0 drop-shadow-md hover:drop-shadow-lg bg-white py-2 px-5 rounded" style={{left: '50%', transform: 'translate(-50%, 50%)'}} onClick={() => isPhoto(true)}><EditOutlined /> Edit Photo</button>
                     </div>
                 </Col>
             </Row>
-            <Modal open={photo} onCancel={() => isPhoto(false)}>
+            <Modal title='Edit Profiles' open={photo} onCancel={() => isPhoto(false)} footer={
+                <div className="w-full flex gap-5 justify-end">
+                    <Buttons funcs={() => isPhoto(false)} type='danger'>Cancel</Buttons>
+                    <Buttons funcs={() => isPhoto(false)}>Save</Buttons>
+                </div>
+            }>
                 test
             </Modal>
-            <Modal open={dept} onCancel={() => isDept(false)}>
-                test
+            <Modal title='Department History' open={dept} onCancel={() => isDept(false)} footer={
+                <div className="w-full flex gap-5 justify-end">
+                    <Buttons funcs={() => isDept(false)} type='danger'>Cancel</Buttons>
+                    <Buttons funcs={mutationDept}>Save</Buttons>
+                </div>
+            }>
+                <Form>
+                    <Form.Item
+                        label='Shift Option'>
+                        <Select className="w-full" options={[
+                            {value: '1', label: 'Pagi'},
+                            {value: '2', label: 'Siang'},
+                            {value: '3', label: 'Malam'}
+                        ]} value={mutation.shiftId} onChange={value => setMutation({...mutation, shiftId: value})}/>
+                    </Form.Item>
+                    <Form.Item
+                        label='Mutation To'>
+                            <Select options={selectDept} value={mutation.deptId} placeholder='Find Department' onChange={value => setMutation({ ...mutation, deptId: value})}/>
+                    </Form.Item>
+                </Form>
             </Modal>
-            <Modal open={pay} onCancel={() => isPay(false)}>
-                test
+            <Modal title="Payment" open={pay} onCancel={() => isPay(false)} footer={
+                <div className="w-full flex gap-5 justify-end">
+                    <Buttons funcs={() => isPay(false)} type='danger'>Cancel</Buttons>
+                    <Buttons funcs={() => addPayment()}>Save</Buttons>
+                </div>
+            }>
+                <Form
+                labelCol={{ span: 6 }}
+                wrapperCol={{ span: 18 }}>
+                    <Form.Item
+                    label='Salary'>
+                        <Input prefix='Rp' placeholder="X,XXX,XXX" 
+                        value={addCommas(payment.salary)}
+                        onChange={e => setPayment({  ...payment, salary: removeNonNumeric(e.target.value)})}/>
+                    </Form.Item>
+                    <Form.Item
+                    label='Pay Frequence'>
+                        <Select className="w-full" options={[
+                            {value: '1', label: 'Monthly'},
+                            {value: '2', label: 'Weekly'},
+                        ]} value={payment.payFrequence} onChange={value => setPayment({...payment, payFrequence: value})}/>
+                    </Form.Item>
+                </Form>
             </Modal>
         </Dashboard>
     )

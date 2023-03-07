@@ -69,6 +69,39 @@ export class EmployeeController {
     return await this.employeeService.addEmployee(body, file, job.joroName);
   }
 
+  @Put('empfoto')
+  @UseInterceptors(
+    FileInterceptor('image', {
+      storage: diskStorage({
+        destination: './public/employeephoto',
+        filename(req, file, callback) {
+          const filenames = file.originalname.split('.');
+          callback(
+            null,
+            filenames[0] + Date.now() + '.' + filenames[filenames.length - 1],
+          );
+        },
+      }),
+    }),
+  )
+  async updatePhotoEmp(
+    @UploadedFile() file: Express.Multer.File,
+    @Body() body,
+  ): Promise<any> {
+    await this.employeeService.updatePhotos(body.id, file);
+    return this.employeeService.employeeDetail(body.id);
+  }
+
+  @Post('/mutation/')
+  mutationsEmployee(@Body() body): Promise<any> {
+    return this.employeeService.addMutations(body);
+  }
+
+  @Post('/payhist')
+  payHistory(@Body() body): Promise<any> {
+    return this.employeeService.addPay(body);
+  }
+
   @Put('')
   async updateEmployee(@Body() body): Promise<any> {
     const job = await this.jobRoleService.findAJob(parseInt(body.jobId));

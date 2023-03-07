@@ -18,7 +18,7 @@ export class EmployeeDepartmentHistory {
   @PrimaryGeneratedColumn({ type: 'integer', name: 'edhi_id' })
   edhiId: number;
 
-  @Column('integer', { name: 'edhi_emp_id', nullable: true, unique: true })
+  @Column('integer', { name: 'edhi_emp_id', nullable: true, unique: false })
   edhiEmpId: number | null;
 
   @Column('timestamp without time zone', {
@@ -38,9 +38,6 @@ export class EmployeeDepartmentHistory {
     nullable: true,
   })
   edhiModifiedDate: Date | null;
-
-  // @Column('integer', { name: 'edhi_dept_id', nullable: true })
-  // edhiDeptId: number | null;
 
   @ManyToOne(
     () => Department,
