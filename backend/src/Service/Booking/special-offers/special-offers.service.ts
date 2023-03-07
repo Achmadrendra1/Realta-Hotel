@@ -12,7 +12,7 @@ export class SpecialOffersService {
   ) {}
 
   async findAll(): Promise<any> {
-    return await this.SpecialOffersRepository.find();
+    return await this.SpecialOffersRepository.query('select * from booking.getspecialoffers');
   }
 
   async findAllId(id: number): Promise<any> {

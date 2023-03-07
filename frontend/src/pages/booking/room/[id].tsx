@@ -352,16 +352,17 @@ export default function bookingRoom() {
   });
 
   useEffect(() => {
+    const totalGuest = parseInt(dataBooking.borde_adults) + parseInt(dataBooking.borde_kids)
     setDataBooking({
       ...dataBooking,
-      borde_price: ratePriceInt,
-      borde_discount: spofDiscInt,
-      borde_tax: taxRateInt,
-      boor_total_tax: taxRateInt,
-      borde_faci_id: priceRoom.faci_id,
-      soco_spof_id: spofPrice.spofId,
+      borde_price: parseInt(priceRoom.faci_rate_price.split(",")[0].replace(/[^0-9]/g, "")),
+      borde_discount: parseInt(spofPrice.spofDiscount.split(",")[0].replace(/[^0-9]/g, "")),
+      boor_discount: parseInt(spofPrice.spofDiscount.split(",")[0].replace(/[^0-9]/g, "")),
+      borde_tax: parseInt(priceRoom.faci_tax_rate.split(",")[0].replace(/[^0-9]/g, "")),
+      boor_total_tax: parseInt(priceRoom.faci_tax_rate.split(",")[0].replace(/[^0-9]/g, "")),
+      boor_total_guest : totalGuest
     });;
-  }, [ratePriceInt, spofDiscInt, taxRateInt, priceRoom.faci_id]);
+  }, [priceRoom.faci_rate_price, priceRoom.faci_tax_rate, spofPrice.spofDiscount, dataBooking.borde_adults, dataBooking.borde_kids]);
 
   // useEffect list hotel into Booking Detail
   // useEffect(()=> {
@@ -369,14 +370,6 @@ export default function bookingRoom() {
   //         faci_id, faci_name, faci_rate_price, faci_high_price, faci_tax_rate
   //     })
   // }, [faci_name])
-
-  useEffect(()=>{
-      const totalGuest = parseInt(dataBooking.borde_adults) + parseInt(dataBooking.borde_kids)
-      setDataBooking({
-        ...dataBooking,
-        boor_total_guest : totalGuest
-    })
-  }, [dataBooking.borde_adults, dataBooking.borde_kids])
 
   //Handle button selected room into booking
   const handleButtonSelected = (index: any) => {
@@ -388,7 +381,7 @@ export default function bookingRoom() {
       faci_rate_price: selected.faci_rate_price,
       faci_tax_rate: selected.faci_tax_rate,
     });
-    setDataBooking({...dataBooking, boor_hotel_id : selected.faci_id, borde_price : ratePriceInt })
+    setDataBooking({...dataBooking, borde_faci_id : selected.faci_id, borde_price : ratePriceInt })
   };
 
   //Handle button add Special Offers
@@ -441,7 +434,7 @@ export default function bookingRoom() {
     const disc = dataBooking.borde_discount
     const extra = extraTotal.extraSubTotal
     const total = ((((rate*days)*room)-disc)+extra)
-    console.log(extra)
+    console.log(rate)
     const subTotal = () => {
           setDataBooking({...dataBooking, boor_total_amount : total, borde_subtotal : total, borde_extra : extra})
           setDataPayment({...dataPayment, amount : total})
