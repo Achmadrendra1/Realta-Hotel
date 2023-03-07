@@ -8,9 +8,11 @@ import {
   UseInterceptors,
   Delete,
   Put,
+  Res,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
+import { join } from 'path';
 import { EmployeeService } from 'src/Service/HR/employee/employee.service';
 import { JobRoleService } from 'src/Service/HR/job-role/job-role.service';
 
@@ -39,6 +41,11 @@ export class EmployeeController {
     };
   }
 
+  @Get('public/:filename')
+  getPhoto(@Param('filename') file: string, @Res() res) {
+    return res.sendFile(file, { root: join('public/employeephoto') });
+  }
+
   @Post('')
   @UseInterceptors(
     FileInterceptor('image', {
@@ -48,7 +55,7 @@ export class EmployeeController {
           const filenames = file.originalname.split('.');
           callback(
             null,
-            req.body.fullName + '.' + filenames[filenames.length - 1],
+            filenames[0] + Date.now() + '.' + filenames[filenames.length - 1],
           );
         },
       }),

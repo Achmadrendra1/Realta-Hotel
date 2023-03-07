@@ -10,7 +10,7 @@ export const employeesReducer = (state:object = initialState, action:any) => {
         case empType.DEL_DATA_SUCCES:
             return{
                 ...state,
-                employees: state.employees.filter((item:any) => item.id !== +payload.id)
+                employees: state.employees.filter((item:any) => item.empUser.userId !== +payload.id)
             }
         case empType.ADD_DATA_SUCCESS: 
             return{

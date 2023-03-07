@@ -1,4 +1,11 @@
-import { Column, Entity, Index, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  Index,
+  OneToMany,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
+import { EmployeeDepartmentHistory } from './EmployeeDepartmentHistory';
 
 @Index('department_pkey', ['deptId'], { unique: true })
 @Entity('department', { schema: 'hr' })
@@ -18,4 +25,10 @@ export class Department {
     nullable: true,
   })
   deptModifiedDate: Date | null;
+
+  @OneToMany(
+    () => EmployeeDepartmentHistory,
+    (employeeDepartmentHistory) => employeeDepartmentHistory.edhiDept,
+  )
+  employeeDepartmentHistory: EmployeeDepartmentHistory[];
 }

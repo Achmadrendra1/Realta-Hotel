@@ -1,16 +1,20 @@
 import { getDetailEmp, updateEmployee } from "@/Redux/Action/HR"
 import Buttons from "@/components/Button"
 import Dashboard from "@/layouts/dashboard"
-import { ArrowLeftOutlined, EditOutlined } from "@ant-design/icons"
-import { Col, DatePicker, Divider, Input, List, Row, Select, Space } from "antd"
+import { ArrowLeftOutlined, EditOutlined, UserOutlined } from "@ant-design/icons"
+import { Avatar, Col, DatePicker, Divider, Input, List, Modal, Row, Select, Space } from "antd"
 import Image from "next/image"
 import Link from "next/link"
 import { useRouter } from "next/router"
 import { useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
+import { configuration } from '@/Redux/Configs/url'
 
 const EmployeeDetail = () => {
     const [isEdit, setIsEdit] = useState(false)
+    const [ dept, isDept ] = useState(false)
+    const [ pay, isPay ] = useState(false)
+    const [ photo, isPhoto ] = useState(false)
     const dispatch = useDispatch()
     const router = useRouter()
     const { details, deptHist, payHist } = useSelector((state:any) => state.detailEmpReducer)
@@ -166,14 +170,17 @@ const EmployeeDetail = () => {
                     </form>
                     <Divider/>
                     <div className="my-3">
-                        <h1 className="text-xl">Department History</h1>
+                        <div className="flex justify-between items-center">
+                            <h1 className="text-xl">Department History</h1>
+                            <Buttons funcs={() => isDept(true)}>Add Mutation</Buttons>
+                        </div>
                         <Space direction="vertical" size={15} className="w-full my-4">
                             {
-                                deptHist && deptHist.map((item:any, index:any) =>
-                                    <div key={index} className="flex justify-between px-5 py-4 rounded bg-white drop-shadow-md">
+                                deptHist.map((item:any, index:any) =>
+                                    <div key={index} className="flex border justify-between p-5 rounded bg-white drop-shadow-none hover:drop-shadow-md">
                                         <div><span className="font-medium">Department : </span>{item?.edhiDept?.deptName}</div>
                                         <div><span className="font-medium">Start Date : </span>{item.edhiStartDate?.split('T')[0]}</div>
-                                        <div><span className="font-medium">End Date : </span>{item.edhiEndDate?.split('T')[0]}</div>
+                                        <div><span className="font-medium">End Date : </span>{item.edhiEndDate !== null ? item.edhiEndDate?.split('T')[0] : 'None'}</div>
                                     </div>
                                 )
                             }
@@ -181,11 +188,14 @@ const EmployeeDetail = () => {
                     </div>
                     <Divider/>
                     <div className="my-3">
-                        <h1 className="text-xl">Pay History</h1>
+                        <div className="flex justify-between items-center">
+                            <h1 className="text-xl">Pay History</h1>
+                            <Buttons funcs={() => isPay(true)}>New Payment</Buttons>
+                        </div>
                         <Space direction="vertical" size={15} className="w-full my-4">
                             {
-                                payHist && payHist.map((item:any, index:any) =>
-                                    <div key={index} className="flex justify-between px-5 py-4 rounded bg-white drop-shadow-md">
+                                payHist.map((item:any, index:any) =>
+                                    <div key={index} className="flex border justify-between p-5 rounded bg-white drop-shadow-none hover:drop-shadow-md">
                                         <div><span className="font-medium">Salary : </span>{item.ephiRateSalary}</div>
                                         <div><span className="font-medium">Pay Date : </span>{item.ephiRateChangeDate?.split('T')[0]}</div>
                                         <div><span className="font-medium">Pay Frequence : </span>{item.ephiPayFrequence == 1 ? 'Mothly' : 'Weekly'}</div>
@@ -196,13 +206,22 @@ const EmployeeDetail = () => {
                     </div>
                 </Col>
                 <Col span={6}>
-                    <h1>Photo Profile</h1>
+                    <h1 className="mb-5 text-2xl font-semibold">Photo Profile</h1>
                     <div className="p-2 border-2 relative rounded">
-                        <img className="w-full rounded" src="https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png" alt="test" />
-                        <button className="transition ease-in-out absolute bottom-0 drop-shadow-md hover:drop-shadow-lg bg-white py-2 px-5 rounded" style={{left: '50%', transform: 'translate(-50%, 50%)'}}><EditOutlined /> Edit Photo</button>
+                        <Avatar className="bg-[#754CFF]" alt={details.fullName} icon={<UserOutlined />} shape="square" size={250} src={`${configuration.BASE_URL}/employee/public/${details.photourl}`} />
+                        <button className="transition ease-in-out absolute bottom-0 drop-shadow-md hover:drop-shadow-lg bg-white py-2 px-5 rounded" style={{left: '50%', transform: 'translate(-50%, 50%)'}} onClick={() => isPhoto(true)}><EditOutlined /> Edit Photo</button>
                     </div>
                 </Col>
             </Row>
+            <Modal open={photo} onCancel={() => isPhoto(false)}>
+                test
+            </Modal>
+            <Modal open={dept} onCancel={() => isDept(false)}>
+                test
+            </Modal>
+            <Modal open={pay} onCancel={() => isPay(false)}>
+                test
+            </Modal>
         </Dashboard>
     )
 }
