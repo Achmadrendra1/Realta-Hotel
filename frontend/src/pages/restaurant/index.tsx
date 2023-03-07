@@ -52,11 +52,14 @@ export default function index() {
       <main>
         <Layouts>
           {/* <Hero/> */}
+        
+          <div className='-z-10'>
           <Carousel autoplay>
             <img src="/assets/resto/1.jpg" alt="Restaurant" className='w-full object-cover object-bottom h-80 rounded-lg'/>
             <img src="/assets/resto/2.jpg" alt="Restaurant" className='w-full object-cover h-80' />
             <img src="/assets/resto/3.jpg" alt="Restaurant" className='w-full object-cover h-80' />
           </Carousel>
+          </div>
           <div className='mt-5 '>
             <h1 className='text-2xl text-center'>HOTEL REALTA SYSTEM RESTAURANT LIST</h1>
 

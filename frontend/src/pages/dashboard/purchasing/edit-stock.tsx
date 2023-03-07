@@ -49,7 +49,7 @@ export default function EditStocks(props: any) {
                         name="stockName" label='Stock Name'
                         rules={[{ required: true, message: 'Please input stock name!' }]}
                     >
-                        <Input />
+                        <Input onChange={eventHandler("stockName")}/>
                     </Form.Item>
 
 
@@ -57,7 +57,7 @@ export default function EditStocks(props: any) {
                         name="stockQuantity" label='Quantity'
                         rules={[{ required: true, message: 'Please input quantity!' }]}
                     >
-                        <Input />
+                        <Input onChange={eventHandler("stockQuantity")}/>
                     </Form.Item>
 
 
@@ -65,7 +65,7 @@ export default function EditStocks(props: any) {
                         name="stockReorderPoint" label='Reorder Point'
                         rules={[{ required: true, message: 'Please input reorder point!' }]}
                     >
-                        <Input />
+                        <Input onChange={eventHandler("stockReorderPoint")}/>
                     </Form.Item>
 
 
@@ -73,7 +73,7 @@ export default function EditStocks(props: any) {
                         name="stockUsed" label='Used'
                         rules={[{ required: true, message: 'Please input used!' }]}
                     >
-                        <Input />
+                        <Input onChange={eventHandler("stockUsed")}/>
                     </Form.Item>
 
 
@@ -81,7 +81,7 @@ export default function EditStocks(props: any) {
                         name="stockScrap" label='Scrap'
                         rules={[{ required: true, message: 'Please input scrap!' }]}
                     >
-                        <Input />
+                        <Input onChange={eventHandler("stockScrap")}/>
                     </Form.Item>
 
 
@@ -89,7 +89,7 @@ export default function EditStocks(props: any) {
                         name="stockSize" label='Size'
                         rules={[{ required: true, message: 'Please input size!' }]}
                     >
-                        <Input />
+                        <Input onChange={eventHandler("stockSize")}/>
                     </Form.Item>
 
 
@@ -97,7 +97,7 @@ export default function EditStocks(props: any) {
                         name="stockColor" label='Color'
                         rules={[{ required: true, message: 'Please input color!' }]}
                     >
-                        <Input />
+                        <Input onChange={eventHandler("stockColor")}/>
                     </Form.Item>
 
                     <Form.Item label=" " colon={false}>

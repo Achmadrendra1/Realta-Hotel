@@ -30,12 +30,9 @@ export const StockReducer = (state = initialState, action: any) => {
         case PurchasingConst.EDIT_STOCKS:
             return { ...state }
         case PurchasingConst.EDIT_STOCKS_SUCCESS:
-            // state.stocks.splice(state.stocks.findIndex((i: any) => i.stockId == action.payload.stockId), 1)
-            // return {
-            //     ...state,
-            //     stocks: [...state.stocks]
-            // }
-            const index = state.stocks.findIndex((item: any) => item.stockId == action.payload.stockId)
+            const index = state.stocks.findIndex(
+                (item: any) => item.stockId == action.payload.stockId
+            )
             state.stocks.splice(index, 1)
             return {
                 ...state,

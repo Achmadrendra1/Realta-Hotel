@@ -44,7 +44,7 @@ export default withAuth( function Fintech() {
   const [filteredData, setFilteredData] = useState([]);
   const [id, setId] = useState(0);
   const [messageApi, contextHolder] = message.useMessage();
-  const { payPaga, error } = useSelector((state: any) => state.payPagaReducer);
+  const { payPaga, error, currentPage, total } = useSelector((state: any) => state.payPagaReducer);
   const { account } = useSelector((state: any) => state.payUserAccReducer);
 
   let countAccount = account.filter((obj:any) => obj.usacType === 'Payment').length;
@@ -107,6 +107,13 @@ export default withAuth( function Fintech() {
       },
     });
   };
+
+  useEffect(() => {
+    if (payPaga.length === 0 && currentPage > 1) {
+      dispatch(doPagaRequest({ page: currentPage - 1 }));
+    }
+  }, [total]);
+
   const columnsPaga: ColumnsType<DataType> = [
     {
       title: "ID",
@@ -149,27 +156,18 @@ export default withAuth( function Fintech() {
       ),
     },
   ];
-  const onChange: TableProps<DataType>["onChange"] = (
-    pagination,
-    filters,
-    sorter,
-    extra
-  ) => {
-    console.log("params", pagination, filters, sorter, extra);
-  };
+
   const { Search } = Input;
   
-  const onSearch = (value: string) => {
-    const filteredData = payPaga.filter((item: any) => {
-      const values = Object.values(item).map((x: any) =>
-        x.toString().toLowerCase()
-      );
-      return values.some((x) => x.includes(value.toLowerCase()));
-    });
-    setFilteredData(filteredData);
+  const handleTableChange = (pagination: any) => {
+    dispatch(doPagaRequest({ page: pagination }));
   };
 
-  const tableData = filteredData.length > 0 ? filteredData : payPaga;
+  const handleSearch = (event: any) => {
+    event
+      ? dispatch(doPagaRequest({ page: 1, keyword: event.target.value }))
+      : dispatch(doPagaRequest());
+  };
 
   return (
     <div>
@@ -193,14 +191,14 @@ export default withAuth( function Fintech() {
           data={payPaga}
         />
       ) : null}
-      <Row gutter={16} className="mb-4">
-        <Col span={16}>
+      {/* <Row gutter={16} className="mb-4">
+        <Col span={16}> */}
           <div className=" w-full">
             <div className="flex-col">
               <div className="flex justify-between mb-4">
                 <Search
                   placeholder="Search"
-                  onSearch={onSearch}
+                  onChange={handleSearch}
                   style={{ width: 200 }}
                 />
                 <Buttons funcs={() => setOpenAddFin(true)}>
@@ -209,12 +207,19 @@ export default withAuth( function Fintech() {
               </div>
               <Table
                 columns={columnsPaga}
-                dataSource={tableData}
-                onChange={onChange}
+                dataSource={payPaga}
+                pagination={{
+                  current: currentPage,
+                  total: total,
+                  pageSize: 10,
+                  showQuickJumper: true,
+                  showTotal: (total) => `${total} items`,
+                  onChange: handleTableChange,
+                }}
               />
             </div>
           </div>
-        </Col>
+        {/* </Col>
         <Col span={8} className="text-center ">
           <Statistic
             title="Total H-Pay Active"
@@ -222,7 +227,7 @@ export default withAuth( function Fintech() {
             prefix={<CheckOutlined />}
           />
         </Col>
-      </Row>
+      </Row> */}
     </div>
   );
 }

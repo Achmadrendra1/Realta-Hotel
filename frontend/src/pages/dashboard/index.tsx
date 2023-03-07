@@ -54,32 +54,32 @@ import {
 } from "@/Redux/Action/Master/actionServiceTask";
 
 //Add
-import AddRegions from "./add/addRegions";
-import AddCountry from "./add/addCountry";
-import AddProvinces from "./add/addProvinces";
-import AddCity from "./add/addCity";
-import AddJalan from "./add/addJalan";
-import AddPolicy from "./add/addPolicy";
-import AddCategory from "./add/addCategory";
-import AddPrice from "./add/addPrice";
-import AddService from "./add/addService";
+import AddRegions from './master/add/addRegions';
+import AddCountry from './master/add/addCountry';
+import AddProvinces from './master/add/addProvinces';
+import AddCity from './master/add/addCity';
+import AddJalan from './master/add/addJalan';
+import AddPolicy from './master/add/addPolicy';
+import AddCategory from './master/add/addCategory';
+import AddPrice from './master/add/addPrice';
+import AddService from './master/add/addService';
 //Edit
-import EditRegions from "./edit/editRegions";
-import EditCountry from "./edit/editCountry";
-import EditProvinces from "./edit/editProvinces";
-import EditAddress from "./edit/editCity";
-import EditJalan from "./edit/editJalan";
-import EditPolicy from "./edit/editPolicy";
-import EditCategory from "./edit/editCategory";
-import EditPrice from "./edit/editPrice";
-import EditService from "./edit/editService";
-import ViewPolicy from "./view/viewPolicy";
-import ViewCategory from "./view/viewCategory";
-import ViewPrice from "./view/viewPrice";
-import { doLocations } from "@/Redux/Action/Master/actionLocations";
-import { doLocationsRC } from "@/Redux/Action/Master/actionLocationsRC";
-import { doLocationsRCP } from "@/Redux/Action/Master/actionLocationsRCP";
-import axios from "axios";
+import EditRegions from './master/edit/editRegions';
+import EditCountry from './master/edit/editCountry';
+import EditProvinces from './master/edit/editProvinces';
+import EditAddress from './master/edit/editCity';
+import EditJalan from './master/edit/editJalan';
+import EditPolicy from './master/edit/editPolicy';
+import EditCategory from './master/edit/editCategory';
+import EditPrice from './master/edit/editPrice';
+import EditService from './master/edit/editService';
+import ViewPolicy from './master/view/viewPolicy';
+import ViewCategory from './master/view/viewCategory';
+import ViewPrice from './master/view/viewPrice';
+import { doLocations } from '@/Redux/Action/Master/actionLocations';
+import { doLocationsRC } from '@/Redux/Action/Master/actionLocationsRC';
+import { doLocationsRCP } from '@/Redux/Action/Master/actionLocationsRCP';
+import axios from 'axios';
 //-------------------------------------------------------------------------------
 //-------------------------------------------------------------------------------
 export default function menuMaster() {

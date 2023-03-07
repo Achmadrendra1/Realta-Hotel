@@ -46,10 +46,9 @@ export function* handleStockAdd(action: any): any {
 
 export function* handleStockUpdate(action: any): any {
     try {
-        const res = yield axios(API('PUT', `/stock/${action.payload.stockId}`, action.payload))
-        yield put(EditStockSuccess(res.data))
-        console.log(res.data);
-        return res.data
+        const res = yield axios(API('PUT', '/stock/' + action.payload.stockId, action.payload))
+        yield put(EditStockSuccess(action.payload))
+        return res.data.result
     } catch (error: any) {
         yield put(EditStockFailed(error.response.data.message))
     }

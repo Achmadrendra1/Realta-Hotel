@@ -3,6 +3,8 @@ import PaymentConst from "@/Redux/Constant/Payment/PaymentConst";
 const initialState = {
   payPaga: [],
   error: null,
+  total: 0,
+  currentPage: 1,
 };
 
 function payPagaReducer(state = initialState, action: any) {
@@ -10,7 +12,12 @@ function payPagaReducer(state = initialState, action: any) {
     case PaymentConst.GET_PAYMENT_GATEWAY_REQUEST:
       return { ...state };
     case PaymentConst.GET_PAYMENT_GATEWAY_REQUEST_SUCCESS:
-      return { ...state, payPaga: action.payload };
+      return { 
+        ...state, 
+        payPaga: action.payload.data,
+        total : action.payload.count,
+        currentPage : action.payload.currentPage
+      };
     case PaymentConst.ADD_PAYMENT_GATEWAY:
       return { ...state };
     case PaymentConst.ADD_PAYMENT_GATEWAY_SUCCESS:
@@ -41,9 +48,10 @@ function payPagaReducer(state = initialState, action: any) {
         payPaga: state.payPaga.filter(
           (items: any) => items.pagaEntityId !== +action.payload
         ),
+        total : state.total -1
       };
     default:
-      return { ...state };
+      return state;
   }
 }
 
