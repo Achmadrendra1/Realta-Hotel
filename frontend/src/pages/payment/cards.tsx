@@ -109,7 +109,7 @@ export default function Cards() {
       </Head>
       <main>
         <Layouts>
-          <div className="relative w-full h-52 drop-shadow-lg p-4 bg-[#754cff] m-auto rounded-xl bg-center bg-cover bg-no-repeat mb-6">
+          <div className="relative w-full h-52 drop-shadow-lg p-4 bg-[#4728ae] m-auto rounded-xl bg-center bg-cover bg-no-repeat mb-6">
             <div className="flex justify-between mb-8 items-center">
               <div className="flex justify-start">
                 <Link href={"/payment"}>

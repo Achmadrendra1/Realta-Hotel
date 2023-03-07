@@ -41,6 +41,7 @@ export default function CheckSecure(props: any) {
         // setTimeout(() => props.handleCancell(false), 5000);
         if(dataPayment.trxType == 'ORM'){
           dispatch(doCreateTransaction(dataPayment));
+          // console.log(dataPayment)
           {
             messageApi
             .open({
@@ -50,7 +51,9 @@ export default function CheckSecure(props: any) {
               })
               .then(() => props.handleCancell(false))
               .then(() => message.success("Payment Success", 3))
-              .then(() => router.push('/restaurant/bill'));
+              .then(() => router.push({
+                pathname: `/restaurant/bill`,
+                query: {id : dataPayment.orderNumber}}));
           }
         } else {
           const boor_id = dataBooking.boor_order_number;
@@ -151,7 +154,6 @@ export default function CheckSecure(props: any) {
         centered
         footer={null}
       >
-        {dataPayment.payType != 'PG' || dataBooking?.boor_pay_type != 'PG' ? 'false' : 'true'}
         <Spin spinning={isLoading} size="large">
           <p className="text-lg font-bold mb-4 text-center">
             Input Your {dataPayment?.payType == "PG" || dataBooking?.boor_pay_type == "PG" ? "PIN" : "CVV"}

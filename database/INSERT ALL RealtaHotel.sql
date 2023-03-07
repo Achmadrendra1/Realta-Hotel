@@ -1815,13 +1815,15 @@ values
 ,(13)
 ,(14)
 ,(15)
-,(16);
+,(16)
+,(17);
 
 
 -- select * from payment.entitys
 
 INSERT INTO payment.payment_gateway values
-(16, '395', 'H-Pay', now());
+(16, 'hpay', 'H-Pay', now())
+(17, 'goto', 'GOTO', now());
 
 -- select * from payment.payment_gateway
 
