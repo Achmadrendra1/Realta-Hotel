@@ -18,12 +18,13 @@ export class FacilityPhotosService {
     });
   }
 
-  async findByFaphoId(id: any): Promise<any> {
+  async findByFaphoId(faphoId: number): Promise<any> {
     return await this.FaphoRepsitory.find({
+      where: { faphoId },
       relations: {
         faphoFaci: true,
       },
-      where: { faphoFaci: { faciId: id } },
+      // where: { faphoFaci: { faciId: id } },
     });
   }
 

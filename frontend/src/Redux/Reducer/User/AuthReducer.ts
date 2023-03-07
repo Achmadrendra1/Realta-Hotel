@@ -15,11 +15,8 @@ export default function loginReducer(state = initialState, action: any) {
     case UserConst.LOGIN_USER_FAILED:
       return { ...state, error: payload };
     case UserConst.LOGOUT_USER:
-      return {...state};
-    case UserConst.LOGOUT_USER_SUCCESS:
+      localStorage.clear();
       return { IsAuth: null, error: null };
-    case UserConst.LOGOUT_USER_FAILED:
-      return {...state, error: payload };
     default:
       return state;
   }
