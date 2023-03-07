@@ -4,7 +4,16 @@ import {
   LeftOutlined,
   PlusCircleOutlined,
 } from "@ant-design/icons";
-import { Avatar, Button, Card, Carousel, Col, List, Row } from "antd";
+import {
+  Avatar,
+  Button,
+  Card,
+  Carousel,
+  Col,
+  DatePicker,
+  List,
+  Row,
+} from "antd";
 import Head from "next/head";
 import Link from "next/link";
 import { useEffect, useState } from "react";
@@ -12,7 +21,11 @@ import AddCard from "./addCard";
 import DetailCards from "./detailCard";
 import DetailTransCards from "./detailTransCard";
 import { useDispatch, useSelector } from "react-redux";
-import { doUsacRequest } from "@/Redux/Action/Payment/paymentDashAction";
+import {
+  doTransactionRequest,
+  doUsacRequest,
+} from "@/Redux/Action/Payment/paymentDashAction";
+import { doGetAllBank } from "@/Redux/Action/Payment/paymentUserAction";
 
 export default function Cards() {
   const dispatch = useDispatch();
@@ -22,15 +35,24 @@ export default function Cards() {
   const [confirmLoading, setConfirmLoading] = useState(false);
   const [msg, setMsg] = useState("");
 
-
   const { account, error } = useSelector(
     (state: any) => state.payUserAccReducer
   );
+  const user = useSelector((state:any) => state.GetUserReducer.getUser)
+  const {payBank, allBank} = useSelector((state:any) => state.payBankReducer)
+  const { payDashTrx, total, currentPage } = useSelector(
+    (state: any) => state.payTrxHistoryReducer
+  );
+  const dispacth = useDispatch();
+  useEffect(() => {
+    dispacth(doTransactionRequest());
+    dispacth(doGetAllBank())
+  }, []);
 
-  // useEffect(() => {
-  //   // user[0]?.role_name != "Guest" ? setIsAdmin(true) : setIsAdmin(false);
-  //   dispatch(doUsacRequest(user[0]?.user_id));
-  // }, [user]);
+  useEffect(() => {
+    // user[0]?.role_name != "Guest" ? setIsAdmin(true) : setIsAdmin(false);
+    dispatch(doUsacRequest(user[0]?.user_id));
+  }, [user]);
 
   const bankAcc = account?.filter(
     (obj: any) => obj.usacType === "Credit Card" || obj.usacType === "Debet"
@@ -66,6 +88,17 @@ export default function Cards() {
     setOpenDetCard(false);
     setOpenDetTrans(false);
   };
+
+
+
+  const { RangePicker } = DatePicker;
+
+  const handleActive = (data: boolean) => {
+    setOpenAdd(data)
+  }
+  const handleClose = (data: boolean) => {
+    setOpenAdd(data)
+  }
   return (
     <>
       <Head>
@@ -76,17 +109,17 @@ export default function Cards() {
       </Head>
       <main>
         <Layouts>
-          <div className="relative w-full h-48 drop-shadow-lg p-4 bg-blue-700 m-auto rounded-xl bg-center bg-cover bg-no-repeat mb-6">
-            <div className="flex justify-between mb-8">
+          <div className="relative w-full h-52 drop-shadow-lg p-4 bg-[#754cff] m-auto rounded-xl bg-center bg-cover bg-no-repeat mb-6">
+            <div className="flex justify-between mb-8 items-center">
               <div className="flex justify-start">
                 <Link href={"/payment"}>
-                  <LeftOutlined className="text-lg text-white mr-4" />
+                  <LeftOutlined className="text-lg mt-1 font-bold text-white mr-2" />
                 </Link>
-                <p className="pt-px text-lg text-white font-bold">My Cards</p>
+                <p className="text-lg text-white font-bold">My Cards</p>
               </div>
               <div>
                 <Button
-                  className="bg-white text-blue-600 font-bold mr-4"
+                  className="bg-white text-[#754cff] h-10 w-32 font-bold mr-4"
                   onClick={() => setOpenAdd(true)}
                 >
                   <CreditCardOutlined />
@@ -94,138 +127,64 @@ export default function Cards() {
                 </Button>
               </div>
             </div>
-            <div className="flex overflow-x-scroll pb-10 overflow-hidden no-scrollbar">
+            <div className="flex overflow-x-auto pb-8 overflow-hidden">
               <div className="flex flex-nowrap lg:ml-40 md:ml-20 ml-10 ">
                 {bankAcc.map((item: any) => (
                   <div className="inline-block px-3">
-                    <div className="h-44 w-80 max-w-xs overflow-hidden rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300 ease-in-out">
-                      <Card bordered={true} hoverable className="bg-blue-200">
-                        <div className="flex justify-between items-center">
-                          <p className="font-semibold">
-                            {/* {
-                              dataBank?.find(
-                                (obj: any) =>
-                                  obj.bankEntityId == data.usacEntityId
-                              )?.bankName
-                            } */}
-                          </p>
-                          <p className="font-semibold text-right">
+                    <div className="w-96 h-56 m-auto bg-red-100 rounded-xl relative text-white shadow-xl transition-transform transform hover:scale-95">
+                      <img
+                        className="relative object-cover w-full h-full rounded-xl"
+                        src={
+                          item.usacType == "Debet"
+                            ? "https://i.imgur.com/kGkSg1v.png"
+                            : "https://i.imgur.com/Zi6v09P.png"
+                        }
+                      />
+
+                      <div className="w-full px-8 absolute top-8">
+                        <div className="flex justify-between">
+                          <div className="">
+                            <p className="font-semiBold text-lg">{allBank.find((obj:any) => obj.bankEntityId == item.usacEntityId)?.bankName}</p>
+                          </div>
+                          <p className="font-semibold text-lg">
                             {item.usacType}
                           </p>
                         </div>
-
-                        <p className="text-2xl font-bold mt-4">
-                          {maskCardNumber(item.usacAccountNumber)}
-                        </p>
-
-                        <div className="flex justify-between mt-6 items-center">
-                          <div>
-                            <p className="text-[12px]">Valid Date :</p>
-                            <p className="font-semibold">{`${item.usacExpmonth}/${item.usacExpyear}`}</p>
-                          </div>
-                          <div>
-                            <p className="text-[12px]">Balance</p>
-                            <p className="font-semibold">
-                              {parseInt(item.usacSaldo).toLocaleString(
-                                "id-ID",
-                                {
-                                  style: "currency",
-                                  currency: "IDR",
-                                  minimumFractionDigits: 0,
-                                  maximumFractionDigits: 0,
-                                }
-                              )}
-                            </p>
+                        <div className="pt-8">
+                          <p className="font-medium tracking-more-wider text-3xl">
+                            {maskCardNumber(item.usacAccountNumber)}
+                          </p>
+                        </div>
+                        <div className="mt-8">
+                          <div className="flex justify-between">
+                            <div className="">
+                              <p className="font-light text-xs">Exp :</p>
+                              <p className="font-medium tracking-wider text-sm">
+                                {`${item.usacExpmonth}/${item.usacExpyear}`}
+                              </p>
+                            </div>
+                            <div className="min-w-[120px]">
+                              <p className="font-light text-xs">
+                                Balance :
+                              </p>
+                              <p className="font-medium tracking-wider text-sm">
+                                {parseInt(item.usacSaldo).toLocaleString(
+                                  "id-ID",
+                                  {
+                                    style: "currency",
+                                    currency: "IDR",
+                                    minimumFractionDigits: 0,
+                                    maximumFractionDigits: 0,
+                                  }
+                                )}
+                              </p>
+                            </div>
                           </div>
                         </div>
-                      </Card>
+                      </div>
                     </div>
                   </div>
                 ))}
-                {bankAcc.map((item: any) => {
-                  //   <div className="inline-block px-3">
-                  //   <div className="h-44 w-80 max-w-xs overflow-hidden rounded-lg shadow-md bg-white hover:shadow-xl transition-shadow duration-300 ease-in-out">
-                  //     <Card bordered={true} hoverable className="bg-blue-200">
-                  //       <div className="flex justify-between items-center">
-                  //         <p className="font-semibold">
-                  //           uuu
-                  //           {/* {
-                  //             bankAcc.find(
-                  //               (obj: any) =>
-                  //                 obj.bankEntityId == item.usacEntityId
-                  //             )?.bankName
-                  //           } */}
-                  //         </p>
-                  //         <p className="font-semibold text-right">
-                  //           {item.usacType}
-                  //         </p>
-                  //       </div>
-                  //       <p className="text-2xl font-bold mt-4">
-                  //         {maskCardNumber(item.usacAccountNumber)}
-                  //       </p>
-                  //       <div className="flex justify-between mt-6 items-center">
-                  //         <div>
-                  //           <p className="text-[12px]">Valid Date :</p>
-                  //           <p className="font-semibold">{`${item.usacExpmonth}/${item.usacExpyear}`}</p>
-                  //         </div>
-                  //         <div>
-                  //           <p className="text-[12px]">Balance</p>
-                  //           <p className="font-semibold">
-                  //             {parseInt(item.usacSaldo).toLocaleString(
-                  //               "id-ID",
-                  //               {
-                  //                 style: "currency",
-                  //                 currency: "IDR",
-                  //                 minimumFractionDigits: 0,
-                  //                 maximumFractionDigits: 0,
-                  //               }
-                  //             )}
-                  //           </p>
-                  //         </div>
-                  //       </div>
-                  //     </Card>
-                  //   </div>
-                  // </div>
-                })}
-
-                {/* <div className="inline-block px-3">
-                  <div className="h-44 w-80 max-w-xs overflow-hidden rounded-lg shadow-md bg-white hover:shadow-xl transition-shadow duration-300 ease-in-out">
-                    <Card
-                      bordered={true}
-                      onClick={() => setOpenDetCard(true)}
-                      className="cursor-pointer"
-                    >
-                      <div className="flex justify-between">
-                        <p className="text-2xl font-bold">**** 1345</p>
-                        <p className="font-bold">Credit Card</p>
-                      </div>
-                      <p className="mt-12">01/2027</p>
-                      <div className="flex justify-between">
-                        <p className="font-bold text-lg">Achmad Rendra</p>
-                        <p>MANDIRI</p>
-                      </div>
-                    </Card>
-                  </div>
-                </div>
-                <div className="inline-block px-3">
-                  <div className="h-44 w-80 max-w-xs overflow-hidden rounded-lg shadow-md bg-white hover:shadow-xl transition-shadow duration-300 ease-in-out">
-                    <Card
-                      bordered={true}
-                      onClick={() => setOpenDetCard(true)}
-                      className="cursor-pointer"
-                    >
-                      <div className="flex justify-between">
-                        <p className="text-2xl font-bold">**** 1345</p>
-                        <p className="font-bold">Credit Card</p>
-                      </div>
-                      <p className="mt-12">01/2027</p>
-                      <div className="flex justify-between">
-                        <p className="font-bold text-lg">Achmad Rendra</p>
-                        <p>MANDIRI</p>
-                      </div>
-                    </Card>
-                  </div>
-                </div> */}
               </div>
             </div>
           </div>
@@ -234,6 +193,10 @@ export default function Cards() {
               show={isOpenAdd}
               clickOk={handleOk}
               clickCancel={handleCancel}
+              handleAct={handleActive}
+              handleCancell={handleClose}
+              dataUser={user}
+              dataBank={payBank}
             />
           ) : null}
           {isOpenDetCard ? (
@@ -250,49 +213,68 @@ export default function Cards() {
               clickCancel={handleCancel}
             />
           ) : null}
-          <Card title="History Transaction" className="mt-24">
-            <Card
-              type="inner"
-              title="TP#20230123-0001"
-              extra={"23-01-2023"}
-              className="mb-4"
+
+          <div className="mt-32 mb-6 drop-shadow-lg m-auto border-b-md rounded-md ">
+            <div className="flex justify-between p-6 bg-white rounded-lg">
+              <p className="text-lg font-semibold text-[#252525]">
+                History Transaction
+              </p>
+              <RangePicker />
+            </div>
+            <List
+              className="pb-4"
+              pagination={{
+                current: currentPage,
+                total: total,
+                pageSize: 10,
+              }}
             >
-              <div>
-                <p className="font-bold text-lg">Top Up</p>
-                <p className="text-md">H-Pay User</p>
-                <p className="text-right text-md text-green-600">Rp. 500.000</p>
-                <p className="text-right text-md">
-                  ... 1345 - Credit Card (CIMB)
-                </p>
-              </div>
-            </Card>
-            <Card
-              type="inner"
-              title="TRB#20230123-0001"
-              extra={"23-01-2023"}
-              className="mb-4"
-            >
-              <div>
-                <p className="font-bold text-lg">
-                  Booking Order BO#20230123-0002
-                </p>
-                <p className="text-md">Hotel ABC</p>
-                <p className="text-right text-md text-red-600">Rp. 500.000</p>
-              </div>
-            </Card>
-            <Card
-              type="inner"
-              title="RF#20230123-0001"
-              extra={"23-01-2023"}
-              className="mb-4 hover:cursor-pointer"
-              onClick={() => setOpenDetTrans(true)}
-            >
-              <div>
-                <p className="font-bold text-lg">Refund BO#20230123-0002</p>
-                <p className="text-right text-md text-green-600">Rp. 500.000</p>
-              </div>
-            </Card>
-          </Card>
+              {payDashTrx.map((item: any) => (
+                <Card
+                  title={item.transactionNumber}
+                  extra={item.trxDate?.split("T")[0]}
+                  className="m-4"
+                >
+                  <div>
+                    <div className="flex justify-between">
+                      <p className="font-bold text-lg">
+                        {item.transactionNote}
+                      </p>
+                      {item.debit != 0 ? (
+                        <p className="text-md text-green-600 font-semibold">
+                          {parseInt(item.debit).toLocaleString("id-ID", {
+                            style: "currency",
+                            currency: "IDR",
+                            minimumFractionDigits: 0,
+                            maximumFractionDigits: 0,
+                          })}
+                        </p>
+                      ) : (
+                        <p className="text-md text-red-600 font-semibold">
+                          {parseInt(item.credit).toLocaleString("id-ID", {
+                            style: "currency",
+                            currency: "IDR",
+                            minimumFractionDigits: 0,
+                            maximumFractionDigits: 0,
+                          })}
+                        </p>
+                      )}
+                    </div>
+                    <div className="flex justify-between">
+                      <p className="text-md">
+                        {item.orderNumber ? item.orderNumber : "Dompet Realta"}
+                      </p>
+                      <p className="text-md font-semibold">
+                        {item.sourcePaymentName == null
+                          ? "Cash"
+                          : item.sourcePaymentName}
+                      </p>
+                    </div>
+                  </div>
+                </Card>
+              ))}
+            </List>
+          </div>
         </Layouts>
       </main>
     </>

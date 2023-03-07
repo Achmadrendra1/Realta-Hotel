@@ -105,8 +105,8 @@ export class BookingOrdersService {
         };
       })
       .catch((err) => {
-        return `Maaf, ada kesalahan masukan` + err;
-        // console.log(err)
+        console.log(err)
+        // return `Maaf, ada kesalahan masukan` + err;
       });
   }
 
@@ -205,7 +205,7 @@ export class BookingOrdersService {
 
     //Get UserReview untuk Booking
     async findSpReview() {
-        return await this.bookingOrdersRepository.query('Select * From hotel.userreview')
+        return await this.bookingOrdersRepository.query('Select * From hotel.user_review')
     }
 
     async getInvoice () {

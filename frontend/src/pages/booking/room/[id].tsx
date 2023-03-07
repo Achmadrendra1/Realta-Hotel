@@ -52,7 +52,7 @@ import Link from "next/link";
 
 export default function bookingRoom() {
   const root = useRouter();
-  const { id } = root.query || {};
+  const { id } = root.query;
   const dispatch = useDispatch();
 
   //useEffect Reducer

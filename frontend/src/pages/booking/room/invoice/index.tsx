@@ -10,7 +10,7 @@ import ReactToPrint from "react-to-print";
 
 export default function index() {
   let root = useRouter();
-  const { id } = root.query || {};
+  const { id } = root.query;
   const dispatch = useDispatch();
 
   const router = useRouter();
@@ -23,15 +23,15 @@ export default function index() {
     dispatch(getSpInvoice());
   }, [id]);
 
-  const Invoice = invoiceView?.filter(
-    (item: any) => item.boor_order_number == id
+  const Invoice = invoiceView.filter(
+    (item: any) => item.boor_order_number === id
   );
 
-  console.log(invoiceView, id)
+  console.log(invoiceView, id);
   const boor_order_number =
     Invoice?.length > 0 ? Invoice[0].boor_order_number : "";
   const boor_order_date = Invoice?.length > 0 ? Invoice[0].boor_order_date : "";
-  const boor_is_paid = Invoice[0]?.boor_is_paid;
+  const boor_is_paid = Invoice?.length > 0 ? Invoice[0]?.boor_is_paid : "";
   const boor_pay_type = Invoice?.length > 0 ? Invoice[0].boor_pay_type : "";
   const user_full_name = Invoice?.length > 0 ? Invoice[0].user_full_name : "";
   const user_phone_number =
@@ -166,7 +166,7 @@ export default function index() {
           <ReactToPrint
             trigger={() => (
               <div className="mr-2">
-                <Buttons funcs={()=>''}>Print</Buttons>
+                <Buttons funcs={() => ""}>Print</Buttons>
               </div>
             )}
             content={() => componentRef.current}
@@ -177,96 +177,94 @@ export default function index() {
         </div>
       </div>
 
-      <div
-        id="invoice"
-        ref={componentRef}
-        className=" w-11/12 shadow-lg m-auto p-4"
-      >
-        <h1 className="text-2xl mb-3 font-bold">Invoice {id}</h1>
+      <div id="invoice" ref={componentRef} className="py-6">
+        <div className=" w-11/12 shadow-lg m-auto p-4">
+          <h1 className="text-2xl mb-3 font-bold">Invoice {id}</h1>
 
-        <Row>
-          {invoice1.map((item: any, index: any) => (
-            <Col span={4} key={index}>
-              <p className="text-lg font-semibold mb-1">{item.title}</p>
-              <p className="text-md">{item.field}</p>
+          <Row>
+            {invoice1.map((item: any, index: any) => (
+              <Col span={4} key={index}>
+                <p className="text-lg font-semibold mb-1">{item.title}</p>
+                <p className="text-md">{item.field}</p>
+              </Col>
+            ))}
+          </Row>
+          <Divider dashed style={{ borderColor: "black" }} />
+
+          <h1 className="text-2xl mb-3 font-bold">Customer </h1>
+
+          <Row>
+            {invoice2.map((item: any, index: any) => (
+              <Col span={4} key={index}>
+                <h2 className="text-lg font-semibold mb-1">{item.title}</h2>
+                <h3 className="text-md">{item.field}</h3>
+              </Col>
+            ))}
+          </Row>
+          <Divider dashed style={{ borderColor: "black" }} />
+
+          <h1 className="text-2xl mb-3 font-bold">Billing </h1>
+
+          <Row className="flex">
+            <Col span={4} className="flex">
+              <div>
+                <h2 className="text-lg font-semibold mb-1">Facilities</h2>
+                <h3 className="text-md">{getInvoice.faci_name}</h3>
+              </div>
             </Col>
-          ))}
-        </Row>
-        <Divider dashed style={{ borderColor: "black" }} />
-
-        <h1 className="text-2xl mb-3 font-bold">Customer </h1>
-
-        <Row>
-          {invoice2.map((item: any, index: any) => (
-            <Col span={4} key={index}>
-              <h2 className="text-lg font-semibold mb-1">{item.title}</h2>
-              <h3 className="text-md">{item.field}</h3>
+            <Col span={4} className="flex">
+              <div>
+                <h2 className="text-lg font-semibold mb-1">Qty</h2>
+                <h3 className="text-md">{getInvoice.boor_total_room}</h3>
+              </div>
             </Col>
-          ))}
-        </Row>
-        <Divider dashed style={{ borderColor: "black" }} />
-
-        <h1 className="text-2xl mb-3 font-bold">Billing </h1>
-
-        <Row className="flex">
-          <Col span={4} className="flex">
-            <div>
-              <h2 className="text-lg font-semibold mb-1">Facilities</h2>
-              <h3 className="text-md">{getInvoice.faci_name}</h3>
-            </div>
-          </Col>
-          <Col span={4} className="flex">
-            <div>
-              <h2 className="text-lg font-semibold mb-1">Qty</h2>
-              <h3 className="text-md">{getInvoice.boor_total_room}</h3>
-            </div>
-          </Col>
-          <Col span={4} className="flex">
-            <div>
-              <h2 className="text-lg font-semibold mb-1">Total Guests</h2>
-              <h3 className="text-md">
-                {getInvoice.borde_adults} Adults {getInvoice.borde_kids} Kids
-              </h3>
-            </div>
-          </Col>
-          <Col span={4} className="flex">
-            <div>
-              <h2 className="text-lg font-semibold mb-1">Price</h2>
-              <h3 className="text-md">{getInvoice.borde_price}</h3>
-            </div>
-          </Col>
-          <Col span={4} className="flex">
-            <div>
-              <h2 className="text-lg font-semibold mb-1">Discount</h2>
-              <h3 className="text-md">{getInvoice.borde_discount}</h3>
-            </div>
-          </Col>
-          <Col span={4} className="flex">
-            <div>
-              <h2 className="text-lg font-semibold mb-1">Sub Total</h2>
-              <h3 className="text-md">{getInvoice.borde_subtotal}</h3>
-            </div>
-          </Col>
-        </Row>
-        <Divider dashed style={{ borderColor: "black" }} />
-        <div className="w-10/12 flex justify-between items-center">
-          <QRCode value={id} size={96} className="ml-14" />
-          <div className="w-1/4">
-            <div className="flex justify-between min-w-[350px]">
-              <h2 className="flex text-lg font-semibold mb-1 mr-5">
-                Total Amount
-              </h2>
-              <h2 className="flex text-lg font-semibold mb-1">
-                {getInvoice.borde_subtotal}
-              </h2>
-            </div>
-            <div className="flex justify-between min-w-[350px]">
-              <h2 className="flex text-lg font-semibold mb-1 mr-5">
-                Payment Amount
-              </h2>
-              <h2 className="flex text-lg font-semibold mb-1">
-                {getInvoice.borde_subtotal}
-              </h2>
+            <Col span={4} className="flex">
+              <div>
+                <h2 className="text-lg font-semibold mb-1">Total Guests</h2>
+                <h3 className="text-md">
+                  {getInvoice.borde_adults} Adults {getInvoice.borde_kids} Kids
+                </h3>
+              </div>
+            </Col>
+            <Col span={4} className="flex">
+              <div>
+                <h2 className="text-lg font-semibold mb-1">Price</h2>
+                <h3 className="text-md">{getInvoice.borde_price}</h3>
+              </div>
+            </Col>
+            <Col span={4} className="flex">
+              <div>
+                <h2 className="text-lg font-semibold mb-1">Discount</h2>
+                <h3 className="text-md">{getInvoice.borde_discount}</h3>
+              </div>
+            </Col>
+            <Col span={4} className="flex">
+              <div>
+                <h2 className="text-lg font-semibold mb-1">Sub Total</h2>
+                <h3 className="text-md">{getInvoice.borde_subtotal}</h3>
+              </div>
+            </Col>
+          </Row>
+          <Divider dashed style={{ borderColor: "black" }} />
+          <div className="w-10/12 flex justify-between items-center">
+            <QRCode value={id} size={96} className="ml-14" />
+            <div className="w-1/4">
+              <div className="flex justify-between min-w-[350px]">
+                <h2 className="flex text-lg font-semibold mb-1 mr-5">
+                  Total Amount
+                </h2>
+                <h2 className="flex text-lg font-semibold mb-1">
+                  {getInvoice.borde_subtotal}
+                </h2>
+              </div>
+              <div className="flex justify-between min-w-[350px]">
+                <h2 className="flex text-lg font-semibold mb-1 mr-5">
+                  Payment Amount
+                </h2>
+                <h2 className="flex text-lg font-semibold mb-1">
+                  {getInvoice.borde_subtotal}
+                </h2>
+              </div>
             </div>
           </div>
         </div>

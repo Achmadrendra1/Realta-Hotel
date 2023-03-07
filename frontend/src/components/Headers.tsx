@@ -120,7 +120,7 @@ const Headers = ({
     localStorage.removeItem("token");
     dispatch(doLogout())
     setIsLogin(false);
-    router.push("../");
+    router.push("/");
   };
 
   //Dropdown menu user & admin

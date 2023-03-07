@@ -2,6 +2,7 @@ import PaymentConst from "@/Redux/Constant/Payment/PaymentConst";
 
 const initialState = {
   payBank: [],
+  allBank: [],
   error: null,
   total: 0,
   currentPage: 1,
@@ -18,6 +19,15 @@ function payBankReducer(state = initialState, action: any) {
         total: action.payload.count,
         currentPage: action.payload.currentPage,
       };
+    case PaymentConst.GET_ALL_BANK_REQUEST:
+      return {
+        ...state
+      }
+    case PaymentConst.GET_ALL_BANK_REQUEST_SUCCESS:
+      return {
+        ...state,
+        allBank : action.payload
+      }
     case PaymentConst.ADD_BANK:
       return { ...state };
     case PaymentConst.ADD_BANK_SUCCESS:
