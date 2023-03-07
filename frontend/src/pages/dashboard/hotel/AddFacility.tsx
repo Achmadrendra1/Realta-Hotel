@@ -1,10 +1,11 @@
+import withAuth from "@/PrivateRoute/WithAuth";
 import { addFacility } from "@/Redux/Action/Hotel/HotelAction";
 import { Form, Input, Select, Typography } from "antd";
 import { useFormik } from "formik";
 import React from "react";
 import { useDispatch } from "react-redux";
 
-export default function AddFacilities(props: any) {
+export default withAuth( function AddFacilities(props: any) {
   const dispatch = useDispatch();
   const { Title, Text } = Typography;
   const [form] = Form.useForm();
@@ -303,4 +304,4 @@ export default function AddFacilities(props: any) {
       </div>
     </Form>
   );
-}
+})
