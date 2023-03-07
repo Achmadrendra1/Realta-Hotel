@@ -59,7 +59,7 @@ export default function Login() {
 
   const contentStyle: React.CSSProperties = {
     height: "160px",
-    color: "#fff",
+    color: "#f2f1fa",
     // textAlign: 'center',
     backgroundColor: "#252525",
     backdropFilter: "blur(10px)",
@@ -72,7 +72,7 @@ export default function Login() {
     
     <Layouts>
       {contextHolder}
-      <Card className="m-12 mx-52 drop-shadow-md  bg-sky-100 ">
+      <Card className="m-12 mx-52 drop-shadow-md bg-[#754cff] ">
         <Row>
           <Col span={14}>
             <Card className={`p-2 mr-3  ${loginStyle.cardLogin} no-border`}>
@@ -180,10 +180,10 @@ export default function Login() {
           {/* Form */}
           <Col className="ml-3">
             <div className="container mt-16 mb-12  ">
-              <h1 className="text-3xl font-bold text-gray-700 mb-2">
-                Welcome back.
+              <h1 className="text-3xl font-bold text-[#f2f1fa] mb-2">
+                Welcome Back
               </h1>
-              <p className="font-semibold text-gray-500">
+              <p className="font-semibold text-[#252525]">
                 Login to your account now
               </p>
             </div>
@@ -194,13 +194,13 @@ export default function Login() {
             >
               <label
                 htmlFor="Email"
-                className="block text-gray-500 font-semibold"
+                className="block text-[#252525] font-semibold"
               >
                 Email
               </label>
               <Form.Item
                 name="email"
-                className="mb-2"
+                className="mb-2 "
                 rules={[
                   { required: true, message: "Please input your Email!" },
                 ]}
@@ -213,7 +213,7 @@ export default function Login() {
               </Form.Item>
               <label
                 htmlFor="Password"
-                className="block text-gray-500 font-semibold"
+                className="block text-[#252525] font-semibold"
               >
                 Password
               </label>
@@ -235,9 +235,9 @@ export default function Login() {
               >
                 Login
               </button>
-              <p className="text-gray-500 mx-12 mt-3 font-semibold">
+              <p className="text-[#252525] mx-12 mt-3 font-semibold">
                 Don't have an account?
-                <Link href="/users/register" className="ml-1 text-blue-700">
+                <Link href="/users/register" className="ml-1 text-[#f1f2fa]">
                   <motion.button
                    whileHover={{ scale: 1.1 }}
                    whileTap={{ scale: 0.9 }}

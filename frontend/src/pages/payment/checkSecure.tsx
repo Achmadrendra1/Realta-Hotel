@@ -13,13 +13,13 @@ export default function CheckSecure(props: any) {
   const { dataPayment, dataBooking } = props;
   const [pin, setPin] = useState(["", "", "", ""]);
   const [cvv, setCVV] = useState(["", "", ""]);
-  const dispacth = useDispatch();
+  const dispatch = useDispatch();
 
   const [finalForm, setFinalForm] = useState(dataPayment);
   // console.log(dataPayment)
 
   const onComplete = () => {
-    dispacth(doCheckSecureCode(finalForm));
+    dispatch(doCheckSecureCode(finalForm));
   };
 
   const { error, messages, validate } = useSelector(
@@ -30,7 +30,7 @@ export default function CheckSecure(props: any) {
   const [isLoading, setLoading] = useState(false);
   const [messageApi, contextHolder] = message.useMessage();
   const router = useRouter();
-  const dispatch = useDispatch();
+
 
   useEffect(() => {
     if (messages != null) {
@@ -40,7 +40,8 @@ export default function CheckSecure(props: any) {
         setLoading(true);
         // setTimeout(() => props.handleCancell(false), 5000);
         if(dataPayment.trxType == 'ORM'){
-          dispacth(doCreateTransaction(dataPayment));
+          dispatch(doCreateTransaction(dataPayment));
+          // console.log(dataPayment)
           {
             messageApi
             .open({
@@ -50,12 +51,15 @@ export default function CheckSecure(props: any) {
               })
               .then(() => props.handleCancell(false))
               .then(() => message.success("Payment Success", 3))
-              .then(() => router.push('/restaurant/bill'));
+              .then(() => router.push({
+                pathname: `/restaurant/bill`,
+                query: {id : dataPayment.orderNumber}}));
           }
         } else {
           const boor_id = dataBooking.boor_order_number;
-          dispacth(doCreateTransaction(dataPayment));
           dispatch(insertBooking(dataBooking));
+          dispatch(doCreateTransaction(dataPayment));
+          // console.log(dataBooking, dataPayment)
           {
             messageApi
             .open({
@@ -152,11 +156,22 @@ export default function CheckSecure(props: any) {
       >
         <Spin spinning={isLoading} size="large">
           <p className="text-lg font-bold mb-4 text-center">
-            Input Your {dataPayment?.payType || dataBooking?.boor_pay_type != "PG" ? "CVV" : "PIN"}
+            Input Your {dataPayment?.payType == "PG" || dataBooking?.boor_pay_type == "PG" ? "PIN" : "CVV"}
           </p>
           <div className="flex justify-center">
-            {dataPayment?.payType || dataBooking?.boor_pay_type != "PG"
-              ? cvv.map((value, index) => (
+            {dataPayment?.payType == "PG" || dataBooking?.boor_pay_type == "PG"
+              ?pin.map((value, index) => (
+                  <Input
+                    key={index}
+                    id={`pin-${index + 1}`}
+                    type="text"
+                    maxLength={1}
+                    value={value}
+                    onChange={(event) => handleChangePin(index, event)}
+                    onKeyDown={(event) => handleBackspace(index, event)}
+                    className="h-[45px] mx-4 focus:border-sky-500 w-[45px] text-center"
+                  />
+                )) :  cvv.map((value, index) => (
                   <Input
                     key={index}
                     id={`pin-${index + 1}`}
@@ -168,18 +183,7 @@ export default function CheckSecure(props: any) {
                     className="h-[45px] mx-4 focus:border-sky-500 w-[45px] text-center"
                   />
                 ))
-              : pin.map((value, index) => (
-                  <Input
-                    key={index}
-                    id={`pin-${index + 1}`}
-                    type="text"
-                    maxLength={1}
-                    value={value}
-                    onChange={(event) => handleChangePin(index, event)}
-                    onKeyDown={(event) => handleBackspace(index, event)}
-                    className="h-[45px] mx-4 focus:border-sky-500 w-[45px] text-center"
-                  />
-                ))}
+              }
           </div>
           {msgValidate == "Your PIN is correct! Please Wait" ? (
             <p className="text-center mt-4 text-green-500">{msgValidate}</p>

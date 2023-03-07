@@ -192,48 +192,23 @@ $$ LANGUAGE PLPGSQL;
 -- select * from resto.ordermenuscomplete('MENUS#20230301-0002',1)
 -- 4. function resto.resto_detail (-)
 -- 5. SELECT ORDER MENU
-CREATE OR REPLACE FUNCTION resto.ordermenuscomplete(orderNumber text, user_id int) RETURNS TABLE (
-		orme_id int,
-		orme_order_number varchar(20),
-		orme_order_date date,
-		orme_total_item INT,
-		orme_total_discount MONEY,
-		orme_total_amount MONEY,
-		orme_pay_type varchar(2),
-		orme_cardnumber text,
-		orme_is_paid varchar(2),
-		orme_modified_date date,
-		orme_user_id int,
-		omde_id int,
-		orme_price money,
-		orme_qty int,
-		orme_subtotal money,
-		omde_orme_id int,
-		omde_reme_id int,
-		reme_name text,
-		trx_number text,
-		payment_Type text
-	) AS $$
-DECLARE dataordermenus CURSOR FOR (
-		SELECT resto.order_menus.orme_id,
-			resto.order_menus.orme_order_number,
-			resto.order_menus.orme_order_date,
-			resto.order_menus.orme_total_item,
-			resto.order_menus.orme_total_discount,
-			resto.order_menus.orme_total_amount,
-			resto.order_menus.orme_pay_type,
-			resto.order_menus.orme_cardnumber,
-			resto.order_menus.orme_is_paid,
-			resto.order_menus.orme_modified_date,
-			resto.order_menus.orme_user_id,
-			resto.order_menu_detail.omde_id,
-			resto.order_menu_detail.orme_price,
-			resto.order_menu_detail.orme_qty,
-			resto.order_menu_detail.orme_subtotal,
-			resto.order_menu_detail.omde_orme_id,
-			resto.order_menu_detail.omde_reme_id,
-			resto.resto_menus.reme_name,
-			(
+CREATE OR REPLACE FUNCTION resto.ordermenuscomplete(orderNumber text) 
+	RETURNS TABLE (
+		orme_id int, orme_order_number varchar(20), orme_order_date date, orme_total_item INT, orme_total_discount MONEY,orme_total_amount MONEY,
+		orme_pay_type varchar(2), orme_cardnumber text, orme_is_paid varchar(2), orme_modified_date date, orme_user_id int, omde_id int,
+		orme_price money, orme_qty int, orme_subtotal money, omde_orme_id int, omde_reme_id int,
+		reme_name text, trx_number text, payment_type text
+	) 
+	AS 
+	$$
+	
+	DECLARE 
+		dataordermenus CURSOR FOR (
+			SELECT resto.order_menus.orme_id, resto.order_menus.orme_order_number,resto.order_menus.orme_order_date, resto.order_menus.orme_total_item,
+				resto.order_menus.orme_total_discount, resto.order_menus.orme_total_amount, resto.order_menus.orme_pay_type,
+				resto.order_menus.orme_cardnumber, resto.order_menus.orme_is_paid,resto.order_menus.orme_modified_date,resto.order_menus.orme_user_id,
+				resto.order_menu_detail.omde_id,resto.order_menu_detail.orme_price,resto.order_menu_detail.orme_qty,resto.order_menu_detail.orme_subtotal,
+				resto.order_menu_detail.omde_orme_id,resto.order_menu_detail.omde_reme_id,resto.resto_menus.reme_name,(
 				select "transactionNumber"
 				from payment.user_transactions
 				where "orderNumber" = resto.order_menus.orme_order_number
@@ -243,41 +218,26 @@ DECLARE dataordermenus CURSOR FOR (
 				from payment.user_transactions
 				where "orderNumber" = resto.order_menus.orme_order_number
 			) "payment_Type"
-		FROM resto.order_menus
-			RIGHT JOIN resto.order_menu_detail ON resto.order_menus.orme_id = resto.order_menu_detail.omde_orme_id
-			JOIN resto.resto_menus ON resto.resto_menus.reme_id = resto.order_menu_detail.omde_reme_id
-		WHERE resto.order_menus.orme_order_number = orderNumber
-			AND order_menus.orme_user_id = user_id
-	);
-BEGIN OPEN dataordermenus;
-LOOP FETCH NEXT
-FROM dataordermenus INTO orme_id,
-	orme_order_number,
-	orme_order_date,
-	orme_total_item,
-	orme_total_discount,
-	orme_total_amount,
-	orme_pay_type,
-	orme_cardnumber,
-	orme_is_paid,
-	orme_modified_date,
-	orme_user_id,
-	omde_id,
-	orme_price,
-	orme_qty,
-	orme_subtotal,
-	omde_orme_id,
-	omde_reme_id,
-	reme_name,
-	trx_number,
-	payment_Type;
-EXIT
-WHEN NOT FOUND;
-RETURN NEXT;
-END LOOP;
-CLOSE dataordermenus;
-END;
-$$ LANGUAGE PLPGSQL;
+			FROM resto.order_menus
+				RIGHT JOIN resto.order_menu_detail ON resto.order_menus.orme_id = resto.order_menu_detail.omde_orme_id
+				JOIN resto.resto_menus ON resto.resto_menus.reme_id = resto.order_menu_detail.omde_reme_id
+			WHERE resto.order_menus.orme_order_number = orderNumber
+-- 			AND order_menus.orme_user_id = user_id
+		);
+BEGIN 
+	OPEN dataordermenus;
+		LOOP FETCH NEXT FROM dataordermenus 
+			INTO orme_id,orme_order_number,orme_order_date,orme_total_item,orme_total_discount,
+				orme_total_amount,orme_pay_type,orme_cardnumber,orme_is_paid,orme_modified_date,orme_user_id,
+				omde_id,orme_price,orme_qty,orme_subtotal,omde_orme_id,omde_reme_id,reme_name, trx_number, payment_type;
+		EXIT WHEN NOT FOUND;
+		RETURN NEXT;
+		END LOOP;
+	CLOSE dataordermenus;
+	END;
+	
+$$ 
+LANGUAGE PLPGSQL;
 -- ORDERS
 CREATE OR REPLACE FUNCTION resto.orders(
 		ormeOrderNumber text,
