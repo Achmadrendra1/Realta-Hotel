@@ -8,12 +8,14 @@ import {
   Put,
   UseInterceptors,
   UploadedFile,
+  Res,
 } from '@nestjs/common';
 import { ServiceTask } from 'src/entities/ServiceTask';
 import { CategoryGroupService } from 'src/Service/Master/category_group/category_group.service';
 import { CategoryGroup } from 'src/entities/CategoryGroup';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
+import { join } from 'path';
 
 @Controller('category')
 export class CategoryGroupController {
@@ -36,16 +38,6 @@ export class CategoryGroupController {
   categoryName(@Param('name') params): Promise<any> {
     return this.CategoryGroupService.getCategoryGroupByName(params);
   }
-  //find by Provinces
-  @Get('/policy/:name')
-  categoryPoli(@Param('name') params): Promise<any> {
-    return this.CategoryGroupService.getCategoryGroupByPolicy(params);
-  }
-  //find by Hotel
-  @Get('/facility/:name')
-  categoryFaci(@Param('name') params): Promise<any> {
-    return this.CategoryGroupService.getCategoryGroupByFacility(params);
-  }
 
   //create new
   @Post('insert')
@@ -60,6 +52,7 @@ export class CategoryGroupController {
     }
   }
 
+  // upload
   @Post('upload')
   @UseInterceptors(
     FileInterceptor('file', {
@@ -83,6 +76,11 @@ export class CategoryGroupController {
       };
     }
   }
+  @Get('public/upload/:fileName')
+  getPhoto(@Param('fileName') fileName: string, @Res() res) {
+    return res.sendFile(fileName, { root: join('public/upload') });
+  }
+  // upload end
 
   //update
   @Put('edit/:id')

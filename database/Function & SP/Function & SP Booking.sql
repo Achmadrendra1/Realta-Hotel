@@ -1,22 +1,31 @@
 --Get Special Offers Coupons
 CREATE VIEW booking.getSpecialOffers
 AS
-SELECT * 
+SELECT 
+spof_id "spofId",
+spof_name  "spofName",
+spof_description "spofDescription",
+spof_type "spofType",
+spof_discount "spofDiscount",
+spof_start_date "spofStartDate",
+spof_end_date "spofEndDate",
+spof_min_qty "spofMinQty",
+spof_max_qty "spofMaxQty",
+spof_modified_date "spofModifiedDate"
 FROM booking.special_offers spof
-JOIN (
+LEFT JOIN (
 	SELECT soco_spof_id, COUNT(soco_spof_id) AS socount
 	FROM booking.special_offer_coupons
 	GROUP BY soco_spof_id
 ) soco
 ON spof.spof_id = soco.soco_spof_id
 WHERE
-(spof.spof_max_qty > soco.socount 
-OR 
-soco.socount IS NULL)
-AND
-(spof.spof_start_date <= CURRENT_TIMESTAMP
-AND
-spof.spof_end_date >= CURRENT_TIMESTAMP)
+spof.spof_start_date <= CURRENT_TIMESTAMP
+AND spof.spof_end_date >= CURRENT_TIMESTAMP
+AND (
+	spof.spof_max_qty > COALESCE(soco.socount, 0)
+	OR soco.socount IS NULL
+)
 
 --Booking.CreateBooking()
 CREATE OR REPLACE PROCEDURE booking.InsertBooking(
@@ -148,225 +157,130 @@ COMMIT;
 END;$$;
 
 --Get Booking Invoice
-CREATE OR REPLACE PROCEDURE booking.getBookingInvoice()
-AS $$
-BEGIN
-	CREATE VIEW booking.getBookingInvoice 
-	AS 
-	SELECT users.user_id, 
-	users.user_full_name, 
-	users.user_phone_number, 
-	usme.usme_memb_name, 
-	usme.usme_promote_date, 
-	usme.usme_points,
-	boor.boor_id,
-	boor.boor_order_number,
-	boor.boor_order_date,
-	boor.boor_is_paid,
-	boor.boor_pay_type,
-	boor.boor_total_room,
-	boor.boor_total_amount,
-	borde.borde_adults,
-	borde.borde_kids,
-	borde.borde_price,
-	borde.borde_discount,
-	borde.borde_subtotal,
-	faci.faci_name,
-    patr.patr_trx_id,
-	patr.patr_modified_date
-	
-	FROM users.users users
-	JOIN users.user_members usme
-	ON users.user_id = usme.usme_user_id
-	JOIN booking.booking_orders boor
-	ON users.user_id = boor.boor_user_id
-	JOIN booking.booking_order_detail borde
-	ON boor.boor_id = borde.border_boor_id
-	JOIN hotel.facilities faci
-	ON borde.borde_faci_id = faci.faci_id
-    JOIN payment.payment_transaction patr
-	ON boor.boor_order_number = patr.patr_order_number;
-END; $$
-LANGUAGE plpgsql;
+CREATE VIEW booking.getBookingInvoice 
+AS 
+SELECT users.user_id, 
+users.user_full_name, 
+users.user_phone_number, 
+usme.usme_memb_name, 
+usme.usme_promote_date, 
+usme.usme_points,
+boor.boor_id,
+boor.boor_order_number,
+boor.boor_order_date,
+boor.boor_is_paid,
+boor.boor_pay_type,
+boor.boor_total_room,
+boor.boor_total_amount,
+borde.borde_adults,
+borde.borde_kids,
+borde.borde_price,
+borde.borde_discount,
+borde.borde_subtotal,
+faci.faci_name,
+patr.patr_trx_id,
+patr.patr_modified_date
+
+FROM users.users users
+JOIN users.user_members usme
+ON users.user_id = usme.usme_user_id
+JOIN booking.booking_orders boor
+ON users.user_id = boor.boor_user_id
+JOIN booking.booking_order_detail borde
+ON boor.boor_id = borde.border_boor_id
+JOIN hotel.facilities faci
+ON borde.borde_faci_id = faci.faci_id
+JOIN payment.payment_transaction patr
+ON boor.boor_order_number = patr.patr_order_number
+
+SELECT * FROM booking.getBookingInvoice
 
 
 --Get Hotel
-CREATE OR REPLACE PROCEDURE hotel.viewHotel()
-AS $$
-BEGIN
-    CREATE VIEW hotel.viewHotel AS 
-	select h.hotel_id, h.hotel_name, h.hotel_description, h.hotel_rating_star, h.hotel_phonenumber,
-		  faci_group.faci_hotelall,faci_group_rprice.faci_rateprice,faci_group_lprice.faci_lowprice,faci_group_hprice.faci_highprice,string_agg(photo_hotel.url, ',')as url, addrees.place,faci_room_group.faci_hotelroom
-   from hotel.hotels h 
-   join 
-   (select faci_hotel_id, string_agg(faci_name, ', ')as faci_hotelall
-   from hotel.facilities group by faci_hotel_id)faci_group
-   on h.hotel_id = faci_group.faci_hotel_id
-   join
-   (select faci_hotel_id, string_agg(concat(' ',faci_rate_price), '- ')as faci_rateprice
-   from hotel.facilities 
-	where faci_cagro_id = 1
-	group by faci_hotel_id)faci_group_rprice
-   on h.hotel_id = faci_group_rprice.faci_hotel_id
-   join
-   (select faci_hotel_id, string_agg(concat(' ',faci_low_price), '- ')as faci_lowprice
-   from hotel.facilities 
-	where faci_cagro_id = 1
-	group by faci_hotel_id)faci_group_lprice
-   on h.hotel_id = faci_group_lprice.faci_hotel_id
-   join 
-    (select faci_hotel_id, string_agg(concat(' ',faci_high_price), '- ')as faci_highprice
-   from hotel.facilities
-	where faci_cagro_id = 1
-	group by faci_hotel_id)faci_group_hprice
-   on h.hotel_id = faci_group_hprice.faci_hotel_id
-   join 
-   (select (f.faci_hotel_id) as hotel_id, faci_cagro_id, f.faci_name, (ph.fapho_url) as url, ph.fapho_primary 
-   from hotel.facility_photo ph
-   join hotel.facilities f on ph.fapho_faci_id = f.faci_id 
-   where ph.fapho_primary = '1' and f.faci_cagro_id=1)photo_hotel
-   on h.hotel_id = photo_hotel.hotel_id
-   join
-   (select faci_hotel_id, string_agg(faci_name, ', ')as faci_hotelroom
-   from hotel.facilities 
-	where faci_cagro_id = 1
-	group by faci_hotel_id
-  	)faci_room_group
-   on h.hotel_id = faci_room_group.faci_hotel_id
-   join
-   (select (a.addr_id)hotel_addr_id, concat(a.addr_line1,' ',p.prov_name,' ',c.country_name,' ',r.region_name)place 
-	from master.address a
-	join master.proviences p on a.addr_prov_id = p.prov_id
-	join master.country c on p.prov_country_id = c.country_id
-	join master.regions r on r.region_code = c.country_region_id)addrees
-	on h.hotel_addr_id = addrees.hotel_addr_id group by h.hotel_id, faci_group_rprice.faci_rateprice, faci_group.faci_hotelall,faci_group_lprice.faci_lowprice,faci_group_hprice.faci_highprice, addrees.place,faci_room_group.faci_hotelroom;
-END; $$
-LANGUAGE plpgsql;
+CREATE VIEW hotel.viewHotel AS 
+select h.hotel_id, h.hotel_name, h.hotel_description, h.hotel_rating_star, h.hotel_phonenumber,
+		faci_group.faci_hotelall,faci_group_rprice.faci_rateprice,faci_group_lprice.faci_lowprice,faci_group_hprice.faci_highprice,string_agg(photo_hotel.url, ',')as url, addrees.place,faci_room_group.faci_hotelroom
+from hotel.hotels h 
+join 
+(select faci_hotel_id, string_agg(faci_name, ', ')as faci_hotelall
+from hotel.facilities group by faci_hotel_id)faci_group
+on h.hotel_id = faci_group.faci_hotel_id
+join
+(select faci_hotel_id, string_agg(concat(' ',faci_rate_price), '- ')as faci_rateprice
+from hotel.facilities 
+where faci_cagro_id = 1
+group by faci_hotel_id)faci_group_rprice
+on h.hotel_id = faci_group_rprice.faci_hotel_id
+join
+(select faci_hotel_id, string_agg(concat(' ',faci_low_price), '- ')as faci_lowprice
+from hotel.facilities 
+where faci_cagro_id = 1
+group by faci_hotel_id)faci_group_lprice
+on h.hotel_id = faci_group_lprice.faci_hotel_id
+join 
+(select faci_hotel_id, string_agg(concat(' ',faci_high_price), '- ')as faci_highprice
+from hotel.facilities
+where faci_cagro_id = 1
+group by faci_hotel_id)faci_group_hprice
+on h.hotel_id = faci_group_hprice.faci_hotel_id
+join 
+(select (f.faci_hotel_id) as hotel_id, faci_cagro_id, f.faci_name, (ph.fapho_url) as url, ph.fapho_primary 
+from hotel.facility_photo ph
+join hotel.facilities f on ph.fapho_faci_id = f.faci_id 
+where ph.fapho_primary = '1' and f.faci_cagro_id=1)photo_hotel
+on h.hotel_id = photo_hotel.hotel_id
+join
+(select faci_hotel_id, string_agg(faci_name, ', ')as faci_hotelroom
+from hotel.facilities 
+where faci_cagro_id = 1
+group by faci_hotel_id
+)faci_room_group
+on h.hotel_id = faci_room_group.faci_hotel_id
+join
+(select (a.addr_id)hotel_addr_id, concat(a.addr_line1,' ',p.prov_name,' ',c.country_name,' ',r.region_name)place 
+from master.address a
+join master.proviences p on a.addr_prov_id = p.prov_id
+join master.country c on p.prov_country_id = c.country_id
+join master.regions r on r.region_code = c.country_region_id)addrees
+on h.hotel_addr_id = addrees.hotel_addr_id group by h.hotel_id, faci_group_rprice.faci_rateprice, faci_group.faci_hotelall,faci_group_lprice.faci_lowprice,faci_group_hprice.faci_highprice, addrees.place,faci_room_group.faci_hotelroom;
+
+SELECT * FROM hotel.viewHotel
 
 --Get Facility
-CREATE OR REPLACE PROCEDURE hotel.viewRoom()
-AS $$
-BEGIN
-    CREATE VIEW hotel.viewRoom AS
-	select *
-	from hotel.hotels h join hotel.facilities f 
-	on h.hotel_id = f.faci_hotel_id
-	join (select fapho_faci_id, string_agg(fapho_url,', ')as fapho_url
-			from hotel.facility_photos group by fapho_faci_id) fap
-	on f.faci_id = fap.fapho_faci_id
-	where faci_cagro_id = 1;
-END; $$
-LANGUAGE plpgsql;
+CREATE VIEW hotel.viewRoom AS
+select *
+from hotel.hotels h join hotel.facilities f 
+on h.hotel_id = f.faci_hotel_id
+join (select fapho_faci_id, string_agg(fapho_url,', ')as fapho_url
+		from hotel.facility_photos group by fapho_faci_id) fap
+on f.faci_id = fap.fapho_faci_id;
+where faci_cagro_id = 1
+
+SELECT * FROM hotel.viewRoom
 
 --Get User Review
-CREATE OR REPLACE PROCEDURE hotel.userreview()
-AS $$
-BEGIN
-    CREATE VIEW hotel.userreview AS
-	select hr.hore_hotel_id, u.user_full_name, u.user_email, hr.hore_user_review, hr.hore_created_on, hr.hore_rating
-  	from hotel.hotel_reviews hr
-	join users.users u
-	on hr.hore_user_id = u.user_id;
-END; $$
-LANGUAGE plpgsql;
--- call hotel.user_review()
--- select * from hotel.userreview
+CREATE VIEW hotel.userreview AS
+select hr.hore_hotel_id, u.user_full_name, u.user_email, hr.hore_user_review, hr.hore_created_on, hr.hore_rating
+from hotel.hotel_reviews hr
+join users.users u
+on hr.hore_user_id = u.user_id;
+
+SELECT * FROM hotel.userreview
+
 
 --Payment Insert
-CREATE OR REPLACE PROCEDURE  payment.insertPaymentTrx(
-	userId				int,
-	amount				int,
-	sourceNumber		varchar,
-	targetNumber		varchar,
-	trxType    			text DEFAULT NULL,
-	orderNumber			varchar DEFAULT NULL
-)
-AS $$
-DECLARE
-  result text;
-  orderType text;
-  currentDate date := NOW();
-  orderDate date;
-  lastCount int;
-  currentCount int;
-  newCount text;
-  newCode text;
-  debetAmount int := 0;
-  creditAmount int := 0;
-  note text;
-  TransactionNumberRef text := FLOOR(RANDOM() * POWER(CAST(10 as BIGINT), 15))::text;
+CREATE OR REPLACE PROCEDURE payment.insertOneTrx(
+	patr_trx_id			varchar,
+	patr_debet			int,
+	patr_credit			int,
+	patr_type			varchar,
+	patr_note			varchar,
+	patr_order_number	varchar,
+	patr_source_id		numeric,
+	patr_target_id		numeric,
+	patr_user_id		int
+) AS $$
 BEGIN
-	IF orderNumber IS NULL THEN
-		CASE
-			WHEN trxType = 'TP'
-				THEN 
-				orderDate := (SELECT COALESCE(MAX(SUBSTRING(patr_trx_id, '#(.*)-')::date), now()::date) from payment.payment_transaction where patr_type = trxType);
-				IF orderDate != currentDate
-					THEN currentCount := 1;
-				ELSE
-					currentCount := (SELECT COALESCE(MAX(SUBSTRING(patr_trx_id, '-(.*)'))::int, 0) from payment.payment_transaction where patr_type = trxType) +1;
-				END IF;
-				newCount := lpad(currentCount::text, 4, '0');
-				newCode := CONCAT(trxType, '#', TO_CHAR(currentDate::date, 'YYYYMMDD'), '-', newCount);
-				note := 'Top Up';
-				debetAmount := amount;
-				UPDATE payment.user_accounts SET usac_saldo = usac_saldo + amount WHERE usac_account_number = targetNumber;
-				UPDATE payment.user_accounts SET usac_saldo = usac_saldo - amount WHERE usac_account_number = sourceNumber;
-
-			WHEN trxType = 'RF'
-				THEN 
-				orderDate := (SELECT COALESCE(MAX(SUBSTRING(patr_trx_id, '#(.*)-')::date), now()::date) from payment.payment_transaction where patr_type = trxType);
-				IF orderDate != currentDate
-					THEN currentCount := 1;
-				ELSE
-					currentCount := (SELECT COALESCE(MAX(SUBSTRING(patr_trx_id, '-(.*)'))::int, 0) from payment.payment_transaction where patr_type = trxType) +1;
-				END IF;
-				newCount := lpad(currentCount::text, 4, '0');
-				newCode := CONCAT(trxType, '#', TO_CHAR(currentDate::date, 'YYYYMMDD'), '-', newCount);
-				note := 'Refund';
-				debetAmount := amount;
-				UPDATE payment.user_accounts SET usac_saldo = usac_saldo + amount WHERE usac_account_number = targetNumber;
-				
-			WHEN trxType = 'RPY'
-				THEN 
-				orderDate := (SELECT COALESCE(MAX(SUBSTRING(patr_trx_id, '#(.*)-')::date), now()::date) from payment.payment_transaction where patr_type = trxType);
-				IF orderDate != currentDate
-					THEN currentCount := 1;
-				ELSE
-					currentCount := (SELECT COALESCE(MAX(SUBSTRING(patr_trx_id, '-(.*)'))::int, 0) from payment.payment_transaction where patr_type = trxType) +1;
-				END IF;
-				newCount := lpad(currentCount::text, 4, '0');
-				newCode := CONCAT(trxType, '#', TO_CHAR(currentDate::date, 'YYYYMMDD'), '-', newCount);
-				note := 'Repayment';
-				creditAmount := amount;
-				UPDATE payment.user_accounts SET usac_saldo = usac_saldo + amount WHERE usac_account_number = targetNumber;
-				UPDATE payment.user_accounts SET usac_saldo = usac_saldo - amount WHERE usac_account_number = sourceNumber;	
-		END CASE;
-	ELSE
-		orderType := SUBSTRING(orderNumber, '(.*)#');
-		orderDate := SUBSTRING(orderNumber, '#(.*)-')::date;
-		lastCount := SUBSTRING(orderNumber, '-(.*)')::int;	
-		IF orderDate != currentDate
-			THEN currentCount := 1;
-		ELSE 
-			currentCount := lastCount + 1;
-		END IF;
-		newCount := lpad(currentCount::text, 4, '0');
-		IF orderType = 'BO'::text
-			THEN 
-			trxType := 'TRB';
-			newCode := CONCAT(trxType, '#', TO_CHAR(currentDate::date, 'YYYYMMDD'), '-', newCount);
-			note := 'Booking';
-			creditAmount := amount;
-			UPDATE payment.user_accounts SET usac_saldo = usac_saldo - amount WHERE usac_account_number = sourceNumber;	
-		ELSE
-			trxType := 'ORM';
-		 	newCode := CONCAT(trxType, '#', TO_CHAR(currentDate::date, 'YYYYMMDD'), '-', newCount);
-			note := 'Food Order';
-			creditAmount := amount;
-			UPDATE payment.user_accounts SET usac_saldo = usac_saldo - amount WHERE usac_account_number = sourceNumber;	
-		END IF;
-	END IF;
 	INSERT INTO payment.payment_transaction (
 		patr_trx_id,
 		patr_debet,
@@ -380,18 +294,173 @@ BEGIN
 		patr_user_id,
 		patr_modified_date
 	) VALUES (
-		newCode,
-		debetAmount,
-		creditAmount,
-		trxType,
-		note,
-		OrderNumber,
-		sourceNumber::numeric,
-		targetNumber::numeric,
-		TransactionNumberRef,
-		userId,
+		patr_trx_id,
+		patr_debet,
+		patr_credit,
+		patr_type,
+		patr_note,
+		patr_order_number,
+		patr_source_id,
+		patr_target_id,
+		FLOOR(RANDOM() * POWER(CAST(10 as BIGINT), 15))::text,
+		patr_user_id,
 		now()
 	);
+END;$$
+LANGUAGE plpgsql;
+
+--Payment
+CREATE OR REPLACE PROCEDURE  payment.insertPaymentTrx(
+	userId				int,
+	amount				int,
+	sourceNumber		varchar,
+	targetNumber		varchar,
+	trxType    			text DEFAULT NULL,
+	payType             text DEFAULT NULL,
+	orderNumber			varchar DEFAULT NULL
+)
+AS $$
+DECLARE
+  lastOrderNumber text;
+  orderType text;
+  currentDate date := NOW();
+  orderDate date;
+  lastCount int;
+  currentCount int;
+  lastCode int;
+  newCount text;
+  newLastCount text;
+  newCode text;
+  newLastCode text;
+  debetAmount int := 0;
+  creditAmount int := 0;
+  note text;
+  TransactionNumberRef text;
+BEGIN
+	IF orderNumber IS NULL THEN
+		CASE
+			WHEN trxType = 'TP'
+				THEN
+				lastOrderNumber := (SELECT COALESCE(MAX(patr_trx_id)) from payment.payment_transaction where patr_type = trxType);
+				orderDate := (SELECT COALESCE(SUBSTRING(lastOrderNumber, '#(.*)-')::date, now()::date));
+				IF orderDate != currentDate
+					THEN currentCount := 1;
+				ELSE
+					currentCount := (SELECT COALESCE(SUBSTRING(lastOrderNumber, '-(.*)')::int, 0)) +1;
+				END IF;
+				newCount := lpad(currentCount::text, 4, '0');
+				newCode := CONCAT(trxType, '#', TO_CHAR(currentDate::date, 'YYYYMMDD'), '-', newCount);
+				note := 'Top Up';
+				debetAmount := amount;
+				call payment.insertOneTrx(
+					newCode,
+					debetAmount,
+					creditAmount,
+					trxType,
+					note,
+					OrderNumber,
+					sourceNumber::numeric,
+					targetNumber::numeric,
+					userId
+				);
+				lastCode := currentCount + 1;
+				newLastCount := lpad(lastCode::text, 4, '0');
+				newLastCode := CONCAT(trxType, '#', TO_CHAR(currentDate::date, 'YYYYMMDD'), '-', newLastCount);
+				note := 'Top Up';
+				creditAmount := amount;
+				debetAmount := 0;
+				call payment.insertOneTrx(
+					newLastCode,
+					debetAmount,
+					creditAmount,
+					trxType,
+					note,
+					OrderNumber,
+					sourceNumber::numeric,
+					targetNumber::numeric,
+					userId
+				);
+				UPDATE payment.user_accounts SET usac_saldo = usac_saldo + amount WHERE usac_account_number = targetNumber;
+				UPDATE payment.user_accounts SET usac_saldo = usac_saldo - amount WHERE usac_account_number = sourceNumber;
+
+			WHEN trxType = 'RF'
+				THEN 
+				lastOrderNumber := (SELECT COALESCE(MAX(patr_trx_id)) from payment.payment_transaction where patr_type = trxType);
+				orderDate := (SELECT COALESCE(SUBSTRING(lastOrderNumber, '#(.*)-')::date, now()::date));
+				IF orderDate != currentDate
+					THEN currentCount := 1;
+				ELSE
+					currentCount := (SELECT COALESCE(SUBSTRING(lastOrderNumber, '-(.*)')::int, 0)) +1;
+				END IF;
+				newCount := lpad(currentCount::text, 4, '0');
+				newCode := CONCAT(trxType, '#', TO_CHAR(currentDate::date, 'YYYYMMDD'), '-', newCount);
+				note := 'Refund';
+				debetAmount := amount;
+				UPDATE payment.user_accounts SET usac_saldo = usac_saldo + amount WHERE usac_account_number = targetNumber;
+				
+			WHEN trxType = 'RPY'
+				THEN 
+				lastOrderNumber := (SELECT COALESCE(MAX(patr_trx_id)) from payment.payment_transaction where patr_type = trxType);
+				orderDate := (SELECT COALESCE(SUBSTRING(lastOrderNumber, '#(.*)-')::date, now()::date));
+				IF orderDate != currentDate
+					THEN currentCount := 1;
+				ELSE
+					currentCount := (SELECT COALESCE(SUBSTRING(lastOrderNumber, '-(.*)')::int, 0)) +1;
+				END IF;
+				newCount := lpad(currentCount::text, 4, '0');
+				newCode := CONCAT(trxType, '#', TO_CHAR(currentDate::date, 'YYYYMMDD'), '-', newCount);
+				note := 'Repayment';
+				creditAmount := amount;
+				
+				UPDATE payment.user_accounts SET usac_saldo = usac_saldo + amount WHERE usac_account_number = targetNumber;
+				UPDATE payment.user_accounts SET usac_saldo = usac_saldo - amount WHERE usac_account_number = sourceNumber;	
+		END CASE;
+	ELSE
+		orderType := SUBSTRING(orderNumber, '(.*)#');
+		IF orderType = 'BO'::text
+			THEN 
+			trxType := 'TRB';
+			lastOrderNumber := (SELECT COALESCE(MAX(patr_trx_id)) from payment.payment_transaction where patr_type = trxType);
+				orderDate := (SELECT COALESCE(SUBSTRING(lastOrderNumber, '#(.*)-')::date, now()::date));
+				IF orderDate != currentDate
+					THEN currentCount := 1;
+				ELSE
+					currentCount := (SELECT COALESCE(SUBSTRING(lastOrderNumber, '-(.*)')::int, 0)) +1;
+				END IF;
+			newCount := lpad(currentCount::text, 4, '0');
+			newCode := CONCAT(trxType, '#', TO_CHAR(currentDate::date, 'YYYYMMDD'), '-', newCount);
+			note := 'Booking';
+			creditAmount := amount;
+			
+			UPDATE payment.user_accounts SET usac_saldo = usac_saldo - amount WHERE usac_account_number = sourceNumber;	
+		ELSE
+			trxType := 'ORM';
+			lastOrderNumber := (SELECT COALESCE(MAX(patr_trx_id)) from payment.payment_transaction where patr_type = trxType);
+				orderDate := (SELECT COALESCE(SUBSTRING(lastOrderNumber, '#(.*)-')::date, now()::date));
+				IF orderDate != currentDate
+					THEN currentCount := 1;
+				ELSE
+					currentCount := (SELECT COALESCE(SUBSTRING(lastOrderNumber, '-(.*)')::int, 0)) +1;
+				END IF;
+			newCount := lpad(currentCount::text, 4, '0');
+		 	newCode := CONCAT(trxType, '#', TO_CHAR(currentDate::date, 'YYYYMMDD'), '-', newCount);
+			note := 'Food Order';
+			creditAmount := amount;
+			UPDATE payment.user_accounts SET usac_saldo = usac_saldo - amount WHERE usac_account_number = sourceNumber;	
+			UPDATE resto.order_menus SET orme_pay_type = payType, orme_cardnumber = sourceNumber, orme_is_paid = 'P' where orme_order_number = orderNumber;
+		END IF;
+		call payment.insertOneTrx(
+				newCode,
+				debetAmount,
+				creditAmount,
+				trxType,
+				note,
+				OrderNumber,
+				sourceNumber::numeric,
+				targetNumber::numeric,
+				userId
+			);
+	END IF;
 END; $$ 
 LANGUAGE plpgsql;
 
@@ -468,4 +537,3 @@ BEGIN
 
 END; $$
 LANGUAGE plpgsql;
-

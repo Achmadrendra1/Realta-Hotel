@@ -37,22 +37,18 @@ export class FacilityPhotosController {
   getFaphoId(@Param('id') id) {
     return this.FaphoService.findByFaphoId(id);
   }
+
   @Put(':id')
   UpdateFapho(@Param('hotelId') hotelId: any, @Body() body: any) {
     return this.FaphoService.UpdateFapho(hotelId, body);
   }
-  // @Post('Add')
-  // @UseInterceptors(FileInterceptor('faphoUrl'))
-  // addFapho(@UploadedFiles() file: any, @Body() body: any) {
-  //   return this.FaphoService.addNewFapho(file, body);
-  // }
 
   @Post()
   @UseInterceptors(
     FilesInterceptor('faphoUrl', 10, {
       storage: diskStorage({
         destination: UploadConfig.storage,
-        filename: UploadConfig.customFileName,
+        filename: UploadConfig.PhotoFilename,
       }),
     }),
   )

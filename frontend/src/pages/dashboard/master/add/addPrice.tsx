@@ -7,17 +7,14 @@ import { useDispatch, useSelector } from 'react-redux';
 export default function AddPrice(props: any) {
   const dispatch = useDispatch();
   const { handleClose } = props;
-  // console.log('tes:', doAddPriceItems);
 
   const onFinish = (data: any) => {
-    // console.log('Success:', data);
     dispatch(doAddPriceItems(data));
     handleClose(false);
     alert;
   };
 
   const onFinishFailed = (errorInfo: any) => {
-    // console.log('Failed:', errorInfo);
   };
 
   //Alert

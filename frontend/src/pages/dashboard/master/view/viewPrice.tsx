@@ -9,10 +9,6 @@ export default function ViewPrice(props: any) {
   const detailsPrice = dataPrice.find((item: any) => item.pritId == idPrice);
   const [formValues, setFormValues] = useState(detailsPrice);
 
-  // console.log('view id price:', idPrice);
-  // console.log('view data price:', dataPrice);
-  // console.log('view detail price:', detailsPrice);
-
   const onFinish = () => {
     console.log('Success:', formValues);
     handleClose(false);

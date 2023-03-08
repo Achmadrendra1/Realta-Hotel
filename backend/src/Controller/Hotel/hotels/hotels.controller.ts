@@ -24,10 +24,6 @@ export class HotelsController {
   getHotelsId(@Param('id') id: number) {
     return this.hotelsService.findByNameId(id);
   }
-  // @Get(':hotelName')
-  // getHotelName(@Param('hotelName') hotelName: string) {
-  //   return this.hotelsService.findByHotelName(hotelName);
-  // }
 
   @Put(':id')
   UpdateHotel(@Param('id') id: any, @Body() body: any) {
