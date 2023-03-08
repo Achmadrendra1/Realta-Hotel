@@ -17,6 +17,7 @@ export default function loginReducer(state = initialState, action: any) {
     case UserConst.LOGOUT_USER:
       localStorage.clear();
       return { IsAuth: null, error: null };
+    
     default:
       return state;
   }

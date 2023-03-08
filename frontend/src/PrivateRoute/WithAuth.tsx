@@ -8,7 +8,7 @@ const withAuth = <P extends object>(WrappedComponent: NextPage<P>) => {
       const router = useRouter()
       useEffect(() => {
           const token = localStorage.getItem("token");
-          !token && router.replace('../users/login')
+          !token && router.replace('../users/login');
           // if (!token) {
           //    router.push('../users/login')
           // }
