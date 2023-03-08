@@ -30,6 +30,7 @@ import {
   handleCheckSecure,
   handleGetHistoryTrx,
   handleCreateTransaction,
+  handleBankAllRequest,
 } from "./Payment/paymentSagas";
 
 //Master
@@ -182,6 +183,7 @@ export default function* rootSaga() {
     takeEvery(PaymentConst.UPDATE_PAYMENT_GATEWAY, handlePagaUpdate),
     takeEvery(PaymentConst.DELETE_PAYMENT_GATEWAY, handlePagaDelete),
     takeEvery(PaymentConst.GET_BANK_REQUEST, handleBankRequest),
+    takeEvery(PaymentConst.GET_ALL_BANK_REQUEST, handleBankAllRequest),
     takeEvery(PaymentConst.ADD_BANK, handleBankAdd),
     takeEvery(PaymentConst.UPDATE_BANK, handleUpdateBank),
     takeEvery(PaymentConst.DELETE_BANK, handleDeleteBank),

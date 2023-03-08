@@ -31,6 +31,7 @@ export class BankService {
       .where('LOWER(bank.bankName) LIKE LOWER(:keyword)', {
         keyword: `%${keyword.toLowerCase()}%`,
       })
+      .orderBy('bank.bankEntityId', 'ASC')
       .skip(skip)
       .take(take)
       .getManyAndCount();

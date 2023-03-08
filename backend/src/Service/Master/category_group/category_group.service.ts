@@ -2,7 +2,6 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CategoryGroup } from 'src/entities/CategoryGroup';
 import { Like, Repository } from 'typeorm';
-import { fileName } from 'typeorm-model-generator/dist/src/NamingStrategy';
 
 @Injectable()
 export class CategoryGroupService {
@@ -36,33 +35,6 @@ export class CategoryGroupService {
       },
     });
   }
-  //find Category Group by Policy
-  async getCategoryGroupByPolicy(name: string): Promise<any> {
-    return await this.categoryGroupRepository
-      .createQueryBuilder('category_group')
-      .innerJoin(
-        'policy_category_group',
-        'policy_category_group',
-        'policy_category_group.poca_cagro_id = category_group.cagro_id',
-      )
-      .innerJoin(
-        'policy',
-        'policy',
-        'policy.poli_id = policy_category_group.poca_poli_id',
-      )
-      .where('policy.poli_name LIKE :name', { name: `%${name}%` })
-      .getMany();
-  }
-  //find Category Group by Facility
-  async getCategoryGroupByFacility(name: string): Promise<any> {
-    return await this.categoryGroupRepository.find({
-      where: {
-        facilities: {
-          faciName: Like(`%${name}%`),
-        },
-      },
-    });
-  }
 
   //create new
 
@@ -72,20 +44,20 @@ export class CategoryGroupService {
     );
   }
 
-  // upload photo
+  // // upload photo by D
   async storeFileInfo(file: { filename: any; originalName: any }, body: any) {
     const fileInfo = new CategoryGroup();
 
-    fileInfo.cagroIconUrl = `http://localhost:3500/category/public/asset/master/${file.filename}`;
+    fileInfo.cagroIconUrl = `http://localhost:3500/category/public/upload/${file.filename}`;
     fileInfo.cagroIcon = file.filename; //.svg .jpg
-    fileInfo.cagroName = body.cagro_name;
-    fileInfo.cagroDescription = body.cagro_description;
-    fileInfo.cagroType = body.cagro_type;
+    fileInfo.cagroName = body.cagroName;
+    fileInfo.cagroDescription = body.cagroDescription;
+    fileInfo.cagroType = body.cagroType;
 
     await this.categoryGroupRepository.save(fileInfo);
 
     const res = await this.categoryGroupRepository.query(
-      'select * from master.category_group',
+      'select * from master.category_group order by cagro_id',
     );
 
     return { result: res };

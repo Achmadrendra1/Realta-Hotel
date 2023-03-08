@@ -9,14 +9,12 @@ export default function AddService(props: any) {
   const { handleClose } = props;
 
   const onFinish = (data: any) => {
-    // console.log('Success:', data);
     dispatch(doAddServiceTask(data));
     handleClose(false);
     alert;
   };
 
   const onFinishFailed = (errorInfo: any) => {
-    // console.log('Failed:', errorInfo);
   };
 
   //Alert

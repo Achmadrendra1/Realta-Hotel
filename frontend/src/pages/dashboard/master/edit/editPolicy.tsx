@@ -12,17 +12,11 @@ export default function EditPolicy(props: any) {
   const details = dataPolicy.find((item: any) => item.poliId == idPolicy);
   const [formValues, setFormValues] = useState(details);
 
-  // console.log('id policy :', idPolicy);
-  // console.log(' dataPolicy :', dataPolicy);
-  // console.log('details policy :', details);
-  // console.log('formValues policy :', formValues);
-
   const handleInputChange = (input: any) => (e: any) => {
     setFormValues({ ...formValues, [input]: e.target.value });
   };
 
   const onFinish = () => {
-    // console.log('Success:', formValues);
     dispatch(doUpdatePolicy(formValues));
     handleClose(false);
     window.location.reload();

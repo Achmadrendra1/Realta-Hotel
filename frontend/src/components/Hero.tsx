@@ -94,33 +94,7 @@ const Hero = () => {
           </div>
         </div>
 
-        {/* <form className={float} style={{bottom: '20%', left: '50%', transform: 'translateX(-50%)'}}>
-                    <Row justify='space-between' align='middle'>
-                        <Col span={4} className="text-start">
-                            <label htmlFor="location">Location</label>
-                            <input type="text" className={input} placeholder="Find here" id="location"/>
-                        </Col>
-                        <Col span={4} className="text-start">
-                            <label htmlFor="faci">Hotel</label>
-                            <input type="text" className={input} placeholder="Find here" id="faci"/>
-                        </Col>
-                        <Col span={4} className="text-start">
-                            <label htmlFor="guest">Guest</label>
-                            <input type="number" className={input} placeholder="Find here" id="guest"/>
-                        </Col>
-                        <Col span={9} className="text-start">
-                            <label htmlFor="date">Date</label>
-                            <div className="flex gap-4">
-                                <input type="date" className={input} placeholder="Check In" id="date"/>
-                                <input type="date" className={input} placeholder="Check Out" id="date1"/>
-                            </div>
-
-                        </Col>
-                        <Col span={3} className="flex justify-end">
-                            <button className="bg-slate-700 p-4 text-white rounded-full flex items-center justify-end"><ArrowRightOutlined /></button>
-                        </Col>
-                    </Row>
-                </form> */}
+       
       </div>
     </Layout>
   );
