@@ -62,7 +62,7 @@ const WorkDetail = () => {
         {
             title: 'Work Order ID',
             key: 'wodeId',
-            render: (_:any, record:any) => record.wodeWoro.woroId
+            render: (_:any, record:any) => record.wodeId
         },
         {
             title: 'Task Name',
@@ -82,7 +82,7 @@ const WorkDetail = () => {
         {
             title: 'Assign to',
             key: 'empId',
-            render: (_:any, record:any) => record.wodeWoro.woroUser.userFullName
+            render: (_:any, record:any) => record.wodeEmp.empUser.userFullName
         },
         {
             title: 'Action',
@@ -124,12 +124,12 @@ const WorkDetail = () => {
             <Link href={'/dashboard/hr'}><ArrowLeftOutlined /> Back</Link>
             <Row gutter={32} className="my-5">
                 <Col span={6}>
-                    <Card hoverable>
+                    <Card hoverable className="bg-[#F2F1FA]">
                         <Meta title="Work Order Date" description={date} />
                     </Card>
                 </Col>
                 <Col span={6}>
-                    <Card hoverable>
+                    <Card hoverable className="bg-[#F2F1FA]">
                         <Meta title="Status" description={status} />
                     </Card>
                 </Col>

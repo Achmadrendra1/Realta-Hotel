@@ -18,19 +18,19 @@ export class HotelReviewsController {
     return this.horeService.findAllHotelsReviews();
   }
   @Get(':id')
-  getHoreId(@Param() params) {
-    return this.horeService.findReviewById(params);
+  getHoreId(@Param('id') id) {
+    return this.horeService.findReviewById(id);
   }
   @Put(':id')
-  UpdateHore(@Param('hotelId') hotelId: any, @Body() body: any) {
-    return this.horeService.UpdateHotelReviews(hotelId, body);
+  UpdateHore(@Param('id') id: any, @Body() body: any) {
+    return this.horeService.UpdateHotelReviews(id, body);
   }
   @Post('Add')
   addHore(@Body() body: any) {
     return this.horeService.addNewHotelReviews(body);
   }
-  @Delete()
-  DeleteHore(@Param('id') params) {
-    return this.horeService.deleteHotelsReviews(params);
+  @Delete(':id')
+  DeleteHore(@Param('id') id) {
+    return this.horeService.deleteHotelsReviews(id);
   }
 }

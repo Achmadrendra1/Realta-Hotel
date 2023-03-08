@@ -116,6 +116,7 @@ export default withAuth( function Userprofile() {
         <ChangePassword
           show={OpenChange}
           clickOk={handleOk}
+          data={user}
           clickCancel={handleCancel}
           handleClose={handleClose}
         />
@@ -130,7 +131,7 @@ export default withAuth( function Userprofile() {
             <Avatar
               size={120}
               icon={
-                <UserOutlined />
+                 !user[0]?.emp_photo ? <UserOutlined /> : user[0]?.emp_photo 
               }
             />
           </Col>

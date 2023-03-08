@@ -205,7 +205,7 @@ export class BookingOrdersService {
 
     //Get UserReview untuk Booking
     async findSpReview() {
-        return await this.bookingOrdersRepository.query('Select * From hotel.user_review')
+        return await this.bookingOrdersRepository.query('Select * From hotel.userreview')
     }
 
     async getInvoice () {

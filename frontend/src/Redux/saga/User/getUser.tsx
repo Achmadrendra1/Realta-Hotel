@@ -1,4 +1,4 @@
-import { doAddDataUserFailed, doAddDataUserSuccess, doGetDataFailed, doGetDataSuccess, doUpdateFailed, doUpdateSuccess } from "@/Redux/Action/User/GetDataUser";
+import { doAddDataUserFailed, doAddDataUserSuccess, doGetDataFailed, doGetDataSuccess, doUpdateFailed, doUpdatePasswordFailed, doUpdatePasswordSuccess, doUpdateSuccess } from "@/Redux/Action/User/GetDataUser";
 import axios from "axios";
 import { call, put } from "redux-saga/effects";
 import { API } from "../../Configs/consumeApi";
@@ -47,15 +47,15 @@ export function* HandleEditProfile(action:any):any{
 
 export function* HandleUpdatePassword(action:any):any{
     try {
-        yield axios (API("PUT","/password/"+ action.payload.uspa_user_id, action.payload))
-        // console.log(result);
-          yield put (doUpdateSuccess(action.payload))
+         const result = yield axios (API("PUT","/password/"+ action.payload.uspa_user_id, action.payload))
+        // console.log(action.payload.user_id);
+          yield put (doUpdatePasswordSuccess(action.payload))
       } catch (error :any) {
           // yield put (doUpdateFailed(error))
           const delay = (time: any) =>
           new Promise((resolve) => setTimeout(resolve, time));
-        yield put(doUpdateFailed(error.response.data.message));
+        yield put(doUpdatePasswordFailed(error.response.data.message));
         yield call(delay, 6000);
-        yield put(doUpdateFailed(null));
+        yield put(doUpdatePasswordFailed(null));
       }
 }

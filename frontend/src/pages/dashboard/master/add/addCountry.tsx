@@ -18,21 +18,13 @@ export default function AddCountry(props: any) {
     (item: any) => item.country_region_id == regionId
   );
   const [formValues, setFormValues] = useState(details);
-  // console.log('regionId :', regionId);
-  // console.log('regionNamee :', regionNamee);
-  // console.log('dataCountry :', dataLocationsRC);
-  // console.log('details country:', details);
-  // console.log('formValues country :', formValues);
 
   const handleInputChange = (input: any) => (e: any) => {
     setFormValues({ ...formValues, [input]: e.target.value });
   };
 
-  // console.log('handleInputChange :', handleInputChange);
-
   const onFinish = (data: any) => {
     dispatch(doAddCountry(data));
-    // console.log('add country data :', data);
     dispatch(doUpdateCountry(formValues));
     handleClose(false);
     // window.location.reload();
@@ -41,7 +33,6 @@ export default function AddCountry(props: any) {
   };
 
   const onFinishFailed = (errorInfo: any) => {
-    // console.log('Failed:', errorInfo);
   };
 
   //Alert

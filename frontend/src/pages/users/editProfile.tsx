@@ -22,7 +22,6 @@ export default function EditProfile(props: any) {
   const [form] = Form.useForm();
   const [messageApi, contextHolder] = message.useMessage();
   const user = data.find((item: any) => item[0]?.user_id == id);
-
   
   // console.log(user);
 
@@ -33,12 +32,12 @@ export default function EditProfile(props: any) {
     user_email:"",
     user_phone_number:"",
     uspro_national_id:"",
-    uspro_birt_date:moment(),
+    uspro_birth_date:"",
     uspro_job_title:"",
     uspro_marital_status:"",
     uspro_gender:"",
     usro_role:"",
-    role_name:null,
+    role_name:"",
   });
 // console.log('t',formValues)
   useEffect (()=>{
@@ -50,7 +49,7 @@ export default function EditProfile(props: any) {
     console.log("Success:", formValues);
     dispatch(doUpdate(formValues));
     handleClose(false);
-    message.success("Login Berhasil", 1.5)
+    message.success("Data Berhasil Diubah", 1.5)
   };
 
  
@@ -71,8 +70,8 @@ export default function EditProfile(props: any) {
   const handleSelectMaritalChange = (value: any) => {
     setFormValues({ ...formValues, uspro_marital_status: value });
   };
-  const handleSelectDateChange = (value: any,dateString :any) => {
-    setFormValues({ ...formValues, uspro_birt_date: dateString });
+  const handleSelectDateChange = (dateString :any) => {
+    setFormValues({ ...formValues, uspro_birth_date:dateString });
   };
 
 
@@ -175,9 +174,12 @@ export default function EditProfile(props: any) {
               <Form.Item
               label="Role Type"
               style={{ width: 250 }}
-              name="role_name"
+              
                       >
-                <Input  disabled style={{ marginLeft: 10 }} /> 
+                <Input 
+                value={formValues.role_name} 
+                 disabled 
+                 style={{ marginLeft: 10 }} /> 
 
               </Form.Item>
                 }
@@ -219,12 +221,13 @@ export default function EditProfile(props: any) {
             </Col>
 
             <Col>
-              <Form.Item label="Birth Date" name="uspro_birt_date">
-                <Input
-                  type="date"
+              <Form.Item label="Birth Date" name="uspro_birth_date">
+                <DatePicker
                   style={{ marginLeft: 8 }}
-                  // format="DD-MM-YY"
                   // value={formValues.uspro_birth_date}
+                  format="YYYY-MM-DD"
+                  onChange={handleSelectDateChange}
+                  // onChange={(date:any) => handleSelectDateChange(date)}
                 />
               </Form.Item>
 
@@ -244,12 +247,13 @@ export default function EditProfile(props: any) {
             </Col>
           </Row>
 
-          <Button
-            htmlType="submit"
+          <button
+            type="submit"
+            className="bg-[#754CFF] hover:bg-purple-500 text-white px-4 py-3 my-2 rounded-lg font-medium w-30"
             style={{ marginBlockEnd: 10, marginLeft: 520 }}
           >
             Save
-          </Button>
+          </button>
         </Form>
       </Modal>
     </>

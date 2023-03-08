@@ -1,18 +1,21 @@
 import { doUpdatePassword } from "@/Redux/Action/User/GetDataUser";
-import { Button, Col, Form, Input, Modal, Row } from "antd";
+import { Button, Col, Form, Input, Modal, Row, message } from "antd";
+import { useRouter } from "next/router";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 export default function ChangePassword(props: any) {
  const  dispatch = useDispatch();
- const { handleClose } = props;
- const [password,setPassword] = useState('');
+ const { handleClose,data } = props;
+ const id = data[0].user_id
+ const [password,setPassword]  = useState('');
  const [confirmPassword,setConfirmPassword] = useState('');
  const [error, setError] = useState('');
- 
+ const [messageApi, contextHolder] = message.useMessage();
 
 
-  const onFinish = (values: any) => {
+
+  const onFinish = (values:any) => {
     if (password !== confirmPassword) {
       setError(`Password doesn't match`);
       setTimeout(() => {
@@ -21,11 +24,13 @@ export default function ChangePassword(props: any) {
       console.log("Success:", values);
       dispatch(doUpdatePassword(values));
       handleClose(false);
+      message.success("Data Berhasil Diubah", 1.5);
     }
-  
+    
   };
   return (
     <>
+    {contextHolder}
       <Modal
         title="Change Password"
         open={props.show}
@@ -50,6 +55,12 @@ export default function ChangePassword(props: any) {
               }}
             >
               <Form.Item
+              initialValue={id}
+              name="uspa_user_id"
+              hidden
+              />
+              <Form.Item
+                //hidden
                 label="New Password"
                 name="uspa_passwordhash"
                 rules={[
@@ -67,7 +78,6 @@ export default function ChangePassword(props: any) {
 
               <Form.Item
                 label="Confirm Password"
-                name="Confirmpassword"
                 rules={[
                   { required: true, message: "Please input your Password!" },
                 ]}
@@ -82,9 +92,9 @@ export default function ChangePassword(props: any) {
                 />
               </Form.Item>
               {error && <div  className="error text-red-600 mb-2" >{error}</div>}
-              <Button  htmlType="submit" style={{marginBottom:30}}>
+              <button  type="submit" className="bg-[#754CFF] hover:bg-purple-500 text-white px-4 py-3 my-2 rounded-lg font-medium w-30" style={{marginBottom:30}} >
                 Change Password
-              </Button>
+              </button>
             
              </Form>
           </Col>

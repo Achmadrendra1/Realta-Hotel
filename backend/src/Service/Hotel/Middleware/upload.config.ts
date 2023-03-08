@@ -1,18 +1,12 @@
+import { extname } from 'path';
+
 export class UploadConfig {
-  static customFileName(req, file, callback) {
+  static PhotoFilename(req, file, callback) {
     let customName = file.originalname.split('.')[0];
-    customName =
-      customName + Date.now() + '-' + Math.round(Math.random() * 1e9);
-    let fileExtension = '';
-    if (file.mimetype.indexOf('jpeg') > -1) {
-      fileExtension = '.jpg';
-    } else if (file.mimetype.indexOf('png') > -1) {
-      fileExtension = '.png';
-    } else if (file.mimetype.indexOf('jpeg') > -1) {
-      fileExtension = '.jpeg';
-    }
-    customName = customName + fileExtension;
-    callback(null, customName);
+    customName += '-' + Date.now() + '-' + Math.round(Math.random() * 1e9);
+    const ext = extname(file.originalname);
+    const filename = `${customName}${ext}`;
+    callback(null, filename);
   }
   static storage(req, file, callback) {
     callback(null, './src/Service/Hotel/Uploads');

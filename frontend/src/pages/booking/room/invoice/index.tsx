@@ -19,6 +19,8 @@ export default function index() {
     (state: any) => state.BoorInvoiceReducer.invoice
   );
 
+  // console.log(invoiceView);
+
   useEffect(() => {
     dispatch(getSpInvoice());
   }, []);
@@ -27,12 +29,15 @@ export default function index() {
     (item: any) => item.boor_order_number === id
   );
 
-  console.log(invoiceView, id);
+<<<<<<< HEAD
+=======
+  // console.log(invoiceView, id)
+>>>>>>> 643f5058b6609369ec32e878972ef24073342ea7
   const boor_order_number =
     Invoice?.length > 0 ? Invoice[0].boor_order_number : "";
   const boor_order_date = Invoice?.length > 0 ? Invoice[0].boor_order_date : "";
-  const boor_is_paid = Invoice?.length > 0 ? Invoice[0]?.boor_is_paid : "";
-  const boor_pay_type = Invoice?.length > 0 ? Invoice[0].boor_pay_type : "";
+  const boor_is_paid = Invoice?.length > 0 ? Invoice[0]?.boor_paid : "";
+  const boor_pay_type = Invoice?.length > 0 ? Invoice[0].payment_type : "";
   const user_full_name = Invoice?.length > 0 ? Invoice[0].user_full_name : "";
   const user_phone_number =
     Invoice?.length > 0 ? Invoice[0].user_phone_number : "";
@@ -49,6 +54,7 @@ export default function index() {
   const borde_subtotal = Invoice?.length > 0 ? Invoice[0].borde_subtotal : "";
   const inv_number = Invoice?.length > 0 ? Invoice[0].patr_trx_id : "";
   const inv_date = Invoice?.length > 0 ? Invoice[0].patr_modified_date : "";
+
 
   const [getInvoice, setGetinvoice] = useState({
     boor_order_number: "",
@@ -95,7 +101,7 @@ export default function index() {
     });
   }, [boor_order_number]);
 
-  // console.log(getInvoice);
+  console.log(getInvoice);
 
   // const email = "aryasamiftah@gmail.com"
 
@@ -106,15 +112,15 @@ export default function index() {
   //Array Object untuk title and field
   const invoice1 = [
     {
-      title: "Booking Order",
+      title: "Booking Order", //
       field: getInvoice.boor_order_number,
     },
     {
-      title: "Order Date",
+      title: "Order Date", //
       field: getInvoice.boor_order_date?.split("T")[0],
     },
     {
-      title: "Invoice Number",
+      title: "Invoice Number", //
       field: getInvoice.invoice_number,
     },
     {
@@ -126,8 +132,13 @@ export default function index() {
       field: getInvoice.boor_is_paid,
     },
     {
+<<<<<<< HEAD
       title: "Payment Type",
+      field: getInvoice.boor_pay_type == null ? "Cash" : getInvoice.boor_pay_type,
+=======
+      title: "Payment Type", //
       field: getInvoice?.boor_pay_type,
+>>>>>>> 643f5058b6609369ec32e878972ef24073342ea7
     },
   ];
 
@@ -155,6 +166,7 @@ export default function index() {
   ];
 
   const componentRef = React.useRef(null);
+  
 
   return (
     <>
@@ -247,7 +259,7 @@ export default function index() {
           </Row>
           <Divider dashed style={{ borderColor: "black" }} />
           <div className="w-10/12 flex justify-between items-center">
-            <QRCode value={id} size={96} className="ml-14" />
+            <QRCode value={`http://localhost:3000/${root.asPath}`} size={96} className="ml-14" />
             <div className="w-1/4">
               <div className="flex justify-between min-w-[350px]">
                 <h2 className="flex text-lg font-semibold mb-1 mr-5">
