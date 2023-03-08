@@ -4,7 +4,7 @@ import { Button, Divider, Form, Input, Modal } from 'antd';
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-export default function AddProvinces(props: any) {
+export default function AddJalan(props: any) {
   const dispatch = useDispatch();
   const cityNamee = props.cityNamee;
   const cityId = props.cityId;

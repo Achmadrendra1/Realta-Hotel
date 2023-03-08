@@ -1,9 +1,10 @@
 import HotelConstant from "@/Redux/Constant/Hotel/HotelConstant";
 
 //HOTEL
-export const getHotel = () => {
+export const getHotel = (payload?: any) => {
   return {
     type: HotelConstant.GET_HOTEL,
+    payload
   };
 };
 
@@ -24,7 +25,7 @@ export const getHotelFailed = (payload: any) => {
 export const getHotelID = (payload:any) => {
   return {
     type: HotelConstant.GET_HOTEL_ID,
-    payload
+    payload,
   };
 };
 
