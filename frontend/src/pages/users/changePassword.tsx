@@ -6,12 +6,14 @@ import { useDispatch, useSelector } from "react-redux";
 
 export default function ChangePassword(props: any) {
  const  dispatch = useDispatch();
- const { handleClose } = props;
+ const { handleClose,data } = props;
+ const id = data[0].user_id
  const [password,setPassword]  = useState('');
  const [confirmPassword,setConfirmPassword] = useState('');
  const [error, setError] = useState('');
  const [messageApi, contextHolder] = message.useMessage();
- const router = useRouter();
+
+ console.log(id);
 
   const onFinish = (values:any) => {
     if (password !== confirmPassword) {
@@ -23,7 +25,6 @@ export default function ChangePassword(props: any) {
       dispatch(doUpdatePassword(values));
       handleClose(false);
       message.success("Data Berhasil Diubah", 1.5);
-      router.push("../");
     }
     
   };
@@ -54,6 +55,12 @@ export default function ChangePassword(props: any) {
               }}
             >
               <Form.Item
+              initialValue={id}
+              name="uspa_user_id"
+              hidden
+              />
+              <Form.Item
+                //hidden
                 label="New Password"
                 name="uspa_passwordhash"
                 rules={[
@@ -71,7 +78,6 @@ export default function ChangePassword(props: any) {
 
               <Form.Item
                 label="Confirm Password"
-                name="Confirmpassword"
                 rules={[
                   { required: true, message: "Please input your Password!" },
                 ]}
@@ -97,7 +103,3 @@ export default function ChangePassword(props: any) {
     </>
   );
 }
-function userRouter(arg0: string) {
-  throw new Error("Function not implemented.");
-}
-

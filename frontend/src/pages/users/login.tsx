@@ -18,8 +18,10 @@ import { useEffect, useState } from "react";
 import { motion } from 'framer-motion';
 import { useDispatch, useSelector } from "react-redux";
 import Layouts from "@/layouts/layout";
+import withAuth from "@/PrivateRoute/WithAuth";
+import Auth from "@/PrivateRoute/Auth";
 
-export default function Login() {
+export default Auth( function Login() {
   const { Content } = Layout;
   const { IsAuth, error } = useSelector((state: any) => state.loginReducer);
   const dispatch = useDispatch();
@@ -253,7 +255,7 @@ export default function Login() {
       </Card>
     </Layouts>
   );
-}
+})
 
 // primary /ungu: #754CFF
 // sec  /abu-abu : #F2F1FA

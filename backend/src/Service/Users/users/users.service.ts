@@ -72,23 +72,28 @@ export class UsersService {
   // }
 
   async register(user: any): Promise<any> {
-    return await this.UsersRepository.query(
-      'CALL users.Register($1, $2, $3, $4)',
-      [
-        user.userFullName,
-        user.userEmail,
-        user.userPhoneNumber,
-        user.UserPassword,
-      ],
-    ).catch((err) => {
+    try {
+      return await this.UsersRepository.query(
+        'CALL users.Register($1, $2, $3, $4)',
+        [
+          user.userFullName,
+          user.userEmail,
+          user.userPhoneNumber,
+          user.UserPassword,
+        ],
+      )  
+    } catch (error) {
+      
       throw new HttpException(
         {
-          message: err.message,
+          message: error.message,
         },
         HttpStatus.BAD_REQUEST,
       );
-    });
+    }
   }
+  
+  
 
 
   // async UpdateUser(id: number, item: Users) {

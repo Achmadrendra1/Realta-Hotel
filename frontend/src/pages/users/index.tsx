@@ -10,8 +10,9 @@ import withAuth from '@/PrivateRoute/WithAuth';
 import { useDispatch } from 'react-redux';
 import { doLogout } from '@/Redux/Action/User/auth';
 import { useRouter } from 'next/router';
+import UserHistory from './userHistory';
 
-export default  function Index() {
+export default withAuth(  function Index() {
   const { Header, Content, Footer, Sider } = Layout;
   const items1: MenuProps['items'] = ['1', '2', '3'].map((key) => ({
     key,
@@ -108,7 +109,7 @@ export default  function Index() {
               {router.asPath === "/users#profile" ? (
                 <Userprofile />
               ) : router.asPath === "/users#history" ? (
-                "History"
+                <UserHistory/>
               ) : (
                 router.asPath === "/users#account" && <MyAccount />
               )}
@@ -119,3 +120,4 @@ export default  function Index() {
     </Layouts>
   );
 }
+)

@@ -73,6 +73,7 @@ export const doUpdatePassword = (payload: any)=>{
     }
 }
 export const doUpdatePasswordSuccess = (payload: any)=>{
+    // console.log(payload
     return{
         type: UserConst.UPDATE_PASSWORD_SUCCESS,
         payload

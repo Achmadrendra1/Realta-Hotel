@@ -19,7 +19,7 @@ export default function index() {
     (state: any) => state.BoorInvoiceReducer.invoice
   );
 
-  console.log(invoiceView)
+  // console.log(invoiceView);
 
   useEffect(() => {
     dispatch(getSpInvoice());
@@ -29,7 +29,7 @@ export default function index() {
     (item: any) => item.boor_order_number == id
   );
 
-  console.log(invoiceView, id)
+  // console.log(invoiceView, id)
   const boor_order_number =
     Invoice?.length > 0 ? Invoice[0].boor_order_number : "";
   const boor_order_date = Invoice?.length > 0 ? Invoice[0].boor_order_date : "";
@@ -108,15 +108,15 @@ export default function index() {
   //Array Object untuk title and field
   const invoice1 = [
     {
-      title: "Booking Order",
+      title: "Booking Order", //
       field: getInvoice.boor_order_number,
     },
     {
-      title: "Order Date",
+      title: "Order Date", //
       field: getInvoice.boor_order_date?.split("T")[0],
     },
     {
-      title: "Invoice Number",
+      title: "Invoice Number", //
       field: getInvoice.invoice_number,
     },
     {
@@ -128,7 +128,7 @@ export default function index() {
       field: getInvoice.boor_is_paid,
     },
     {
-      title: "Payment Type",
+      title: "Payment Type", //
       field: getInvoice?.boor_pay_type,
     },
   ];
@@ -168,7 +168,7 @@ export default function index() {
           <ReactToPrint
             trigger={() => (
               <div className="mr-2">
-                <Buttons funcs={()=>''}>Print</Buttons>
+                <Buttons funcs={() => ""}>Print</Buttons>
               </div>
             )}
             content={() => componentRef.current}

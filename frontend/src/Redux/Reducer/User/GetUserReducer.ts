@@ -34,8 +34,7 @@ export default function GetUserReducer(state = initialState, action:any) {
     case UserConst.EDIT_DATA_PROFILE_FAILED:
       return {...state,error : action.payload};
     case UserConst.UPDATE_PASSWORD:
-      localStorage.clear();
-      return{ ...state}
+      return{...state}
     case UserConst.UPDATE_PASSWORD_SUCCESS:
         state.getUser.splice(
         state.getUser.findIndex(
@@ -44,7 +43,8 @@ export default function GetUserReducer(state = initialState, action:any) {
         action.payload
       );
       return {
-      error :null,
+        ...state,
+        getUser: [...state.getUser],
       };
     case UserConst.UPDATE_PASSWORD_FAILED:
       return {...state,error : action.payload};

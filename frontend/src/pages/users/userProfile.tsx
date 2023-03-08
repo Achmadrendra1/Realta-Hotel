@@ -116,6 +116,7 @@ export default withAuth( function Userprofile() {
         <ChangePassword
           show={OpenChange}
           clickOk={handleOk}
+          data={user}
           clickCancel={handleCancel}
           handleClose={handleClose}
         />

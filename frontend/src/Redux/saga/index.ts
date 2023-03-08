@@ -10,7 +10,7 @@ import { empType } from "../Constant/HR/empType";
 import { handleAddEmployee, handleDelEmployee, handleDetailEmployee, handleGetEmployees, handleUpdateEmployee } from "./HR/employees";
 import UserConst from "../Constant/User/UserConst";
 import { HandleLoginUser } from "./User/auth";
-import { HandleEditProfile, HandleGetUser, HandleUpdatePassword } from "./User/getUser";
+import { HandleCreateUser, HandleEditProfile, HandleGetUser, HandleUpdatePassword } from "./User/getUser";
 import PaymentConst from "../Constant/Payment/PaymentConst";
 import {
   handleTrxDashRequest,
@@ -163,6 +163,7 @@ export default function* rootSaga() {
     //user and auth
     takeEvery(UserConst.LOGIN_USER, HandleLoginUser),
     takeEvery(UserConst.GET_DATA_USER, HandleGetUser),
+    takeEvery(UserConst.ADD_DATA_USER,HandleCreateUser),
     takeEvery(UserConst.EDIT_DATA_PROFILE,HandleEditProfile),
     takeEvery(UserConst.UPDATE_PASSWORD,HandleUpdatePassword),
 

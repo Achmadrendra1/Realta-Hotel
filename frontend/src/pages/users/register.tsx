@@ -1,34 +1,32 @@
 import { doAddDataUser } from "@/Redux/Action/User/GetDataUser";
-import { Avatar, Card, Carousel, Col, Form, Input, Layout, Row } from "antd";
+import { Avatar, Card, Carousel, Col, Form, Input, Row } from "antd";
 import { DotPosition } from "antd/es/carousel";
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 
-import loginStyle from "@/styles/login.module.css";
-import Link from "next/link";
-import { motion } from "framer-motion";
+import Auth from "@/PrivateRoute/Auth";
 import Layouts from "@/layouts/layout";
+import loginStyle from "@/styles/login.module.css";
+import { motion } from "framer-motion";
+import Link from "next/link";
+import { useRouter } from "next/router";
 
-export default function Register(): any {
+export default Auth ( function Register(): any {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState("");
-  const [Number, setNumber] = useState("");
+  const  router = useRouter();
 
-  const { Content } = Layout;
-  const { Meta } = Card;
   const dispatch = useDispatch();
 
   const onFinish = (values: any) => {
-    if (Number === '') {
-      setError("Number Phone must be a number");
-    } else if (password !== confirmPassword) {
+    if (password !== confirmPassword) {
       setError("Password do not match");
       setTimeout(() => {}, 5000);
     } else {
-      // console.log("Success:", values);
+      console.log("Success:", values);
       dispatch(doAddDataUser(values));
-      window.location.href = "/users/login";
+      router.push("/users/login")
     }
   };
 
@@ -43,7 +41,7 @@ export default function Register(): any {
 
   return (
     <Layouts>
-      <motion.div
+    <motion.div
         initial={{ opacity: 0, scale: 0.5 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{
@@ -55,6 +53,7 @@ export default function Register(): any {
     >
     <Card className="m-12 mx-52 drop-shadow-md  bg-[#754CFF] ">
       <Row>
+      
         {/* Form */}
         <Col span={10}>
           <div className="container m-5">
@@ -98,7 +97,7 @@ export default function Register(): any {
               Email
             </label>
             <Form.Item
-              name="useEmail"
+              name="userEmail"
               className="mb-2"
               rules={[
                 { required: true, message: "Please input your Email!" },
@@ -137,17 +136,41 @@ export default function Register(): any {
             </label>
             <Form.Item
               name="UserPassword"
+              className="mb-2"
               rules={[
                 { required: true, message: "Please input your Password!" },
               ]}
             >
               <Input
                 type="password"
+                value={password}
+                onChange={(e)=> setPassword(e.target.value)}
                 className="mt-1 px-3 py-2 bg-white border shadow-sm border-slate-300 placeholder-slate-400 focus:outline-none focus:border-sky-500 focus:ring-sky-500 block rounded-md sm:text-sm focus:ring-1 w-80"
                 placeholder=" Your Password"
               />
             </Form.Item>
 
+            <label
+              htmlFor="Password"
+              className="block text-white font-semibold"
+            >
+              Confirm Password
+            </label>
+            <Form.Item
+              name="ConfirmPassword"
+              rules={[
+                { required: true, message: "Re-type your Password!" },
+              ]}
+            >
+              <Input
+                type="password"
+                value={confirmPassword}
+                onChange={(e)=> setConfirmPassword(e.target.value)}
+                className="mt-1 px-3 py-2 bg-white border shadow-sm border-slate-300 placeholder-slate-400 focus:outline-none focus:border-sky-500 focus:ring-sky-500 block rounded-md sm:text-sm focus:ring-1 w-80"
+                placeholder=" Your Password"
+              />
+            </Form.Item>
+            {error}
             <button
               type="submit"
               className="bg-purple-400 hover:bg-purple-500 text-white px-4 py-3 my-2 rounded-lg font-medium w-80"
@@ -163,7 +186,7 @@ export default function Register(): any {
        
         </Col>
         <Col span={14} >
-          <Card className={`p-2 ml-5 mr-3  ${loginStyle.cardLogin} no-border`}>
+          <Card className={`p-2 ml-5 mr-3 mt-6 ${loginStyle.cardLogin} no-border`}>
             <div className="container mt-3 ">
               <img src="/assets/icons.png" alt="" style={{ width: 60 }} />
 
@@ -270,8 +293,7 @@ export default function Register(): any {
   </motion.div>
   </Layouts>
   );
-}
-
+})
 // primary /ungu: #754CFF
 // sec  /abu-abu : #F2F1FA
 // base /hitam : #252525
