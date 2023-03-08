@@ -19,6 +19,8 @@ export default function index() {
     (state: any) => state.BoorInvoiceReducer.invoice
   );
 
+  // console.log(invoiceView);
+
   useEffect(() => {
     dispatch(getSpInvoice());
   }, []);
@@ -27,6 +29,10 @@ export default function index() {
     (item: any) => item.boor_order_number === id
   );
 
+<<<<<<< HEAD
+=======
+  // console.log(invoiceView, id)
+>>>>>>> 643f5058b6609369ec32e878972ef24073342ea7
   const boor_order_number =
     Invoice?.length > 0 ? Invoice[0].boor_order_number : "";
   const boor_order_date = Invoice?.length > 0 ? Invoice[0].boor_order_date : "";
@@ -106,15 +112,15 @@ export default function index() {
   //Array Object untuk title and field
   const invoice1 = [
     {
-      title: "Booking Order",
+      title: "Booking Order", //
       field: getInvoice.boor_order_number,
     },
     {
-      title: "Order Date",
+      title: "Order Date", //
       field: getInvoice.boor_order_date?.split("T")[0],
     },
     {
-      title: "Invoice Number",
+      title: "Invoice Number", //
       field: getInvoice.invoice_number,
     },
     {
@@ -126,8 +132,13 @@ export default function index() {
       field: getInvoice.boor_is_paid,
     },
     {
+<<<<<<< HEAD
       title: "Payment Type",
       field: getInvoice.boor_pay_type == null ? "Cash" : getInvoice.boor_pay_type,
+=======
+      title: "Payment Type", //
+      field: getInvoice?.boor_pay_type,
+>>>>>>> 643f5058b6609369ec32e878972ef24073342ea7
     },
   ];
 

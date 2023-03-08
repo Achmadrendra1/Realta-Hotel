@@ -10,11 +10,8 @@ export default function ViewCategory(props: any) {
     (item: any) => item.cagroId == idCategory
   );
   const [formValues, setFormValues] = useState(detailscate);
-  // console.log('view cate:', detailscate);
-  // console.log('view data cate:', dataCategory);
 
   const onFinish = () => {
-    // console.log('Success:', formValues);
     handleClose(false);
   };
 

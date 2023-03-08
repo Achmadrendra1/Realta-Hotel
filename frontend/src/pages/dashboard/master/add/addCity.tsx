@@ -18,30 +18,20 @@ export default function AddProvinces(props: any) {
     (item: any) => item.prov_name == provNamee
   );
   const [formValues, setFormValues] = useState(details);
-  // console.log('provNamee :', provNamee);
-  // console.log('provId :', provId);
-  // console.log('dataProvinces :', dataProvinces);
-  // console.log('details :', details);
-  // console.log('formValues address :', formValues);
 
   const handleInputChange = (input: any) => (e: any) => {
     setFormValues({ ...formValues, [input]: e.target.value });
   };
 
-  // console.log('handleInputChange :', handleInputChange);
-
   const onFinish = (data: any) => {
     dispatch(doAddAddress(data));
-    // console.log('add data city:', data);
     dispatch(doUpdateAddress(formValues));
     window.location.reload();
     handleClose(false);
     alert;
   };
 
-  const onFinishFailed = (errorInfo: any) => {
-    // console.log('Failed:', errorInfo);
-  };
+  const onFinishFailed = (errorInfo: any) => {};
 
   //Alert
   const [visible, setVisible] = useState('hidden');
