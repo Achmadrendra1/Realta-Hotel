@@ -61,6 +61,27 @@ export const insertBookingFailed = (payload : any) => {
     }
 }
 
+export const insertBookingExtra = (payload : any) => {
+    return{
+        type : BookingConstant.INSERT_BOOKING_EXTRA,
+        payload
+    }
+}
+
+export const insertBookingExtraSuccess = (payload : any) => {
+    return {
+        type : BookingConstant.INSERT_BOOKING_EXTRA_SUCCESS,
+        payload
+    }
+}
+
+export const insertBookingExtraFailed = (payload : any) => {
+    return {
+        type : BookingConstant.INSERT_BOOKING_ORDER_FAILED,
+        payload
+    }
+}
+
 export const getSpHotel = () => {
     return{
         type : BookingConstant.GET_SP_HOTEL
