@@ -6,6 +6,7 @@ import {
   EditOutlined,
   ExclamationCircleFilled,
   EyeOutlined,
+  SearchOutlined,
   UserAddOutlined,
 } from "@ant-design/icons";
 import { Breadcrumb, Col, Input, List, Modal, Row, Table } from "antd";
@@ -19,14 +20,30 @@ import withAuth from "@/PrivateRoute/WithAuth";
 
 export default withAuth(function index() {
   const dispatch: any = useDispatch();
-  const { hotel } = useSelector((state: any) => state.HotelReducer);
+  const { hotel, currentPage, total } = useSelector(
+    (state: any) => state.HotelReducer
+  );
   const [OpenAdd, setOpenAdd] = useState(false);
   const [id, setId] = useState();
   const [refresh, setRefresh] = useState(false);
   const [OpenEdit, setOpenEdit] = useState(false);
   const router = useRouter();
+  const [search, setSearch] = useState("");
   const { Search } = Input;
-  const {confirm} = Modal;
+  const { confirm } = Modal;
+
+  const filterData = hotel.filter((item: any) => {
+    if (search === "") {
+      return item;
+    } else {
+      return (
+        item.hotelName.toLowerCase().includes(search.toLocaleLowerCase()) ||
+        item.hotelAddr?.addrLine2
+          .toLowerCase()
+          .includes(search.toLocaleLowerCase())
+      );
+    }
+  });
 
   useEffect(() => {
     dispatch(getHotel());
@@ -39,19 +56,19 @@ export default withAuth(function index() {
   const handleClose = (data: boolean) => {
     setOpenAdd(data);
     setOpenEdit(data);
-  }
+  };
 
   const handleOk = () => {
     setTimeout(() => {
       setOpenAdd(false);
       setOpenEdit(false);
     }, 2000);
-  }
+  };
 
   const handleCancel = () => {
     setOpenAdd(false);
     setOpenEdit(false);
-  }
+  };
 
   const editHotel = (id: any) => {
     setOpenEdit(true);
@@ -60,7 +77,7 @@ export default withAuth(function index() {
 
   const onDelete = (hotelId: any) => {
     confirm({
-      title: 'Are you sure you want to delete this Hotel?',
+      title: "Are you sure you want to delete this Hotel?",
       icon: <ExclamationCircleFilled />,
       okText: "Yes",
       okType: "danger",
@@ -69,12 +86,15 @@ export default withAuth(function index() {
         dispatch(deleteHotel(hotelId));
       },
       onCancel() {
-        console.log(
-          "Cancel"
-        );
-      }
-    })    
+        console.log("Cancel");
+      },
+    });
   };
+  useEffect(() => {
+    if (hotel.length === 0 && currentPage > 1) {
+      dispatch(getHotel({ page: currentPage - 1 }));
+    }
+  }, [total]);
 
   const column = [
     {
@@ -121,15 +141,21 @@ export default withAuth(function index() {
             <a>
               {" "}
               <Link href={`hotel/${index}`}>
-                <EyeOutlined />
+                <EyeOutlined className="text-blue-400" />
               </Link>
             </a>{" "}
             <a>
               {" "}
-              <EditOutlined onClick={() => editHotel(index)} />
+              <EditOutlined
+                style={{ color: "#13c2c2" }}
+                onClick={() => editHotel(index)}
+              />
             </a>{" "}
             <a>
-              <DeleteOutlined onClick={() => onDelete(index)} />
+              <DeleteOutlined
+                style={{ color: "red" }}
+                onClick={() => onDelete(index)}
+              />
             </a>
           </div>
         );
@@ -137,16 +163,15 @@ export default withAuth(function index() {
     },
   ];
 
-  const [queryHotel, setQueryHotel] = useState("");
-  const handleSearchHotel = (e: any) => {
-    const input = e.target.value.toLowerCase().replace(/\s/g, "");
-    setQueryHotel(input);
+  const handleTableChange = (pagination: any) => {
+    dispatch(getHotel({ page: pagination }));
   };
-  const searchResultsHotel = hotel.filter(
-    (item: any) =>
-      item?.hotelName?.toLowerCase().replace(/\s/g, "").includes(queryHotel) ||
-      item?.hotelAddr?.addrLine2?.toLowerCase().replace(/\s/g, "").includes(queryHotel)
-  );
+
+  const handleSearch = (e: any) => {
+    e
+      ? dispatch(getHotel({ page: 1, keyword: e.target.value }))
+      : dispatch(getHotel());
+  };
 
   return (
     <Dashboard>
@@ -158,56 +183,59 @@ export default withAuth(function index() {
           <Link href="/dashboard/hotel">Hotel</Link>
         </Breadcrumb.Item>
       </Breadcrumb>
-      
-      {OpenAdd ?
+
+      {OpenAdd ? (
         <AddHotelsRealta
           showAdd={OpenAdd}
-          okAdd = {handleOk}
+          okAdd={handleOk}
           cancelAdd={handleCancel}
           handleClose={handleClose}
           onRefresh={() => setRefresh(true)}
         />
-       : null }
-      
-      {OpenEdit ? 
+      ) : null}
+
+      {OpenEdit ? (
         <EditHotelRealta
           id={id}
           showEdit={OpenEdit}
-          okEdit = {handleOk}
+          okEdit={handleOk}
           cancelEdit={handleCancel}
           handleClose={handleClose}
           onRefresh={() => setRefresh(true)}
           htlname={hotel.hotelName}
         />
-       : null }
+      ) : null}
 
-        <Row gutter={16}>
-          <Col span={24}>
-            <h1 className="text-xl font-medium">Realta Hotel</h1>
-            <Row gutter={5} className=" mt-6 mb-8">
-              <Col span={6}>
-                <Search
-                  placeholder="input search text"
-                  allowClear
-                  style={{ width: 200 }}
-                  onChange={handleSearchHotel}
-                />
-              </Col>
-              <Col></Col>
-              <Col className="ml-auto">
-                <Buttons funcs={() => setOpenAdd(true)}>
-                  Add <UserAddOutlined />
-                </Buttons>
-              </Col>
-            </Row>
-            <Table
-              columns={column}
-              dataSource={searchResultsHotel}
-              pagination={{ pageSize: 5 }}
-            />
-          </Col>
-        </Row>
+      <Row gutter={16}>
+        <Col span={24}>
+          <h1 className="text-xl font-medium">Realta Hotel</h1>
+          <Row gutter={5} className=" mt-6 mb-8">
+            <Col span={6}>
+              <Search
+                placeholder="Search"
+                onChange={handleSearch}
+                style={{ width: 200 }}
+              />
+            </Col>
+            <Col></Col>
+            <Col className="ml-auto">
+              <Buttons funcs={() => setOpenAdd(true)}>
+                Add <UserAddOutlined />
+              </Buttons>
+            </Col>
+          </Row>
+          <Table
+            columns={column}
+            dataSource={hotel}
+            pagination={{
+              current: currentPage,
+              total: total,
+              pageSize: 10,
+              onChange: handleTableChange,
+            }}
+          />
+        </Col>
+      </Row>
     </Dashboard>
   );
-}
-)
+});
