@@ -2,12 +2,13 @@ import { all, takeEvery } from "redux-saga/effects";
 import {
   handleAddDept,
   handleDeleteDept,
+  handleDeptSelect,
   handleGetDept,
   handleUpdateDept,
 } from "./HR/department";
 import { deptType } from "../Constant/HR/deptType";
 import { empType } from "../Constant/HR/empType";
-import { handleAddEmployee, handleDelEmployee, handleDetailEmployee, handleGetEmployees, handleUpdateEmployee } from "./HR/employees";
+import { handleAddEmployee, handleAddPayhist, handleDelEmployee, handleDeptHist, handleDetailEmployee, handleGetEmployees, handleUpdateEmployee, handleUpdatePhotoEmp } from "./HR/employees";
 import UserConst from "../Constant/User/UserConst";
 import { HandleLoginUser } from "./User/auth";
 import { HandleEditProfile, HandleGetUser, HandleUpdatePassword } from "./User/getUser";
@@ -269,6 +270,10 @@ export default function* rootSaga() {
     takeEvery(workType.GET_WORK_ORDER, handleWorkorder),
     takeEvery(workType.GET_DETAIL, handleWorkDetail),
     takeEvery(workType.SERVICE_WORK, handleServicesList),
+    takeEvery(deptType.GET_SELECT, handleDeptSelect),
+    takeEvery(empType.ADD_MUTATION, handleDeptHist),
+    takeEvery(empType.ADD_PAYHIST, handleAddPayhist),
+    takeEvery(empType.UPDATE_PHOTO, handleUpdatePhotoEmp),
 
     //Hotel
     takeEvery(HotelConstant.GET_HOTEL, handleHotel),

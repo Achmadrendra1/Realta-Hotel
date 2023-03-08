@@ -95,7 +95,7 @@ const Department = () => {
             <Row justify='space-between' className="my-5">
                 <Col>
                     <Space size={17}>
-                        <Input className="w-96 py-2 rounded-full" value={search} placeholder="Department Name" prefix={<SearchOutlined />} onChange={e => setSearch(e.target.value)}/>
+                        <Input className="w-96 py-2 rounded" value={search} placeholder="Department Name" prefix={<SearchOutlined />} onChange={e => setSearch(e.target.value)}/>
                     </Space>
                 </Col>
                 <Col>

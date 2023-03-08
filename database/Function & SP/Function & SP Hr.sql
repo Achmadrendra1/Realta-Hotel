@@ -44,7 +44,7 @@ returns table(
 	jobName varchar(55),
 	salary money,
 	frequentlyPay smallint,
-	departmane varchar(50),
+	departName varchar(50),
 	deptStart timestamp,
 	deptEnd timestamp,
 	shifting varchar(25),
@@ -78,15 +78,13 @@ begin
 		shift_start_time,
 		shift_end_time
 	from
-		users.users u join hr.work_orders wo on wo.woro_user_id = u.user_id
-		join hr.work_order_detail wod on wod.wode_woro_id = wo.woro_id
-		join hr.employee emp on emp.emp_id = wod.wode_emp_id
-		join hr.employee_pay_history pay on emp.emp_id = pay.ephi_emp_id
-		join hr.employee_department_history edh on emp.emp_id = edh.edhi_emp_id
+		users.users join hr.employee on user_id = emp_user_id
+		join hr.employee_pay_history pay on emp_id = pay.ephi_emp_id
+		join hr.employee_department_history edh on emp_id = edh.edhi_emp_id
 		join hr.department dpt on edh.edhi_dept_id = dpt.dept_id
 		join hr.shift sh on edh.edhi_shift_id = sh.shift_id
-		join hr.job_role job on emp.emp_joro_id = job.joro_id
-	where emp.emp_id = id;
+		join hr.job_role job on emp_joro_id = job.joro_id 
+	where emp_id = 1;
 end; $$
 language plpgsql
 
@@ -187,18 +185,6 @@ begin
 		'C'
 	);
 	
-	insert into hr.work_orders(
-		woro_id,
-		woro_start_date,
-		woro_status,
-		woro_user_id
-	) values (
-		id_work,
-		now(),
-		'OPEN',
-		id_user
-	);
-	
 	insert into hr.employee(
 		emp_id,
 		emp_national_id,
@@ -213,6 +199,7 @@ begin
 		emp_photo,
 		emp_joro_id,
 		emp_emp_id,
+		emp_user_id,
 		emp_modified_date
 	)values(
 		id_emp,
@@ -228,14 +215,9 @@ begin
 		photoUrl,
 		jobId,
 		bosId,
+		id_user,
 		now()
 	);
-	
-	insert into hr.work_order_detail(
-		wode_id,
-		wode_emp_id,
-		wode_woro_id
-	)values (id_wode, id_emp, id_work);
 	
 	insert into hr.employee_pay_history(
 		ephi_emp_id,
