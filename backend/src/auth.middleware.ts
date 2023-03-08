@@ -16,7 +16,6 @@ export class AuthMiddleware implements NestMiddleware {
     } else {
       try {
         jwt.verify(auth, process.env.SECRET_KEY);
-        console.log('Verified');
         next();
       } catch (e: any) {
         throw new HttpException('Unverified Token', HttpStatus.UNAUTHORIZED);

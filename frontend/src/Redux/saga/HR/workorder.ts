@@ -1,6 +1,6 @@
 import { put } from "redux-saga/effects";
 import axios from "axios";
-import { API } from "@/Redux/Configs/consumeApi";
+import { API, FORMAPI } from "@/Redux/Configs/consumeApi";
 import { workType } from "@/Redux/Constant/HR/workType";
 
 export function* handleWorkorder():any{
@@ -13,8 +13,9 @@ export function* handleWorkorder():any{
 }
 
 export function* handleWorkDetail(action:any):any{
+    const { payload } = action
     try {
-        const res = yield axios(API('get', '/workorder/'+ action.payload))
+        const res = yield axios(API('get', '/workorder/'+ payload))
         yield put({ type: workType.GET_DETAIL_SUCCESS, payload: res.data})
     } catch (e:any) {
         Promise.resolve(e)
@@ -24,6 +25,7 @@ export function* handleWorkDetail(action:any):any{
 export function* handleServicesList():any{
     try {
         const res = yield axios(API('get', '/workorder/task'))
+        console.log(res.data)
         yield put({ type: workType.SERVICE_WORK_SUCCESS, payload: res.data})
     } catch (e:any) {
         Promise.resolve(e)
