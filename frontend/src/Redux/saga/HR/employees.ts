@@ -72,3 +72,13 @@ export function* handleAddPayhist(action:any): any{
         yield put({ type: empType.ADD_PAYHIST_FAILED });
     }
 }
+
+export function* handleUpdatePhotoEmp(action:any):any{
+    const { payload } = action
+    try {
+        const res = yield axios(FORMAPI('put', '/employee/empfoto', payload))
+        yield put({ type: empType.UPDATE_PHOTO_SUCCESS, payload: res.data })
+    } catch (e:any) {
+        yield put({ type: empType.UPDATE_PHOTO_FAILED })
+    }
+}

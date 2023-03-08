@@ -9,6 +9,11 @@ const initialState = {
 export const detailEmpReducer = ( state:object = initialState, action:any ) => {
     const { type, payload } = action
     switch(type){
+        case empType.UPDATE_PHOTO_SUCCESS:
+            return{
+                ...state,
+                details: payload[0]
+            }
         case empType.ADD_PAYHIST_SUCCESS:
             return{
                 ...state,
@@ -50,6 +55,7 @@ export const detailEmpReducer = ( state:object = initialState, action:any ) => {
             }
         case empType.ADD_PAYHIST:
         case empType.ADD_MUTATION:
+        case empType.UPDATE_PHOTO:
         case empType.GET_DETAIL:
         default:
             return state

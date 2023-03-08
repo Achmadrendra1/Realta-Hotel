@@ -1,7 +1,7 @@
-import { addDeptHist, addPayHist, getDeptSelect, getDetailEmp, updateEmployee } from "@/Redux/Action/HR"
+import { addDeptHist, addPayHist, getDeptSelect, getDetailEmp, updateEmpPhoto, updateEmployee } from "@/Redux/Action/HR"
 import Buttons from "@/components/Button"
 import Dashboard from "@/layouts/dashboard"
-import { ArrowLeftOutlined, EditOutlined, UserOutlined } from "@ant-design/icons"
+import { ArrowLeftOutlined, DeleteOutlined, EditOutlined, UserOutlined } from "@ant-design/icons"
 import { AutoComplete, Avatar, Col, DatePicker, Divider, Form, Input, List, Modal, Row, Select, Space } from "antd"
 import Image from "next/image"
 import Link from "next/link"
@@ -21,6 +21,7 @@ const EmployeeDetail = () => {
     const { selectJob, selectDept } = useSelector((state:any) => state.selectReducer)
     const { employee } : any = router.query
     const jobId = !parseInt(details?.jobname) ? selectJob.find((item:any) => item.label.toLocaleLowerCase() == details?.jobname?.toLocaleLowerCase()) : selectJob.find((item:any) => item.value == details?.jobname)
+    const [photos, setPhotos] = useState([])
     const [ update, setUpdate ] = useState({
         userId: '',
         empId: '',
@@ -103,6 +104,15 @@ const EmployeeDetail = () => {
     const submitForm = (e:any) => {
         e.preventDefault()
         dispatch(updateEmployee(update))
+    }
+
+    const editPhoto = () => {
+        const body = new FormData()
+        body.append('image', photos)
+        body.append('id', mutation.empId)
+        dispatch(updateEmpPhoto(body))
+        isPhoto(false)
+        setPhotos([])
     }
 
     const addCommas = (num:any) => num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
@@ -253,13 +263,27 @@ const EmployeeDetail = () => {
                     </div>
                 </Col>
             </Row>
-            <Modal title='Edit Profiles' open={photo} onCancel={() => isPhoto(false)} footer={
+            <Modal title='Edit Profiles Photo' open={photo} onCancel={() => isPhoto(false)} footer={
                 <div className="w-full flex gap-5 justify-end">
                     <Buttons funcs={() => isPhoto(false)} type='danger'>Cancel</Buttons>
-                    <Buttons funcs={() => isPhoto(false)}>Save</Buttons>
+                    <Buttons funcs={() => editPhoto()}>Save</Buttons>
                 </div>
             }>
-                test
+                <Form>
+                    <Input type="file" id="photo" style={{ display: 'none'}} onChange={e => setPhotos(e.target.files[0])}/>
+                    <label htmlFor="photo" className="w-full">
+                        <div className="flex justify-center items-center bg-gray-100 rounded h-28">
+                            Click Here and Choose New File
+                        </div>
+                    </label>
+                    {
+                        photos?.name !== undefined && 
+                        <div className="flex justify-between items-center py-3">
+                            <p>{photos?.name}</p>
+                            <button className="text-red-500" onClick={() => setPhotos([])}><DeleteOutlined/></button>
+                        </div>
+                    }
+                </Form>
             </Modal>
             <Modal title='Department History' open={dept} onCancel={() => isDept(false)} footer={
                 <div className="w-full flex gap-5 justify-end">

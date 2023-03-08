@@ -109,3 +109,10 @@ export const addPayHist = (payload:any) => {
         payload: payload
     }
 }
+
+export const updateEmpPhoto = (payload:any) => {
+    return{
+        type: empType.UPDATE_PHOTO,
+        payload: payload
+    }
+}
