@@ -34,6 +34,7 @@ import BoorInvoiceReducer from './Booking/BoorInvoiceReducer';
 // Purchasing
 import { StockReducer } from './Purchasing/stockReducer';
 import StodReducer from './Purchasing/stodReducer';
+import { SphoReducer } from './Purchasing/sphoReducer';
 import VendorReducer from './Purchasing/vendorReducer';
 import VeproReducer from './Purchasing/veproReducer';
 import PoheReducer from './Purchasing/poheReducer';
@@ -92,6 +93,7 @@ export default combineReducers({
   //Purchasing
   StockReducer,
   StodReducer,
+  SphoReducer,
   VendorReducer,
   VeproReducer,
   PoheReducer,

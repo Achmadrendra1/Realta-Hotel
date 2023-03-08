@@ -12,7 +12,7 @@ import {
     DelPodeFailed
 } from "@/Redux/Action/Purchasing/purchasingAction";
 
-function* handlePode(): any {
+export function* handlePode(): any {
     try {
         const result = yield axios(API('GET', '/purchase-order-detail'))
         yield put(AllPodeSuccess(result.data))
@@ -22,7 +22,7 @@ function* handlePode(): any {
     }
 }
 
-function* handlePodeAdd(action: any): any {
+export function* handlePodeAdd(action: any): any {
     try {
         const res = yield axios(API('POST', '/purchase-order-detail', action.payload))
         yield put(AddPodeSuccess(res.data.result))
@@ -32,27 +32,21 @@ function* handlePodeAdd(action: any): any {
     }
 }
 
-function* handlePodeUpdate(action: any): any {
+export function* handlePodeUpdate(action: any): any {
     try {
-        yield axios(API('PUT', '/purchase-order-detail/' + action.payload.podeId, action.payload))
+        const res = yield axios(API('PUT', '/purchase-order-detail/' + action.payload.podhe_id, action.payload))
         yield put(EditPodeSuccess(action.payload))
+        return res.data.result
     } catch (error: any) {
         yield put(EditPodeFailed(error.response.data.message))
     }
 }
 
-function* handlePodeDelete(action: any): any {
+export function* handlePodeDelete(action: any): any {
     try {
         yield axios(API(`DELETE`, `/purchase-order-detail/${action.payload}`))
         yield put(DelPodeSuccess(action.payload))
     } catch (error) {
         yield put(DelPodeFailed(error))
     }
-}
-
-export {
-    handlePode,
-    handlePodeAdd,
-    handlePodeUpdate,
-    handlePodeDelete
 }

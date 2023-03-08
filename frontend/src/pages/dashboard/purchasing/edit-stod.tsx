@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
+import React, { useState, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { Form, Modal, Select } from 'antd';
 import Buttons from '@/components/Button';
 import { EditStod } from '@/Redux/Action/Purchasing/purchasingAction';
+import { getFacility } from '@/Redux/Action/Hotel/HotelAction';
 
 export default function EditStods(props: any) {
     const id = props.id
@@ -10,24 +11,29 @@ export default function EditStods(props: any) {
     const { handleClose } = props
     const dispatch = useDispatch()
 
+    const { facilities } = useSelector((state: any) => state.HotelReducer)
+    useEffect(() => {
+        dispatch(getFacility())
+    }, [])
+
     const editStods = data.find((item: any) => item.stockdet_id == id)
     const [dataStod, setDataStod] = useState(editStods)
 
     const status = [
         {
-            value: 1,
+            value: "1",
             label: "Stocked"
         },
         {
-            value: 2,
+            value: "2",
             label: "Expired"
         },
         {
-            value: 3,
+            value: "3",
             label: "Broken"
         },
         {
-            value: 4,
+            value: "4",
             label: "Used"
         }
     ]
@@ -45,6 +51,7 @@ export default function EditStods(props: any) {
         console.log("Failed:", errorInfo)
     }
 
+
     return (
         <>
             <Modal
@@ -61,14 +68,33 @@ export default function EditStods(props: any) {
                     onFinishFailed={onFinishFailed}
                     initialValues={dataStod}
                 >
-                    <Form.Item name="stockdet_status" label="Status"
-                        rules={[{ required: true, message: 'Please select status!' }]}>
-                        <Select options={status} />
+                    <Form.Item
+                        name="stockdet_status" label="Status"
+                        rules={[{ required: true, message: 'Please select status!' }]}
+                    >
+                        <Select
+                            options={status}
+                            onChange={(value) => {
+                                setDataStod({ ...dataStod, stockdet_status: value })
+                            }}
+                        />
                     </Form.Item>
 
-                    <Form.Item name="stockdet_facilities" label="Used In"
-                        rules={[{ required: true, message: 'Please select facilities!' }]}>
-                        <Select />
+                    <Form.Item
+                        name="stockdet_facilities" label="Used In"
+                        rules={[{ required: true, message: 'Please select facilities!' }]}
+                    >
+                        <Select
+                            onChange={(value) => {
+                                setDataStod({ ...dataStod, stockdet_facilities: value })
+                            }}
+                        >
+                            {facilities && facilities.map((item: any, index: any) => (
+                                <option value={item.faciId}>
+                                    {item.faciName}
+                                </option>
+                            ))}
+                        </Select>
                     </Form.Item>
 
                     <Form.Item label=" " colon={false}>

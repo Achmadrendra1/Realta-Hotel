@@ -12,7 +12,7 @@ import {
     DelPoheFailed
 } from "@/Redux/Action/Purchasing/purchasingAction";
 
-function* handlePohe(): any {
+export function* handlePohe(): any {
     try {
         const result = yield axios(API('GET', '/purchase-order-header'))
         yield put(AllPoheSuccess(result.data))
@@ -22,7 +22,7 @@ function* handlePohe(): any {
     }
 }
 
-function* handlePoheAdd(action: any): any {
+export function* handlePoheAdd(action: any): any {
     try {
         const res = yield axios(API('POST', '/purchase-order-header', action.payload))
         yield put(AddPoheSuccess(res.data.result))
@@ -32,27 +32,21 @@ function* handlePoheAdd(action: any): any {
     }
 }
 
-function* handlePoheUpdate(action: any): any {
+export function* handlePoheUpdate(action: any): any {
     try {
-        yield axios(API('PUT', '/purchase-order-header/' + action.payload.poheId, action.payload))
+        const res = yield axios(API('PUT', '/purchase-order-header/' + action.payload.pove_id, action.payload))
         yield put(EditPoheSuccess(action.payload))
+        return res.data.result
     } catch (error: any) {
         yield put(EditPoheFailed(error.response.data.message))
     }
 }
 
-function* handlePoheDelete(action: any): any {
+export function* handlePoheDelete(action: any): any {
     try {
         yield axios(API(`DELETE`, `/purchase-order-header/${action.payload}`))
         yield put(DelPoheSuccess(action.payload))
     } catch (error) {
         yield put(DelPoheFailed(error))
     }
-}
-
-export {
-    handlePohe,
-    handlePoheAdd,
-    handlePoheUpdate,
-    handlePoheDelete
 }

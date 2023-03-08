@@ -12,7 +12,7 @@ import {
     DelStodFailed
 } from '@/Redux/Action/Purchasing/purchasingAction';
 
-function* handleStod(): any {
+export function* handleStod(): any {
     try {
         const result = yield axios(API('GET', '/stock-detail'))
         yield put(AllStodSuccess(result.data))
@@ -22,7 +22,7 @@ function* handleStod(): any {
     }
 }
 
-function* handleStodAdd(action: any): any {
+export function* handleStodAdd(action: any): any {
     try {
         const res = yield axios(API('POST', '/stock-detail', action.payload))
         yield put(AddStodSuccess(res.data.result))
@@ -32,27 +32,21 @@ function* handleStodAdd(action: any): any {
     }
 }
 
-function* handleStodUpdate(action: any): any {
+export function* handleStodUpdate(action: any): any {
     try {
-        yield axios(API('PUT', '/stock-detail/' + action.payload.stockId, action.payload))
-        yield put(EditStodSuccess(action.payload))
+        const res = yield axios(API('PUT', `/stock-detail/${action.payload.stockdet_id}`, action.payload))
+        yield put(EditStodSuccess(res.data.result[0]))
+        return res.data.result
     } catch (error: any) {
         yield put(EditStodFailed(error.response.data.message))
     }
 }
 
-function* handleStodDelete(action: any): any {
+export function* handleStodDelete(action: any): any {
     try {
         yield axios(API(`DELETE`, `/stock-detail/${action.payload}`))
         yield put(DelStodSuccess(action.payload))
     } catch (error) {
         yield put(DelStodFailed(error))
     }
-}
-
-export {
-    handleStod,
-    handleStodAdd,
-    handleStodUpdate,
-    handleStodDelete
 }

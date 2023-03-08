@@ -2,6 +2,7 @@ import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Like, Repository } from 'typeorm';
 import { StockPhoto } from 'src/entities/StockPhoto';
+import * as path from 'path';
 
 @Injectable()
 export class SphoService {
@@ -26,20 +27,24 @@ export class SphoService {
     );
   }
 
-  async addSpho(stockPhoto: StockPhoto): Promise<any> {
-    await this.sphoRepository.save(
-      {
-        sphoThumbnailFilename: stockPhoto.sphoThumbnailFilename,
-        sphoPhotoFilename: stockPhoto.sphoPhotoFilename,
-        sphoPrimary: stockPhoto.sphoPrimary,
-        sphoUrl: stockPhoto.sphoUrl,
-        sphoStock: stockPhoto.sphoStock,
-      }
-    )
-    const res = await this.findAllSpho()
-    return (
-      { message: `Congrats, you have new Stock photo`, result: res }
-    )
+  async addSpho(url: any, stockPhoto: StockPhoto): Promise<any> {
+    for (const data of url) {
+      console.log(data);
+      await this.sphoRepository.save(
+        {
+          sphoThumbnailFilename: data.originalname,
+          sphoPhotoFilename: data.filename,
+          sphoPrimary: stockPhoto.sphoPrimary,
+          sphoUrl: data.filename,
+          sphoStock: stockPhoto.sphoStock,
+        }
+      )
+      const res = await this.findAllSpho()
+      return (
+        { message: `Congrats, you have new Stock photo`, result: res }
+      )
+    }
+
   }
 
   async editSpho(id: number, spho: StockPhoto): Promise<any> {

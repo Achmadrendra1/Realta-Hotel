@@ -139,10 +139,12 @@ import { handleBoorCreateFinal, handleBoorLast, handleSpBoorInvoice, handleSpFac
 import PurchasingConst from '../Constant/Purchasing/PurchasingConst'
 import { handleStock, handleStockAdd, handleStockUpdate, handleStockDelete, handleStockCart } from './Purchasing/stockSaga'
 import { handleStod, handleStodAdd, handleStodDelete, handleStodUpdate } from './Purchasing/stodSaga'
+import { handleSpho, handleSphoAdd, handleSphoDelete, handleSphoUpdate } from "./Purchasing/sphoSaga";
 import { handleVendor, handleVendorAdd, handleVendorDelete, handleVendorUpdate } from './Purchasing/vendorSaga'
 import { handleVepro, handleVeproAdd, handleVeproDelete, handleVeproUpdate } from './Purchasing/veproSaga'
 import { handlePohe, handlePoheAdd, handlePoheDelete, handlePoheUpdate } from './Purchasing/poheSaga'
 import { handlePode, handlePodeAdd, handlePodeDelete, handlePodeUpdate } from './Purchasing/podeSaga'
+
 import menuConstant from "../Constant/Resto/menuConstant";
 import { handleAddMenu, handleDeleteMenu, handleMenu, handleUpdateMenu } from "./Resto/menuProcess";
 import restoConstant from "../Constant/Resto/restoConstant";
@@ -163,8 +165,8 @@ export default function* rootSaga() {
     //user and auth
     takeEvery(UserConst.LOGIN_USER, HandleLoginUser),
     takeEvery(UserConst.GET_DATA_USER, HandleGetUser),
-    takeEvery(UserConst.EDIT_DATA_PROFILE,HandleEditProfile),
-    takeEvery(UserConst.UPDATE_PASSWORD,HandleUpdatePassword),
+    takeEvery(UserConst.EDIT_DATA_PROFILE, HandleEditProfile),
+    takeEvery(UserConst.UPDATE_PASSWORD, HandleUpdatePassword),
 
 
     takeEvery(deptType.GET_DATA, handleGetDept),
@@ -303,6 +305,11 @@ export default function* rootSaga() {
     takeEvery(PurchasingConst.ADD_STOD, handleStodAdd),
     takeEvery(PurchasingConst.EDIT_STOD, handleStodUpdate),
     takeEvery(PurchasingConst.DEL_STOD, handleStodDelete),
+    // STOCK PHOTO
+    takeEvery(PurchasingConst.GET_SPHO, handleSpho),
+    takeEvery(PurchasingConst.ADD_SPHO, handleSphoAdd),
+    takeEvery(PurchasingConst.EDIT_SPHO, handleSphoUpdate),
+    takeEvery(PurchasingConst.DEL_SPHO, handleSphoDelete),
     // VENDOR
     takeEvery(PurchasingConst.GET_VENDOR, handleVendor),
     takeEvery(PurchasingConst.ADD_VENDOR, handleVendorAdd),

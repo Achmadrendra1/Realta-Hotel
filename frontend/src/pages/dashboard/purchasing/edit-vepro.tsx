@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
-import { Form, Input, Modal } from 'antd';
+import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { Form, Input, Modal, Select } from 'antd';
 import Buttons from '@/components/Button';
-import { EditVepro } from '@/Redux/Action/Purchasing/purchasingAction';
+import { AllStock, EditVepro } from '@/Redux/Action/Purchasing/purchasingAction';
 
 export default function EditVepros(props: any) {
     const id = props.id
@@ -14,8 +14,13 @@ export default function EditVepros(props: any) {
     const [dataVepro, setDataVepro] = useState(editVepros)
 
     const eventHandler = (item: any) => (event: any) => {
-        setDataVepro({ ...dataVepro, [item]: event.target.value });
+        setDataVepro({ ...dataVepro, [item]: event.target.value })
     }
+
+    const { stocks } = useSelector((state: any) => state.StockReducer)
+    useEffect(() => {
+        dispatch(AllStock())
+    }, [])
 
     const onFinish = () => {
         dispatch(EditVepro(dataVepro));
@@ -24,10 +29,6 @@ export default function EditVepros(props: any) {
 
     const onFinishFailed = (errorInfo: any) => {
         console.log("Failed:", errorInfo);
-    }
-
-    const config = {
-        rules: [{ type: 'object' as const, required: true, message: 'Please select time!' }]
     }
 
     return (
@@ -53,14 +54,24 @@ export default function EditVepros(props: any) {
                         name="vestock_name" label='Stock Name'
                         rules={[{ required: true, message: 'Please input stock name!' }]}
                     >
-                        <Input />
+                        <Select
+                            onChange={(value) => {
+                                setDataVepro({ ...dataVepro, vestock_name: value })
+                            }}
+                        >
+                            {stocks && stocks.map((item: any) => (
+                                <option value={item.stockId}>
+                                    {item.stockName}
+                                </option>
+                            ))}
+                        </Select>
                     </Form.Item>
 
                     <Form.Item
                         name="vestock_qty_stocked" label='Qty Stocked'
                         rules={[{ required: true, message: 'Please input qty Stocked!' }]}
                     >
-                        <Input />
+                        <Input onChange={eventHandler("vestock_qty_stocked")}/>
                     </Form.Item>
 
 
@@ -68,7 +79,7 @@ export default function EditVepros(props: any) {
                         name="vestock_qty_remaining" label='Remaining'
                         rules={[{ required: true, message: 'Please input remaining!' }]}
                     >
-                        <Input />
+                        <Input onChange={eventHandler("vestock_qty_remaining")}/>
                     </Form.Item>
 
 
@@ -76,7 +87,7 @@ export default function EditVepros(props: any) {
                         name="vestock_price" label='Sell Price'
                         rules={[{ required: true, message: 'Please input price!' }]}
                     >
-                        <Input />
+                        <Input onChange={eventHandler("vestock_price")}/>
                     </Form.Item>
 
                     <Form.Item label=" " colon={false}>
@@ -91,7 +102,7 @@ export default function EditVepros(props: any) {
                     </Form.Item>
 
                 </Form>
-            </Modal>
+            </Modal >
         </>
     )
 }

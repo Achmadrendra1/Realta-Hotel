@@ -12,7 +12,7 @@ import {
     DelVeproFailed
 } from '@/Redux/Action/Purchasing/purchasingAction';
 
-function* handleVepro(): any {
+export function* handleVepro(): any {
     try {
         const result = yield axios(API('GET', '/vendor-product'))
         yield put(AllVeproSuccess(result.data))
@@ -22,37 +22,32 @@ function* handleVepro(): any {
     }
 }
 
-function* handleVeproAdd(action: any): any {
+export function* handleVeproAdd(action: any): any {
     try {
-        const res = yield axios(API('POST', '/vendor-product' + action.payload))
+        // console.log(action.payload);
+        const res = yield axios(API('POST', '/vendor-product', action.payload))
         yield put(AddVeproSuccess(res.data.result))
         return res.data.result
-    } catch (error) {
-        yield put(AddVeproFailed(error))
+    } catch (error: any) {
+        yield put(AddVeproFailed(error.response.data.message))
     }
 }
 
-function* handleVeproUpdate(action: any): any {
+export function* handleVeproUpdate(action: any): any {
     try {
-        yield axios(API('PUT', '/vendor-product/' + action.payload.veproId, action.payload))
-        yield put(EditVeproSuccess(action.payload))
-    } catch (error) {
-        yield put(EditVeproFailed(error))
+        const res = yield axios(API('PUT', `/vendor-product/${action.payload.vestock_id}`, action.payload))
+        yield put(EditVeproSuccess(res.data.result[0]))
+        return res.data.result
+    } catch (error: any) {
+        yield put(EditVeproFailed(error.response.data.message))
     }
 }
 
-function* handleVeproDelete(action: any): any {
+export function* handleVeproDelete(action: any): any {
     try {
         yield axios(API(`DELETE`, `/vendor-product/${action.payload}`))
         yield put(DelVeproSuccess(action.payload))
     } catch (error) {
         yield put(DelVeproFailed(error))
     }
-}
-
-export {
-    handleVepro,
-    handleVeproAdd,
-    handleVeproUpdate,
-    handleVeproDelete
 }

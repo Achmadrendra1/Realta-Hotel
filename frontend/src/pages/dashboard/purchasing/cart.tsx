@@ -1,161 +1,238 @@
-import { API } from "@/Redux/Configs/consumeApi";
-import { PlusOutlined } from "@ant-design/icons";
-import axios from "axios";
-import { useState } from "react";
-import { useSelector } from "react-redux";
+import { Affix, Card, Col, Input, InputNumber, Row, Table, MenuProps, Dropdown, Typography, Space } from 'antd';
+import { useSelector, useDispatch } from 'react-redux';
+import { useEffect, useState } from 'react';
+import { AllStockCart } from "@/Redux/Action/Purchasing/purchasingAction";
+import { DeleteOutlined, DownOutlined, PlusOutlined, SearchOutlined, ShoppingCartOutlined } from "@ant-design/icons";
+import { configuration } from '@/Redux/Configs/url';
 
 export default function Cart() {
-    const user = useSelector((state: any) => state.GetUserReducer.getUser)
-    const userid = user[0]?.user_id
-    const { stocks } = useSelector((state: any) => state.StockReducer)
-    const { pohes } = useSelector((state: any) => state.PoheReducer)
-    const [search, setSearch] = useState("")
-    const [cart, setCart] = useState([])
+    const { stcart } = useSelector((state: any) => state.StockReducer)
+    const dispatch = useDispatch()
+    const [search, setSearch] = useState('')
+    const [sortedData, setSorted] = useState("")
+    const [itemOrder, setItemOrder] = useState([])
 
-    const [poheNumber, setPoheNumber] = useState("")
-    function code() {
-        // console.log(numberOrder.ormeOrderNumber,'numberOrder'); // hasilnya MENUS#20230223-0001
-        let lastCode = pohes.poheNumber
-        let getStr = lastCode.slice(0, 14);// MENUS#20230223
+    useEffect(() => {
+        dispatch(AllStockCart())
+    }, [])
 
-        let fulldate = new Date()
-        let year = fulldate.getFullYear().toString()
-        let month = fulldate.getMonth() + 1
-        let monthstr = month < 10 ? "0" + month : month
-        let day = fulldate.getDate()
-        let daystr = day < 10 ? "0" + day : day
-        let date = year + monthstr + daystr
-
-        let generate = "PO-" + date
-
-        let orderNumber
-        // kalau sama, lanjutin nomor
-        if (generate === getStr) {
-            let number = Number(lastCode.slice(-4)) + 1
-            let numberstr = number.toString()
-            let zero = "0"
-            let length = numberstr.length
-            let generateNumber = zero.repeat(4 - length) + numberstr
-            orderNumber = generate + "-" + generateNumber
-            setPoheNumber(orderNumber)
-            // kalau beda, mulai dari 1
-        } else {
-            orderNumber = generate + "-" + "001"
-            setPoheNumber(orderNumber);
-        }
-        return orderNumber
+    // Sorted Item Price
+    let sorted: number;
+    if (sortedData && sortedData == "DESC") {
+        sorted = stcart.sort((a: any, b: any) =>
+            b.stcart_price > a.stcart_price ? 1 : -1
+        )
+    } else if (sortedData && sortedData == "ASC") {
+        sorted = stcart.sort((a: any, b: any) =>
+            a.stcart_price > b.stcart_price ? 1 : -1
+        )
     }
 
-    const addtocart = (items: any) => {
-        const newCart = [...cart]
-        const itemInCart = cart.find((item: any) => items.stockName === item.stockName)
+    function handlesort(sort: any) {
+        setSorted(sort)
+    }
 
-        // console.log(code(), 'isi code');
-
-        if (!itemInCart) {
-            const itemInCart = {
-                ...items,
-                // items,
-                quantity: 1,
-                subtotal: 0,
-                orderNumber: code()
+    const items: MenuProps["items"] = [
+        {
+            key: "1",
+            label: "Ascending",
+            onClick: () => {
+                handlesort("ASC")
             }
-            const numberOfPrice = Number(
-                items.remeprice.split(",")[0].replace(/[^0-9]/g, "") // Ganti remeprice veproPrice
-            )
-
-            // split(',')[0].replace(/[^0-9]/g, '')
-            // let numberString = items.remeprice.toString().replace(/[^0-9.-]+/g,"")
-            // const numberOfPrice = parseInt(numberString)
-            // console.log(items.remeprice)
-
-            itemInCart.subtotal = itemInCart.quantity * numberOfPrice
-            newCart.push(itemInCart)
-        } else {
-            itemInCart.quantity++
-            // let numberOfPrice = Number(items.remeprice.replace(/[^0-9.-]+/g,""));
-            console.log(items.remeprice, "else");
-            let numberString = items.remeprice.split(",")[0].replace(/[^0-9]/g, "");
-            const numberOfPrice = parseInt(numberString);
-            itemInCart.subtotal = itemInCart.quantity * numberOfPrice;
-            // console.log(typeof numberString)
+        },
+        {
+            key: "2",
+            label: "Descending",
+            onClick: () => {
+                handlesort("DESC")
+            }
         }
-        setCart(newCart);
-    };
+    ]
 
-    const [currentpage, setCurrentPage] = useState(1)
-    const startIndex = (currentpage - 1) * 9
-    const endIndex = startIndex + 9
+    const addToCart = (item: any) => {
+        const data: any = [...itemOrder]
+        data.push(item)
+        setItemOrder(data)
+    }
+    console.log(itemOrder)
 
-    const sorted = stocks.sort((a: any, b: any) => {
-        a.remeprice > b.remeprice ? 1 : -1 // Ganti remeprice veproPrice
-    })
-    const stocksPagination = sorted.slice(startIndex, endIndex)
+
+
+    const getCartTotal = (): number => {
+        return itemOrder.reduce((sum: number, { quantity }) => sum + quantity, 0)
+    }
+
+
+
+    // Subtotal
+    const getTotalSum = (): number => {
+        let jml = 0
+        itemOrder.map((item: any) => {
+            // ubah tipe data money ke integer agar bisa di hitung
+            let numberOfPrice = Number(item.stcart_price.split(",")[0].replace(/[^0-9]/g, ""))
+
+            jml = numberOfPrice * item.quantity + jml
+        })
+        return jml
+    }
+
+    // Tax
+    function tax(): number {
+        const subtotal = getTotalSum()
+        const result = subtotal * (10 / 100)
+        return result
+    }
+
+    // Total
+    function sumWithTax() {
+        const subtotal = getTotalSum()
+        const totaltax = tax()
+
+        // add tax 10% from sub total
+        const result = subtotal + totaltax
+        return result
+    }
 
     return (
         <>
-            <div className="flex flex-wrap ml-5 item-center">
-                {stocksPagination
-                    .filter((item: any) => {
-                        if (
-                            item.stockName.toLowerCase().includes(search.toLocaleLowerCase())
-                        ) {
-                            return item
-                        }
-                    })
-                    .map(
-                        (stock: any, key: any) => (
-                            <div
-                                key={stock.stockId}
-                                className="w-52 mr-6 mx-auto mb-12"
-                            >
-                                <div>
-                                    {/* <a className=" hover:text-slate-400"> */}
-                                    {/* <img
-                                            src={`${configuration.BASE_URL}/${stock.rempurl}`}
-                                            alt={stock.remename}
-                                            className="h-40 w-full object-cover rounded-lg"
-                                        ></img> */}
-                                    <div className="ml-3 mt-3 h-40">
-                                        <p className="text-lg font-bold">
-                                            {stock.stockName}
-                                        </p>
-                                        <p>{stock.stockDescription}</p>
-                                        <p>Stocked : {stock.stockQuantity}</p>
-                                        <p>Re-order : {stock.stockReorderPoint}</p>
-                                        <p>{stock.stockReorderPoint} (Ganti ke veproPrice)</p>
-                                        {/* <p className="text-amber-600">
-                                                {stock.remestatus}
-                                            </p> */}
-                                    </div>
-                                    {/* </a> */}
-                                    {/* <div className='absolute'> */}
-                                    <div className="w-full flex">
-                                        {userid ? (
-                                            <button
-                                                onClick={() => addtocart(stock)}
-                                                className="w-3/4 mx-auto rounded-full inline-block px-5 py-2 mt-4 bg-slate-500 hover:bg-slate-600 text-white uppercase bottom-0"
-                                            >
-                                                <PlusOutlined /> Add To Cart
-                                            </button>
-                                        ) : (
-                                            ""
-                                        )}
-                                    </div>
-                                    {/* </div> */}
-                                </div>
-                            </div>
-                        )
-                    )}
-            </div>
+            <div className="container mx-auto">
 
-            {/* <Pagination
-                  onChange={handlePagination}
-                  current={currentpage}
-                  pageSize={10}
-                  total={menus.length}
-                  className="text-center py-14"
-                /> */}
+                <Input
+                    className="w-96 py-2 rounded-full my-5"
+                    value={search}
+                    placeholder="Stock Name"
+                    prefix={<SearchOutlined />}
+                    onChange={e => setSearch(e.target.value)} />
+
+                <Dropdown
+                    menu={{
+                        items,
+                        selectable: true,
+                        defaultSelectedKeys: ["1"]
+                    }}>
+
+                    <Typography.Link>
+                        <Space className="my-5">
+                            Sort by price
+                            <DownOutlined />
+                        </Space>
+                    </Typography.Link>
+                </Dropdown>
+
+                <div className="mt-3 flex my-20">
+                    <div className="w-3/5 border rounded shadow p-3 mr-2">
+                        <div className="flex flex-wrap ml-5 item-center">
+                            {stcart.filter((item: any) => {
+                                if (
+                                    item.stcart_name
+                                        .toLowerCase()
+                                        .includes(search.toLowerCase())
+                                ) {
+                                    return item
+                                }
+                            })
+                                .map((item: any) => (
+                                    <Card
+                                        key={item.stcard_id}
+                                        hoverable
+                                        style={{ width: 320 }}
+                                        className="m-2"
+                                    >
+                                        <img
+                                            src={`${configuration.BASE_URL}/stock-photo/src/erik-van-dijk-LpMrtiXDVhE-unsplash.jpg-erik-van-dijk-LpMrtiXDVhE-unsplash-1678187540604-206109257.jpg`}
+                                            alt={item.stcart_name}
+                                            className="w-full object-cover rounded-lg"
+                                        ></img>
+                                        <p className="text-2xl font-semibold my-2">{item.stcart_name}</p>
+                                        <p>{item.stcart_desc}</p>
+                                        <Row gutter={16}>
+                                            <Col span={12}>
+                                                <p>Quantity: {item.stcart_quantity}</p>
+                                            </Col>
+                                            <Col span={12}>
+                                                <p>ReOrder Point: {item.stcart_reorder_point}</p>
+                                            </Col>
+                                        </Row>
+                                        <p className="text-2xl font-semibold my-2">{item.stcart_price}</p>
+
+                                        <button
+                                            onClick={() => addToCart(item)}
+                                            className="float-right rounded-full px-5 py-2 mt-4 bg-slate-500 hover:bg-slate-600 text-white uppercase bottom-0"
+                                        >
+                                            <PlusOutlined /> Add To Cart
+                                        </button>
+                                    </Card>
+                                ))}
+                        </div>
+                    </div>
+
+
+
+                    {/* <Affix className="w-2/5">
+                        <ShoppingCartOutlined className="border rounded shadow py-20 ml-2 text-xl text-center">Items Ordered </ShoppingCartOutlined><br />
+                    </Affix> */}
+                    <div className="border rounded shadow p-3 ml-2 sticky top-0 h-1/2 w-2/5">
+                        <div className="text-xl font-bold text-center">
+                            Checkout
+                        </div>
+
+                        {itemOrder.map((item: any) => (
+                            <Card style={{ width: 310 }}>
+                                <p className="text-xl font-semibold">{item.stcart_name}</p>
+                                <div className="ml-4">
+                                    <p>{item.stcart_vendor}</p>
+                                    <p className="text-xl">
+                                        {item.stcart_price} x
+                                        <InputNumber min={1} max={10} defaultValue={1} className="text-xl" />
+                                    </p>
+                                </div>
+                                <DeleteOutlined className="flex" />
+                            </Card>
+                        ))}
+
+                        <div className="border rounded py-5 bg-slate-100">
+                            <p className="font-bold text-center py-2">
+                                Payment Summary
+                            </p>
+
+                            <table className="py-5 bg-slate-100 mx-4">
+                                <tbody>
+                                    <tr className="hover:bg-slate-300">
+                                        <td className="w-full">Sub total</td>
+                                        <td className="text-right">
+                                            Rp.{getTotalSum().toLocaleString("id-ID")}
+                                        </td>
+                                    </tr>
+                                    <tr className="hover:bg-slate-300">
+                                        <td className=" py-2">Tax(10%)</td>
+                                        <td className="text-right">
+                                            {tax().toLocaleString("id-ID", {
+                                                style: "currency",
+                                                currency: "IDR",
+                                                minimumFractionDigits: 0,
+                                                maximumFractionDigits: 0
+                                            })}
+                                        </td>
+                                    </tr>
+                                    <tr className="font-bold hover:bg-slate-300">
+                                        <td className=" py-2">Total payment</td>
+                                        <td className="text-right">
+                                            Rp.{sumWithTax().toLocaleString("id-ID")}
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <a>
+                            <div
+                                className="border rounded-lg bg-slate-100 my-5 text-center font-bold py-2 hover:bg-slate-300 hover:text-white"
+                            >
+                                REQUEST ORDER
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div >
         </>
     )
 }

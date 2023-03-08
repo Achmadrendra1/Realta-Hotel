@@ -31,7 +31,7 @@ export class VeproController {
     }
 
     @Put(':id')
-    updateVepro(@Param() params: any, @Body() body: any) {
+    updateStod(@Param() params: any, @Body() body: any) {
         return this.veproService.editVepro(params.id, body);
     }
 

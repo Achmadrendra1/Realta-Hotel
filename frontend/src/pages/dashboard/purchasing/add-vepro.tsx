@@ -1,12 +1,17 @@
-import React from 'react';
-import { useDispatch } from 'react-redux';
-import { Form, Input, Modal } from 'antd';
-import { AddVepro } from '@/Redux/Action/Purchasing/purchasingAction';
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { Form, Input, Modal, Select } from 'antd';
+import { AddVepro, AllStock } from '@/Redux/Action/Purchasing/purchasingAction';
 import Buttons from '@/components/Button';
 
 export default function AddVepros(props: any) {
     const { handleClose } = props
     const dispatch = useDispatch()
+
+    const { stocks } = useSelector((state: any) => state.StockReducer)
+    useEffect(() => {
+        dispatch(AllStock())
+    }, [])
 
     const onFinish = (dataVepro: any) => {
         dispatch(AddVepro(dataVepro))
@@ -15,10 +20,6 @@ export default function AddVepros(props: any) {
 
     const onFinishFailed = (errorInfo: any) => {
         console.log("Failed:", errorInfo)
-    }
-
-    const config = {
-        rules: [{ type: 'object' as const, required: true, message: 'Please select time!' }]
     }
 
     return (
@@ -38,12 +39,18 @@ export default function AddVepros(props: any) {
                     <p className='text-center text-xl py-5 font-bold'>
                         Add Vendor Product
                     </p>
-
+                    <Form.Item name="vestock_vendor_id" initialValue={props.id} hidden/>
                     <Form.Item
                         name="vestock_name" label='Stock Name'
                         rules={[{ required: true, message: 'Please input stock name!' }]}
                     >
-                        <Input />
+                        <Select>
+                            {stocks && stocks.map((item: any, index: any) => (
+                                <option value={item.stockId}>
+                                    {item.stockName}
+                                </option>
+                            ))}
+                        </Select>
                     </Form.Item>
 
 

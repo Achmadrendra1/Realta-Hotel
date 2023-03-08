@@ -10,8 +10,10 @@ import {
     UploadedFiles
 } from '@nestjs/common';
 import { SphoService } from 'src/service/Purchasing/stock-photo/stock-photo.service';
-import { FileInterceptor } from '@nestjs/platform-express';
+import { FilesInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
+import { extname, join } from 'path';
+import { Res } from '@nestjs/common';
 
 @Controller('stock-photo')
 export class SphoController {
@@ -22,6 +24,13 @@ export class SphoController {
     @Get()
     getSpho() {
         return this.sphoService.findAllSpho();
+    }
+
+    @Get('src/:filename')
+    getSphoFile(@Param('filename') filename: string, @Res() res: any) {
+        return res.sendFile(filename, {
+            root: join('src', 'Service', 'Purchasing', 'stock-photo', 'photos')
+        });
     }
 
     @Get(':id')
@@ -36,19 +45,21 @@ export class SphoController {
 
     @Post('')
     @UseInterceptors(
-        FileInterceptor('image', {
+        FilesInterceptor('sphoUrl', 10, {
             storage: diskStorage({
-                destination: './employeephoto',
+                destination: './src/Service/Purchasing/stock-photo/photos',
                 filename(req, file, callback) {
-                    const filenames = file.originalname.split('.');
-                    callback(
-                        null,
-                        req.body.fullName + '.' + filenames[filenames.length - 1],
-                    );
-                },
-            }),
-        }),
-    )
+                    let customName = file.originalname.split('.')[0] // Remove Extension
+                    customName = customName + '-' + Date.now() + '-' + Math.round(Math.random() * 1e9)
+                    const ext = extname(file.originalname)
+                    const filename = `${customName}${ext}`
+                    callback(null, filename)
+                }
+            })
+        })
+    ) createSpho(@UploadedFiles() file: Express.Multer.File, @Body() body: any) {
+        return this.sphoService.addSpho(file, body);
+    }
 
     // @Post()
     // @UseInterceptors(FilesInterceptor('files'))
@@ -57,10 +68,10 @@ export class SphoController {
     //     return `File's uploaded successfully`;
     // }
 
-    @Post()
-    createSpho(@Body() body: any) {
-        return this.sphoService.addSpho(body);
-    }
+    // @Post()
+    // createSpho(@Body() body: any) {
+    //     return this.sphoService.addSpho(body);
+    // }
 
     @Put(':id')
     updateSpho(@Param() params: any, @Body() body: any) {
