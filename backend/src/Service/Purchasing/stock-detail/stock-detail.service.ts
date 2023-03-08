@@ -1,4 +1,4 @@
-import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { StockDetail } from 'src/entities/StockDetail';
@@ -15,9 +15,7 @@ export class StodService {
   }
 
   async findStodId(id: number): Promise<any> {
-    return await this.stodRepository.find(
-      { where: { stodId: id } }
-    );
+    return await this.stodRepository.query('select * from purchasing.getALLStod() where stockdet_id = $1', [id])
   }
 
   async addNewStod(stod: StockDetail): Promise<any> {
@@ -37,23 +35,21 @@ export class StodService {
     )
   }
 
-  async editStod(id: number, stod: StockDetail): Promise<any> {
+  async editStod(id: number, stod: any): Promise<any> {
     try {
       await this.stodRepository.update({
         stodId: id
       }, {
-        stodBarcodeNumber: stod.stodBarcodeNumber,
-        stodStatus: stod.stodStatus,
-        stodNotes: stod.stodNotes,
-        stodFaci: stod.stodFaci,
-        stodPohe: stod.stodPohe,
-        stodStock: stod.stodStock
+        stodStatus: stod.stockdet_status,
+        stodFaci: stod.stockdet_facilities
       })
-      return { message: `Congrats, you're Stock Detail has been changed` }
+      const res = await this.findStodId(id)
+      return {
+        message: `Congrats, you're Stock Detail has been changed`,
+        result: res
+      }
     } catch (error) {
-      throw new HttpException({
-        message: error.message
-      }, HttpStatus.BAD_REQUEST)
+      console.log(error)
     }
   }
 

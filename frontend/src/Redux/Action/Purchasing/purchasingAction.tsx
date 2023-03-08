@@ -1,11 +1,11 @@
 import PurchasingConst from "@/Redux/Constant/Purchasing/PurchasingConst";
 
-export const OneStock = (payload: any): any => ({ type: PurchasingConst.GETONE_STOCK, payload })
-export const OneStockSuccess = (payload: any): any => ({ type: PurchasingConst.GETONE_STOCK_SUCCESS, payload })
-export const OneStockFailed = (payload: any): any => ({ type: PurchasingConst.GETONE_STOCK_FAILED, payload })
 export const AllStock = (): any => ({ type: PurchasingConst.GET_STOCKS })
 export const AllStockSuccess = (payload: any): any => ({ type: PurchasingConst.GET_STOCKS_SUCCESS, payload })
 export const AllStockFailed = (payload: any): any => ({ type: PurchasingConst.GET_STOCKS_FAILED, payload })
+export const AllStockCart = (): any => ({ type: PurchasingConst.GET_STOCK_CART })
+export const AllStockCartSuccess = (payload: any): any => ({ type: PurchasingConst.GET_STOCK_CART_SUCCESS, payload })
+export const AllStockCartFailed = (payload: any): any => ({ type: PurchasingConst.GET_STOCK_CART_FAILED, payload })
 export const AddStock = (payload: any): any => ({ type: PurchasingConst.ADD_STOCKS, payload })
 export const AddStockSuccess = (payload: any): any => ({ type: PurchasingConst.ADD_STOCKS_SUCCESS, payload })
 export const AddStockFailed = (payload: any): any => ({ type: PurchasingConst.ADD_STOCKS_FAILED, payload })
@@ -16,9 +16,6 @@ export const DelStock = (payload: any): any => ({ type: PurchasingConst.DEL_STOC
 export const DelStockSuccess = (payload: any): any => ({ type: PurchasingConst.DEL_STOCKS_SUCCESS, payload })
 export const DelStockFailed = (payload: any): any => ({ type: PurchasingConst.DEL_STOCKS_FAILED, payload })
 
-export const OneStod = (payload: any): any => ({ type: PurchasingConst.GETONE_STOD, payload })
-export const OneStodSuccess = (payload: any): any => ({ type: PurchasingConst.GETONE_STOD_SUCCESS, payload })
-export const OneStodFailed = (payload: any): any => ({ type: PurchasingConst.GETONE_STOD_FAILED, payload })
 export const AllStod = (): any => ({ type: PurchasingConst.GET_STOD })
 export const AllStodSuccess = (payload: any): any => ({ type: PurchasingConst.GET_STOD_SUCCESS, payload })
 export const AllStodFailed = (payload: any): any => ({ type: PurchasingConst.GET_STOD_FAILED, payload })
@@ -32,9 +29,6 @@ export const DelStod = (payload: any): any => ({ type: PurchasingConst.DEL_STOD,
 export const DelStodSuccess = (payload: any): any => ({ type: PurchasingConst.DEL_STOD_SUCCESS, payload })
 export const DelStodFailed = (payload: any): any => ({ type: PurchasingConst.DEL_STOD_FAILED, payload })
 
-export const OneSpho = (payload: any): any => ({ type: PurchasingConst.GETONE_SPHO, payload })
-export const OneSphoSuccess = (payload: any): any => ({ type: PurchasingConst.GETONE_SPHO_SUCCESS, payload })
-export const OneSphoFailed = (payload: any): any => ({ type: PurchasingConst.GETONE_SPHO_FAILED, payload })
 export const AllSpho = (): any => ({ type: PurchasingConst.GET_SPHO })
 export const AllSphoSuccess = (payload: any): any => ({ type: PurchasingConst.GET_SPHO_SUCCESS, payload })
 export const AllSphoFailed = (payload: any): any => ({ type: PurchasingConst.GET_SPHO_FAILED, payload })
@@ -48,9 +42,6 @@ export const DelSpho = (payload: any): any => ({ type: PurchasingConst.DEL_SPHO,
 export const DelSphoSuccess = (payload: any): any => ({ type: PurchasingConst.DEL_SPHO_SUCCESS, payload })
 export const DelSphoFailed = (payload: any): any => ({ type: PurchasingConst.DEL_SPHO_FAILED, payload })
 
-export const OneVendor = (payload: any): any => ({ type: PurchasingConst.GETONE_VENDOR, payload })
-export const OneVendorSuccess = (payload: any): any => ({ type: PurchasingConst.GETONE_VENDOR_SUCCESS, payload })
-export const OneVendorFailed = (payload: any): any => ({ type: PurchasingConst.GETONE_VENDOR_FAILED, payload })
 export const AllVendor = (): any => ({ type: PurchasingConst.GET_VENDOR })
 export const AllVendorSuccess = (payload: any): any => ({ type: PurchasingConst.GET_VENDOR_SUCCESS, payload })
 export const AllVendorFailed = (payload: any): any => ({ type: PurchasingConst.GET_VENDOR_FAILED, payload })
@@ -64,9 +55,6 @@ export const DelVendor = (payload: any): any => ({ type: PurchasingConst.DEL_VEN
 export const DelVendorSuccess = (payload: any): any => ({ type: PurchasingConst.DEL_VENDOR_SUCCESS, payload })
 export const DelVendorFailed = (payload: any): any => ({ type: PurchasingConst.DEL_VENDOR_FAILED, payload })
 
-export const OneVepro = (payload: any): any => ({ type: PurchasingConst.GETONE_VEPRO, payload })
-export const OneVeproSuccess = (payload: any): any => ({ type: PurchasingConst.GETONE_VEPRO_SUCCESS, payload })
-export const OneVeproFailed = (payload: any): any => ({ type: PurchasingConst.GETONE_VEPRO_FAILED, payload })
 export const AllVepro = (): any => ({ type: PurchasingConst.GET_VEPRO })
 export const AllVeproSuccess = (payload: any): any => ({ type: PurchasingConst.GET_VEPRO_SUCCESS, payload })
 export const AllVeproFailed = (payload: any): any => ({ type: PurchasingConst.GET_VEPRO_FAILED, payload })
@@ -80,9 +68,6 @@ export const DelVepro = (payload: any): any => ({ type: PurchasingConst.DEL_VEPR
 export const DelVeproSuccess = (payload: any): any => ({ type: PurchasingConst.DEL_VEPRO_SUCCESS, payload })
 export const DelVeproFailed = (payload: any): any => ({ type: PurchasingConst.DEL_VEPRO_FAILED, payload })
 
-export const OnePohe = (payload: any) => ({ type: PurchasingConst.GETONE_POHE, payload })
-export const OnePoheSuccess = (payload: any) => ({ type: PurchasingConst.GETONE_POHE_SUCCESS, payload })
-export const OnePoheFailed = (payload: any) => ({ type: PurchasingConst.GETONE_POHE_FAILED, payload })
 export const AllPohe = () => ({ type: PurchasingConst.GET_POHE })
 export const AllPoheSuccess = (payload: any) => ({ type: PurchasingConst.GET_POHE_SUCCESS, payload })
 export const AllPoheFailed = (payload: any) => ({ type: PurchasingConst.GET_POHE_FAILED, payload })
@@ -96,9 +81,6 @@ export const DelPohe = (payload: any) => ({ type: PurchasingConst.DEL_POHE, payl
 export const DelPoheSuccess = (payload: any) => ({ type: PurchasingConst.DEL_POHE_SUCCESS, payload })
 export const DelPoheFailed = (payload: any) => ({ type: PurchasingConst.DEL_POHE_FAILED, payload })
 
-export const OnePode = (payload: any) => ({ type: PurchasingConst.GETONE_PODE, payload })
-export const OnePodeSuccess = (payload: any) => ({ type: PurchasingConst.GETONE_PODE_SUCCESS, payload })
-export const OnePodeFailed = (payload: any) => ({ type: PurchasingConst.GETONE_PODE_FAILED, payload })
 export const AllPode = () => ({ type: PurchasingConst.GET_PODE })
 export const AllPodeSuccess = (payload: any) => ({ type: PurchasingConst.GET_PODE_SUCCESS, payload })
 export const AllPodeFailed = (payload: any) => ({ type: PurchasingConst.GET_PODE_FAILED, payload })

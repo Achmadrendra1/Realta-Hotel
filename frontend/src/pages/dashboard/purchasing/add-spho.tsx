@@ -1,14 +1,19 @@
 import React, { useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { Form, Input, Modal, Upload, } from 'antd';
+import { useDispatch } from 'react-redux';
+import { Button, Form, Modal, Upload, UploadFile, message, } from 'antd';
 import Buttons from '@/components/Button';
 import { EditStock } from '@/Redux/Action/Purchasing/purchasingAction';
+import { UploadOutlined } from '@ant-design/icons';
+import { RcFile, UploadProps } from 'antd/es/upload';
 
 export default function AddSphos(props: any) {
     const id = props.id
     const data = props.data
     const { handleClose } = props
     const dispatch = useDispatch()
+
+    const [fileList, setFileList] = useState<UploadFile[]>([])
+    const [uploading, setUploading] = useState(false)
 
     // const { sphos } = useSelector((state: any) => state.SphoReducer)
 
@@ -26,6 +31,45 @@ export default function AddSphos(props: any) {
 
     const onFinishFailed = (errorInfo: any) => {
         console.log("Failed:", errorInfo)
+    }
+
+    const handleUpload = () => {
+        const formData = new FormData()
+        fileList.forEach((file) => {
+            formData.append('files[]', file as RcFile)
+        })
+        setUploading(true)
+        // You can use any AJAX library you like
+        fetch('https://www.mocky.io/v2/5cc8019d300000980a055e76', {
+            method: 'POST',
+            body: formData,
+        })
+            .then((res) => res.json())
+            .then(() => {
+                setFileList([]);
+                message.success('Upload successfully')
+            })
+            .catch(() => {
+                message.error('Upload failed')
+            })
+            .finally(() => {
+                setUploading(false)
+            })
+    }
+
+    const propsUpload: UploadProps = {
+        onRemove: (file) => {
+            const index = fileList.indexOf(file)
+            const newFileList = fileList.slice()
+            newFileList.splice(index, 1)
+            setFileList(newFileList)
+        },
+        beforeUpload: (file) => {
+            setFileList([...fileList, file])
+
+            return false
+        },
+        fileList
     }
 
     return (
@@ -48,14 +92,9 @@ export default function AddSphos(props: any) {
                         name="stockName" label='Stock Name'
                         rules={[{ required: true, message: 'Please input stock name!' }]}
                     >
-                        {/* <Upload
-                            listType='picture-card'
-                            onPreview={handlePreview}
-                            onChange={handleChange} >
-
-                            {fileList.length >= 4 ? null : uploadButton}
-
-                        </Upload> */}
+                        <Upload {...propsUpload}>
+                            <Button icon={<UploadOutlined />}>Select File</Button>
+                        </Upload>
                     </Form.Item>
 
                     <Form.Item label=" " colon={false}>
@@ -64,11 +103,18 @@ export default function AddSphos(props: any) {
                                 Cancel
                             </Buttons>
                             <div className="ml-2">
-                                <Buttons>Save</Buttons>
+                                <Button
+                                    type="primary"
+                                    onClick={handleUpload}
+                                    disabled={fileList.length === 0}
+                                    loading={uploading}
+                                    style={{ marginTop: 16 }}
+                                >
+                                    {uploading ? 'Uploading' : 'Start Upload'}
+                                </Button>
                             </div>
                         </div>
                     </Form.Item>
-
                 </Form>
             </Modal>
         </>

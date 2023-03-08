@@ -17,31 +17,31 @@ export class PoheController {
 
     @Get()
     getPohe() {
-        return this.poheService.findAllPohe();
+        return this.poheService.findAllPohe()
     }
 
     @Get(':id')
     getPoheId(@Param() params: any) {
-        return this.poheService.findPoheId(params.id);
+        return this.poheService.findPoheId(params.id)
     }
 
     @Get(':number')
     getPoheNumber(@Param() params: any) {
-        return this.poheService.findPoheNumber(params.number);
+        return this.poheService.findPoheNumber(params.number)
     }
 
     @Post()
     createPohe(@Body() body: any) {
-        return this.poheService.addPohe(body);
+        return this.poheService.addPohe(body)
     }
 
     @Put(':id')
     updatePohe(@Param() params: any, @Body() body: any) {
-        return this.poheService.editPohe(params.id, body);
+        return this.poheService.editPohe(params.id, body)
     }
 
     @Delete(':id')
     deletePohe(@Param() params: any) {
-        return this.poheService.dropPohe(params.id);
+        return this.poheService.dropPohe(params.id)
     }
 }

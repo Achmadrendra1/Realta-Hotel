@@ -1,12 +1,17 @@
-import React from 'react';
-import { useDispatch } from 'react-redux';
-import { Form, Input, Modal } from 'antd';
-import { AddVepro } from '@/Redux/Action/Purchasing/purchasingAction';
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { Form, Input, Modal, Select } from 'antd';
+import { AddVepro, AllStock } from '@/Redux/Action/Purchasing/purchasingAction';
 import Buttons from '@/components/Button';
 
 export default function AddVepros(props: any) {
     const { handleClose } = props
     const dispatch = useDispatch()
+
+    const { stocks } = useSelector((state: any) => state.StockReducer)
+    useEffect(() => {
+        dispatch(AllStock())
+    }, [])
 
     const onFinish = (dataVepro: any) => {
         dispatch(AddVepro(dataVepro))
@@ -15,10 +20,6 @@ export default function AddVepros(props: any) {
 
     const onFinishFailed = (errorInfo: any) => {
         console.log("Failed:", errorInfo)
-    }
-
-    const config = {
-        rules: [{ type: 'object' as const, required: true, message: 'Please select time!' }]
     }
 
     return (
@@ -39,37 +40,41 @@ export default function AddVepros(props: any) {
                         Add Vendor Product
                     </p>
 
+                    <Form.Item name="vestock_vendor_id" initialValue={props.id} hidden />
+
                     <Form.Item
                         name="vestock_name" label='Stock Name'
                         rules={[{ required: true, message: 'Please input stock name!' }]}
                     >
-                        <Input />
+                        <Select placeholder="Select stock">
+                            {stocks && stocks.map((item: any) => (
+                                <option value={item.stockId}>
+                                    {item.stockName}
+                                </option>
+                            ))}
+                        </Select>
                     </Form.Item>
-
 
                     <Form.Item
                         name="vestock_qty_stocked" label='Qty Stocked'
                         rules={[{ required: true, message: 'Please input qty Stocked!' }]}
                     >
-                        <Input />
+                        <Input placeholder="Input quantity stocked" />
                     </Form.Item>
-
 
                     <Form.Item
                         name="vestock_qty_remaining" label='Remaining'
                         rules={[{ required: true, message: 'Please input remaining!' }]}
                     >
-                        <Input />
+                        <Input placeholder="Input quantity remaining" />
                     </Form.Item>
-
 
                     <Form.Item
                         name="vestock_price" label='Sell Price'
                         rules={[{ required: true, message: 'Please input price!' }]}
                     >
-                        <Input />
+                        <Input placeholder="Input price" />
                     </Form.Item>
-
 
                     <Form.Item label=" " colon={false}>
                         <div className="flex justify-end">
@@ -81,8 +86,6 @@ export default function AddVepros(props: any) {
                             </div>
                         </div>
                     </Form.Item>
-
-
                 </Form>
             </Modal>
         </>
