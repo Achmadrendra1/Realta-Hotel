@@ -242,9 +242,13 @@ import { Department } from 'src/entities/Department';
   ],
   controllers: [
     AppController,
+
+    //Payment
     EntitysController,
     BankController,
     PaymentGatewayController,
+    PaymentTransactionController,
+    UserAccountController,
 
     //Hotel
     FacilitiesController,
@@ -252,8 +256,6 @@ import { Department } from 'src/entities/Department';
     FacilityPriceHistoryController,
     HotelsController,
     HotelReviewsController,
-    UserAccountController,
-    PaymentTransactionController,
     RestoMenusController,
     RestoMenuPhotosController,
     OrderMenusController,

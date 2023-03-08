@@ -21,7 +21,7 @@ function payTrxHistoryReducer( state = initialState, action:any ){
         case PaymentConst.GET_HISTORY_PAYMENT :
             return {...state}
         case PaymentConst.GET_HISTORY_PAYMENT_SUCCESS :
-            return {...state, payHistoryTrx : action.payload}
+            return {...state, payHistoryTrx : action.payload.data, total: action.payload.total}
         default:
             return {...state};
     }

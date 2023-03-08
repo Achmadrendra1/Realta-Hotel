@@ -1,4 +1,5 @@
 import { doCreateAccount } from "@/Redux/Action/Payment/paymentUserAction";
+import Buttons from "@/components/Button";
 import { Button, Input, Modal } from "antd";
 import next from "next";
 import { useState } from "react";
@@ -13,7 +14,6 @@ export default function ActivationHpay(props: any) {
   const dispatch = useDispatch()
 
   const pagaId = dataPaga?.filter((obj:any) => obj.pagaName === 'H-Pay')[0]?.pagaEntityId
-  console.log(pagaId)
   const accNumber = `131${dataUser[0]?.user_phone_number}`
   
   const [formValues, setFormValues] = useState({
@@ -97,20 +97,21 @@ export default function ActivationHpay(props: any) {
     }
     setError("");
     handleCancell(false)
+    // console.log(formValues)
     dispatch(doCreateAccount(formValues))
     // continue with form submission
   };
   return (
     <>
       <Modal
-        title="Activation H-Pay"
+        title={<span className="text-lg">Activation H-Pay</span>}
         open={props.show}
         onOk={props.clickOk}
         onCancel={props.clickCancel}
         centered
         footer={null}
       >
-        <Input size="large" readOnly value={props.phone} />
+        <Input size="large" readOnly value={props.phone} className="my-4 hover:border-[#754cff]"/>
         <div className="mt-4 text-center justify-center">
           <p className="mb-2 font-bold">Create New Pin</p>
           <div className="flex justify-center">
@@ -123,7 +124,7 @@ export default function ActivationHpay(props: any) {
                 value={value}
                 onChange={(event) => handleChange(index, event)}
                 onKeyDown={(event) => handleBackspace(index, event)}
-                className="h-[45px] mx-4 focus:border-sky-500 w-[45px] text-center"
+                className="h-[45px] mx-4 focus:border-[#754cff] hover:border-[#754cff] w-[45px] text-center"
               />
             ))}
           </div>
@@ -140,16 +141,16 @@ export default function ActivationHpay(props: any) {
               value={value}
               onChange={(event) => handleConfirmPinChange(index, event)}
               onKeyDown={(event) => handleDelConfirm(index, event)}
-              className="h-[45px] mx-4 focus:border-sky-500 w-[45px] text-center"
+              className="h-[45px] mx-4 focus:border-[#754cff] hover:border-[#754cff] w-[45px] text-center"
             />
           ))}
         </div>
       </div>
         <div className="text-center mt-4">
-          {error && <div className="error text-red-600">{error}</div>}
-          <Button onClick={handleSubmit} className="bg-blue-600 text-white">
+          {error && <div className="error text-red-600 my-4">{error}</div>}
+          <Buttons funcs={handleSubmit} >
             Activate
-          </Button>
+          </Buttons>
         </div>
       </Modal>
     </>
