@@ -12,9 +12,9 @@ export class HotelsService {
 
   async findAllHotels(): Promise<any> {
     return await this.hotelRepository.find({
-      // order: {
-      //   hotelName: 'ASC',
-      // },
+      order: {
+        hotelName: 'ASC',
+      },
       relations: {
         facilities: {
           facilityPhotos: true,
