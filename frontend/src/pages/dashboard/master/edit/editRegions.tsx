@@ -14,17 +14,11 @@ export default function EditRegions(props: any) {
   );
   const [formValues, setFormValues] = useState(details);
 
-  // console.log('id idRegions : ', idRegions);
-  // console.log('data dataRegions :', dataRegions);
-  // console.log('detail Region : ', details);
-  // console.log('formValues regions :', formValues);
-
   const handleInputChange = (input: any) => (e: any) => {
     setFormValues({ ...formValues, [input]: e.target.value });
   };
 
   const onFinish = () => {
-    // console.log('Success:', formValues);
     dispatch(doUpdateRegions(formValues));
     handleClose(false);
     window.location.reload();

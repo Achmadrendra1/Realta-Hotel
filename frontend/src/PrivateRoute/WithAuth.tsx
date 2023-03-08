@@ -1,7 +1,7 @@
-import { NextPage } from 'next';
-import { useRouter } from 'next/router';
-import React from 'react';
-import { useEffect } from 'react';
+import { NextPage } from "next";
+import { useRouter } from "next/router";
+import React from "react";
+import { useEffect } from "react";
 
 const withAuth = <P extends object>(WrappedComponent: NextPage<P>) => {
   return (props: P) => {  
@@ -19,4 +19,3 @@ const withAuth = <P extends object>(WrappedComponent: NextPage<P>) => {
 }
 
 export default withAuth;
-

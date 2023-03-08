@@ -8,7 +8,7 @@ export function* HandleGetUser():any {
     try {
         const token = localStorage.getItem('token')
         const result = yield axios(API('GET',"/auth/"+token));
-        console.log(result.data.users);
+        // console.log(result.data.users);
         yield put (doGetDataSuccess(result.data.users))
     } catch (error) {
         // console.log(error)

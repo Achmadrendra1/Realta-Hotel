@@ -13,16 +13,10 @@ export default function EditAddress(props: any) {
   const details = dataCity.find((item: any) => item.addr_id == idCity);
   const [formValues, setFormValues] = useState(details);
 
-  // console.log('id idCity : ', idCity);
-  // console.log('data dataCity :', dataCity);
-  // console.log('detail City : ', details);
-  // console.log('formValues City :', formValues);
-
   const handleInputChange = (input: any) => (e: any) => {
     setFormValues({ ...formValues, [input]: e.target.value });
   };
   const onFinish = () => {
-    // console.log('Success:', formValues);
     dispatch(doUpdateAddress(formValues));
     handleClose(false);
     window.location.reload();

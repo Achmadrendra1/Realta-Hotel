@@ -25,7 +25,7 @@ export class FacilitiesController {
   UpdateFacility(@Param('id') id: any, @Body() body: any) {
     return this.FaciService.UpdateFaci(id, body);
   }
-  @Post('Add')
+  @Post()
   addFacility(@Body() body: any) {
     return this.FaciService.addNewFaci(body);
   }

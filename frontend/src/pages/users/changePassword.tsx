@@ -13,7 +13,7 @@ export default function ChangePassword(props: any) {
  const [error, setError] = useState('');
  const [messageApi, contextHolder] = message.useMessage();
 
- console.log(id);
+
 
   const onFinish = (values:any) => {
     if (password !== confirmPassword) {

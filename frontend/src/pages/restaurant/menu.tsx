@@ -12,6 +12,7 @@ import {
   Pagination,
   Radio,
   Select,
+  Tag,
 } from "antd";
 import Image from "next/image";
 import { DeleteOutlined, DownOutlined, PlusOutlined } from "@ant-design/icons";
@@ -101,14 +102,14 @@ export default function menu({ restaurant }) {
   const items: MenuProps["items"] = [
     {
       key: "1",
-      label: "Ascending",
+      label: "Harga Terendah",
       onClick: () => {
         handlesort("ASC");
       },
     },
     {
       key: "2",
-      label: "Descending",
+      label: "Harga Tertinggi",
       onClick: () => {
         handlesort("DESC");
       },
@@ -417,7 +418,7 @@ export default function menu({ restaurant }) {
             <hr className="my-5 border-t-2" />
 
             <div className="mt-3 flex my-20">
-              <div className="w-3/5 border rounded shadow p-3 mr-2">
+              <div className="w-3/5 border rounded-xl shadow p-3 mr-2 bg-white">
                 <div className="text-xl font-bold text-center">
                   Menu Makanan dan Minuman
                 </div>
@@ -431,8 +432,8 @@ export default function menu({ restaurant }) {
                       }}
                     >
                       <Typography.Link>
-                        <Space className="my-5">
-                          Sort by price
+                        <Space className="my-5 text-[#754cff]">
+                          Urutkan Berdasarkan Harga
                           <DownOutlined />
                         </Space>
                       </Typography.Link>
@@ -464,14 +465,11 @@ export default function menu({ restaurant }) {
                     })
                     .map(
                       (menu: any, key: any) => (
-                        <div
-                          key={menu.remeid}
-                          className="w-52 mr-6 mx-auto mb-12"
-                        >
+                        <div key={menu.remeid} className="w-52 mr-6 mb-12">
                           <div>
                             <a
                               onClick={() => showModalsMenu(menu)}
-                              className=" hover:text-slate-400"
+                              className=" hover:text-[#754cff]"
                             >
                               <img
                                 src={`${configuration.BASE_URL}/${menu.rempurl}`}
@@ -479,22 +477,23 @@ export default function menu({ restaurant }) {
                                 className="h-40 w-full object-cover rounded-lg"
                               ></img>
                               <div className="ml-3 mt-3 h-40">
-                                <p className="text-lg font-bold">
+                                <p className="text-lg font-bold h-20">
                                   {menu.remename}
                                 </p>
-                                <p>{menu.remedescription}</p>
-                                <p>{menu.remeprice}</p>
-                                <p className="text-amber-600">
+                                <p className="font-light my-2">{menu.remedescription}</p>
+                                {/* <p className="text-amber-600 my-2 text-[11px]">
                                   {menu.remestatus}
-                                </p>
+                                </p> */}
+                                <Tag color="green" className="text-[11px]">{menu.remestatus}</Tag>
+                                <p className="text-[14px] font-bold text-right mr-4">{menu.remeprice}</p>
                               </div>
                             </a>
                             {/* <div className='absolute'> */}
-                            <div className="w-full flex">
+                            <div className="w-full flex mt-2">
                               {userid ? (
                                 <button
                                   onClick={() => addtocart(menu)}
-                                  className="w-3/4 mx-auto rounded-full inline-block px-5 py-2 mt-4 bg-slate-500 hover:bg-slate-600 text-white uppercase bottom-0"
+                                  className="w-3/4 mx-auto rounded-full inline-block px-5 py-2 mt-4 bg-[#754cff] hover:bg-[#592fe4] text-white uppercase bottom-0"
                                 >
                                   <PlusOutlined /> Add To Cart
                                 </button>
@@ -536,22 +535,22 @@ export default function menu({ restaurant }) {
               {
                 getCartTotal() === 0 || !userid ? (
                   <Affix className="w-2/5">
-                    <div className="border rounded shadow py-20 ml-2 text-xl text-center">
-                      Welcome to hotel realta! <br />
+                    <div className="border font-semibold bg-white rounded-xl shadow py-20 ml-2 text-xl text-center">
+                      Welcome to Hotel Realta ! <br />
                     </div>
                   </Affix>
                 ) : (
                   //    <Affix className='w-2/5'>
-                  <div className="border rounded shadow p-3 ml-2 sticky top-0 h-1/2 w-2/5">
+                  <div className="bg-white rounded-lg shadow p-3 ml-2 sticky top-0 h-1/2 w-2/5">
                     <div className="text-xl font-bold text-center">
                       Checkout
                     </div>
-                    <div className="text-lg pt-5">
-                      Total order: {getCartTotal()}
+                    <div className="text-lg pt-5 font-semibold">
+                      Total Order : {getCartTotal()}
                     </div>
                     {cart &&
                       cart.map((order: any) => (
-                        <div className="border rouded shadow mt-5 my-5 hover:bg-slate-100 flex">
+                        <div className="border rounded-lg p-4 shadow-md gap-y-2 my-5 flex">
                           <img
                             src={`${configuration.BASE_URL}/${order.rempurl}`}
                             alt="cake"
@@ -633,31 +632,29 @@ export default function menu({ restaurant }) {
                             </div>
                         </div> */}
 
-                    <div className="border rounded py-5 bg-slate-100">
-                      <p className="font-bold text-center py-2">
-                        Payment Summary
-                      </p>
+                    <div className="border rounded-xl py-5">
+                      <p className="text-lg font-bold text-center mb-4">Payment Summary</p>
 
-                      <table className="py-5 bg-slate-100 mx-4">
+                      <table className="py-5 mx-4">
                         <tbody>
-                          <tr className="hover:bg-slate-300">
+                          <tr className="">
                             <td className="w-full">Sub total</td>
                             <td className="text-right">
                               Rp.{getTotalSum().toLocaleString("id-ID")}
                             </td>
                           </tr>
-                          {/* <tr className='hover:bg-slate-300'>
-                                        <td>Discount [dapet dr manaa?]</td>
-                                        <td className='text-right'>Rp.0</td>
-                                    </tr> */}
-                          <tr className="hover:bg-slate-300">
+                          <tr className="">
                             <td className=" py-2">Tax(11%)</td>
                             <td className="text-right">
-                              {tax().toLocaleString("id-ID", {style:"currency", currency:"IDR", minimumFractionDigits: 0,
-  maximumFractionDigits: 0})}
+                              {tax().toLocaleString("id-ID", {
+                                style: "currency",
+                                currency: "IDR",
+                                minimumFractionDigits: 0,
+                                maximumFractionDigits: 0,
+                              })}
                             </td>
                           </tr>
-                          <tr className="font-bold hover:bg-slate-300">
+                          <tr className="font-bold">
                             <td className=" py-2">Total payment</td>
                             <td className="text-right">
                               Rp.{sumWithTax().toLocaleString("id-ID")}
@@ -670,7 +667,7 @@ export default function menu({ restaurant }) {
                     <a>
                       <div
                         onClick={placeOrder}
-                        className="border rounded-lg bg-slate-100 my-5 text-center font-bold py-2 hover:bg-slate-300 hover:text-white"
+                        className="border rounded-full bg-[#754cff] my-5 text-center font-bold py-4 text-[#f2f1fa] hover:text-white"
                       >
                         PLACE ORDER HERE
                       </div>

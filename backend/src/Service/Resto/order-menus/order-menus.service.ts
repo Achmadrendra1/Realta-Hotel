@@ -21,7 +21,7 @@ export class OrderMenusService {
         // const id = Number(data.userId);
         const id = 1;
          
-        return await this.orderMenuRepository.query(`SELECT * FROM resto.ordermenuscomplete($1, $2)`,[data.ormeNumber, id])
+        return await this.orderMenuRepository.query(`SELECT * FROM resto.ordermenuscomplete($1)`,[data.orderNumber])
     }
  
     async getCodeDesc(){

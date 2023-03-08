@@ -8,12 +8,8 @@ export default function ViewPolicy(props: any) {
   const { handleClose } = props;
   const detailsPoli = dataPolicy.find((item: any) => item.poliId == idPolicy);
   const [formValues, setFormValues] = useState(detailsPoli);
-  // console.log('view id policy:', idPolicy);
-  // console.log('view data policy:', dataPolicy);
-  // console.log('view detail policy:', detailsPoli);
-
+  
   const onFinish = () => {
-    // // console.log('Success:', formValues);
     handleClose(false);
   };
 

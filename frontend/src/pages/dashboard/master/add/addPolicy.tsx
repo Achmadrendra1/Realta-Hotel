@@ -9,16 +9,12 @@ export default function AddPolicy(props: any) {
   const { handleClose } = props;
 
   const onFinish = (data: any) => {
-    // console.log('Success:', data);
     dispatch(doAddPolicy(data));
     handleClose(false);
-
-    // console.log('data policy :', data);
     alert;
   };
 
   const onFinishFailed = (errorInfo: any) => {
-    // console.log('Failed:', errorInfo);
   };
 
   //Alert

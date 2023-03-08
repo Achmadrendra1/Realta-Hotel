@@ -26,7 +26,7 @@ const Hero = () => {
             <p className="bg-clip-text m-auto text-[36px] font-semibold text-white w-3/4 ">
               Experience More with Best Service at Realta Hotel
             </p>
-            <div className="bg-[#f1f2fa] h-28 mt-16 rounded-full py-6 pl-4">
+            <div className="bg-[#f1f2fa] mt-16 rounded-full p-5">
               <Row className="">
                 <Col span={8} className="px-4 text-start">
                   <p className="text-lg font-semibold ml-2">Locations</p>

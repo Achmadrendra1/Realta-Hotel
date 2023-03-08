@@ -54,7 +54,7 @@ import Link from "next/link";
 
 export default function bookingRoom() {
   const root = useRouter();
-  const { id } = root.query || {};
+  const { id } = root.query;
   const dispatch = useDispatch();
 
   //useEffect Reducer
@@ -88,15 +88,16 @@ export default function bookingRoom() {
   //useSelector Get Special Offers
   let spof = useSelector((state: any) => state.SpofReducer.spof);
   const typeSpof = spof?.filter((item : any) => {
-    if (getUser[0].user_type === "C" && item.spofType === "Corporate") {
+    if (getUser[0]?.user_type === "C" && item.spofType === "Corporate") {
       return true;
-    } else if (getUser[0].user_type === "I" && item.spofType === "Individual") {
+    } else if (getUser[0]?.user_type === "I" && item.spofType === "Individual") {
       return true;
-    } else if (getUser[0].user_type === "T" && item.spofType === "Travel Agent") {
+    } else if (getUser[0]?.user_type === "T" && item.spofType === "Travel Agent") {
       return true;
     }
     return false;
   });
+  console.log(spof)
   
   //useSelector Get Price Items for Booking Extra
   let extra = useSelector((state: any) => state.priceItemsReducer.priceItems);
@@ -290,15 +291,27 @@ export default function bookingRoom() {
   };
 
   const handleDateRangeChange = (date : any, dateString : any) => {
-    setDataBooking({
-      ...dataBooking,
-      borde_checkin : dateString[0],
-      boor_arrival_date : dateString[0],
-      borde_checkout : dateString[1]
-    })
-    setInDate(date[0])
-    setOutDate(date[1])
-    calculateNumDays(date[0], date[1])
+    if(date !== null){
+      setDataBooking({
+        ...dataBooking,
+        borde_checkin : dateString[0],
+        boor_arrival_date : dateString[0],
+        borde_checkout : dateString[1]
+      })
+      setInDate(date[0])
+      setOutDate(date[1])
+      calculateNumDays(date[0], date[1])
+    } else {
+      setDataBooking({
+        ...dataBooking,
+        borde_checkin : '',
+        boor_arrival_date : '',
+        borde_checkout : ''
+      })
+      setInDate(null)
+      setOutDate(null)
+      calculateNumDays('', '')
+    }
   }
 
   const calculateNumDays = (start : any, end : any) => {
@@ -331,7 +344,7 @@ export default function bookingRoom() {
     borde_checkout: "",
     borde_adults: 0,
     borde_kids: 0,
-    borde_price: 0,
+    borde_price: ratePriceInt,
     borde_extra: 0,
     borde_discount: 0,
     borde_tax: 0,
@@ -352,15 +365,18 @@ export default function bookingRoom() {
   });
 
   useEffect(() => {
+    const totalGuest = parseInt(dataBooking.borde_adults) + parseInt(dataBooking.borde_kids)
     setDataBooking({
       ...dataBooking,
       borde_price: ratePriceInt,
       borde_discount: spofDiscInt,
+      boor_total_room : 1,
+      borde_adults : 1,
       borde_tax: taxRateInt,
       boor_total_tax: taxRateInt,
       borde_faci_id: priceRoom.faci_id,
       soco_spof_id: spofPrice.spofId,
-    });;
+    });
   }, [ratePriceInt, spofDiscInt, taxRateInt, priceRoom.faci_id]);
 
   // useEffect list hotel into Booking Detail
@@ -369,14 +385,6 @@ export default function bookingRoom() {
   //         faci_id, faci_name, faci_rate_price, faci_high_price, faci_tax_rate
   //     })
   // }, [faci_name])
-
-  useEffect(()=>{
-      const totalGuest = parseInt(dataBooking.borde_adults) + parseInt(dataBooking.borde_kids)
-      setDataBooking({
-        ...dataBooking,
-        boor_total_guest : totalGuest
-    })
-  }, [dataBooking.borde_adults, dataBooking.borde_kids])
 
   //Handle button selected room into booking
   const handleButtonSelected = (index: any) => {
@@ -388,12 +396,12 @@ export default function bookingRoom() {
       faci_rate_price: selected.faci_rate_price,
       faci_tax_rate: selected.faci_tax_rate,
     });
-    setDataBooking({...dataBooking, boor_hotel_id : selected.faci_id, borde_price : ratePriceInt })
+    setDataBooking({...dataBooking, borde_faci_id : selected.faci_id, borde_price : ratePriceInt })
   };
 
   //Handle button add Special Offers
   const handleButtonModal = (index: any) => {
-    const selected = typeSpof[index];
+    const selected = spof[index];
     setSpofPrice({
       spofId: selected.spofId,
       spofName: selected.spofName,
@@ -437,11 +445,10 @@ export default function bookingRoom() {
   useEffect(() => {
     const rate = dataBooking.borde_price
     const room = dataBooking.boor_total_room
-    const days = numDays
-    const disc = dataBooking.borde_discount
+    const days = numDays || 1
+    const disc = dataBooking.borde_discount || 0
     const extra = extraTotal.extraSubTotal
     const total = ((((rate*days)*room)-disc)+extra)
-    console.log(extra)
     const subTotal = () => {
           setDataBooking({...dataBooking, boor_total_amount : total, borde_subtotal : total, borde_extra : extra})
           setDataPayment({...dataPayment, amount : total})
@@ -451,13 +458,11 @@ export default function bookingRoom() {
         }
   }, [dataBooking.borde_price, dataBooking.boor_total_room, dataBooking.borde_checkin, dataBooking.borde_checkout, dataBooking.borde_discount, extraTotal.extraSubTotal]);
 
-
   //useEffect untuk auto munculin perhitungan extra
   useEffect(() => {
     const totalExtra = () => {
     const sumExtra = valueExtra.pritTotal.reduce((a,b)=> a + b, 0)
     setExtraTotal({...extraTotal, extraSubTotal : sumExtra})
-    console.log(extraTotal)
     };
     totalExtra();
   }, [valueExtra.pritTotal]);
@@ -1476,19 +1481,19 @@ export default function bookingRoom() {
                   disabledDate={(current) => disabledDate(current, dayjs())}
                   />
                   </Col>
-                  <Col span={12} className="flex">
-                    <Col span={8}>
-                    <InputNumber type="number" min={1} max={3}  value={dataBooking.boor_total_room} onChange={handleRoomValue}/>
+                  <Col span={12} className="flex gap-5">
+                    <Col span={6}>
+                    <InputNumber type="number" className="w-14" min={1} max={3}  value={dataBooking.boor_total_room} onChange={handleRoomValue}/>
                     </Col>
-                    <Col span={8}>
-                    <InputNumber type="number" min={1} max={4}  value={dataBooking.borde_adults} onChange={handleAdultsValue}/>
+                    <Col span={6}>
+                    <InputNumber type="number" className="w-14" min={1} max={4}  value={dataBooking.borde_adults} onChange={handleAdultsValue}/>
                     </Col>
-                    <Col span={8}>
-                    <InputNumber type="number" min={1} max={2}  value={dataBooking.borde_kids} onChange={handleKidsValue}/>
+                    <Col span={6}>
+                    <InputNumber type="number" className="w-14" min={0} max={2}  value={dataBooking.borde_kids} onChange={handleKidsValue}/>
                     </Col>
                   </Col>
               </Row>
-              <div className="flex justify-between items-center mb-3">
+              <div className="flex justify-between items-center mt-2 mb-3">
                 <div className=" flex my-1 items-center">
                   <Modal
                     title="Special Offers"
