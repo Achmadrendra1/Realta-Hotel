@@ -34,12 +34,12 @@ export class UserPasswordService {
         // }
         // Password baru
         
+        // const passwordMatch = await bcrypt.compare(item.old_password, item.uspa_passwordhash);
+        // if (!passwordMatch) {
+        //   throw new HttpException('Current password is incorrect', HttpStatus.BAD_REQUEST);
+        // }
         try {
-          // // Validasi Password 
-          // const passwordMatch = await bcrypt.compare(oldPassword, item.uspa_passwordhash);
-          // if (!passwordMatch) {
-          //   throw new HttpException('Current password is incorrect', HttpStatus.BAD_REQUEST);
-          // }
+          // Validasi Password 
         const newPasswordHash = await bcrypt.hash(item.uspa_passwordhash, 10);
         const salt = await bcrypt.genSalt(10);
          await this.UserPasswordRepository.createQueryBuilder()

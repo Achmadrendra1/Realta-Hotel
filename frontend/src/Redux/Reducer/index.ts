@@ -31,13 +31,16 @@ import { workorderReducer } from './HR/workorder';
 import { workorderDetailReducer } from './HR/workDetail';
 import { serviceListReducer } from './HR/serviceList';
 import BoorInvoiceReducer from './Booking/BoorInvoiceReducer';
+import BoorExtraReducer from './Booking/BoorExtraReducer';
 // Purchasing
-import StockReducer from './Purchasing/stockReducer';
-import StodReducer from './Purchasing/stodReducer';
-import VendorReducer from './Purchasing/vendorReducer';
-import VeproReducer from './Purchasing/veproReducer';
-import PoheReducer from './Purchasing/poheReducer';
-import PodeReducer from './Purchasing/podeReducer';
+import { StockReducer } from './Purchasing/stockReducer';
+import { StodReducer } from './Purchasing/stodReducer';
+import { SphoReducer } from './Purchasing/sphoReducer';
+import { VendorReducer } from './Purchasing/vendorReducer';
+import { VeproReducer } from './Purchasing/veproReducer';
+import { PoheReducer } from './Purchasing/poheReducer';
+import { PodeReducer } from './Purchasing/podeReducer';
+
 import restoMenuReducer from './Resto/restoMenuReducer';
 import menuReducer from './Resto/menuReducer';
 import menuPhotoReducer from './Resto/menuPhotoReducer';
@@ -86,16 +89,17 @@ export default combineReducers({
   HotelBoorReducer,
   ReviewBoorReducer,
   BoorInvoiceReducer,
-
+  BoorExtraReducer,
 
   //Purchasing
   StockReducer,
   StodReducer,
+  SphoReducer,
   VendorReducer,
   VeproReducer,
   PoheReducer,
   PodeReducer,
-  
+
   //Resto
   restoMenuReducer,
   menuReducer,

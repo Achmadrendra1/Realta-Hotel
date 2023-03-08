@@ -12,7 +12,7 @@ import {
     DelVendorFailed
 } from '@/Redux/Action/Purchasing/purchasingAction';
 
-function* handleVendor(): any {
+export function* handleVendor(): any {
     try {
         const result = yield axios(API('GET', '/vendor'))
         yield put(AllVendorSuccess(result.data))
@@ -22,7 +22,7 @@ function* handleVendor(): any {
     }
 }
 
-function* handleVendorAdd(action: any): any {
+export function* handleVendorAdd(action: any): any {
     try {
         const res = yield axios(API('POST', '/vendor', action.payload))
         yield put(AddVendorSuccess(res.data.result))
@@ -32,27 +32,21 @@ function* handleVendorAdd(action: any): any {
     }
 }
 
-function* handleVendorUpdate(action: any): any {
+export function* handleVendorUpdate(action: any): any {
     try {
-        yield axios(API('PUT', '/vendor/' + action.payload.vendorId, action.payload))
+        const res = yield axios(API('PUT', '/vendor/' + action.payload.vendorId, action.payload))
         yield put(EditVendorSuccess(action.payload))
+        return res.data.result
     } catch (error: any) {
         yield put(EditVendorFailed(error.response.data.message))
     }
 }
 
-function* handleVendorDelete(action: any): any {
+export function* handleVendorDelete(action: any): any {
     try {
         yield axios(API(`DELETE`, `/vendor/${action.payload}`))
         yield put(DelVendorSuccess(action.payload))
     } catch (error) {
         yield put(DelVendorFailed(error))
     }
-}
-
-export {
-    handleVendor,
-    handleVendorAdd,
-    handleVendorUpdate,
-    handleVendorDelete
 }

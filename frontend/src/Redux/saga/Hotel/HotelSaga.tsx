@@ -43,9 +43,11 @@ import { API, FORMAPI } from "@/Redux/Configs/consumeApi";
 import axios from "axios";
 import { call, put } from "redux-saga/effects";
 
-function* handleHotel(): any {
+function* handleHotel(action:any): any {
   try {
-    const result = yield axios(API("Get", `/hotels`, null));
+    const pageQueryParam = action.payload?.page ? `page=${action.payload.page}` : '';
+    const keywordsQueryParam = action.payload?.keywords ? `keywords=${action.payload.keywords}` : '';
+    const result = yield axios(API("Get", `/hotels?${pageQueryParam}${keywordsQueryParam}`));
     yield put(getHotelSuccess(result.data));
     return result.data;
   } catch (e: any) {
@@ -56,9 +58,9 @@ function* handleHotelID(action: any): any {
   const { payload } = action;
 
   try {
-    const result = yield axios(API("Get", `/hotels/${payload}`, null));
+    const result = yield axios(API("Get", `/hotels/${payload}`));
     yield put(getHotelIDSuccess(result.data[0]));
-    return result.data[0];
+    // return result.data[0];
   } catch (e: any) {
     yield put(getHotelIDFailed(e));
   }
@@ -66,7 +68,7 @@ function* handleHotelID(action: any): any {
 
 function* handleAddress(): any {
   try {
-    const result = yield axios(API("Get", `/address`, null));
+    const result = yield axios(API("Get", `/address`));
     yield put(getAddressSuccess(result.data));
     return result.data;
   } catch (e: any) {
@@ -76,7 +78,7 @@ function* handleAddress(): any {
 
 function* handleProvince(): any {
   try {
-    const result = yield axios(API("Get", `/provinces`, null));
+    const result = yield axios(API("Get", `/provinces`));
     yield put(getProvinceSuccess(result.data));
     return result.data;
   } catch (e: any) {

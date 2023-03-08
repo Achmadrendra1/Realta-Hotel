@@ -10,6 +10,8 @@ const initialState = {
   faciById: "",
   photo: [],
   faphistory: [],
+  total: 0,
+  currentPage: 1,
 };
 
 function HotelReducer(state = initialState, action: any) {
@@ -17,7 +19,12 @@ function HotelReducer(state = initialState, action: any) {
     case HotelConstant.GET_HOTEL:
       return { ...state };
     case HotelConstant.GET_HOTEL_SUCCESS:
-      return { ...state, hotel: action.payload };
+      return {
+        ...state,
+        hotel: action.payload.data,
+        total: action.payload.count,
+        currentPage: action.payload.currentPage,
+      };
     case HotelConstant.GET_ADDRESS:
       return { ...state };
     case HotelConstant.GET_ADDRESS_SUCCESS:
@@ -51,7 +58,7 @@ function HotelReducer(state = initialState, action: any) {
     case HotelConstant.GET_FACILITIES_SUCCESS:
       return { ...state, facilities: action.payload };
     case HotelConstant.ADD_FACILITIES:
-      return {...state}
+      return { ...state };
     case HotelConstant.ADD_FACILITIES_SUCCESS:
       return AddFacilitySuccessed(state, action);
     case HotelConstant.UPDATE_FACILITIES:
@@ -67,7 +74,7 @@ function HotelReducer(state = initialState, action: any) {
     case HotelConstant.GET_FAPHO_SUCCESS:
       return { ...state, fapho: action.payload };
     case HotelConstant.ADD_FAPHO:
-      return { ...state}
+      return { ...state };
     case HotelConstant.ADD_FAPHO_SUCCESS:
       return AddFaphoSuccessed(state, action);
     case HotelConstant.UPDATE_FAPHO:

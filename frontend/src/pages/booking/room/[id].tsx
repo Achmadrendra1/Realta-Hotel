@@ -97,7 +97,6 @@ export default function bookingRoom() {
     }
     return false;
   });
-  console.log(spof)
   
   //useSelector Get Price Items for Booking Extra
   let extra = useSelector((state: any) => state.priceItemsReducer.priceItems);
@@ -151,6 +150,8 @@ export default function bookingRoom() {
     pritMeasure : [] as any []
   });
 
+  console.log(valueExtra)
+
   //State untuk extraTotal
   const [extraTotal, setExtraTotal] = useState({
     extraSubTotal: 0,
@@ -184,19 +185,19 @@ export default function bookingRoom() {
   const columnsExtra = [
     {
       title: "Item Name",
-      dataIndex: "name",
+      dataIndex: "pritName",
     },
     {
       title: "Price",
-      dataIndex: "price",
+      dataIndex: "boexPrice",
     },
     {
       title: "Quantity",
-      dataIndex: "quantity",
+      dataIndex: "boexQty",
     },
     {
       title: "SubTotal",
-      dataIndex: "subTotal",
+      dataIndex: "boexSubtotal",
     },
     {
       title: (
@@ -214,13 +215,17 @@ export default function bookingRoom() {
   //Looping Map untuk menampilkan data booking extra
   const dataExtra = valueExtra.pritName.map((name: any, index: any) => {
     return {
-      key: index,
-      name: name,
-      price: valueExtra.pritPrice[index],
-      quantity : valueExtra.pritQty[index],
-      subTotal : valueExtra.pritTotal[index]
+      // key: index,
+      pritId : valueExtra.pritId[index],
+      pritName: valueExtra.pritName[index],
+      boexPrice: valueExtra.pritPrice[index],
+      boexQty : valueExtra.pritQty[index],
+      boexSubtotal : valueExtra.pritTotal[index],
+      boexMeasure : valueExtra.pritMeasure[index]
     };
   });
+
+  console.log(dataExtra)
 
   let spofDiscInt = parseInt(
     spofPrice.spofDiscount.split(",")[0].replace(/[^0-9]/g, "")
@@ -354,6 +359,8 @@ export default function bookingRoom() {
     boor_cardnumber: "",
   });
 
+  console.log(dataBooking)
+
   const [dataPayment, setDataPayment] = useState({
     userId: 0,
     amount: 0,
@@ -365,13 +372,14 @@ export default function bookingRoom() {
   });
 
   useEffect(() => {
-    const totalGuest = parseInt(dataBooking.borde_adults) + parseInt(dataBooking.borde_kids)
+    const totalGuest = parseInt(dataBooking?.borde_adults) + parseInt(dataBooking?.borde_kids)
     setDataBooking({
       ...dataBooking,
       borde_price: ratePriceInt,
       borde_discount: spofDiscInt,
-      boor_total_room : 1,
-      borde_adults : 1,
+      boor_discount : spofDiscInt,
+      // boor_total_room : 1,
+      boor_total_guest : totalGuest,
       borde_tax: taxRateInt,
       boor_total_tax: taxRateInt,
       borde_faci_id: priceRoom.faci_id,
@@ -401,7 +409,7 @@ export default function bookingRoom() {
 
   //Handle button add Special Offers
   const handleButtonModal = (index: any) => {
-    const selected = spof[index];
+    const selected = typeSpof[index];
     setSpofPrice({
       spofId: selected.spofId,
       spofName: selected.spofName,
@@ -427,7 +435,15 @@ export default function bookingRoom() {
     }else {
       let measureUnit = '';
       if(selected.pritType === "SNACK") {
-        measureUnit = "Kg"
+        measureUnit = "Unit"
+      }else if(selected.pritType === "FACILITY"){
+        measureUnit = "People"
+      }else if(selected.pritType === "SOFTDRINK"){
+        measureUnit = "Unit"
+      }else if(selected.pritType === "FOOD"){
+        measureUnit = "Unit"
+      }else if(selected.pritType === "SERVICE"){
+        measureUnit = "People"
       }
       setValueExtra({
         pritId:[...valueExtra.pritId, selected.pritId],
@@ -436,6 +452,7 @@ export default function bookingRoom() {
         pritQty : [...valueExtra.pritQty, 1],
         pritTotal : [...valueExtra.pritTotal, parseInt(selected.pritPrice.split(",")[0].replace(/[^0-9]/g, ""))],
         pritMeasure : [...valueExtra.pritMeasure, measureUnit]
+
       })
     }
     setAddExtra(false)
@@ -444,7 +461,7 @@ export default function bookingRoom() {
   //UseEffect untuk change auto totalPrice di booking
   useEffect(() => {
     const rate = dataBooking.borde_price
-    const room = dataBooking.boor_total_room
+    const room = dataBooking.boor_total_room || 1
     const days = numDays || 1
     const disc = dataBooking.borde_discount || 0
     const extra = extraTotal.extraSubTotal
@@ -1195,6 +1212,7 @@ export default function bookingRoom() {
                 </div>
               </Modal>
               <Table columns={columnsExtra} dataSource={dataExtra} />
+              <button>Finish</button>
             </div>
             <div className="flex justify-between">
               {/* <div className='flex justify-between'>
@@ -1556,7 +1574,10 @@ export default function bookingRoom() {
               <div className="flex items-center justify-between mb-3">
                 <div className="flex text-l items-center">Additional Extra</div>
                 <div className="flex text-xl items-center">
-                  {extraTotal.extraSubTotal}
+                  {extraTotal.extraSubTotal.toLocaleString("id-ID", {
+                      style: "currency",
+                      currency: "IDR",
+                    })}
                 </div>
               </div>
               <div className="flex items-center justify-between mb-3">

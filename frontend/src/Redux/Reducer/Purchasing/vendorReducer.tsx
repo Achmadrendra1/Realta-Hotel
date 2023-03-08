@@ -1,39 +1,35 @@
 import PurchasingConst from "@/Redux/Constant/Purchasing/PurchasingConst";
 
 const initialState = {
-    vendors: [],
-    vendor: []
+    vendors: []
 }
 
-export default function VendorReducer(state = initialState, action: any) {
+export const VendorReducer = (state = initialState, action: any) => {
     switch (action.type) {
-        case PurchasingConst.GETONE_VENDOR:
-            return { ...state }
-        case PurchasingConst.GETONE_VENDOR_SUCCESS:
-            return { ...state, vendors: action.payload }
         case PurchasingConst.GET_VENDOR:
-            return { ...state }
-        case PurchasingConst.GET_VENDOR_SUCCESS:
-            return { ...state, vendors: action.payload }
         case PurchasingConst.ADD_VENDOR:
-            return { ...state }
-        case PurchasingConst.ADD_VENDOR_SUCCESS:
-            return { ...state, vendors: action.payload }
         case PurchasingConst.EDIT_VENDOR:
-            return { ...state }
-        case PurchasingConst.EDIT_VENDOR_SUCCESS:
-            state.vendors.splice(state.vendors.findIndex((i: any) => i.vendorId == action.payload.vendorId), 1)
-            return {
-                ...state,
-                vendor: [...state.vendors]
-            }
         case PurchasingConst.DEL_VENDOR:
             return { ...state }
+
+        case PurchasingConst.GET_VENDOR_SUCCESS:
+        case PurchasingConst.ADD_VENDOR_SUCCESS:
+            return { ...state, vendors: action.payload }
+
+        case PurchasingConst.EDIT_VENDOR_SUCCESS:
+            const index = state.vendors.findIndex((item: any) => item.vendorId == action.payload.vendorId)
+            state.vendors.splice(index, 1, action.payload)
+            return {
+                ...state,
+                vendors: [...state.vendors]
+            }
+
         case PurchasingConst.DEL_VENDOR_SUCCESS:
             return {
                 ...state,
-                vendor: state.vendors.filter((vendors: any) => vendors.id !== +action.payload)
+                vendors: state.vendors.filter((item: any) => item.vendorId !== action.payload)
             }
+
         default:
             return state
     }

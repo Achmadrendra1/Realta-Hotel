@@ -18,8 +18,10 @@ import { useEffect, useState } from "react";
 import { motion } from 'framer-motion';
 import { useDispatch, useSelector } from "react-redux";
 import Layouts from "@/layouts/layout";
+import withAuth from "@/PrivateRoute/WithAuth";
+import Auth from "@/PrivateRoute/Auth";
 
-export default function Login() {
+export default Auth( function Login() {
   const { Content } = Layout;
   const { IsAuth, error } = useSelector((state: any) => state.loginReducer);
   const dispatch = useDispatch();
@@ -53,15 +55,15 @@ export default function Login() {
 
   //Pas click submit dispatch langsung, kalo formnya masih kosong validasi muncul
   const onFinish = (values: any) => {
-    console.log("Success:", values);
+    // console.log("Success:", values);
     dispatch(doLogin(values));
   };
 
   const contentStyle: React.CSSProperties = {
     height: "160px",
-    color: "#f2f1fa",
+    color: "#252525",
     // textAlign: 'center',
-    backgroundColor: "#252525",
+    backgroundColor: "#FFFFFF",
     backdropFilter: "blur(10px)",
     borderRadius: "8px",
   };
@@ -72,7 +74,7 @@ export default function Login() {
     
     <Layouts>
       {contextHolder}
-      <Card className="m-12 mx-52 drop-shadow-md bg-[#754cff] ">
+      <Card className="m-12 mx-52 drop-shadow-md  bg-[#8662FF] ">
         <Row>
           <Col span={14}>
             <Card className={`p-2 mr-3  ${loginStyle.cardLogin} no-border`}>
@@ -80,11 +82,11 @@ export default function Login() {
                 <img src="/assets/icons.png" alt="" style={{ width: 60 }} />
 
                 <div className="container my-12">
-                  <h1 className="font-semibold text-2xl">
+                  <h1 className="font-semibold text-2xl text-white">
                     Experience unmatched luxury and exceptional hospitality at
                     our hotel.
                   </h1>
-                  <p className="text-gray-600 mt-3">
+                  <p className="text-[#252525] mt-3">
                     Immerse yourself in a world of unrivaled sophistication and
                     impeccable service.
                   </p>
@@ -97,7 +99,7 @@ export default function Login() {
                       <div style={contentStyle}>
                         <Row>
                           <div className="container mt-4 mx-6 mb-2 ">
-                            <p>
+                            <p className="text-[#000000]">
                               "Being able to book a hotel without having to
                               physically go to the destination has made me more
                               efficient."
@@ -112,10 +114,10 @@ export default function Login() {
                             />
                           </Col>
                           <Col className="ml-3">
-                            <h1 className="font-semibold text-sm ">
+                            <h1 className="font-semibold text-sm text-[#000000] ">
                               Aryasa Miftah Mubaraq Siagian
                             </h1>
-                            <p className="font-normal text-xs text-gray-400">
+                            <p className="font-normal text-xs text-[#000000]">
                               Quality Assurance
                             </p>
                           </Col>
@@ -126,7 +128,7 @@ export default function Login() {
                     <div>
                       <div style={contentStyle}>
                         <Row>
-                          <div className="container mt-4 mx-6 mb-2 ">
+                          <div className="container mt-4 mx-6 mb-2 text-[#000000]">
                             <p>
                               " I can easily book a hotel without any hassle and just one Click, that impresive me!"
                             </p>
@@ -137,10 +139,10 @@ export default function Login() {
                             <Avatar size={45} src="/img/loginpict/poto2.jpg" />
                           </Col>
                           <Col className="ml-3 ">
-                            <h1 className="font-semibold text-sm ">
+                            <h1 className="font-semibold text-sm text-[#000000] ">
                               Shoffie Anastasya
                             </h1>
-                            <p className="font-normal text-xs text-gray-400">
+                            <p className="font-normal text-xs text-[#000000]">
                               Traveller
                             </p>
                           </Col>
@@ -151,7 +153,7 @@ export default function Login() {
                     <div>
                       <div style={contentStyle}>
                       <Row>
-                          <div className="container mt-4 mx-6 mb-2 ">
+                          <div className="container mt-4 mx-6 mb-2 text-[#000000] ">
                             <p>
                               "The fast registration process makes it easy for me as someone who always wants things done quickly."
                             </p>
@@ -162,10 +164,10 @@ export default function Login() {
                             <Avatar size={45} src="/img/loginpict/poto3.jpg" />
                           </Col>
                           <Col className="ml-3">
-                            <h1 className="font-semibold text-sm ">
+                            <h1 className="font-semibold text-sm text-[#000000] ">
                               Reynaldi Renolds
                             </h1>
-                            <p className="font-normal text-xs text-gray-400">
+                            <p className="font-normal text-xs text-[#000000]">
                               Influencer
                             </p>
                           </Col>
@@ -180,10 +182,10 @@ export default function Login() {
           {/* Form */}
           <Col className="ml-3">
             <div className="container mt-16 mb-12  ">
-              <h1 className="text-3xl font-bold text-[#f2f1fa] mb-2">
-                Welcome Back
+              <h1 className="text-3xl font-bold text-white mb-2">
+                Welcome back.
               </h1>
-              <p className="font-semibold text-[#252525]">
+              <p className="font-semibold text-white">
                 Login to your account now
               </p>
             </div>
@@ -194,7 +196,7 @@ export default function Login() {
             >
               <label
                 htmlFor="Email"
-                className="block text-[#252525] font-semibold"
+                className="block text-white font-semibold"
               >
                 Email
               </label>
@@ -213,7 +215,7 @@ export default function Login() {
               </Form.Item>
               <label
                 htmlFor="Password"
-                className="block text-[#252525] font-semibold"
+                className="block text-white font-semibold"
               >
                 Password
               </label>
@@ -231,13 +233,13 @@ export default function Login() {
               </Form.Item>
               <button
                 type="submit"
-                className="bg-[#252525] text-white px-4 py-3 my-2 rounded-lg font-medium w-80"
+                className="bg-purple-400 hover:bg-purple-500 text-white px-4 py-3 my-2 rounded-lg font-medium w-80"
               >
                 Login
               </button>
-              <p className="text-[#252525] mx-12 mt-3 font-semibold">
+              <p className="text-white mx-12 mt-3 font-semibold">
                 Don't have an account?
-                <Link href="/users/register" className="ml-1 text-[#f1f2fa]">
+                <Link href="/users/register" className="ml-1 text-[#F7C934]">
                   <motion.button
                    whileHover={{ scale: 1.1 }}
                    whileTap={{ scale: 0.9 }}
@@ -253,119 +255,4 @@ export default function Login() {
       </Card>
     </Layouts>
   );
-}
-
-// primary /ungu: #754CFF
-// sec  /abu-abu : #F2F1FA
-// base /hitam : #252525
-// aksen / kuning : #F7C934
-
-// <Layouts>
-// <div className="flex h-screen justify-center items-center bg-gray-100 py-8">
-//  {contextHolder}
-//  <Form className="bg-white p-10 rounded shadow-md padding"  initialValues={{ remember: true }}
-//  onFinish={onFinish}>
-//    <h1 className="text-3xl font-bold text-gray-800">Welcome Back</h1>
-//    <p className="text-normal mb-5 font-light">Please enter your details</p>
-//    <div className="mb-5">
-//      <label htmlFor="email" className="block text-gray-700 font-bold mb-2">Email Address</label>
-//      {/* <input type="email" id="email" name="email" placeholder="Enter your email address" className="px-4 py-3 rounded-lg shadow-sm focus:outline-none focus:shadow-outline w-full" /> */}
-//    <Form.Item
-//      name="email"
-//      rules={[{ required: true, message: "Please input your Email!" },]}>
-//    <Input
-//      className="px-4 py-3 rounded-lg shadow-sm focus:outline-none focus:shadow-outline w-full"
-//      placeholder=" Your Email"
-//      maxLength={20}
-//    />
-//  </Form.Item>
-//    </div>
-//    <div className="mb-5">
-//      <label htmlFor="password" className="block text-gray-700 font-bold mb-2">Password</label>
-//      {/* <input type="password" id="password" name="password" placeholder="Enter your password" className="px-4 py-3 rounded-lg shadow-sm focus:outline-none focus:shadow-outline w-full" /> */}
-//      <Form.Item
-//    name="password"
-//    rules={[
-//      { required: true, message: "Please input your Password!" },
-//    ]}
-//  >
-//    <Input.Password
-//      type="password"
-//      className="px-4 py-3 rounded-lg shadow-sm focus:outline-none focus:shadow-outline w-full"
-//      placeholder=" Your Password"
-//    />
-//  </Form.Item>
-//    </div>
-//    <button type="submit" className="bg-blue-500 text-white px-4 py-3 rounded font-medium w-full">Sign in</button>
-//    <div className="flex justify-between mt-5">
-//      <p  className="text-blue-500 hover:text-blue-700">Dont have an account?</p>
-//      <Link href="/users/register" className="text-blue-500 hover:text-blue-700">Create Account</Link>
-//    </div>
-//  </Form>
-// </div>
-// </Layouts>
-
-// <Content style={contentStyle}>
-// {contextHolder}
-// <Space size={10}>
-//   <Card size="small">
-//     <Meta title="SIGN IN TO YOUR ACCOUNT" style={{ marginTop: 30 }} />
-
-//     <Form
-//       name="normal_login"
-//       className="login-form"
-//       initialValues={{ remember: true }}
-//       onFinish={onFinish}
-//       style={{
-//         marginTop: 30,
-//         width: 300,
-//         marginLeft: 100,
-//         marginRight: 100,
-//       }}
-//     >
-//       <Form.Item
-//         name="email"
-//         rules={[
-//           { required: true, message: "Please input your Email!" },
-//         ]}
-//       >
-//         <Input
-//           prefix={<MailOutlined className="site-form-item-icon" />}
-//           placeholder=" Your Email"
-//           // onChange={eventHandler("email")}
-//           maxLength={20}
-//         />
-//       </Form.Item>
-//       <Form.Item
-//         name="password"
-//         rules={[
-//           { required: true, message: "Please input your Password!" },
-//         ]}
-//       >
-//         <Input.Password
-//           prefix={<LockOutlined className="site-form-item-icon" />}
-//           type="password"
-//           placeholder=" Your Password"
-//           // onChange={eventHandler("password")}
-//         />
-//       </Form.Item>
-//       {/* <Form.Item>
-//           <a className="login-form-forgot" href="">
-//             Forgot password
-//           </a>
-//         </Form.Item> */}
-
-//       <Button
-//         htmlType="submit"
-//         className="login-form-button mt-0"
-//         // onClick={Logins}
-//       >
-//         Log in
-//       </Button>
-//       <Form.Item>
-//         Don't have an account? <a href="">register now!</a>
-//       </Form.Item>
-//     </Form>
-//   </Card>
-// </Space>
-// </Content>
+})

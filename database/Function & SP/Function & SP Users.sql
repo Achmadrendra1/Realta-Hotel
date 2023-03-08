@@ -117,12 +117,13 @@ BEGIN
  INSERT INTO users.user_bonus_points(ubpo_user_id,ubpo_total_points,ubpo_bonus_type,ubpo_created_on)
 	values(user_id,5,'R',now());
 	
-	INSERT INTO hr.work_orders(woro_user_id)
-	VAlues(user_id);
+	INSERT INTO hr.employee(emp_id)
+	Values(user_id);
 	
 	
 END;
 $$;
+
 
 -- New Role 
 INSERT INTO users.roles(
@@ -144,7 +145,7 @@ INSERT INTO users.user_roles(usro_user_id, usro_role_id) VALUES (55,4);
 
 --New User Password
 INSERT INTO users.user_password(uspa_user_id, uspa_passwordhash, uspa_passwordsalt)
-VALUES (44, '$2a$12$gjaHnpIPGhQHokozo0urWOViHx9nkUjj1nJH6T.tTYGanEtkcSz7S', 'P@ssword144');
+VALUES (44, '$2a$12$gjaHnpIPGhQHokozo0urWOViHx9nkUjj1nJH6T.tTYGanEtkcSz7S', 'P@ssword14');
 
 INSERT INTO users.user_password(uspa_user_id, uspa_passwordhash, uspa_passwordsalt)
 VALUES (55, '$2a$12$y90LlOedo9hZqVYsQI0YeeEIV3w7cyo4/6T3tpQaqS.4uVTPYud56', 'P@ssword66');
