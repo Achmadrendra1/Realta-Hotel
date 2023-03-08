@@ -37,9 +37,7 @@ export default function menu({ restaurant }:any) {
   );
   let router = useRouter(); 
 
-  let listmenu = menus.data;
-  // console.log(listmenu,'menus');
-  
+  let listmenu = menus.data; 
 
   // search data
   const [search, setSearch] = useState("");
@@ -85,41 +83,7 @@ export default function menu({ restaurant }:any) {
   ];
 
   const [cart, setCart] = useState([]);
-
-  // let [ormeNumber, setOrmeNumber] = useState("");
-  // function code() {
-  //   // console.log(numberOrder.ormeOrderNumber,'numberOrder'); // hasilnya MENUS#20230223-0001
-  //   let lastCode = numberOrder.ormeOrderNumber;
-  //   let getStr = lastCode.slice(0, 14); // MENUS#20230223
-
-  //   let fulldate = new Date();
-  //   let year = fulldate.getFullYear().toString();
-  //   let month = fulldate.getMonth() + 1;
-  //   let monthstr = month < 10 ? "0" + month : month;
-  //   let day = fulldate.getDate();
-  //   let daystr = day < 10 ? "0" + day : day;
-  //   let date = year + monthstr + daystr;
-
-  //   let generate = "MENUS#" + date;
-
-  //   let orderNumber;
-  //   // kalau sama, lanjutin nomor
-  //   if (generate === getStr) {
-  //     let number = Number(lastCode.slice(-4)) + 1;
-  //     let numberstr = number.toString();
-  //     let zero = "0";
-  //     let length = numberstr.length;
-  //     let generateNumber = zero.repeat(4 - length) + numberstr;
-  //     orderNumber = generate + "-" + generateNumber;
-  //     setOrmeNumber(orderNumber);
-  //     // kalau beda, mulai dari 1
-  //   } else {
-  //     orderNumber = generate + "-" + "0001";
-  //     setOrmeNumber(orderNumber);
-  //   }
-  //   return orderNumber;
-  // }
-
+ 
   useEffect(() => {
     const cartdrlocalstorage = localStorage.getItem("cart");
     const parsedCart = cartdrlocalstorage !== null ? JSON.parse(cartdrlocalstorage) : [];
@@ -191,8 +155,7 @@ export default function menu({ restaurant }:any) {
   };
 
   
-  // quantity by incdecr
-  // const [inc, setInc] = useState([]);
+  // quantity by incdecr 
   function inc(product:any){
     const newcart:any = [...cart];
     newcart.map((cart:any) => {
@@ -202,8 +165,7 @@ export default function menu({ restaurant }:any) {
         cart.subtotal = price * cart.quantity; 
       }
 
-    })
-    // newcart.find((item)=> item.remename === product.remename).quantity + 1
+    }) 
     setCart(newcart);
   }
 
@@ -230,8 +192,7 @@ export default function menu({ restaurant }:any) {
   }
 
   // get total amount from selected products
-  const getTotalSum = (): number => {
-    // console.warn('total sum: ', cart)
+  const getTotalSum = (): number => { 
     let jml = 0;
     cart.map((item: any) => {
       // ubah tipe data money ke integer agar bisa di hitung
@@ -260,8 +221,7 @@ export default function menu({ restaurant }:any) {
 
   
   let [ormeNumber, setOrmeNumber] = useState("");
-  function code() {
-    // console.log(numberOrder.ormeOrderNumber,'numberOrder'); // hasilnya MENUS#20230223-0001
+  function code() { 
     let lastCode = numberOrder.ormeOrderNumber;
     let getStr = lastCode.slice(0, 14); // MENUS#20230223
 
@@ -306,9 +266,7 @@ export default function menu({ restaurant }:any) {
 
   async function showModalsMenu(menu: any) {
     setOpenMenu(true);
-
-    // console.log('isi menu', menu);
-
+ 
     // ambil semua data photo per- menu yang di klik
     const result = await axios(
       API("Get", `/resto-menu-photos/${menu.remeid}`, null)
@@ -380,28 +338,12 @@ export default function menu({ restaurant }:any) {
 
     localStorage.setItem("cart", JSON.stringify([]));
   }
-
-  // ------------------------ SORTED
-  // console.log(menus);
-  // let sorted = menus.sort((a: any, b: any) =>
-  //   a.remeprice > b.remeprice ? 1 : -1
-  // );
-
-  // if (sortedData && sortedData == "DESC") {
-  //   sorted = menus.sort((a: any, b: any) =>
-  //     b.remeprice > a.remeprice ? 1 : -1
-  //   );
-  // }
+ 
 
   function handlesort(sort: any) {
     setSorted(sort);
   }
-
-
-  // const startIndex = (currentpage - 1) * 9;
-  // const endIndex = startIndex + 9;
-  // const menusWPagination = sorted.slice(startIndex, endIndex);
-
+ 
   // ------------------------- menu detail dengan photo
   const [selected, setSelected] = useState({
     rempurl: "",
@@ -484,7 +426,7 @@ export default function menu({ restaurant }:any) {
                   </div>
                 </div>
 
-                <div className="flex flex-wrap ml-5 item-center">
+                <div className="flex flex-wrap ml-5 item-center justify-center">
                 {listmenu && listmenu.map(
                       (menu: any, key: any) => (
                         <div key={menu.remeid} className="w-52 mr-6 mb-12">
@@ -617,31 +559,6 @@ export default function menu({ restaurant }:any) {
                           </div>
                         </div>
                       ))}
-
-                    {/* <div className='border rounded py-5 bg-slate-100 my-5'>
-                            <p className='font-bold text-center py-2'>Payment Type</p>
-                            <div className='text-center'>
-                                <Radio.Group name='paymenttype' defaultValue={'cash'} onChange={paymentType} className='items-center'>
-                                    <Radio value={'card'}>Pay Card</Radio>
-                                    <Radio value={'cash'}>Pay Cash</Radio>
-                                </Radio.Group>
-                                <Select placeholder={'Select payment type...'} onChange={paymentType}>
-                                    <Select.Option value='card'>Pay with your card</Select.Option>
-                                    <Select.Option value='cash'>Pay cash</Select.Option>
-                                </Select>
-                                <br/>
-                                <div>
-                                { payType==='card' ? 
-                                    <Select placeholder={'Select card type...'} className='w-4/6 py-3'>
-                                        <Select.Option value='CR'>Credit Card</Select.Option>
-                                        <Select.Option value='D'>Debit</Select.Option>
-                                        <Select.Option value='PG'>Hotel Realta Wallet</Select.Option>
-                                    </Select> 
-                                  : null
-                                }
-                                </div>
-                            </div>
-                        </div> */}
 
                     <div className="border rounded-xl py-5">
                       <p className="text-lg font-bold text-center mb-4">Payment Summary</p>

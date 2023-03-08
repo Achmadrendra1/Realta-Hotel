@@ -337,16 +337,7 @@ function Order({orderNumberUser}:any) {
                       placeholder="hp"
                       value={userLoggedIn[0]?.user_phone_number}
                       readOnly
-                    ></Input>
-                    {/* <Input.Group compact>
-                        <Select defaultValue="+62" style={{ width: '30%' }}>
-                          <Select.Option value="+1">+1 (USA)</Select.Option>
-                          <Select.Option value="+44">+44 (UK)</Select.Option>
-                          <Select.Option value="+62">+62 (Indonesia)</Select.Option>
-                        </Select>
-                      <Input style={{ width: '70%' }} placeholder="Nomor Telepon" />
-      
-                      </Input.Group> */}
+                    ></Input> 
                   </Form.Item>
                 </Form>
                 <p className="text-2xl">Payment</p>
