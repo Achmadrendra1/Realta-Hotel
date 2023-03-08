@@ -180,14 +180,14 @@ WHERE hotel.facilities.faci_cagro_id = 2;
 
 
 ------------------------------------------- 5--------------------------------------------
-drop function resto.listMenuUser
+
 CREATE OR REPLACE FUNCTION resto.listMenuUser(faciid int, search_menu varchar(50), currentpage int, sort varchar(10)) 
 	RETURNS TABLE (
 		remeId int,
 		remeName text,
 		remeDescription text,
 		remePrice money,
-		-- remeDiscount money,
+		remeDiscount money,
 		remeStatus text,
 		rempThumbnailFilename text,
 		rempPhotoFilename text,
@@ -205,7 +205,7 @@ DECLARE
 			resto.resto_menus.reme_name,
 			resto.resto_menus.reme_description,
 			resto.resto_menus.reme_price,
-			-- resto.resto_menus.reme_discount,
+			resto.resto_menus.reme_discount,
 			resto.resto_menus.reme_status,
 			resto.resto_menu_photos.remp_thumbnail_filename,
 			resto.resto_menu_photos.remp_photo_filename,
@@ -238,7 +238,7 @@ BEGIN
 				remeName,
 				remeDescription,
 				remePrice,
-				-- remeDiscount,
+				remeDiscount,
 				remeStatus,
 				rempThumbnailFilename,
 				rempPhotoFilename,
@@ -319,7 +319,7 @@ CREATE OR REPLACE FUNCTION resto.listMenuUser(faciid int, search_menu varchar(50
 		remeName text,
 		remeDescription text,
 		remePrice money,
-		-- remeDiscount money,
+		remeDiscount money,
 		remeStatus text,
 		rempThumbnailFilename text,
 		rempPhotoFilename text,
@@ -337,7 +337,7 @@ DECLARE
 			resto.resto_menus.reme_name,
 			resto.resto_menus.reme_description,
 			resto.resto_menus.reme_price,
-			-- resto.resto_menus.reme_discount,
+			resto.resto_menus.reme_discount,
 			resto.resto_menus.reme_status,
 			resto.resto_menu_photos.remp_thumbnail_filename,
 			resto.resto_menu_photos.remp_photo_filename,
@@ -370,7 +370,7 @@ BEGIN
 				remeName,
 				remeDescription,
 				remePrice,
-				-- remeDiscount,
+				remeDiscount,
 				remeStatus,
 				rempThumbnailFilename,
 				rempPhotoFilename,
@@ -395,7 +395,7 @@ LANGUAGE PLPGSQL;
 CREATE OR REPLACE FUNCTION resto.listMenu(faciid int)
 	RETURNS TABLE (
 		remeId int, remeName text, remeDescription text, remePrice money, 
-		-- remeDiscount money, 
+		remeDiscount money, 
 		remeStatus text,
 		rempThumbnailFilename text, 
 		rempPhotoFilename text, rempPrimary bit, rempUrl text, remeFaciId int
@@ -407,8 +407,7 @@ CREATE OR REPLACE FUNCTION resto.listMenu(faciid int)
 		dataMenu CURSOR FOR (
 			SELECT  DISTINCT ON (resto.resto_menus.reme_id) resto.resto_menus.reme_id, resto.resto_menus.reme_name, 
 					resto.resto_menus.reme_description, resto.resto_menus.reme_price,
-					-- resto.resto_menus.reme_discount, 
-					resto.resto_menus.reme_status,
+					resto.resto_menus.reme_discount, resto.resto_menus.reme_status,
 					resto.resto_menu_photos.remp_thumbnail_filename, resto.resto_menu_photos.remp_photo_filename,
 					resto.resto_menu_photos.remp_primary, resto.resto_menu_photos.remp_url, resto.resto_menus.reme_faci_id
 			FROM resto.resto_menus
@@ -422,8 +421,7 @@ CREATE OR REPLACE FUNCTION resto.listMenu(faciid int)
 			LOOP 
 				FETCH NEXT FROM dataMenu
 					INTO 	remeId, remeName, remeDescription, remePrice, 
-							-- remeDiscount, 
-							remeStatus,
+							remeDiscount, remeStatus,
 							rempThumbnailFilename, 
 							rempPhotoFilename, rempPrimary, rempUrl, remeFaciId;
 				EXIT WHEN NOT FOUND;
