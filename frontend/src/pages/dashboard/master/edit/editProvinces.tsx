@@ -14,16 +14,11 @@ export default function EditProvinces(props: any) {
   );
   const [formValues, setFormValues] = useState(details);
 
-  // console.log('id idProvinces : ', idProvinces);
-  // console.log('data dataProvinces :', dataProvinces);
-  // console.log('detail idProvinces : ', details);
-  // console.log('formValues idProvinces :', formValues);
   const handleInputChange = (input: any) => (e: any) => {
     setFormValues({ ...formValues, [input]: e.target.value });
   };
 
   const onFinish = () => {
-    // console.log('Success:', formValues);
     dispatch(doUpdateProvinces(formValues));
     handleClose(false);
     window.location.reload();

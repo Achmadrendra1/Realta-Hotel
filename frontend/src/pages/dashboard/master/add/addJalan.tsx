@@ -14,26 +14,18 @@ export default function AddProvinces(props: any) {
     (item: any) => item.addr_line2 == cityNamee
   );
   const [formValues, setFormValues] = useState(details);
-  // console.log('Jalan :', cityNamee);
-  // console.log('cityId :', cityId);
-  // console.log('Data Jalan :', dataProvinces);
-  // console.log('Detail Jalan :', details);
 
   const handleInputChange = (input: any) => (e: any) => {
     setFormValues({ ...formValues, [input]: e.target.value });
   };
 
-  // console.log('handleInputChange :', handleInputChange);
-
   const onFinish = (event: any) => {
-    // console.log('Success:', details);
     dispatch(doAddProvinces(details));
     handleClose(false);
     alert;
   };
 
   const onFinishFailed = (errorInfo: any) => {
-    // console.log('Failed:', errorInfo);
   };
 
   //Alert
