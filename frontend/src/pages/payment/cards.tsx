@@ -11,6 +11,7 @@ import {
   Carousel,
   Col,
   DatePicker,
+  Empty,
   List,
   Row,
 } from "antd";
@@ -25,7 +26,7 @@ import {
   doTransactionRequest,
   doUsacRequest,
 } from "@/Redux/Action/Payment/paymentDashAction";
-import { doGetAllBank } from "@/Redux/Action/Payment/paymentUserAction";
+import { doGetAllBank, doGetHistory } from "@/Redux/Action/Payment/paymentUserAction";
 
 export default function Cards() {
   const dispatch = useDispatch();
@@ -40,19 +41,25 @@ export default function Cards() {
   );
   const user = useSelector((state:any) => state.GetUserReducer.getUser)
   const {payBank, allBank} = useSelector((state:any) => state.payBankReducer)
-  const { payDashTrx, total, currentPage } = useSelector(
+  const { payDashTrx, total, currentPage, payHistoryTrx } = useSelector(
     (state: any) => state.payTrxHistoryReducer
   );
-  const dispacth = useDispatch();
+
   useEffect(() => {
-    dispacth(doTransactionRequest());
-    dispacth(doGetAllBank())
+    dispatch(doGetHistory());
+    dispatch(doGetAllBank())
   }, []);
 
   useEffect(() => {
     // user[0]?.role_name != "Guest" ? setIsAdmin(true) : setIsAdmin(false);
     dispatch(doUsacRequest(user[0]?.user_id));
   }, [user]);
+
+  const dataHistory = payHistoryTrx?.filter(
+    (obj: any) => obj.userId === user[0]?.user_id && obj.sourcePaymentName !== null && obj.sourcePaymentName !== 'H-Pay'
+  )
+
+  console.log(dataHistory)
 
   const bankAcc = account?.filter(
     (obj: any) => obj.usacType === "Credit Card" || obj.usacType === "Debet"
@@ -128,7 +135,7 @@ export default function Cards() {
               </div>
             </div>
             <div className="flex overflow-x-auto pb-8 overflow-hidden">
-              <div className="flex flex-nowrap lg:ml-40 md:ml-20 ml-10 ">
+              <div className="flex flex-nowrap lg:ml-40 md:ml-20  ">
                 {bankAcc.map((item: any) => (
                   <div className="inline-block px-3">
                     <div className="w-96 h-56 m-auto bg-red-100 rounded-xl relative text-white shadow-xl transition-transform transform hover:scale-95">
@@ -229,7 +236,7 @@ export default function Cards() {
                 pageSize: 10,
               }}
             >
-              {payDashTrx.map((item: any) => (
+              {dataHistory.length != 0 ? dataHistory.map((item: any) => (
                 <Card
                   title={item.transactionNumber}
                   extra={item.trxDate?.split("T")[0]}
@@ -272,7 +279,9 @@ export default function Cards() {
                     </div>
                   </div>
                 </Card>
-              ))}
+              )) : (
+                <Empty className="mt-10 font-bold text-xl"/>
+              )}
             </List>
           </div>
         </Layouts>

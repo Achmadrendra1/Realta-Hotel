@@ -19,7 +19,7 @@ export default function index() {
     (state: any) => state.BoorInvoiceReducer.invoice
   );
 
-  // console.log(invoiceView);
+  console.log(invoiceView);
 
   useEffect(() => {
     dispatch(getSpInvoice());
@@ -97,7 +97,7 @@ export default function index() {
     });
   }, [boor_order_number]);
 
-  console.log(getInvoice);
+  // console.log(getInvoice);
 
   // const email = "aryasamiftah@gmail.com"
 
@@ -162,7 +162,7 @@ export default function index() {
   return (
     <>
       <div className="px-6 pt-4 flex justify-between">
-        <Link href={"/booking"} className="text-xl mb-5">
+        <Link href={"/users#history"} className="text-xl mb-5">
           <LeftCircleOutlined /> Kembali
         </Link>
         <div className="mr-12 flex justify-end">

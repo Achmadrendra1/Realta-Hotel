@@ -10,8 +10,8 @@ export class PaymentTransactionController {
     }
 
     @Get('all')
-    getAll(){
-        return this.payService.getAll()
+    getAll(@Query() query){
+        return this.payService.getAll(query)
     }
 
     @Post()
