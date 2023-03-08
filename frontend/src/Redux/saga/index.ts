@@ -9,7 +9,7 @@ import { deptType } from "../Constant/HR/deptType";
 import { empType } from "../Constant/HR/empType";
 import { handleAddEmployee, handleDelEmployee, handleDetailEmployee, handleGetEmployees, handleUpdateEmployee } from "./HR/employees";
 import UserConst from "../Constant/User/UserConst";
-import { HandleLoginUser, HandleLogoutUser } from "./User/auth";
+import { HandleLoginUser } from "./User/auth";
 import { HandleEditProfile, HandleGetUser, HandleUpdatePassword } from "./User/getUser";
 import PaymentConst from "../Constant/Payment/PaymentConst";
 import {
@@ -29,6 +29,7 @@ import {
   handleCheckSecure,
   handleGetHistoryTrx,
   handleCreateTransaction,
+  handleBankAllRequest,
 } from "./Payment/paymentSagas";
 
 //Master
@@ -165,7 +166,6 @@ export default function* rootSaga() {
     takeEvery(UserConst.GET_DATA_USER, HandleGetUser),
     takeEvery(UserConst.EDIT_DATA_PROFILE,HandleEditProfile),
     takeEvery(UserConst.UPDATE_PASSWORD,HandleUpdatePassword),
-    takeEvery(UserConst.LOGOUT_USER,HandleLogoutUser),
 
 
     takeEvery(deptType.GET_DATA, handleGetDept),
@@ -182,6 +182,7 @@ export default function* rootSaga() {
     takeEvery(PaymentConst.UPDATE_PAYMENT_GATEWAY, handlePagaUpdate),
     takeEvery(PaymentConst.DELETE_PAYMENT_GATEWAY, handlePagaDelete),
     takeEvery(PaymentConst.GET_BANK_REQUEST, handleBankRequest),
+    takeEvery(PaymentConst.GET_ALL_BANK_REQUEST, handleBankAllRequest),
     takeEvery(PaymentConst.ADD_BANK, handleBankAdd),
     takeEvery(PaymentConst.UPDATE_BANK, handleUpdateBank),
     takeEvery(PaymentConst.DELETE_BANK, handleDeleteBank),

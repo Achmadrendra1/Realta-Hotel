@@ -27,29 +27,8 @@ export class FacilityPhotosService {
     });
   }
 
-  // async addNewFapho(file, fapho: FacilityPhoto): Promise<any> {
-  //   return await this.FaphoRepsitory.save({
-  //     faphoFaciId: fapho.faphoFaciId,
-  //     faphoThumbnailFilename: fapho.faphoThumbnailFilename,
-  //     faphoPhotoFilename: fapho.faphoPhotoFilename,
-  //     faphoPrimary: fapho.faphoPrimary,
-  //     // faphoUrl: file ? file[0].originalname : null,
-  //     faphoUrl: file,
-  //     faphoModifiedDate: fapho.faphoModifiedDate,
-  //   })
-  //     .then((result) => {
-  //       return {
-  //         message: `Facilities successfuly added to the system`,
-  //         result: result,
-  //       };
-  //     })
-  //     .catch((error) => {
-  //       return `facilities failed adding to the system` + error;
-  //     });
-  // }
-
-  async addNewFapho(file, fapho: any) {
-    console.log(file);
+  async addNewFapho(file: any, fapho: any) {
+    const date = new Date();
     const id = fapho.faphoFaci;
     for (const data of file) {
       await this.FaphoRepsitory.save({
@@ -58,8 +37,7 @@ export class FacilityPhotosService {
         faphoPhotoFilename: data.filename,
         faphoPrimary: fapho.faphoPrimary,
         faphoUrl: data.path,
-        // faphoUrl: file.path,
-        faphoModifiedDate: fapho.faphoModifiedDate,
+        faphoModifiedDate: date,
       });
     }
     return await this.FaphoRepsitory.find({

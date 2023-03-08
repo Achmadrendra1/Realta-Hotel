@@ -16,15 +16,25 @@ const Dashboard = ({children} : {children:any}) => {
         {
             name: 'Home',
             icon: <HomeOutlined />,
-            href: '/dashboard/master'
+            href: '/dashboard'
         },
+        // {
+        //     name: 'Task',
+        //     icon: <CarryOutOutlined />,
+        //     href: '/dashboard/hr/officeboy'
+        // },
+        // {
+        //     name: 'Resepsionis',
+        //     icon: <BookOutlined />,
+        //     href: '/'
+        // },
         {
             name: 'Resto',
             icon: <CoffeeOutlined />,
             href: '/dashboard/resto'
         },
         {
-            name: 'Human resources',
+            name: 'Human Resources',
             icon: <UserSwitchOutlined />,
             href: '/dashboard/hr'
         },
@@ -56,7 +66,7 @@ const Dashboard = ({children} : {children:any}) => {
                 <meta name="viewport" content="width=device-width, initial-scale=1" />
                 <link rel="icon" href="/assets/icons.png" />
             </Head>
-            <Layout className='bg-white  max-h-screen' hasSider>
+            <Layout className='bg-[#F2F1FA]' hasSider>
                 <Sidebar nav={navigation} collapsed={collapsed} logo="/assets/icons.png" locations={router.asPath}/>
                 <Content style={{ minHeight: "100vh" }}>
                     <Headers click={collapse}/>

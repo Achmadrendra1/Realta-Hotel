@@ -4,44 +4,78 @@ import Dashboard from "@/layouts/dashboard";
 import {
   DeleteOutlined,
   EditOutlined,
+  ExclamationCircleFilled,
   EyeOutlined,
   UserAddOutlined,
 } from "@ant-design/icons";
-import { Breadcrumb, Col, Input, List, Row, Table } from "antd";
+import { Breadcrumb, Col, Input, List, Modal, Row, Table } from "antd";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import AddHotelsRealta from "./AddHotel";
 import { useRouter } from "next/router";
 import Link from "next/link";
 import EditHotelRealta from "./EditHotel";
+import withAuth from "@/PrivateRoute/WithAuth";
 
-export default function index() {
+export default withAuth(function index() {
   const dispatch: any = useDispatch();
   const { hotel } = useSelector((state: any) => state.HotelReducer);
-  const { Search } = Input;
-  const [add, setAdd] = useState(false);
+  const [OpenAdd, setOpenAdd] = useState(false);
   const [id, setId] = useState();
   const [refresh, setRefresh] = useState(false);
-  const [edit, setEdit] = useState(false);
+  const [OpenEdit, setOpenEdit] = useState(false);
   const router = useRouter();
+  const { Search } = Input;
+  const {confirm} = Modal;
 
   useEffect(() => {
     dispatch(getHotel());
   }, []);
+
   const handleRefresh = () => {
     setRefresh(true);
   };
 
-  const onClick = (id: any) => {
-    setEdit(true);
+  const handleClose = (data: boolean) => {
+    setOpenAdd(data);
+    setOpenEdit(data);
+  }
+
+  const handleOk = () => {
+    setTimeout(() => {
+      setOpenAdd(false);
+      setOpenEdit(false);
+    }, 2000);
+  }
+
+  const handleCancel = () => {
+    setOpenAdd(false);
+    setOpenEdit(false);
+  }
+
+  const editHotel = (id: any) => {
+    setOpenEdit(true);
     setId(id);
   };
 
   const onDelete = (hotelId: any) => {
-    console.log(hotelId);
-
-    dispatch(deleteHotel(hotelId));
+    confirm({
+      title: 'Are you sure you want to delete this Hotel?',
+      icon: <ExclamationCircleFilled />,
+      okText: "Yes",
+      okType: "danger",
+      cancelText: "No",
+      onOk() {
+        dispatch(deleteHotel(hotelId));
+      },
+      onCancel() {
+        console.log(
+          "Cancel"
+        );
+      }
+    })    
   };
+
   const column = [
     {
       title: "Hotel Name",
@@ -92,7 +126,7 @@ export default function index() {
             </a>{" "}
             <a>
               {" "}
-              <EditOutlined onClick={() => onClick(index)} />
+              <EditOutlined onClick={() => editHotel(index)} />
             </a>{" "}
             <a>
               <DeleteOutlined onClick={() => onDelete(index)} />
@@ -118,27 +152,35 @@ export default function index() {
     <Dashboard>
       <Breadcrumb>
         <Breadcrumb.Item>
-          <a href="/dashboard/">Dashboard</a>
+          <Link href="/dashboard/">Dashboard</Link>
         </Breadcrumb.Item>
         <Breadcrumb.Item>
-          <a href="/dashboard/hotel">Hotel</a>
+          <Link href="/dashboard/hotel">Hotel</Link>
         </Breadcrumb.Item>
       </Breadcrumb>
-      {edit ? (
-        <EditHotelRealta
-          id={id}
-          setDisplay={setEdit}
-          closeEdit={() => setEdit(false)}
-          setRefresh={handleRefresh}
-          htlname={hotel.hotelName}
-        />
-      ) : add ? (
+      
+      {OpenAdd ?
         <AddHotelsRealta
-          setDisplay={setAdd}
-          closeAdd={() => setAdd(false)}
+          showAdd={OpenAdd}
+          okAdd = {handleOk}
+          cancelAdd={handleCancel}
+          handleClose={handleClose}
           onRefresh={() => setRefresh(true)}
         />
-      ) : (
+       : null }
+      
+      {OpenEdit ? 
+        <EditHotelRealta
+          id={id}
+          showEdit={OpenEdit}
+          okEdit = {handleOk}
+          cancelEdit={handleCancel}
+          handleClose={handleClose}
+          onRefresh={() => setRefresh(true)}
+          htlname={hotel.hotelName}
+        />
+       : null }
+
         <Row gutter={16}>
           <Col span={24}>
             <h1 className="text-xl font-medium">Realta Hotel</h1>
@@ -153,7 +195,7 @@ export default function index() {
               </Col>
               <Col></Col>
               <Col className="ml-auto">
-                <Buttons funcs={() => setAdd(true)}>
+                <Buttons funcs={() => setOpenAdd(true)}>
                   Add <UserAddOutlined />
                 </Buttons>
               </Col>
@@ -165,7 +207,7 @@ export default function index() {
             />
           </Col>
         </Row>
-      )}
     </Dashboard>
   );
 }
+)

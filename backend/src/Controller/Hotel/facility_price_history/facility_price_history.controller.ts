@@ -14,23 +14,23 @@ export class FacilityPriceHistoryController {
   constructor(private FaphService: FacilityPriceHistoryService) {}
 
   @Get()
-  getHore() {
+  getFaph() {
     return this.FaphService.findAllFaph();
   }
   @Get(':id')
-  getHoreId(@Param() params) {
-    return this.FaphService.findByFaphId(params);
+  getFaphId(@Param('id') id) {
+    return this.FaphService.findByFaphId(id);
   }
   @Put(':id')
-  UpdateHore(@Param('hotelId') hotelId: any, @Body() body: any) {
-    return this.FaphService.UpdateFaph(hotelId, body);
+  UpdateFaph(@Param('if') id: any, @Body() body: any) {
+    return this.FaphService.UpdateFaph(id, body);
   }
-  @Post('Add')
-  addHore(@Body() body: any) {
+  @Post()
+  addFaph(@Body() body: any) {
     return this.FaphService.addNewFaph(body);
   }
-  @Delete()
-  DeleteHore(@Param('id') params) {
-    return this.FaphService.deleteFaph(params);
+  @Delete(':id')
+  DeleteHore(@Param('id') id) {
+    return this.FaphService.deleteFaph(id);
   }
 }

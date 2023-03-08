@@ -1,85 +1,57 @@
-//-------------------------------------------------------------------------------
-//import from package
-import React, { use, useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { ColumnType } from 'antd/es/table';
-import {
-  Input,
-  Modal,
-  Tabs,
-  Button,
-  Table,
-  Form,
-  Alert,
-  Radio,
-  message,
-  Divider,
-  Select,
-  Image,
-} from 'antd';
-import {
-  DeleteOutlined,
-  EditOutlined,
-  ExclamationCircleFilled,
-  EyeOutlined,
-  PlusOutlined,
-  SearchOutlined,
-} from '@ant-design/icons';
-import router, { useRouter } from 'next/router';
 
 //-------------------------------------------------------------------------------
 //import from src
 //GET and DEL
-import Dashboard from '@/layouts/dashboard';
-import { doRegions, doDelRegions } from '@/Redux/Action/Master/actionRegions';
-import { doCountry, doDelCountry } from '@/Redux/Action/Master/actionCountry';
+import Dashboard from "@/layouts/dashboard";
+import { doRegions, doDelRegions } from "@/Redux/Action/Master/actionRegions";
+import { doCountry, doDelCountry } from "@/Redux/Action/Master/actionCountry";
 import {
   doProvinces,
   doDelProvinces,
-} from '@/Redux/Action/Master/actionProvinces';
-import { doAddress, doDelAddress } from '@/Redux/Action/Master/actionAddress';
-import { doDelPolicy, doPolicy } from '@/Redux/Action/Master/actionPolicy';
+} from "@/Redux/Action/Master/actionProvinces";
+import { doAddress, doDelAddress } from "@/Redux/Action/Master/actionAddress";
+import { doDelPolicy, doPolicy } from "@/Redux/Action/Master/actionPolicy";
 import {
   doCategoryGroup,
   doDelCategoryGroup,
   doUpdateCategoryGroup,
-} from '@/Redux/Action/Master/actionCategoryGroup';
+} from "@/Redux/Action/Master/actionCategoryGroup";
 import {
   doPriceItems,
   doDelPriceItems,
-} from '@/Redux/Action/Master/actionPriceItems';
+} from "@/Redux/Action/Master/actionPriceItems";
 import {
   doServiceTask,
   doDelServiceTask,
-} from '@/Redux/Action/Master/actionServiceTask';
+} from "@/Redux/Action/Master/actionServiceTask";
 
 //Add
-import AddRegions from './add/addRegions';
-import AddCountry from './add/addCountry';
-import AddProvinces from './add/addProvinces';
-import AddCity from './add/addCity';
-import AddJalan from './add/addJalan';
-import AddPolicy from './add/addPolicy';
-import AddCategory from './add/addCategory';
-import AddPrice from './add/addPrice';
-import AddService from './add/addService';
+import AddRegions from "./add/addRegions";
+import AddCountry from "./add/addCountry";
+import AddProvinces from "./add/addProvinces";
+import AddCity from "./add/addCity";
+import AddJalan from "./add/addJalan";
+import AddPolicy from "./add/addPolicy";
+import AddCategory from "./add/addCategory";
+import AddPrice from "./add/addPrice";
+import AddService from "./add/addService";
 //Edit
-import EditRegions from './edit/editRegions';
-import EditCountry from './edit/editCountry';
-import EditProvinces from './edit/editProvinces';
-import EditAddress from './edit/editCity';
-import EditJalan from './edit/editJalan';
-import EditPolicy from './edit/editPolicy';
-import EditCategory from './edit/editCategory';
-import EditPrice from './edit/editPrice';
-import EditService from './edit/editService';
-import ViewPolicy from './view/viewPolicy';
-import ViewCategory from './view/viewCategory';
-import ViewPrice from './view/viewPrice';
-import { doLocations } from '@/Redux/Action/Master/actionLocations';
-import { doLocationsRC } from '@/Redux/Action/Master/actionLocationsRC';
-import { doLocationsRCP } from '@/Redux/Action/Master/actionLocationsRCP';
-import axios from 'axios';
+import EditRegions from "./edit/editRegions";
+import EditCountry from "./edit/editCountry";
+import EditProvinces from "./edit/editProvinces";
+import EditAddress from "./edit/editCity";
+import EditJalan from "./edit/editJalan";
+import EditPolicy from "./edit/editPolicy";
+import EditCategory from "./edit/editCategory";
+import EditPrice from "./edit/editPrice";
+import EditService from "./edit/editService";
+import ViewPolicy from "./view/viewPolicy";
+import ViewCategory from "./view/viewCategory";
+import ViewPrice from "./view/viewPrice";
+import { doLocations } from "@/Redux/Action/Master/actionLocations";
+import { doLocationsRC } from "@/Redux/Action/Master/actionLocationsRC";
+import { doLocationsRCP } from "@/Redux/Action/Master/actionLocationsRCP";
+import axios from "axios";
 //-------------------------------------------------------------------------------
 //-------------------------------------------------------------------------------
 export default function menuMaster() {
@@ -114,43 +86,64 @@ export default function menuMaster() {
   //GET DATA FROM DATABASE
 
   let dataRegions = useSelector((state: any) => state.regionsReducer.regions);
+  // // console.log('Selector Regions :', dataRegions);
+
   let dataCountry = useSelector((state: any) => state.countryReducer.country);
+  // console.log('Selector Country :', dataCountry);
+
   let dataProvinces = useSelector(
     (state: any) => state.provincesReducer.provinces
   );
+  // console.log('Selector Provinces :', dataProvinces);
+
   let dataCity = useSelector((state: any) => state.addressReducer.address);
+  // console.log('Selector City :', dataCity);
   let dataJalan = useSelector((state: any) => state.addressReducer.address);
+  // console.log('S electorJalan :', dataJalan);
+
   let dataPolicy = useSelector((state: any) => state.policyReducer.policy);
+  // console.log('Selector policy :', dataPolicy);
+
   let dataCategory = useSelector(
     (state: any) => state.categoryGroupReducer.categoryGroup
   );
+
+  // console.log('Selector categoryGroup :', dataCategory);
   let dataPrice = useSelector(
     (state: any) => state.priceItemsReducer.priceItems
   );
+  // console.log('Selector priceItems :', dataPrice);
   let dataService = useSelector(
     (state: any) => state.serviceTaskReducer.serviceTask
   );
+  // console.log('Selector serviceTask :', dataPolicy);
   let dataLocationsAll = useSelector(
     (state: any) => state.locationsReducer.locations
   );
+  // console.log('Selector locationsAll :', dataLocationsAll);
   let dataLocationsRC = useSelector(
     (state: any) => state.locationsRCReducer.locationsRC
   );
+  // console.log('Selector locationsRC :', dataLocationsRC);
   let dataLocationsRCP = useSelector(
     (state: any) => state.locationsRCPReducer.locationsRCP
   );
+  // console.log('Selector locationsRCP :', dataLocationsRCP);
 
+  //-------------------------------------------------------------------------------
+  //-------------------------------------------------------------------------------
+  //-------------------------------------------------------------------------------
   /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   //ADD DATA FROM DATABASE
 
   //-------------------------------------------------------------------------------
   // Modal Add
-  type LayoutType = Parameters<typeof Form>[0]['layout'];
+  type LayoutType = Parameters<typeof Form>[0]["layout"];
 
   const [AddModalOpen, showModalAdd] = useState(false);
   const [EditModalOpen, showModalEdit] = useState(false);
   const [form] = Form.useForm();
-  const [formLayout, setFormLayout] = useState<LayoutType>('horizontal');
+  const [formLayout, setFormLayout] = useState<LayoutType>("horizontal");
   const router = useRouter();
 
   const onFormLayoutChange = ({ layout }: { layout: LayoutType }) => {
@@ -201,36 +194,44 @@ export default function menuMaster() {
   const editDataRegions = (idRegions: number) => {
     setOpenEditRegions(true);
     setIdRegions(idRegions);
+    // console.log('click edit region :', idRegions);
   };
   const editDataCountry = (idCountry: number) => {
     setOpenEditCountry(true);
     setIdCountry(idCountry);
+    // console.log(idCountry);
   };
   const editDataProvinces = (idProvinces: number) => {
     setOpenEditProvinces(true);
     setIdProvinces(idProvinces);
+    // console.log(idProvinces);
   };
   const editDataCity = (idCity: number) => {
     setOpenEditCity(true);
     setIdCity(idCity);
+    // console.log(idCity);
   };
   const editDataJalan = (idJalan: number) => {
     setOpenEditJalan(true);
     setIdJalan(idJalan);
+    // console.log(idJalan);
   };
 
   const editDataPolicy = (idPolicy: number) => {
     setOpenEditPolicy(true);
     setIdPolicy(idPolicy);
+    // console.log('click poli :', idPolicy);
   };
 
   /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   //Visible
+
   const [visibleCategory, setVisibleCategory] = useState(false);
   const editDataCategory = (idCategory: number) => {
     setOpenEditCategory(true);
     setIdCategory(idCategory);
     setVisibleCategory(!visibleCategory);
+    // console.log(idCategory);
   };
 
   const [visiblePrice, setVisiblePrice] = useState(false);
@@ -238,35 +239,39 @@ export default function menuMaster() {
     setOpenEditPrice(true);
     setIdPrice(idPrice);
     setVisiblePrice(!visiblePrice);
-  };
 
+    // console.log(idPrice);
+  };
   const editDataService = (idService: number) => {
     setOpenEditService(true);
     setIdService(idService);
+    // console.log(idService);
   };
 
   const viewDataPolicy = (idPolicy: number) => {
     setViewPolicy(true);
     setIdPolicy(idPolicy);
+    // console.log('button poli view click: ', idPolicy);
   };
   const viewDataCategory = (idCategory: number) => {
     setViewCategory(true);
     setIdCategory(idCategory);
+    // console.log('button cate view click:', idCategory);
   };
-
   const viewDataPrice = (idPrice: number) => {
     setViewPrice(true);
     setIdPrice(idPrice);
+    // console.log('button cate view click:', idPrice);
   };
 
   //----------------------------------------------------------------------------------------------------------------------------------------------------------
   // Button Add
-  const [visible, setVisible] = useState('hidden');
+  const [visible, setVisible] = useState("hidden");
 
   //-------------------------------------------------------------------------------
   // Modal Hanlde
   const handleOk = () => {
-    setVisible('');
+    setVisible("");
 
     setTimeout(() => {
       setOpenAddRegions(false);
@@ -288,7 +293,7 @@ export default function menuMaster() {
       setOpenEditCategory(false);
       setOpenEditPrice(false);
       setOpenEditService(false);
-      setVisible('hidden');
+      setVisible("hidden");
     }, 777);
   };
 
@@ -296,6 +301,7 @@ export default function menuMaster() {
   //Cancel
 
   const handleCancel = () => {
+    // console.log('Clicked cancel button');
     setOpenAddRegions(false);
     setOpenAddCountry(false);
     setOpenAddProvinces(false);
@@ -326,6 +332,8 @@ export default function menuMaster() {
   //Close
 
   const handleClose = (data: boolean) => {
+    // console.log('button Close : ', data);
+
     setOpenAddRegions(data);
     setOpenAddCountry(data);
     setOpenAddProvinces(data);
@@ -360,164 +368,189 @@ export default function menuMaster() {
 
   const showDeleteRegions = (id: any) => {
     confirm({
-      title: 'Are you sure delete this Regions?',
+      title: "Are you sure delete this Regions?",
       icon: <ExclamationCircleFilled />,
-      content: 'The data for the regions will be deleted.',
-      okText: 'Yes',
-      okType: 'danger',
-      cancelText: 'No',
+      content: "The data for the regions will be deleted.",
+      okText: "Yes",
+      okType: "danger",
+      cancelText: "No",
       onOk() {
         dispatch(doDelRegions(id));
       },
-      onCancel() {},
+      onCancel() {
+        // console.log('Cancel');
+      },
     });
+
+    // console.log('delete id :', id);
   };
 
   const showDeleteCountry = (id: any) => {
     confirm({
-      title: 'Are you sure delete this Regions?',
+      title: "Are you sure delete this Regions?",
       icon: <ExclamationCircleFilled />,
-      content: 'The data for the regions will be deleted.',
-      okText: 'Yes',
-      okType: 'danger',
-      cancelText: 'No',
+      content: "The data for the regions will be deleted.",
+      okText: "Yes",
+      okType: "danger",
+      cancelText: "No",
       onOk() {
         dispatch(doDelCountry(id));
         window.location.reload();
       },
-      onCancel() {},
+      onCancel() {
+        // console.log('Cancel');
+      },
     });
+    // console.log('delete country id  :', id);
   };
 
   const showDeleteProvinces = (id: any) => {
     confirm({
-      title: 'Are you sure delete this Regions?',
+      title: "Are you sure delete this Regions?",
       icon: <ExclamationCircleFilled />,
-      content: 'The data for the regions will be deleted.',
-      okText: 'Yes',
-      okType: 'danger',
-      cancelText: 'No',
+      content: "The data for the regions will be deleted.",
+      okText: "Yes",
+      okType: "danger",
+      cancelText: "No",
       onOk() {
         dispatch(doDelProvinces(id));
         window.location.reload();
       },
-      onCancel() {},
+      onCancel() {
+        // console.log('Cancel');
+      },
     });
   };
 
   const showDeleteCity = (id: any) => {
     confirm({
-      title: 'Are you sure delete this Regions?',
+      title: "Are you sure delete this Regions?",
       icon: <ExclamationCircleFilled />,
-      content: 'The data for the regions will be deleted.',
-      okText: 'Yes',
-      okType: 'danger',
-      cancelText: 'No',
+      content: "The data for the regions will be deleted.",
+      okText: "Yes",
+      okType: "danger",
+      cancelText: "No",
       onOk() {
         dispatch(doDelAddress(id)), window.location.reload();
+        // console.log('OK');
       },
-      onCancel() {},
+      onCancel() {
+        // console.log('Cancel');
+      },
     });
   };
   const showDeleteJalan = (id: any) => {
     confirm({
-      title: 'Are you sure delete this Regions?',
+      title: "Are you sure delete this Regions?",
       icon: <ExclamationCircleFilled />,
-      content: 'The data for the regions will be deleted.',
-      okText: 'Yes',
-      okType: 'danger',
-      cancelText: 'No',
+      content: "The data for the regions will be deleted.",
+      okText: "Yes",
+      okType: "danger",
+      cancelText: "No",
       onOk() {
-        dispatch(doDelAddress(id));
+        dispatch(doDelAddress(id)); // console.log('OK');
       },
-      onCancel() {},
+      onCancel() {
+        // console.log('Cancel');
+      },
     });
   };
   const showDeletePolicy = (id: any) => {
     confirm({
-      title: 'Are you sure delete this Regions?',
+      title: "Are you sure delete this Regions?",
       icon: <ExclamationCircleFilled />,
-      content: 'The data for the regions will be deleted.',
-      okText: 'Yes',
-      okType: 'danger',
-      cancelText: 'No',
+      content: "The data for the regions will be deleted.",
+      okText: "Yes",
+      okType: "danger",
+      cancelText: "No",
       onOk() {
-        dispatch(doDelPolicy(id));
+        dispatch(doDelPolicy(id)); // console.log('OK');
       },
-      onCancel() {},
+      onCancel() {
+        // console.log('Cancel');
+      },
     });
   };
 
   const showDeleteCategory = (id: any) => {
     confirm({
-      title: 'Are you sure delete this Regions?',
+      title: "Are you sure delete this Regions?",
       icon: <ExclamationCircleFilled />,
-      content: 'The data for the regions will be deleted.',
-      okText: 'Yes',
-      okType: 'danger',
-      cancelText: 'No',
+      content: "The data for the regions will be deleted.",
+      okText: "Yes",
+      okType: "danger",
+      cancelText: "No",
       onOk() {
-        dispatch(doDelCategoryGroup(id));
+        dispatch(doDelCategoryGroup(id)); // console.log('OK');
       },
-      onCancel() {},
+      onCancel() {
+        // console.log('Cancel');
+      },
     });
   };
 
   const showDeletePrice = (id: any) => {
     confirm({
-      title: 'Are you sure delete this Regions?',
+      title: "Are you sure delete this Regions?",
       icon: <ExclamationCircleFilled />,
-      content: 'The data for the regions will be deleted.',
-      okText: 'Yes',
-      okType: 'danger',
-      cancelText: 'No',
+      content: "The data for the regions will be deleted.",
+      okText: "Yes",
+      okType: "danger",
+      cancelText: "No",
       onOk() {
-        dispatch(doDelPriceItems(id));
+        dispatch(doDelPriceItems(id)); // console.log('OK');
       },
-      onCancel() {},
+      onCancel() {
+        // console.log('Cancel');
+      },
     });
   };
 
   const showDeleteService = (id: any) => {
     confirm({
-      title: 'Are you sure delete this Regions?',
+      title: "Are you sure delete this Regions?",
       icon: <ExclamationCircleFilled />,
-      content: 'The data for the regions will be deleted.',
-      okText: 'Yes',
-      okType: 'danger',
-      cancelText: 'No',
+      content: "The data for the regions will be deleted.",
+      okText: "Yes",
+      okType: "danger",
+      cancelText: "No",
       onOk() {
-        dispatch(doDelServiceTask(id));
+        dispatch(doDelServiceTask(id)); // console.log('OK');
       },
-      onCancel() {},
+      onCancel() {
+        // console.log('Cancel');
+      },
     });
+    // console.log('id :', id);
   };
 
   /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   //SEARCH
 
   // search price name
-  const [queryPrice, setQueryPrice] = useState('');
+  const [queryPrice, setQueryPrice] = useState("");
   // handleSearchPrice
   const handleSearchPrice = (e: any) => {
-    const input = e.target.value.toLowerCase().replace(/\s/g, '');
+    const input = e.target.value.toLowerCase().replace(/\s/g, "");
     setQueryPrice(input);
+    // console.log('price input:', input);
   };
   // searchResultsPrice
   const searchResultsPrice = dataPrice.filter((item: any) =>
-    item.pritName.toLowerCase().replace(/\s/g, '').includes(queryPrice)
+    item.pritName.toLowerCase().replace(/\s/g, "").includes(queryPrice)
   );
 
   /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   // Select type Price
 
-  const [selectType, setSelectType] = useState('');
+  const [selectType, setSelectType] = useState("");
   const handleTypeSelect = (value: string) => {
     setSelectType(value);
   };
   const filterPrice = searchResultsPrice.filter((item: any) =>
     selectType ? item.pritType === selectType : true
   );
+  // console.log('filterPrice :', filterPrice);
 
   //-------------------------------------------------------------------------------
   // Radio  Select Regions
@@ -528,6 +561,7 @@ export default function menuMaster() {
 
   const handleRadioClick = (record: any) => {
     setSelectedRow(record);
+    // console.log('nih record region:', record);
 
     const filterRC = dataLocationsRC
       .filter((item: any) => item.region_code == record.region_code)
@@ -535,8 +569,11 @@ export default function menuMaster() {
     setFilterRCP(filterRCP);
 
     setFilterRC(filterRC);
+    // console.log('filterRC :', filterRC);
     setRegionNamee(record.region_name);
     setRegionId(record.region_code);
+
+    // console.log('record.region_code :', record.region_code);
   };
 
   //
@@ -548,11 +585,13 @@ export default function menuMaster() {
 
   const handleRadioClickCountry = (record: any) => {
     setSelectedRowCountry(record);
+    // console.log('nih record country:', record);
 
     const filterRCP = dataLocationsRCP
       .filter((item: any) => item.country_id == record.country_id)
       .sort((az: any, za: any) => az.prov_id - za.prov_id);
     setFilterRCP(filterRCP);
+    // console.log('nih filterRCP :', filterRCP);
     setCountryNamee(record.country_name);
     setCountryId(record.country_id);
   };
@@ -565,11 +604,13 @@ export default function menuMaster() {
 
   const handleRadioClickprovinces = (record: any) => {
     setSelectedRowProvince(record);
+    // console.log('nih record province:', record);
     const filterRCPA = dataLocationsAll.filter(
       (item: any) => item.prov_id == record.prov_id
     );
 
     setFilterRCPA(filterRCPA);
+    // console.log('nih filterRCPA :', filterRCPA);
     setProvNamee(record.prov_name);
     setProvId(record.prov_id);
   };
@@ -581,32 +622,40 @@ export default function menuMaster() {
 
   const handleRadioClickCity = (record: any) => {
     setSelectedRowCity(record);
+    // console.log('nih record city:', record);
+
     const filterRCPCJ = filterRCPA.filter(
       (item: any) => item.addr_line2 == record.addr_line2
     );
 
     setFilterRCPCJ(filterRCPCJ);
+    // console.log('nih filterRCPAJ :', filterRCPCJ);
     setCityNamee(record.addr_line2);
     setCityId(record.addr_line2);
+
+    // console.log('record.addr_line2 :', record.addr_line2);
   };
+
+  //-------------------------------------------------------------------------------
+  //-------------------------------------------------------------------------------
 
   /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   // Data TABLE REGIONS
 
   const columnsRegions: ColumnType<any>[] = [
     {
-      title: '',
-      key: 'action',
+      title: "",
+      key: "action",
       // align: 'right',
 
-      width: '1%',
+      width: "1%",
 
       render: (_: any, record: any) => {
         return (
           <span className="flex">
             <>
               <Radio
-                style={{ marginLeft: '1%', textAlign: 'center' }}
+                style={{ marginLeft: "1%", textAlign: "center" }}
                 checked={record === selectedRow}
                 onClick={() => handleRadioClick(record)}
               ></Radio>
@@ -616,18 +665,18 @@ export default function menuMaster() {
       },
     },
     {
-      title: 'Region Code',
-      dataIndex: 'region_code',
-      width: '10%',
+      title: "Region Code",
+      dataIndex: "region_code",
+      width: "10%",
       render: (text: any, record: any, index: any) => index + 1,
-      fixed: 'left',
+      fixed: "left",
       // align: 'left',
     },
     {
-      width: '90%',
-      title: 'Region Name',
-      dataIndex: 'region_name',
-      key: 'region_name',
+      width: "90%",
+      title: "Region Name",
+      dataIndex: "region_name",
+      key: "region_name",
       // align: 'center',
     },
     {
@@ -635,46 +684,46 @@ export default function menuMaster() {
         <Button
           icon
           style={{
-            float: 'right',
-            backgroundColor: '#EEEEEE',
-            color: 'black',
-            marginTop: '3%',
-            marginBottom: '3%',
-            marginRight: '9%',
+            float: "right",
+            backgroundColor: "#EEEEEE",
+            color: "black",
+            marginTop: "3%",
+            marginBottom: "3%",
+            marginRight: "9%",
           }}
           type="default"
           onClick={() => setOpenAddRegions(true)}
         >
           <PlusOutlined
             style={{
-              backgroundColor: '#EEEEEE',
-              color: 'blue',
-              fontWeight: 'bold',
-              fontSize: 'larger',
+              backgroundColor: "#EEEEEE",
+              color: "blue",
+              fontWeight: "bold",
+              fontSize: "larger",
             }}
           />
           Add Regions
         </Button>
       ),
-      key: 'action',
+      key: "action",
       // align: 'right',
 
-      width: '30%',
+      width: "30%",
 
       render: (_: any, record: any) => {
         return (
           <span className="flex">
             <>
               <Button onClick={() => editDataRegions(record.region_code)}>
-                <EditOutlined style={{ color: '#fdd989' }} />
+                <EditOutlined style={{ color: "#fdd989" }} />
                 Edit
               </Button>
               {/* eksekusi Delete */}
               <Button
                 onClick={() => showDeleteRegions(record.region_code)}
-                style={{ marginLeft: '3%', marginRight: '3%' }}
+                style={{ marginLeft: "3%", marginRight: "3%" }}
               >
-                <DeleteOutlined style={{ color: 'red' }} />
+                <DeleteOutlined style={{ color: "red" }} />
                 Delete
               </Button>
             </>
@@ -691,18 +740,18 @@ export default function menuMaster() {
 
   const columnsCountry: ColumnType<any>[] = [
     {
-      title: '',
-      key: 'action',
+      title: "",
+      key: "action",
       // align: 'right',
 
-      width: '1%',
+      width: "1%",
 
       render: (_: any, record: any) => {
         return (
           <span className="flex">
             <>
               <Radio
-                style={{ marginLeft: '1%', textAlign: 'center' }}
+                style={{ marginLeft: "1%", textAlign: "center" }}
                 checked={record === selectedRowCountry}
                 onClick={() => handleRadioClickCountry(record)}
               ></Radio>
@@ -712,18 +761,18 @@ export default function menuMaster() {
       },
     },
     {
-      title: 'Country Id',
-      dataIndex: 'country_id',
-      width: '10%',
+      title: "Country Id",
+      dataIndex: "country_id",
+      width: "10%",
       render: (text: any, record: any, index: any) => index + 1,
-      fixed: 'left',
+      fixed: "left",
       // align: 'left',
     },
     {
-      width: '90%',
-      title: 'Country Name',
-      dataIndex: 'country_name',
-      key: 'country_name',
+      width: "90%",
+      title: "Country Name",
+      dataIndex: "country_name",
+      key: "country_name",
       // align: 'center',
     },
     {
@@ -731,46 +780,46 @@ export default function menuMaster() {
         <Button
           icon
           style={{
-            float: 'right',
-            backgroundColor: '#EEEEEE',
-            color: 'black',
-            marginTop: '3%',
-            marginBottom: '3%',
-            marginRight: '9%',
+            float: "right",
+            backgroundColor: "#EEEEEE",
+            color: "black",
+            marginTop: "3%",
+            marginBottom: "3%",
+            marginRight: "9%",
           }}
           type="default"
           onClick={() => setOpenAddCountry(true)}
         >
           <PlusOutlined
             style={{
-              backgroundColor: '#EEEEEE',
-              color: 'blue',
-              fontWeight: 'bold',
-              fontSize: 'larger',
+              backgroundColor: "#EEEEEE",
+              color: "blue",
+              fontWeight: "bold",
+              fontSize: "larger",
             }}
           />
           Add Country
         </Button>
       ),
-      key: 'action',
+      key: "action",
       // align: 'right',
 
-      width: '30%',
+      width: "30%",
 
       render: (_: any, record: any) => {
         return (
           <span className="flex">
             <>
               <Button onClick={() => editDataCountry(record.country_id)}>
-                <EditOutlined style={{ color: '#fdd989' }} />
+                <EditOutlined style={{ color: "#fdd989" }} />
                 Edit
               </Button>
               {/* eksekusi Delete */}
               <Button
                 onClick={() => showDeleteCountry(record.country_id)}
-                style={{ marginLeft: '3%', marginRight: '3%' }}
+                style={{ marginLeft: "3%", marginRight: "3%" }}
               >
-                <DeleteOutlined style={{ color: 'red' }} />
+                <DeleteOutlined style={{ color: "red" }} />
                 Delete
               </Button>
             </>
@@ -787,18 +836,18 @@ export default function menuMaster() {
 
   const columnsProvinces: ColumnType<any>[] = [
     {
-      title: '',
-      key: 'action',
+      title: "",
+      key: "action",
       // align: 'right',
 
-      width: '1%',
+      width: "1%",
 
       render: (_: any, record: any) => {
         return (
           <span className="flex">
             <>
               <Radio
-                style={{ marginLeft: '1%', textAlign: 'center' }}
+                style={{ marginLeft: "1%", textAlign: "center" }}
                 checked={record === selectedRowProvince}
                 onClick={() => handleRadioClickprovinces(record)}
               ></Radio>
@@ -808,18 +857,18 @@ export default function menuMaster() {
       },
     },
     {
-      title: 'Provinces Id',
-      dataIndex: 'prov_id',
-      width: '10%',
+      title: "Provinces Id",
+      dataIndex: "prov_id",
+      width: "10%",
       render: (text: any, record: any, index: any) => index + 1,
-      fixed: 'left',
+      fixed: "left",
       // align: 'left',
     },
     {
-      width: '90%',
-      title: 'Provinces Name',
-      dataIndex: 'prov_name',
-      key: 'prov_name',
+      width: "90%",
+      title: "Provinces Name",
+      dataIndex: "prov_name",
+      key: "prov_name",
       // align: 'center',
     },
     {
@@ -827,46 +876,46 @@ export default function menuMaster() {
         <Button
           icon
           style={{
-            float: 'right',
-            backgroundColor: '#EEEEEE',
-            color: 'black',
-            marginTop: '3%',
-            marginBottom: '3%',
-            marginRight: '9%',
+            float: "right",
+            backgroundColor: "#EEEEEE",
+            color: "black",
+            marginTop: "3%",
+            marginBottom: "3%",
+            marginRight: "9%",
           }}
           type="default"
           onClick={() => setOpenAddProvinces(true)}
         >
           <PlusOutlined
             style={{
-              backgroundColor: '#EEEEEE',
-              color: 'blue',
-              fontWeight: 'bold',
-              fontSize: 'larger',
+              backgroundColor: "#EEEEEE",
+              color: "blue",
+              fontWeight: "bold",
+              fontSize: "larger",
             }}
           />
           Add Provinces
         </Button>
       ),
-      key: 'action',
+      key: "action",
       // align: 'right',
 
-      width: '30%',
+      width: "30%",
 
       render: (_: any, record: { prov_id: any }) => {
         return (
           <span className="flex">
             <>
               <Button onClick={() => editDataProvinces(record.prov_id)}>
-                <EditOutlined style={{ color: '#fdd989' }} />
+                <EditOutlined style={{ color: "#fdd989" }} />
                 Edit
               </Button>
               {/* eksekusi Delete */}
               <Button
                 onClick={() => showDeleteProvinces(record.prov_id)}
-                style={{ marginLeft: '3%', marginRight: '3%' }}
+                style={{ marginLeft: "3%", marginRight: "3%" }}
               >
-                <DeleteOutlined style={{ color: 'red' }} />
+                <DeleteOutlined style={{ color: "red" }} />
                 Delete
               </Button>
             </>
@@ -883,18 +932,18 @@ export default function menuMaster() {
 
   const columnsCity: ColumnType<any>[] = [
     {
-      title: '',
-      key: 'action',
+      title: "",
+      key: "action",
       // align: 'right',
 
-      width: '1%',
+      width: "1%",
 
       render: (_: any, record: any) => {
         return (
           <span className="flex">
             <>
               <Radio
-                style={{ marginLeft: '1%', textAlign: 'center' }}
+                style={{ marginLeft: "1%", textAlign: "center" }}
                 checked={record === selectedRowCity}
                 onClick={() => handleRadioClickCity(record)}
               ></Radio>
@@ -904,18 +953,18 @@ export default function menuMaster() {
       },
     },
     {
-      title: 'City Id',
-      dataIndex: 'addr_id',
-      width: '10%',
+      title: "City Id",
+      dataIndex: "addr_id",
+      width: "10%",
       render: (text: any, record: any, index: any) => index + 1,
-      fixed: 'left',
+      fixed: "left",
       // align: 'left',
     },
     {
-      width: '90%',
-      title: 'City',
-      dataIndex: 'addr_line2',
-      key: 'addr_line2',
+      width: "90%",
+      title: "City",
+      dataIndex: "addr_line2",
+      key: "addr_line2",
       // align: 'center',
     },
     {
@@ -923,46 +972,46 @@ export default function menuMaster() {
         <Button
           icon
           style={{
-            float: 'right',
-            backgroundColor: '#EEEEEE',
-            color: 'black',
-            marginTop: '3%',
-            marginBottom: '3%',
-            marginRight: '9%',
+            float: "right",
+            backgroundColor: "#EEEEEE",
+            color: "black",
+            marginTop: "3%",
+            marginBottom: "3%",
+            marginRight: "9%",
           }}
           type="default"
           onClick={() => setOpenAddCity(true)}
         >
           <PlusOutlined
             style={{
-              backgroundColor: '#EEEEEE',
-              color: 'blue',
-              fontWeight: 'bold',
-              fontSize: 'larger',
+              backgroundColor: "#EEEEEE",
+              color: "blue",
+              fontWeight: "bold",
+              fontSize: "larger",
             }}
           />
           Add City
         </Button>
       ),
-      key: 'action',
+      key: "action",
       // align: 'right',
 
-      width: '30%',
+      width: "30%",
 
       render: (_: any, record: { addr_id: any }) => {
         return (
           <span className="flex">
             <>
               <Button onClick={() => editDataCity(record.addr_id)}>
-                <EditOutlined style={{ color: '#fdd989' }} />
+                <EditOutlined style={{ color: "#fdd989" }} />
                 Edit
               </Button>
               {/* eksekusi Delete */}
               <Button
                 onClick={() => showDeleteCity(record.addr_id)}
-                style={{ marginLeft: '3%', marginRight: '3%' }}
+                style={{ marginLeft: "3%", marginRight: "3%" }}
               >
-                <DeleteOutlined style={{ color: 'red' }} />
+                <DeleteOutlined style={{ color: "red" }} />
                 Delete
               </Button>
             </>
@@ -975,18 +1024,18 @@ export default function menuMaster() {
 
   const columnsJalan: ColumnType<any>[] = [
     {
-      title: 'Jalan Id',
-      dataIndex: 'addr_id',
-      width: '10%',
+      title: "Jalan Id",
+      dataIndex: "addr_id",
+      width: "10%",
       render: (text: any, record: any, index: any) => index + 1,
-      fixed: 'left',
+      fixed: "left",
       // align: 'left',
     },
     {
-      width: '90%',
-      title: 'Jalan',
-      dataIndex: 'addr_line1',
-      key: 'addr_line1',
+      width: "90%",
+      title: "Jalan",
+      dataIndex: "addr_line1",
+      key: "addr_line1",
       // align: 'center',
     },
     {
@@ -994,46 +1043,46 @@ export default function menuMaster() {
         <Button
           icon
           style={{
-            float: 'right',
-            backgroundColor: '#EEEEEE',
-            color: 'black',
-            marginTop: '3%',
-            marginBottom: '3%',
-            marginRight: '9%',
+            float: "right",
+            backgroundColor: "#EEEEEE",
+            color: "black",
+            marginTop: "3%",
+            marginBottom: "3%",
+            marginRight: "9%",
           }}
           type="default"
           onClick={() => setOpenAddJalan(true)}
         >
           <PlusOutlined
             style={{
-              backgroundColor: '#EEEEEE',
-              color: 'blue',
-              fontWeight: 'bold',
-              fontSize: 'larger',
+              backgroundColor: "#EEEEEE",
+              color: "blue",
+              fontWeight: "bold",
+              fontSize: "larger",
             }}
           />
           Add Jalan
         </Button>
       ),
-      key: 'action',
+      key: "action",
       // align: 'right',
 
-      width: '30%',
+      width: "30%",
 
       render: (_: any, record: { addr_id: any }) => {
         return (
           <span className="flex">
             <>
               <Button onClick={() => editDataJalan(record.addr_id)}>
-                <EditOutlined style={{ color: '#fdd989' }} />
+                <EditOutlined style={{ color: "#fdd989" }} />
                 Edit
               </Button>
               {/* eksekusi Delete */}
               <Button
                 onClick={() => showDeleteJalan(record.addr_id)}
-                style={{ marginLeft: '3%', marginRight: '3%' }}
+                style={{ marginLeft: "3%", marginRight: "3%" }}
               >
-                <DeleteOutlined style={{ color: 'red' }} />
+                <DeleteOutlined style={{ color: "red" }} />
                 Delete
               </Button>
             </>
@@ -1050,49 +1099,42 @@ export default function menuMaster() {
 
   const columnsPolicy: ColumnType<any>[] = [
     {
-      title: 'Poli Id',
-      dataIndex: 'poliId',
-      width: '10%',
+      title: "Poli Id",
+      dataIndex: "poliId",
+      width: "10%",
       render: (text: any, record: any, index: any) => index + 1,
-      fixed: 'left',
+      fixed: "left",
       // align: 'left',
     },
     {
-      title: 'Policy Name',
-      dataIndex: 'poliName',
-      key: 'poliName',
-      width: '70%',
+      title: "Policy Name",
+      dataIndex: "poliName",
+      key: "poliName",
+      width: "70%",
 
       // align: 'center',
     },
     {
-      title: 'Country region Id',
-      dataIndex: 'country_id',
-      key: 'country_id',
-      width: '70%',
+      title: "Country region Id",
+      dataIndex: "country_id",
+      key: "country_id",
+      width: "70%",
 
       // align: 'center',
     },
     {
-      title: '',
-      key: 'action',
-      align: 'right',
+      title: "",
+      key: "action",
+      align: "right",
 
-      width: '10%',
+      width: "10%",
 
       render: (_: any, record: { poliId: any }) => {
         return (
           <span className="flex">
             <>
-              <Button
-                style={{
-                  border: '1px solid rgba(19, 194, 194, 0)',
-                  backgroundColor: 'transparent',
-                  boxShadow: 'none',
-                }}
-                onClick={() => viewDataPolicy(record.poliId)}
-              >
-                <EyeOutlined style={{ color: '#13c2c2' }} />
+              <Button onClick={() => viewDataPolicy(record.poliId)}>
+                <EyeOutlined style={{ color: "#13c2c2" }} />
               </Button>
               {/* eksekusi Delete */}
             </>
@@ -1105,46 +1147,46 @@ export default function menuMaster() {
         <Button
           icon
           style={{
-            float: 'right',
-            backgroundColor: '#EEEEEE',
-            color: 'black',
-            marginTop: '3%',
-            marginBottom: '3%',
-            marginRight: '9%',
+            float: "right",
+            backgroundColor: "#EEEEEE",
+            color: "black",
+            marginTop: "3%",
+            marginBottom: "3%",
+            marginRight: "9%",
           }}
           type="default"
           onClick={() => setOpenAddPolicy(true)}
         >
           <PlusOutlined
             style={{
-              backgroundColor: '#EEEEEE',
-              color: 'blue',
-              fontWeight: 'bold',
-              fontSize: 'larger',
+              backgroundColor: "#EEEEEE",
+              color: "blue",
+              fontWeight: "bold",
+              fontSize: "larger",
             }}
           />
           Add Policy
         </Button>
       ),
-      key: 'action',
-      align: 'right',
+      key: "action",
+      align: "right",
 
-      width: '30%',
+      width: "30%",
 
       render: (_: any, record: { poliId: any }) => {
         return (
           <span className="flex">
             <>
               <Button onClick={() => editDataPolicy(record.poliId)}>
-                <EditOutlined style={{ color: '#fdd989' }} />
+                <EditOutlined style={{ color: "#fdd989" }} />
                 Edit
               </Button>
               {/* eksekusi Delete */}
               <Button
                 onClick={() => showDeletePolicy(record.poliId)}
-                style={{ marginLeft: '3%', marginRight: '3%' }}
+                style={{ marginLeft: "3%", marginRight: "3%" }}
               >
-                <DeleteOutlined style={{ color: 'red' }} />
+                <DeleteOutlined style={{ color: "red" }} />
                 Delete
               </Button>
             </>
@@ -1161,9 +1203,9 @@ export default function menuMaster() {
 
   const columnsCategory: ColumnType<any>[] = [
     {
-      title: '',
-      dataIndex: 'cagroIconUrl',
-      width: '5%',
+      title: "",
+      dataIndex: "cagroIconUrl",
+      width: "5%",
       render: (text: any, record: any) => (
         <Image
           src={record?.cagroIconUrl}
@@ -1171,43 +1213,36 @@ export default function menuMaster() {
           className="w-1/4"
         />
       ),
-      fixed: 'left',
+      fixed: "left",
       // align: 'left',
     },
     {
-      title: 'Category Id',
-      dataIndex: 'cagroId',
-      width: '10%',
+      title: "Category Id",
+      dataIndex: "cagroId",
+      width: "10%",
       render: (text: any, record: any, index: any) => index + 1,
-      align: 'center',
+      align: "center",
     },
     {
-      title: 'Category Name',
-      dataIndex: 'cagroName',
-      key: 'cagroName',
+      title: "Category Name",
+      dataIndex: "cagroName",
+      key: "cagroName",
       // align: 'center',
     },
 
     {
-      title: '',
-      key: 'action',
+      title: "",
+      key: "action",
       // align: 'right',
 
-      width: '12%',
+      width: "12%",
 
       render: (_: any, record: { cagroId: any }) => {
         return (
           <span className="flex">
             <>
-              <Button
-                style={{
-                  border: '1px solid rgba(19, 194, 194, 0)',
-                  backgroundColor: 'transparent',
-                  boxShadow: 'none',
-                }}
-                onClick={() => viewDataCategory(record.cagroId)}
-              >
-                <EyeOutlined style={{ color: '#13c2c2' }} />
+              <Button onClick={() => viewDataCategory(record.cagroId)}>
+                <EyeOutlined style={{ color: "#13c2c2" }} />
               </Button>
               {/* eksekusi Delete */}
             </>
@@ -1216,9 +1251,9 @@ export default function menuMaster() {
       },
     },
     {
-      title: 'Type',
-      dataIndex: 'cagroType',
-      key: 'cagroType',
+      title: "Type",
+      dataIndex: "cagroType",
+      key: "cagroType",
       // align: 'center',
     },
     {
@@ -1226,46 +1261,46 @@ export default function menuMaster() {
         <Button
           icon
           style={{
-            float: 'right',
-            backgroundColor: '#EEEEEE',
-            color: 'black',
-            marginTop: '3%',
-            marginBottom: '3%',
-            marginRight: '9%',
+            float: "right",
+            backgroundColor: "#EEEEEE",
+            color: "black",
+            marginTop: "3%",
+            marginBottom: "3%",
+            marginRight: "9%",
           }}
           type="default"
           onClick={() => setOpenAddCategory(true)}
         >
           <PlusOutlined
             style={{
-              backgroundColor: '#EEEEEE',
-              color: 'blue',
-              fontWeight: 'bold',
-              fontSize: 'larger',
+              backgroundColor: "#EEEEEE",
+              color: "blue",
+              fontWeight: "bold",
+              fontSize: "larger",
             }}
           />
           Add Category
         </Button>
       ),
-      key: 'action',
+      key: "action",
       // align: 'right',
 
-      width: '30%',
+      width: "30%",
 
       render: (_: any, record: { cagroId: any }) => {
         return (
           <span className="flex">
             <>
               <Button onClick={() => editDataCategory(record.cagroId)}>
-                <EditOutlined style={{ color: '#fdd989' }} />
+                <EditOutlined style={{ color: "#fdd989" }} />
                 Edit
               </Button>
               {/* eksekusi Delete */}
               <Button
                 onClick={() => showDeleteCategory(record.cagroId)}
-                style={{ marginLeft: '3%', marginRight: '3%' }}
+                style={{ marginLeft: "3%", marginRight: "3%" }}
               >
-                <DeleteOutlined style={{ color: 'red' }} />
+                <DeleteOutlined style={{ color: "red" }} />
                 Delete
               </Button>
             </>
@@ -1282,40 +1317,33 @@ export default function menuMaster() {
 
   const columnsPrice: ColumnType<any>[] = [
     {
-      title: ' Id',
-      dataIndex: 'pritId',
-      width: '5%',
+      title: " Id",
+      dataIndex: "pritId",
+      width: "5%",
 
       render: (text: any, record: any, index: any) => index + 1,
-      fixed: 'left',
+      fixed: "left",
       // align: 'left',
     },
     {
-      title: 'Item Name',
-      dataIndex: 'pritName',
-      key: 'pritName',
+      title: "Item Name",
+      dataIndex: "pritName",
+      key: "pritName",
       // align: 'center',
     },
     {
-      title: '',
-      key: 'action',
+      title: "",
+      key: "action",
       // align: 'right',
 
-      width: '12%',
+      width: "12%",
 
       render: (_: any, record: { pritId: any }) => {
         return (
           <span className="flex">
             <>
-              <Button
-                style={{
-                  border: '1px solid rgba(19, 194, 194, 0)',
-                  backgroundColor: 'transparent',
-                  boxShadow: 'none',
-                }}
-                onClick={() => viewDataPrice(record.pritId)}
-              >
-                <EyeOutlined style={{ color: '#13c2c2' }} />
+              <Button onClick={() => viewDataPrice(record.pritId)}>
+                <EyeOutlined style={{ color: "#13c2c2" }} />
               </Button>
               {/* eksekusi Delete */}
             </>
@@ -1324,15 +1352,15 @@ export default function menuMaster() {
       },
     },
     {
-      title: 'Price',
-      dataIndex: 'pritPrice',
-      key: 'pritPrice',
+      title: "Price",
+      dataIndex: "pritPrice",
+      key: "pritPrice",
       // align: 'center',
     },
     {
-      title: 'Type',
-      dataIndex: 'pritType',
-      key: 'pritType',
+      title: "Type",
+      dataIndex: "pritType",
+      key: "pritType",
       // align: 'center',
     },
     {
@@ -1340,46 +1368,46 @@ export default function menuMaster() {
         <Button
           icon
           style={{
-            float: 'right',
-            backgroundColor: '#EEEEEE',
-            color: 'black',
-            marginTop: '3%',
-            marginBottom: '3%',
-            marginRight: '9%',
+            float: "right",
+            backgroundColor: "#EEEEEE",
+            color: "black",
+            marginTop: "3%",
+            marginBottom: "3%",
+            marginRight: "9%",
           }}
           type="default"
           onClick={() => setOpenAddPrice(true)}
         >
           <PlusOutlined
             style={{
-              backgroundColor: '#EEEEEE',
-              color: 'blue',
-              fontWeight: 'bold',
-              fontSize: 'larger',
+              backgroundColor: "#EEEEEE",
+              color: "blue",
+              fontWeight: "bold",
+              fontSize: "larger",
             }}
           />
           Add Price Items
         </Button>
       ),
-      key: 'action',
+      key: "action",
       // align: 'right',
 
-      width: '30%',
+      width: "30%",
 
       render: (_: any, record: { pritId: any }) => {
         return (
           <span className="flex">
             <>
               <Button onClick={() => editDataPrice(record.pritId)}>
-                <EditOutlined style={{ color: '#fdd989' }} />
+                <EditOutlined style={{ color: "#fdd989" }} />
                 Edit
               </Button>
               {/* eksekusi Delete */}
               <Button
                 onClick={() => showDeletePrice(record.pritId)}
-                style={{ marginLeft: '3%', marginRight: '3%' }}
+                style={{ marginLeft: "3%", marginRight: "3%" }}
               >
-                <DeleteOutlined style={{ color: 'red' }} />
+                <DeleteOutlined style={{ color: "red" }} />
                 Delete
               </Button>
             </>
@@ -1396,25 +1424,25 @@ export default function menuMaster() {
 
   const columnsService: ColumnType<any>[] = [
     {
-      title: ' Id',
-      dataIndex: 'setaId',
-      width: '10%',
+      title: " Id",
+      dataIndex: "setaId",
+      width: "10%",
       render: (text: any, record: any, index: any) => index + 1,
-      fixed: 'left',
+      fixed: "left",
       // align: 'left',
     },
     {
-      title: 'Task Name',
-      dataIndex: 'setaName',
-      key: 'pritName',
+      title: "Task Name",
+      dataIndex: "setaName",
+      key: "pritName",
       // align: 'center',
     },
 
     {
-      title: 'Sequence Order',
-      dataIndex: 'setSeq',
-      key: 'setSeq',
-      align: 'center',
+      title: "Sequence Order",
+      dataIndex: "setSeq",
+      key: "setSeq",
+      align: "center",
       // align: 'center',
     },
     {
@@ -1422,46 +1450,46 @@ export default function menuMaster() {
         <Button
           icon
           style={{
-            float: 'right',
-            backgroundColor: '#EEEEEE',
-            color: 'black',
-            marginTop: '3%',
-            marginBottom: '3%',
-            marginRight: '9%',
+            float: "right",
+            backgroundColor: "#EEEEEE",
+            color: "black",
+            marginTop: "3%",
+            marginBottom: "3%",
+            marginRight: "9%",
           }}
           type="default"
           onClick={() => setOpenAddService(true)}
         >
           <PlusOutlined
             style={{
-              backgroundColor: '#EEEEEE',
-              color: 'blue',
-              fontWeight: 'bold',
-              fontSize: 'larger',
+              backgroundColor: "#EEEEEE",
+              color: "blue",
+              fontWeight: "bold",
+              fontSize: "larger",
             }}
           />
           Add Service Task
         </Button>
       ),
-      key: 'action',
+      key: "action",
       // align: 'right',
 
-      width: '12%',
+      width: "12%",
 
       render: (_: any, record: { setaId: any }) => {
         return (
           <span className="flex">
             <>
               <Button onClick={() => editDataService(record.setaId)}>
-                <EditOutlined style={{ color: '#fdd989' }} />
+                <EditOutlined style={{ color: "#fdd989" }} />
                 Edit
               </Button>
               {/* eksekusi Delete */}
               <Button
                 onClick={() => showDeleteService(record.setaId)}
-                style={{ marginLeft: '3%' }}
+                style={{ marginLeft: "3%" }}
               >
-                <DeleteOutlined style={{ color: 'red' }} />
+                <DeleteOutlined style={{ color: "red" }} />
                 Delete
               </Button>
             </>
@@ -1482,9 +1510,9 @@ export default function menuMaster() {
     <Dashboard>
       <div
         style={{
-          display: 'flex',
-          justifyContent: 'center',
-          transform: 'scale(1.5)',
+          display: "flex",
+          justifyContent: "center",
+          transform: "scale(1.5)",
         }}
       >
         {/* message */}
@@ -1494,9 +1522,9 @@ export default function menuMaster() {
           description="The data regions have been successfully updated"
           type="success"
           showIcon
-          style={{ marginBottom: '10px' }}
+          style={{ marginBottom: "10px" }}
           closable
-          afterClose={() => setVisible('')}
+          afterClose={() => setVisible("")}
           className={visible}
         />
       </div>
@@ -1719,7 +1747,7 @@ export default function menuMaster() {
             <Tabs.TabPane tab="Locations" key="locations">
               <div
                 className="text-2xl text-center py-3 mb-20px"
-                style={{ marginBottom: '35px' }}
+                style={{ marginBottom: "35px" }}
               >
                 Locations
               </div>
@@ -1769,7 +1797,7 @@ export default function menuMaster() {
             <Tabs.TabPane tab="Policy" key="policy">
               <div
                 className="text-2xl text-center py-3 mb-20px"
-                style={{ marginBottom: '35px' }}
+                style={{ marginBottom: "35px" }}
               >
                 Policy
               </div>
@@ -1786,7 +1814,7 @@ export default function menuMaster() {
             <Tabs.TabPane tab="Category Group" key="category">
               <div
                 className="text-2xl text-center py-3 mb-20px"
-                style={{ marginBottom: '35px' }}
+                style={{ marginBottom: "35px" }}
               >
                 Category Group
               </div>
@@ -1803,24 +1831,24 @@ export default function menuMaster() {
             <Tabs.TabPane tab="Price Items" key="price">
               <div
                 className="text-2xl text-center py-3 mb-20px"
-                style={{ marginBottom: '1%' }}
+                style={{ marginBottom: "1%" }}
               >
                 Price Items
               </div>
               <Divider></Divider>
-              <Form.Item style={{ marginTop: '1%' }} label="" name={'pritName'}>
+              <Form.Item style={{ marginTop: "1%" }} label="" name={"pritName"}>
                 <div
                   style={{
-                    marginLeft: '20%',
-                    marginBottom: '1%',
+                    marginLeft: "20%",
+                    marginBottom: "1%",
                   }}
                 >
-                  <label style={{ marginRight: '1rem' }}>Search Items</label>
+                  <label style={{ marginRight: "1rem" }}>Search Items</label>
                   <Input
                     style={{
-                      width: '30%',
-                      marginLeft: '1%',
-                      marginTop: '1%',
+                      width: "30%",
+                      marginLeft: "1%",
+                      marginTop: "1%",
                     }}
                     placeholder="Nasi Goreng, Coffe"
                     type="search"
@@ -1830,9 +1858,9 @@ export default function menuMaster() {
                   />
                   <Select
                     style={{
-                      width: '10%',
-                      marginLeft: '1%',
-                      marginTop: '1%',
+                      width: "10%",
+                      marginLeft: "1%",
+                      marginTop: "1%",
                     }}
                     placeholder="Type"
                     onChange={handleTypeSelect}
@@ -1847,9 +1875,9 @@ export default function menuMaster() {
                   <Button
                     htmlType="submit"
                     // onClick={}
-                    style={{ marginLeft: '1%  ', marginRight: '1%' }}
+                    style={{ marginLeft: "1%  ", marginRight: "1%" }}
                   >
-                    <SearchOutlined style={{ color: '#3399FF' }} />
+                    <SearchOutlined style={{ color: "#3399FF" }} />
                     Search
                   </Button>
                 </div>
@@ -1866,7 +1894,7 @@ export default function menuMaster() {
             <Tabs.TabPane tab="Service Task" key="service">
               <div
                 className="text-2xl text-center py-3 mb-20px"
-                style={{ marginBottom: '35px' }}
+                style={{ marginBottom: "35px" }}
               >
                 Service Task
               </div>

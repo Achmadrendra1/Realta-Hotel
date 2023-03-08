@@ -1,31 +1,22 @@
+import withAuth from "@/PrivateRoute/WithAuth";
 import { getFacilityID, updateFacility } from "@/Redux/Action/Hotel/HotelAction";
-import { Form, Input, Typography } from "antd";
+import Buttons from "@/components/Button";
+import { Form, Input, Modal, Typography } from "antd";
 import { useFormik } from "formik";
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
-export default function EditFacilityHotel(props: any) {
+export default withAuth( function EditFacilityHotel(props: any) {
   const dispatch = useDispatch();
-  const { Title, Text } = Typography;
   const { faciById } = useSelector((state: any) => state.HotelReducer);
   const [form] = Form.useForm();
-  const onFinish = (values: any) => {
-    console.log("Received values of form: ", values);
-  };
-  const formItemLayout = {
-    labelCol: {
-      xs: { span: 24 },
-      sm: { span: 8 },
-    },
-    wrapperCol: {
-      xs: { span: 24 },
-      sm: { span: 16 },
-    },
-  };
+  const { Title, Text } = Typography;
+  const { handleClose } = props;
+  
   useEffect(() => {
-    console.log(props.id);
     dispatch(getFacilityID(props.id));
   }, [props.id]);
+
   const formik = useFormik({
     enableReinitialize: true,
     initialValues: {
@@ -69,21 +60,28 @@ export default function EditFacilityHotel(props: any) {
       payload.append("faciHotel", values.faciHotel);
 
       dispatch(updateFacility(payload));
-      props.closeEdit();
       window.alert("Data Successfully Added");
+      handleClose(false)
       props.onRefresh();
-      window.location.reload();
+      // window.location.reload();
     },
   });
+
   return (
-    <Form
+    <Modal
+    open={props.showEdit}
+    onOk={props.okEdit}
+    onCancel={props.cancelEdit}
+    centered
+    footer={null}
+    >
+      <Form
       // {...formItemLayout}
-      onFinish={onFinish}
+      onFinish={formik.handleSubmit}
       // labelCol={{ span: 8 }}
       // wrapperCol={{ span: 10 }}
       layout="vertical"
       style={{ maxWidth: 600 }}
-      className="px-5 py-5 border shadow rounded-lg mx-auto"
     >
       <Title level={4} style={{ textAlign: "center" }}>
         {" "}
@@ -258,23 +256,18 @@ export default function EditFacilityHotel(props: any) {
           autoComplete="faciModifiedDate"
         />
       </Form.Item> */}
-      <div>
-        <button
-          type="submit"
-          className="cursor-pointer inline-flex justify-center py-2 px-2 shadow-sm text-sm font-medium rounded-md text-indigo-500 hover:text-indigo-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-          onClick={formik.handleSubmit}
-        >
-          {" "}
-          Simpan{" "}
-        </button>
-        <button
-          className="cursor-pointer inline-flex justify-center py-2 px-2 shadow-sm text-sm font-medium rounded-md text-indigo-500 hover:text-indigo-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-          onClick={() => props.setDisplay(false)}
-        >
-          {" "}
-          Cancel{" "}
-        </button>
-      </div>
+      <Form.Item label=" " colon={false}>
+          <div className="flex justify-end">
+            <Buttons type={"danger"} funcs={props.cancleEdit}>
+              Cancel
+            </Buttons>
+            <div className="ml-2">
+              <Buttons>Save</Buttons>
+            </div>
+          </div>
+        </Form.Item>
     </Form>
+    </Modal>
   );
 }
+)

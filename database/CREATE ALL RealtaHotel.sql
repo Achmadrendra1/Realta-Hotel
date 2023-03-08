@@ -216,7 +216,7 @@ create table hotel.facility_photo(
 	fapho_photo_filename varchar(125),
 	fapho_primary bool,
 	fapho_url varchar(255),
-	fapho_modified_date date,
+	fapho_modified_date timestamp,
 	constraint pk_fapho_id primary key(fapho_id),
 	constraint fk_fapho_faci_id foreign key (fapho_faci_id) references hotel.facilities(faci_id) on delete cascade on update cascade
 );
