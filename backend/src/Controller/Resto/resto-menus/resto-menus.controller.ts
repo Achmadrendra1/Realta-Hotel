@@ -26,8 +26,7 @@ export class RestoMenusController {
     }
     
     @Post('/user/:id')
-    getMenuForUser(@Param() Param:any, @Body() body){
-        // console.log('masuk sini', Param);
+    getMenuForUser(@Param() Param:any, @Body() body){ 
         
         return this.restoMenuService.getMenuForUser(Param, body)
     } 
@@ -48,7 +47,7 @@ export class RestoMenusController {
 
     @Delete(':id')
     deleteMenu(@Param() param:number){
-        console.log('sampai ke delete di be');
+        // console.log('sampai ke delete di be');
         return this.restoMenuService.deleteMenu(param);
     }
 } 

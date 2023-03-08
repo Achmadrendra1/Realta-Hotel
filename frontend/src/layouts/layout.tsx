@@ -11,12 +11,11 @@ import {
     VideoCameraOutlined,
   } from '@ant-design/icons';
 import Head from 'next/head'
-import { useRouter } from 'next/router'
+import  {useRouter}  from 'next/router'
 
 const Layouts = ({children}:Props) => {
     const router = useRouter()
     const { queries } = router.query
-    const [isAdmin, setIsAdmin] = useState(false)
     const nav = [
         {
             name: 'Home',
@@ -24,7 +23,7 @@ const Layouts = ({children}:Props) => {
         },
         {
             name: 'Hotels',
-            href: '/hotel'
+            href: '/booking'
         },
         {
             name: 'Restaurants',
@@ -39,9 +38,9 @@ const Layouts = ({children}:Props) => {
                 <meta name="viewport" content="width=device-width, initial-scale=1" />
                 <link rel="icon" href="/assets/icons.png"/>
             </Head>
-            <Layout className='bg-white'>
+            <Layout className='bg-[#F2F1FA]'>
                 <Headers nav={nav} queries={queries} logo="/assets/icons.png"/>
-                <main className='py-3 border-0 align-items-center container m-auto min-h-screen'>
+                <main className=' border-0 align-items-center container m-auto min-h-screen'>
                     {children}
                 </main>
                 <Footer service={nav}/>

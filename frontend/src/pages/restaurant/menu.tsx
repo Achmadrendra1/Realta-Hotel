@@ -6,7 +6,10 @@ import {
   Breadcrumb,
   Button, 
   Modal,
-  Pagination, 
+  Pagination,
+  Radio,
+  Select,
+  Tag,
 } from "antd";
 import Image from "next/image";
 import { DeleteOutlined, DownOutlined, MinusCircleOutlined, PlusCircleOutlined, PlusOutlined } from "@ant-design/icons";
@@ -21,9 +24,9 @@ import { doAddOrder, doOrder } from "@/Redux/Action/Resto/orderAction";
 import { doOrderNumberReq } from "@/Redux/Action/Resto/numberOrderAction";
 import axios from "axios";
 import { API } from "@/Redux/Configs/consumeApi";
-import Buttons from '@/components/Button'
+import Buttons from "@/components/Button";
 
-export default function menu({ restaurant }) {
+export default function menu({ restaurant }:any) {
   let dispatch = useDispatch();
   const user = useSelector((state: any) => state.GetUserReducer.getUser);
   let userid = user[0]?.user_id;
@@ -31,7 +34,7 @@ export default function menu({ restaurant }) {
   let order_user = useSelector((state: any) => state.orderReducer.orderMenus);
   let numberOrder = useSelector(
     (state: any) => state.numberOrderReducer.numberOrder
-  ); 
+  );
   let router = useRouter(); 
 
   let listmenu = menus.data;
@@ -67,14 +70,14 @@ export default function menu({ restaurant }) {
   const items: MenuProps["items"] = [
     {
       key: "1",
-      label: "Ascending",
+      label: "Harga Terendah",
       onClick: () => {
         handlesort("ASC");
       },
     },
     {
       key: "2",
-      label: "Descending",
+      label: "Harga Tertinggi",
       onClick: () => {
         handlesort("DESC");
       },
@@ -83,7 +86,39 @@ export default function menu({ restaurant }) {
 
   const [cart, setCart] = useState([]);
 
-  // console.warn(cart, ' ini cart')
+  // let [ormeNumber, setOrmeNumber] = useState("");
+  // function code() {
+  //   // console.log(numberOrder.ormeOrderNumber,'numberOrder'); // hasilnya MENUS#20230223-0001
+  //   let lastCode = numberOrder.ormeOrderNumber;
+  //   let getStr = lastCode.slice(0, 14); // MENUS#20230223
+
+  //   let fulldate = new Date();
+  //   let year = fulldate.getFullYear().toString();
+  //   let month = fulldate.getMonth() + 1;
+  //   let monthstr = month < 10 ? "0" + month : month;
+  //   let day = fulldate.getDate();
+  //   let daystr = day < 10 ? "0" + day : day;
+  //   let date = year + monthstr + daystr;
+
+  //   let generate = "MENUS#" + date;
+
+  //   let orderNumber;
+  //   // kalau sama, lanjutin nomor
+  //   if (generate === getStr) {
+  //     let number = Number(lastCode.slice(-4)) + 1;
+  //     let numberstr = number.toString();
+  //     let zero = "0";
+  //     let length = numberstr.length;
+  //     let generateNumber = zero.repeat(4 - length) + numberstr;
+  //     orderNumber = generate + "-" + generateNumber;
+  //     setOrmeNumber(orderNumber);
+  //     // kalau beda, mulai dari 1
+  //   } else {
+  //     orderNumber = generate + "-" + "0001";
+  //     setOrmeNumber(orderNumber);
+  //   }
+  //   return orderNumber;
+  // }
 
   useEffect(() => {
     const cartdrlocalstorage = localStorage.getItem("cart");
@@ -98,10 +133,16 @@ export default function menu({ restaurant }) {
     localStorage.setItem("result", JSON.stringify(ormeNumber));
   }, [cart]);
 
+  useEffect(() => {
+    const cartdrlocalstorage = localStorage.getItem("cart");
+    const parsedCart =
+      cartdrlocalstorage !== null ? JSON.parse(cartdrlocalstorage) : [];
+    setCart(parsedCart);
+  }, []);
 
   const addtocart = (menu: any) => {
     let newCart:any = [...cart];
-    let itemInCart = cart.find((item: any) => menu.remename === item.remename); 
+    let itemInCart:any = cart.find((item: any) => menu.remename === item.remename); 
     if (!itemInCart) {
       let itemInCart:any = {
         ...menu, 
@@ -153,8 +194,8 @@ export default function menu({ restaurant }) {
   // quantity by incdecr
   // const [inc, setInc] = useState([]);
   function inc(product:any){
-    const newcart = [...cart];
-    newcart.map((cart) => {
+    const newcart:any = [...cart];
+    newcart.map((cart:any) => {
       let price = Number(cart.remeprice.split(",")[0].replace(/[^0-9]/g, ""))
       if(cart.remename === product.remename){
         cart.quantity += 1;
@@ -167,8 +208,8 @@ export default function menu({ restaurant }) {
   }
 
   function dec(product:any){
-    let newcart = [...cart];
-    newcart.map((cart) => {
+    let newcart:any = [...cart];
+    newcart.map((cart:any) => {
       let price = Number(cart.remeprice.split(",")[0].replace(/[^0-9]/g, ""))
       if(cart.remename === product.remename){
         cart.quantity -= 1;
@@ -177,7 +218,7 @@ export default function menu({ restaurant }) {
       }
     })
     let pushCart:any = [];
-    newcart.map( cart => {
+    newcart.map( (cart:any) => {
       if(cart.quantity !== 0){
         pushCart.push(cart) 
     }
@@ -330,7 +371,12 @@ export default function menu({ restaurant }) {
     let order = [{ summary: addorder, detail: cart }];
     dispatch(doAddOrder(order));
  
-    router.push("/restaurant/order");
+    router.push({
+      pathname: "/restaurant/order",
+      query: {
+        orderNumber: code()
+      }
+    });
 
     localStorage.setItem("cart", JSON.stringify([]));
   }
@@ -403,10 +449,10 @@ export default function menu({ restaurant }) {
 
             <hr className="my-5 border-t-2" />
 
-            <div className="mt-3 flex my-20">
-              <div className="w-3/5 border rounded shadow p-3 mr-2">
+            <div className="mt-3 lg:flex  my-20">
+              <div className="lg:w-3/5 sm:full sm:mb-4 border rounded-xl shadow p-3 lg:mr-2 bg-white">
                 <div className="text-xl font-bold text-center">
-                  Menu Makanan dan Minuman
+                  Menus
                 </div>
                 <div className="flex my-4">
                   <div className="w-1/2">
@@ -418,8 +464,8 @@ export default function menu({ restaurant }) {
                       }}
                     >
                       <Typography.Link>
-                        <Space className="my-5">
-                          Sort by price
+                        <Space className="my-5 text-[#754cff]">
+                          Urutkan Berdasarkan Harga
                           <DownOutlined />
                         </Space>
                       </Typography.Link>
@@ -441,23 +487,34 @@ export default function menu({ restaurant }) {
                 <div className="flex flex-wrap ml-5 item-center">
                 {listmenu && listmenu.map(
                       (menu: any, key: any) => (
-                        <div key={menu.remeid} className="w-52 mx-3 mx-auto mb-12 ">
+                        <div key={menu.remeid} className="w-52 mr-6 mb-12">
                           <div>
-                            <a onClick={() => showModalsMenu(menu)} className=" hover:text-slate-400" >
-                              <img src={`${configuration.BASE_URL}/${menu.rempurl}`} alt={menu.remename} 
-                              className="h-40 w-full object-cover rounded-lg"></img>
+                            <a
+                              onClick={() => showModalsMenu(menu)}
+                              className=" hover:text-[#754cff]"
+                            >
+                              <img
+                                src={`${configuration.BASE_URL}/${menu.rempurl}`}
+                                alt={menu.remename}
+                                className="h-40 w-full object-cover rounded-lg"
+                              ></img>
                               <div className="ml-3 mt-3 h-40">
-                                <p className="text-lg font-bold">{menu.remename}</p>
-                                <p>{menu.remeprice}</p>
-                                <p className="text-amber-600"> {menu.remestatus}
+                                <p className="text-lg font-bold h-20">
+                                  {menu.remename}
                                 </p>
+                                {/* <p className="font-light my-2">{menu.remedescription}</p> */}
+                                {/* <p className="text-amber-600 my-2 text-[11px]">
+                                  {menu.remestatus}
+                                </p> */}
+                                <Tag color="green" className="text-[11px]">{menu.remestatus}</Tag>
+                                <p className="text-[14px] font-bold text-right mr-4">{menu.remeprice}</p>
                               </div>
                             </a>
-                            <div className="w-full flex">
+                            <div className="w-full flex mt-2">
                               {userid ? (
                                 <button
                                   onClick={() => addtocart(menu)}
-                                  className="w-3/4 mx-auto rounded-full inline-block px-5 py-2 mt-4 bg-slate-500 hover:bg-slate-600 text-white uppercase bottom-0"
+                                  className="w-3/4 mx-auto rounded-full inline-block px-5 py-2 mt-4 bg-[#754cff] hover:bg-[#592fe4] text-white uppercase bottom-0"
                                 >
                                   <PlusOutlined /> Add To Cart
                                 </button>
@@ -468,22 +525,7 @@ export default function menu({ restaurant }) {
                             {/* </div> */}
                           </div>
                         </div>
-                      )
-                      // <div className='border rouded shadow my-5 hover:bg-slate-100 flex' onClick={() => showModalsMenu(menu)}>
-                      //     <img src={`${configuration.BASE_URL}/${menu.rempurl}`} alt='cake' width={180} height={180}>
-                      //     </img>
-                      //     <div className='ml-3 mt-3'>
-                      //         <p className='text-lg font-bold'>{menu.remename}</p>
-                      //         <p>{menu.remedescription}</p>
-                      //         <p>{menu.remeprice}</p>
-                      //         <div className='mt-4 right'>
-                      //             <button onClick={()=>addtocart(menu)} className='inline-block px-5 py-1 bg-slate-600 text-white rounded shadow uppercase'>
-                      //                 Add item
-                      //             </button>
-                      //         </div>
-                      //     </div>
-
-                      // </div>
+                      ) 
                     )}
                 </div>
                 {/* PAGINATION */}
@@ -497,9 +539,9 @@ export default function menu({ restaurant }) {
               </div>
 
                  { getCartTotal()===0 || !userid ? 
-                   <Affix className='w-2/5'>
-                    <div className='border rounded shadow py-20 ml-2 text-xl text-center'>
-                        Welcome to hotel realta! <br/>
+                   <Affix className='lg:w-2/5 sm:w-full'>
+                    <div className='border font-semibold bg-white rounded-lg shadow py-20 lg:ml-2 text-xl text-center'>
+                        Welcome to Hotel Realta ! <br/>
 
                         { !userid ? 
                           <div>
@@ -514,42 +556,18 @@ export default function menu({ restaurant }) {
                         }
                     </div> 
                    </Affix>
-                    // :
-                //    <Affix className='w-2/5'>
-                    // <div className='border rounded shadow p-3 ml-2 sticky top-0 h-1/2 w-2/5'>
-                    //     <div className='text-xl font-bold text-center'>Checkout</div>
-                    //     <div className='text-lg pt-5'>Total order: {getCartTotal()}</div>
-                    //     {
-                    //         cart && cart.map ( (order:any) => 
-                    //             <div className='border rouded shadow mt-5 my-5 hover:bg-slate-100 flex'>
-                    //                 <img src={`${configuration.BASE_URL}/${order.rempurl}`} alt='cake' width={120} height={120}>
-                    //                 </img>
-                    //                 <div className='ml-3 mt-1 w-full'>
-                    //                     <div className='flex'>
-                    //                         <p className='font-bold w-4/5'>{order.remename}</p>
-                    //                         <button onClick={() => removeFromCart(order)} className='text-red-600'>remove</button>
-                    //                     </div>
-                    //                     {/* <p>{order.desc}</p> */}
-                    //                     <p>{order.remeprice}</p>
-                    //                     <p>Qty: <input value={order.quantity} onChange={(event) => setQuantity(order, parseInt(event.target.value)) } /> </p>
-                    //                     <p>Subtotal: {order.subtotal}</p>
-                    //                 </div>
-                                    
-                    //             </div>
-                    //         )
-                    //     }
                  
                  : (
-                  <div className="border rounded shadow p-3 ml-2 sticky top-0 h-1/2 w-2/5">
+                  <div className="bg-white rounded-lg shadow p-3 sticky top-0 h-1/2 lg:w-2/5 sm:w-full">
                     <div className="text-xl font-bold text-center">
                       Checkout
                     </div>
-                    <div className="text-lg pt-5">
-                      Total order: {getCartTotal()}
+                    <div className="text-lg pt-5 font-semibold">
+                      Total Order : {getCartTotal()}
                     </div>
                     {cart &&
                       cart.map((order: any) => (
-                        <div className="border rouded shadow mt-5 my-5 hover:bg-slate-100 flex">
+                        <div className="border rounded-lg p-4 shadow-md gap-y-2 my-5 flex">
                           <img
                             src={`${configuration.BASE_URL}/${order.rempurl}`}
                             alt={order.remename}
@@ -583,9 +601,9 @@ export default function menu({ restaurant }) {
                             </p>
                             <div>
                               {/* // quantity by incdecr */}
-                              <button onClick={()=>dec(order)} className='text-lg'><MinusCircleOutlined /></button>
+                              <button onClick={()=>dec(order)} className='text-xl text-indigo-700'><MinusCircleOutlined className=" hover:bg-indigo-100 hover:rounded-full"/></button>
                               {"   " + order.quantity + "   "}
-                              <button onClick={()=>inc(order)} className='text-lg' ><PlusCircleOutlined /></button>
+                              <button onClick={()=>inc(order)} className='text-xl text-indigo-700' ><PlusCircleOutlined className=" hover:bg-indigo-100 hover:rounded-full" /></button>
                             </div>
                             <p>
                               Subtotal:{" "}
@@ -625,31 +643,29 @@ export default function menu({ restaurant }) {
                             </div>
                         </div> */}
 
-                    <div className="border rounded py-5 bg-slate-100">
-                      <p className="font-bold text-center py-2">
-                        Payment Summary
-                      </p>
+                    <div className="border rounded-xl py-5">
+                      <p className="text-lg font-bold text-center mb-4">Payment Summary</p>
 
-                      <table className="py-5 bg-slate-100 mx-4">
+                      <table className="py-5 mx-4">
                         <tbody>
-                          <tr className="hover:bg-slate-300">
+                          <tr className="">
                             <td className="w-full">Sub total</td>
                             <td className="text-right">
                               Rp.{getTotalSum().toLocaleString("id-ID")}
                             </td>
                           </tr>
-                          {/* <tr className='hover:bg-slate-300'>
-                                        <td>Discount [dapet dr manaa?]</td>
-                                        <td className='text-right'>Rp.0</td>
-                                    </tr> */}
-                          <tr className="hover:bg-slate-300">
+                          <tr className="">
                             <td className=" py-2">Tax(11%)</td>
                             <td className="text-right">
-                              { tax().toLocaleString("id-ID", {style:"currency", currency:"IDR", minimumFractionDigits: 0,
-                                maximumFractionDigits: 0})}
+                              { tax().toLocaleString("id-ID", {
+                                style: "currency",
+                                currency: "IDR",
+                                minimumFractionDigits: 0,
+                                                              maximumFractionDigits: 0,
+                              })}
                             </td>
                           </tr>
-                          <tr className="font-bold hover:bg-slate-300">
+                          <tr className="font-bold">
                             <td className=" py-2">Total payment</td>
                             <td className="text-right">
                               Rp.{sumWithTax().toLocaleString("id-ID")}
@@ -662,7 +678,7 @@ export default function menu({ restaurant }) {
                     <a>
                       <div
                         onClick={placeOrder}
-                        className="border rounded-lg bg-slate-100 my-5 text-center font-bold py-2 hover:bg-slate-300 hover:text-white"
+                        className="border rounded-full bg-[#754cff] my-5 text-center font-bold py-4 text-[#f2f1fa] hover:text-white"
                       >
                         PLACE ORDER HERE
                       </div>

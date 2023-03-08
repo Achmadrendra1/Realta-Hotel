@@ -5,17 +5,19 @@ import {useState} from 'react'
 const { Sider } = Layout
 const Sidebar = ({nav, collapsed, logo, locations} : {nav:any, collapsed:any, logo:string, locations:string}) => {
     return(
-        <Sider width={collapsed ? 120 : 250} trigger={null} collapsible collapsed={collapsed} className='relative'>
+        <Sider width={collapsed ? 120 : 250} trigger={null} collapsible collapsed={collapsed} className='relative '>
             <Menu 
-            className='p-5 fixed top-0'
+            className='p-5 fixed top-0 bg-[#754CFF]'
             mode="inline"
             style={{ height: '100%', width: collapsed ? 80 : 250 }}>
-                <div className={`bg-white w-full ${collapsed ? 'p-0' : 'pl-8'} flex`}>
-                    <img src={logo} alt='logo' className='w-auto h-8'/>
+                <div className={`w-full ${collapsed ? 'p-0' : 'justify-center'} flex mb-6`}>
+                    {/* <img src={logo} alt='logo' className='w-auto h-12'/> */}
+                    {collapsed ? <p className='text-3xl font-bold shadow-xl text-[#F2F1FA]'>RH</p>:
+                    <p className='text-3xl font-bold shadow-xl text-[#F2F1FA]'>Realta Hotel</p>}
                 </div>
                 {nav.map((item:any, index:any) =>
-                    <Menu.Item key={index} className={`${locations == item.href && 'bg-gray-100 text-black'}`}>
-                        <Link href={item.href} className='flex gap-3 items-center'>
+                    <Menu.Item key={index} className={`${locations == item.href ? 'bg-[#F2F1FA] text-[#754CFF]' : 'text-white'} `}>
+                        <Link href={item.href} className='flex gap-4 items-center'>
                             {item.icon}
                             <span>{item.name}</span>
                         </Link>

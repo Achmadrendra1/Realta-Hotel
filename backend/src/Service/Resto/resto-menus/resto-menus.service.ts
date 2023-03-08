@@ -4,6 +4,7 @@ import { Facilities } from 'src/entities/Facilities';
 import { RestoMenus } from 'src/entities/RestoMenus';
 import { Repository } from 'typeorm';
 
+
 @Injectable()
 export class RestoMenusService {
     constructor(
@@ -19,13 +20,12 @@ export class RestoMenusService {
         return await this.restoMenusRepository.query(`SELECT * FROM resto.listMenu(${Param.id})`)
     } 
     
-    async getMenuForUser(Param:any, body:any){
-        // console.log('body di reme for user', body);
+    async getMenuForUser(Param:any, body:any){ 
         // ubah search yg diinput ke lowercase
         const searchLower = body.search.toLowerCase()
         // get 9 data menu
-        const data = await this.restoMenusRepository.query(`
-            SELECT * FROM resto.listMenuUser($1, $2, $3, $4)`,[Param.id, searchLower, body.currentpage, body.sortedData]
+        const data = await this.restoMenusRepository.query(
+            'SELECT * FROM resto.listMenuUser($1, $2, $3, $4)',[Param.id, searchLower, body.currentpage, body.sortedData]
         )
         // get count
         const selectcount = await this.restoMenusRepository.query(
@@ -75,7 +75,9 @@ export class RestoMenusService {
     async addMenus(body:any){
         // console.log('sampe addmenu', body);
          
-        const date = new Date();
+        // const now:Date = new Date();
+        // const dateForPostgre: string = now.toISOString();
+        const dateForPostgre = new Date()
         
         return await this.restoMenusRepository.insert(
             {
@@ -84,7 +86,7 @@ export class RestoMenusService {
                 remeDescription: body.remeDescription,
                 remePrice: body.remePrice,
                 remeStatus: body.remeStatus,
-                remeModifiedDate: date
+                remeModifiedDate: dateForPostgre
             }
         )
     }

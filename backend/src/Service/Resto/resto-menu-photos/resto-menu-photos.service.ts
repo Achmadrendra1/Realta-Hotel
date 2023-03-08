@@ -35,40 +35,39 @@ export class RestoMenuPhotosService {
         )
     }
  
-    async addMultiplePhoto(files:any, body:any){
-        // console.log('files',files);
-        console.log('body service multiple', body.rempThumbnailFilename);
-        
+    async addMultiplePhoto(files:any, body:any){ 
+        const isPrimary = await this.restoMenuPhotoRepository.query(
+            'SELECT * FROM resto.isPrimary($1)',[body.remeId]
+        )
+        const getcount = isPrimary[0].isprimary 
         
         for(let i=0; i<files.length; i++){
-            await this.restoMenuPhotoRepository.insert(
-                {
-                    rempThumbnailFilename: body.rempThumbnailFilename,
-                    rempPhotoFilename: files[i].filename,
-                    rempPrimary: body.rempPrimary,
-                    rempUrl: files[i].path,
-                    rempReme: body.remeId
-    
-                }
-            )
-        }
-        // files.map(async (photo:any) => {
-        //     await this.restoMenuPhotoRepository.insert(
-        //         {
-        //             rempThumbnailFilename: body.rempThumbnailFilename,
-        //             rempPhotoFilename: photo.filename,
-        //             rempPrimary: body.rempPrimary,
-        //             rempUrl: photo.path,
-        //             rempReme: body.remeId
-    
-        //         }
-        //     )
-        // })
+            if(getcount === 0 && i === 0){
+                await this.restoMenuPhotoRepository.insert(
+                    {
+                        rempThumbnailFilename: body.rempThumbnailFilename,
+                        rempPhotoFilename: files[i].filename,
+                        rempPrimary: '1',
+                        rempUrl: files[i].path,
+                        rempReme: body.remeId
         
-        return 'add successfully'
-        // let data = await files;
-        // console.log('di service', data);
-        // return data;
+                    }
+                )
+            }else{
+                await this.restoMenuPhotoRepository.insert(
+                    {
+                        rempThumbnailFilename: body.rempThumbnailFilename,
+                        rempPhotoFilename: files[i].filename,
+                        rempPrimary: '0',
+                        rempUrl: files[i].path,
+                        rempReme: body.remeId 
+                    }
+                )
+            }
+            
+        } 
+        
+        return 'add successfully' 
         
     }
 

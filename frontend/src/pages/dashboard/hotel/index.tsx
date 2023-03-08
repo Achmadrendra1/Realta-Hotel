@@ -14,8 +14,9 @@ import AddHotelsRealta from "./AddHotel";
 import { useRouter } from "next/router";
 import Link from "next/link";
 import EditHotelRealta from "./EditHotel";
+import withAuth from "@/PrivateRoute/WithAuth";
 
-export default function index() {
+export default withAuth(function index() {
   const dispatch: any = useDispatch();
   const { hotel } = useSelector((state: any) => state.HotelReducer);
   const { Search } = Input;
@@ -169,3 +170,4 @@ export default function index() {
     </Dashboard>
   );
 }
+)

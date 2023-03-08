@@ -33,6 +33,7 @@ export default function index() {
 
   //Get data Hotel
   let hotel = useSelector((state : any) => state.HotelBoorReducer.hotel)
+
   //Hook untuk View More
   const [more, setMore] = useState(false)
   
@@ -41,6 +42,13 @@ export default function index() {
     lowest : 0,
     highest : 0
   })
+
+  //Hook untuk map
+  const [mapHotel, setMapHotel] = useState()
+
+  useEffect(()=>{
+    setMapHotel(hotel)
+  }, [hotel])
 
   const filterHotel = hotel?.filter((items : any) => 
   parseInt((items.faci_rateprice).substring(3).replace(".","")) >= filter.lowest
@@ -55,8 +63,12 @@ export default function index() {
 
   const handleClear = () => {
     setFilter({...filter, highest : 0, lowest : 0})
+    setMapHotel(hotel)
   }
 
+  const handleFilter = () => {
+    setMapHotel(filterHotel)
+  }
 
   return (
     <Layouts>
@@ -115,7 +127,7 @@ export default function index() {
                   <button onClick={()=> setMore(!more)} className={`${!more ? "hidden" : "block"}`}>- Less More</button>
                 </div>
                 <div className="text-center">
-                  <Button className="">Filter</Button>
+                  <Button onClick={handleFilter} className="">Filter</Button>
                 </div>
               </div>
             </Card>
@@ -134,8 +146,8 @@ export default function index() {
               </div>
               <div>
                 {
-                  hotel &&
-                  hotel.map((hotel : any)=>{
+                  mapHotel &&
+                  mapHotel.map((hotel : any)=>{
                     let room = hotel.faci_hotelall;
                     let arrRoom = room.split(',');
                     let ratePrice = hotel.faci_rateprice;

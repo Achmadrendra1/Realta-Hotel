@@ -1,34 +1,34 @@
 import Dashboard from '@/layouts/dashboard'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { Button, Dropdown, Form, Input, Menu, MenuProps, Modal, Pagination, Select, Space, Switch, Tabs, Upload } from 'antd';
 import { Table } from 'antd'
-import { CloseOutlined, DeleteOutlined, DownOutlined, EditOutlined, InboxOutlined, MoreOutlined, PlusOutlined, UploadOutlined, WarningOutlined } from '@ant-design/icons';
+import { CloseOutlined, DeleteOutlined, DownOutlined, EditOutlined, InboxOutlined, MoreOutlined, PictureOutlined, PlusOutlined, UploadOutlined, WarningOutlined } from '@ant-design/icons';
 import { useDispatch, useSelector } from 'react-redux';
 import { doAddMenu, doDeleteMenu, doMenuRequest, doUpdateMenu } from '@/Redux/Action/Resto/restoMenuAction';
 import axios from 'axios';
 import { API } from '@/Redux/Configs/consumeApi';
 import { useRouter } from 'next/router';
 import { configuration } from '@/Redux/Configs/url';
-import { doAddPhoto, doDeletePhoto, doGetPhoto, doUpdatePrimary } from '@/Redux/Action/Resto/menuPhotoAction';
-
+import { doAddPhoto, doDeletePhoto, doGetPhoto, doUpdatePrimary } from '@/Redux/Action/Resto/menuPhotoAction'; 
 import dayjs from 'dayjs';
 import 'dayjs/locale/id'; // impor lokalisasi untuk bahasa Indonesia
 import Buttons from '@/components/Button';
 import { doRestoRequest } from '@/Redux/Action/Resto/restoAction';
 import { doGetUser } from '@/Redux/Action/User/GetDataUser';
 import Unauthorized from '@/components/Unauthorized';
+import withAuth from '@/PrivateRoute/WithAuth';
 
-export default function restoMenu() {
+export default withAuth( function restoMenu() {
   const dispatch = useDispatch();
 
   // let photos = useSelector((state: any) => state.menuPhotoReducer.menuPhoto);
   let menus = useSelector((state: any) => state.restoMenuReducer.restoMenus);
-  let list_restaurant = useSelector((state: any) => state.restoReducer.resto);
+  let restaurant = useSelector((state: any) => state.restoReducer.resto);
   let user = useSelector((state: any) => state.GetUserReducer.getUser);
   let role = user[0]?.role_name;
 
   let [search, setSearch] = useState('');
-// console.log('list_restaurant',list_restaurant);
+  let list_restaurant = restaurant.data;
 
   // ------------------------ PAGINATION
   const [currentpage, setCurrentPage] = useState(1);
@@ -49,18 +49,10 @@ export default function restoMenu() {
 
     dispatch(doMenuRequest(data));
     dispatch(doGetPhoto());
-    dispatch(doRestoRequest())
+    dispatch(doRestoRequest(currentpage))
 
   }, [menus, search, currentpage])
-
-
-  // console.warn('ini photos: ', photos); // isi photos semua file di resto menu photos
-  // console.warn('ini menus:', menus);
-
-  // photos.map( (photo:any, index:number) => {
-  //   console.warn(photo.rempUrl, ' ke ' , index);
-
-  // })
+ 
 
 
   // ------------------------------------------------------------------------------------- EDIT MENU
@@ -76,17 +68,11 @@ export default function restoMenu() {
     setIsModalOpen(false)
   }
 
-  const onFinish = (e: any) => {
-    // console.warn('ini onfinish', e);
-    e.preventDefault()
-
-    console.warn()
+  const onFinish = (e: any) => { 
+    e.preventDefault() 
     console.log(e.target.rempurl);
 
-  }
-
-
-
+  } 
 
   let [getMenu, setGetMenu] = useState({
     remeFaciId: 0,
@@ -94,16 +80,14 @@ export default function restoMenu() {
     remeName: '',
     remeDescription: '',
     remePrice: 0,
-    remeStatus: ''
+    remeStatus: 'EMPTY'
   })
 
   const [formEdit] = Form.useForm()
-  const [firstValue, setFirstValue] = useState('')
-  // console.log('getMenu',getMenu);
+  const [firstValue, setFirstValue] = useState('')  
   const editMenu = async (id: number) => {
     showEdit()
-    // debugger;
-    // const data = await axios(API('Get',`/resto-menus/${id}`, null))
+    // debugger; 
     const menu:any = await axios(API('Get', `/resto-menus/${id}`, null))
       .then((res: any) => {
         console.log('res',res.data[0]);
@@ -115,23 +99,21 @@ export default function restoMenu() {
           remeName: getmenu.reme_name,
           remeDescription: getmenu.reme_description,
           remePrice: getmenu.reme_price,
-          remeStatus: getmenu.reme_status
+          remeStatus: 'AVAILABLE'
+          // remeStatus: getmenu.reme_status
         }
         setGetMenu(data)
         return data;
       })
       .catch((err) => alert(err))
-      // console.log(menu);
-      
-      list_restaurant.map( (resto:any) => {
-        if(resto.faci_id == menu.remeFaciId){
-          let restaurant = resto.hotel_name + ' ' + resto.faci_name
-          setFirstValue(restaurant)          
-        }
-      })
+    
+    list_restaurant.map( (resto:any) => {
+      if(resto.faci_id == menu.remeFaciId){
+        let restaurant = resto.faci_name + ' - ' + resto.hotel_name
+        setFirstValue(restaurant)          
+      }
+    })
   }
-  
-
   const [addMenu, setAddMenu] = useState({
     remeFaciId: 0,
     remeName: '',
@@ -147,7 +129,6 @@ export default function restoMenu() {
   }
 
   const handleSelection = (selected: any, nama: any) => {
-    // console.log([nama][0])
     setGetMenu({
       ...getMenu,
       remeFaciId: selected
@@ -160,7 +141,6 @@ export default function restoMenu() {
 
 
   const handleSelection2 = (selected: any, nama: any) => {
-    // console.log([nama][0])
     setGetMenu({
       ...getMenu,
       remeStatus: selected
@@ -179,9 +159,6 @@ export default function restoMenu() {
     setIsModalOpen(false)
   }
 
-
-  // console.warn('ini id faci',getMenu.remeFaciId, ' reme name ' , getMenu.remeName)
-
   // ------------------------------------------------------------------------------------- ADD MENU
   const [isModalAddMenu, setIsModalAddMenu] = useState(false);
   const showAddMenu = () => {
@@ -189,8 +166,7 @@ export default function restoMenu() {
   }
   // [form] disini karena di Form modal add menu pake form=form
   const [form]:any = Form.useForm()
-  const handleAddMenu = (e: any) => {
-    // console.log('ini add menu di handle add menu: ', addMenu)
+  const handleAddMenu = (e: any) => { 
     e.preventDefault();
     // disini tambahin id menunya, diambil dari db
     dispatch(doAddMenu(addMenu))
@@ -202,12 +178,7 @@ export default function restoMenu() {
     // reset form
     form.resetFields()
     setIsModalAddMenu(false)
-  }
-
-
-  // console.log('addMenu',addMenu);
-  
-
+  } 
   // ------------------------------------------------------------------------------------- DELETE MENU
   const router = useRouter();
 
@@ -236,27 +207,7 @@ export default function restoMenu() {
     setIsModalPhoto(true)
   }
 
-  let [viewPhoto, setViewPhoto] = useState([]);
-  // let newPhoto:any = [];
-  // photos.map( (photo:any, index:number) => {
-  //   // console.warn(photo.rempUrl, ' ke ' , index);
-  //   let rowPhoto = {rempId: photo.rempId, rempUrl: `${configuration.BASE_URL}/${photo.rempurl}`}
-  //     // console.warn(photo.rempurl, ' satu satu');
-  //     newPhoto.push(rowPhoto);
-  // })
-
-  // setViewPhoto([...newPhoto]);
-
-  // console.warn('ini view photo ', viewPhoto);
-
-
-  // function photoMenu(data:any){
-
-  // }
-
-
-
-
+  let [viewPhoto, setViewPhoto] = useState<any[]>([]);  
   // waktu di klik ... di tabel
   // menampilkan deretan photo yang nama menunya sama
   const photoMenu = async (data: any) => {
@@ -309,43 +260,15 @@ export default function restoMenu() {
     })
 
 
-  }
-
-  // viewPhoto.map( (photo) => {
-  //   console.warn('coba map 1: ', photo);
-
-  // })
-
-
-  // console.warn('view photo di luar ', viewPhoto);
-
-  // console.warn(getPhoto, ' ini get photo');
-  const handlePhoto = (e: any) => {
-    // console.log('ini get menu: ', getMenu)
+  } 
+  const handlePhoto = (e: any) => { 
     e.preventDefault();
-    // disini tambahin id menunya, diambil dari db
-    // dispatch(doAddMenu(getMenu))
+    // disini tambahin id menunya, diambil dari db 
     setIsModalPhoto(false)
   }
   const handleCancelPhoto = () => {
     setIsModalPhoto(false)
-  }
-
-
-  // const normFile = (e: any) => {
-  //   console.log('Upload event:', e);
-  //   if (Array.isArray(e)) {
-  //     return e;
-  //   }
-  //   return e?.fileList;
-  // };
-
-  // const [image, setImage] = useState("https://fakeimg.pl/350x200");
-
-  // const [image, setImage] = useState([]);
-
-
-  // let gambar:any = [];
+  } 
 
   let [insertPhoto, setInsertPhoto] = useState({
     rempThumbnailFilename: '',
@@ -372,15 +295,7 @@ export default function restoMenu() {
       setImage(event.target.result);
     };
     fileReader.readAsDataURL(uploaded)
-
-
-    // let url = URL.createObjectURL(uploaded);
-    // console.log('ini url: ', url);
-    // setImage(URL.createObjectURL(uploaded))
-    // // gambar.push(url)
-    // // setAddImage([...addImage, url])
-
-
+ 
     setGetPhoto({
       ...getPhoto,
       rempUrl: uploaded
@@ -392,10 +307,8 @@ export default function restoMenu() {
       rempUrl: uploaded,
       remeId: getPhoto.remeId
 
-    })
-    // setAddImage([...addImage, url])
-  }
-  // console.log('ini gambar: ', addImage);
+    }) 
+  } 
 
   function saveNewPhoto(e: any) {
     e.preventDefault();
@@ -421,65 +334,25 @@ export default function restoMenu() {
         console.warn('error ', err);
 
       })
-
-    // console.warn('ini addImage: ', addImage[0]);
-
-    // setGetPhoto({
-    //   ...getPhoto,
-    //   rempUrl: addImage[0]
-    // });
-
-    // console.warn('ini getPhoto.rempUrl', getPhoto.rempUrl);
-
-
-    // dispatch(doAddPhoto(form))
-
-    // setIsModalPhoto(false);
-    // panggil add menu photo saga
+ 
   }
 
   // -------------------------------------------- DELETE PHOTO
   function deletePhoto(id: number) {
     dispatch(doDeletePhoto(id))
     setisThumbnail(false);
-  }
-
-  // console.log('ini get menu: ', getMenu)
-
+  } 
   // switch menu available or not
-  let [available, setAvailable] = useState('EMPTY')
-
-  // console.log('available',available);
-
-  // let status = false;
+  let [available, setAvailable] = useState('EMPTY') 
   const switchMenu = (checked: boolean) => {
     if (checked == true) {
       setAddMenu({ ...addMenu, remeStatus: 'AVAILABLE' })
-      setGetMenu({ ...getMenu, remeStatus: 'AVAILABLE' })
-      // setAvailable('AVAILABLE');
+      setGetMenu({ ...getMenu, remeStatus: 'AVAILABLE' }) 
     } else {
       setAddMenu({ ...addMenu, remeStatus: 'EMPTY' })
-      setGetMenu({ ...getMenu, remeStatus: 'EMPTY' })
-      // setAvailable('EMPTY');
-    }
-
-    // setAddMenu({...addMenu, remeStatus:available})
-  };
-
-  // console.log('addmenu', addMenu);
-
-  // console.log(photos);
-  // --------------------------------------------------------------------------------------- PAGINATION LIST PHOTO 
-  // const [currentPage, setCurrentPage] = useState(1);
-
-  // const handlePageListPhoto = (page: any) => {
-  //   setCurrentPage(page);
-  // }
-
-  // const startIndex = (currentPage - 1) * 10;
-  // const endIndex = startIndex + 10;
-  // const currentData = photos.slice(startIndex, endIndex);
-
+      setGetMenu({ ...getMenu, remeStatus: 'EMPTY' }) 
+    } 
+  }; 
 
   // --------------------------------------------------------------------------------------- THUMBNAIL PHOTO 
 
@@ -543,6 +416,15 @@ export default function restoMenu() {
   }
 
   function handleCancelThumbnail() {
+    setNewPrimary({
+      remename: '',
+      rempid: 0,
+      rempphotofilename: '',
+      rempprimary: '0',
+      rempreme: '',
+      rempthumbnailfilename: '',
+      rempurl: ``
+    })
     setisThumbnail(false);
   }
 
@@ -571,10 +453,18 @@ export default function restoMenu() {
       }
     })
 
-    dispatch(doUpdatePrimary(newPhotoPrimary))
+    dispatch(doUpdatePrimary(newPhotoPrimary)) 
 
-    // console.log('newPhotoPrimary',newPhotoPrimary);
-
+    
+    setNewPrimary({
+      remename: '',
+      rempid: 0,
+      rempphotofilename: '',
+      rempprimary: '0',
+      rempreme: '',
+      rempthumbnailfilename: '',
+      rempurl: ``
+    })
     setisThumbnail(false);
 
   }
@@ -588,38 +478,34 @@ export default function restoMenu() {
     reme_id: 0
   })
   const [readPhoto, setReadPhoto]:any = useState([])
+  
+  // const inputRef = useRef(null);
+  // const [formMultiplePhoto]:any = Form.useForm()
   function cancelAddMultiple(){
+    // formMultiplePhoto.resetFields()
+    // Reset value of file input
+    // if(inputRef.current){
+    //   inputRef.current.reset();
+    // }
+    setAddPhotos([])
+    setReadPhoto([])
     setShowAddMultiple(false)
   }
-  function handleInputMultiple(e:any){
-    console.log('masuk handle');
+  function handleInputMultiple(e:any){ 
     
     let multiple:any = []
     let uploaded = e.target.files;
     // let uploaded = e.fileList
     // buat baca gambar di layar
     const fileReader = new FileReader()
-    let readUrl = [];
-    console.log('uploaded',uploaded);
-    
-
-    // fileReader.onload = function (event:any){
-    //   readUrl.push(event.target.result);
-    //   console.log('event.target.result',event.target.result);
-      
-    //   setReadPhoto(event.target.result[0])
-    // }
-    // fileReader.readAsDataURL(uploaded)
+    let readUrl = []; 
 
     // masukkan semua gambar ke file upladed 
     for(let i=0; i<uploaded.length; i++){
       multiple.push(e.target.files[i])
       // multiple.push(e.fileList[i])
       readUrl.push(URL.createObjectURL(e.target.files[i]))
-    }
-
-    console.log('multiple',multiple);
-    console.log('readurl',readUrl);
+    } 
     
     setAddPhotos(multiple)
     setReadPhoto(readUrl)
@@ -631,18 +517,12 @@ export default function restoMenu() {
       reme_name: reme.reme_name,
       reme_id: reme.reme_id
     })
-  }
-
-  // console.log(addPhotos);
-  
-
+  } 
   function saveMultiplePhoto(){
-    let dataMultiple:any = [];
-    const form = new FormData();
+    // console.log('masuk save');
     
-    const form2 = new FormData();
-    console.log('dataReme',dataReme);
-  
+    let dataMultiple:any = [];
+    const form = new FormData(); 
     form.append('rempThumbnailFilename', dataReme.reme_name);
     form.append('remeId', dataReme.reme_id.toString());
     form.append('rempPrimary', '0');
@@ -650,56 +530,25 @@ export default function restoMenu() {
     addPhotos.map((photo:any) => {
       form.append('rempUrl', photo);
       // dataMultiple.push(form)
-    })
-    console.log(addPhotos);
+    })  
 
-    console.log(form);
-    
-    
+    dispatch(doAddPhoto(form)) 
 
-    // console.log('isi data multiple', dataMultiple);
-
-
-    axios.post('http://localhost:3501/resto-menu-photos/multiple', form, {
-      headers: {
-        // 'constant-type': 'multipart/form-data',
-        'Content-Type': 'multipart/form-data'
-      },
-      data: form
-    })
-    .then((res: any) => {
-      console.warn('post success ', res);
-    })
-    .catch((err: any) => {
-      console.warn('error ', err); 
-    })
-
+    // formMultiplePhoto.resetFields()
+    setAddPhotos([])
+    setReadPhoto([])
     setShowAddMultiple(false)
-  }
-
-  // console.log('addPhotos',addPhotos);
-  
-  
+  } 
   return (
     <>
       {
         role == 'Manager' || role == 'Admin' ?
 
-          <Dashboard>
-            {/* <Tabs> */}
-            {/* TABEL MENU */}
-            {/* <Tabs.TabPane tab='Menu' key='menu'> */}
-            <div className='text-2xl text-center py-3 font-bold'>Resto Menu</div>
+          <Dashboard> 
+            <div className='text-2xl text-center py-3 font-bold'>Restaurant Menu</div>
 
             <div className='my-4 px-4'>
-              <div className='float-right right-0 items-right'>
-                {/*<a className='bg-slate-400' onClick={showAddMenu}>
-                 <div className='bg-sky-600 hover:bg-sky-500 text-white rounded-md p-3 w-32 text-center font-bold'> */}
-                {/*<Buttons funcs={showAddMenu}>
-                  <PlusOutlined /> Add Menu
-                </Buttons>
-                 </div>
-              </a> */}
+              <div className='float-right right-0 items-right'> 
               </div>
               <Input.Search value={search} onChange={(e: any) => setSearch(e.target.value)} placeholder='Search here..' style={{ width: 400 }} />
             </div>
@@ -707,7 +556,7 @@ export default function restoMenu() {
             <Table dataSource={menus.data} pagination={{current: currentpage, onChange: handlePagination, total: menus.counts}} className='py-4'>
               <Table.Column title='ID' dataIndex='reme_id' key='reme_id'/>
               <Table.Column title='Hotel Name' dataIndex='hotel_name' key='hotel_name' />
-              <Table.Column title='Facility' dataIndex='faci_name' key='faci_name' />
+              <Table.Column title='Restaurant' dataIndex='faci_name' key='faci_name' />
               <Table.Column title='Menu' dataIndex='reme_name' key='reme_name' />
               <Table.Column title='Price' dataIndex='reme_price' key='reme_price' render={((rp) => { return rp.replace('$', 'Rp.') })} />
               <Table.Column title='Description' dataIndex='reme_description' key='reme_description' />
@@ -717,50 +566,32 @@ export default function restoMenu() {
                 return formattedDate;
               }}  
               />
-              <Table.Column title={<button onClick={showAddMenu} className='bg-slate-300 hover:bg-slate-400 rounded-lg w-24 py-2'><PlusOutlined /> Add menu</button>} key="add" 
+              <Table.Column title={<button onClick={showAddMenu} className='bg-slate-200 hover:bg-slate-300 rounded-lg w-24 py-3'><PlusOutlined /> Add menu</button>} key="add" 
                 
                 render={(_: any, record: any) => (
 
-                  <Space size="middle">
-                    {/* <Button onClick={() => editMenu(record.reme_id)}>Edit</Button>
-                  <Button onClick={() => deleteMenu(record.reme_id)}>Delete</Button> */}
-
+                  <Space size="middle"> 
                     <Dropdown overlay={
                       <Menu>
                         <Menu.Item key={'edit'} onClick={() => editMenu(record.reme_id)}> <EditOutlined className='mr-2'/>Edit Menu</Menu.Item>
-                        <Menu.Item key={'add'} onClick={() => photoMenu(record)}><UploadOutlined className='mr-2'/>Upload photo</Menu.Item>
-                        <Menu.Item key={'update'} onClick={() => thumbnailMenu(record)}><EditOutlined className='mr-2'/>Edit Photo Menu</Menu.Item>
-                        <Menu.Item key={'addmultiple'} onClick={() => addMultiple(record)}><UploadOutlined className='mr-2'/>Add Multiple Photo</Menu.Item>
+                        {/* <Menu.Item key={'add'} onClick={() => photoMenu(record)}><UploadOutlined className='mr-2'/>Upload photo</Menu.Item> */}
+                        <Menu.Item key={'addmultiple'} onClick={() => addMultiple(record)}><UploadOutlined className='mr-2'/>Upload Photo</Menu.Item>
+                        <Menu.Item key={'update'} onClick={() => thumbnailMenu(record)}><PictureOutlined className='mr-2'/>Edit Photo Menu</Menu.Item>
                       </Menu>
-                    }
-                      trigger={['click']}
-                      
+                      }
+                      trigger={['click']} 
                     >
                       <a onClick={(e) => e.preventDefault()}>
                         <Space className='mx-10'>
                           <MoreOutlined />
                         </Space>
                       </a>
-                    </Dropdown>
-
-
-                    {/* <Select value="Select option">
-                    <Select.Option value={'edit'} onClick={() => editMenu(record.reme_id)} className='w-48'>Edit</Select.Option>
-                    <Select.Option value={'upload'} onClick={() => photoMenu(record.reme_id)}>Upload Photo</Select.Option>
-                  </Select> */}
-
-                    {/* <Button onClick={() => photoMenu(record)}><MoreOutlined /></Button> */}
+                    </Dropdown> 
                   </Space>
                 )}
               />
             </Table>
-            {/* 
-          ----------------------SEBELUMNYA PAKE INI TAPI GA BISA BUAT KOLOM MODIFIED
-          <Table
-                  dataSource={ menus }
-                  columns={columnsMenu}
-          >
-          </Table> */}
+            
             {/* ------------------------------------------------------------------------------------- MODALS EDIT MENU */}
             <Modal
               title="Update Menu"
@@ -795,7 +626,7 @@ export default function restoMenu() {
                     <Select value={firstValue} onChange={(e) => handleSelection(e, 'remeFaci')}>
                       <>
                         {
-                          list_restaurant.map((resto: any) => (
+                          list_restaurant && list_restaurant.map((resto: any) => (
                             <Select.Option value={resto.faci_id} >{resto.hotel_name} - {resto.faci_name}</Select.Option>
 
                           ))
@@ -838,27 +669,16 @@ export default function restoMenu() {
                   <Form.Item
                     name="remeStatus" label='Status'
                     rules={[{ required: true, message: 'Please select status!' }]}
-                  >
-
-                    <Switch onChange={switchMenu} className='bg-slate-400' />
+                  > 
+                    <Switch onChange={switchMenu} className='bg-slate-400' defaultChecked/>
                     <p className='pl-3 text-white' hidden>Previous: {getMenu.remeStatus}</p>
-
-                    {/* <Select placeholder={getMenu.remeStatus} onChange={(e) => handleSelection2(e, 'remeStatus')}>
-                    <Select.Option value='AVAILABLE'>AVAILABLE</Select.Option>
-                    <Select.Option value='EMPTY'>EMPTY</Select.Option>
-                  </Select> */}
+                    
                   </Form.Item>
-                </>
-                {/* <div className='flex justify-center'>
-                <Link href=''>
-                  <div className='bg-slate-600 hover:bg-slate-500 text-white rounded-lg py-2 w-40 text-center'>
-                      Update Menu
-                  </div>
-                </Link>
-              </div> */}
+                </> 
               </Form>
 
             </Modal>
+
             {/* -------------------------------------------- MODAL ADD MENU */}
             <Modal
               title="Add Menu"
@@ -884,14 +704,14 @@ export default function restoMenu() {
                 className="mx-auto"
               >
                 <p className='text-center text-xl py-5 font-bold'>
-                  Add Menu Resto
+                  Add Menu Restaurant
                 </p>
                 <>
-                  <Form.Item name="remeFaciId" label="Facility"
+                  <Form.Item name="remeFaciId" label="Restaurant"
                     rules={[{ required: true, message: 'Please select restaurant!!' }]}>
-                    <Select placeholder={'Select restaurant'} onChange={(e) => handleSelection(e, 'remeFaci')} value={list_restaurant.faci_name}>
+                    <Select placeholder={'Select restaurant'} onChange={(e) => handleSelection(e, 'remeFaci')} >
                       {
-                        list_restaurant.map((resto: any) => (
+                        list_restaurant && list_restaurant.map((resto: any) => (
                           <Select.Option value={resto.faci_id}>{resto.faci_name} - {resto.hotel_name}</Select.Option>
                         ))
                       }
@@ -931,7 +751,7 @@ export default function restoMenu() {
 
             </Modal>
 
-            {/* ------------------------------------------ MODAL PHOTO---------------------------- */}
+            {/* ------------------------------------------ MODAL ADD PHOTO---------------------------- */}
 
             <Modal
               title="Upload Photo"
@@ -1013,69 +833,70 @@ export default function restoMenu() {
             </Modal>
 
 
-            {/* // --------------------------------------------------------------------------------------- THUMBNAIL PHOTO  */}
-            <Modal
-              title="SET THUMBNAIL PHOTO"
-              open={isThumbnail}
-              // onOk={updatePhoto} // belum tau mau diisi apa sama di button ok jga benerin
-              onCancel={handleCancelThumbnail}
-              width={1000}
-              footer={[
-                <>
-                  <Button key="back" onClick={handleCancelThumbnail}>Cancel</Button>
-                  { viewThumbnailPhoto.length > 0 ? 
-                    <Button key="submit" onClick={updatePhoto}>Update Photo</Button>
-                  : '' }
-                </>
-              ]}
-            >
-              { viewThumbnailPhoto.length > 0 ? 
-                <>
-                <div className='my-4'>
-                  <div className='text-center w-full '>
-                    <p className='font-bold text-xl py-4'>Thumbnail Photo - {getPhoto.remeName}</p>
-                    <img src={newPrimary.rempurl} className='h-64 object-center text-center mx-auto'></img>
+      {/* // --------------------------------------------------------------------------------------- THUMBNAIL PHOTO  */}
+      <Modal
+        title="SET THUMBNAIL PHOTO"
+        open={isThumbnail}
+        onOk={updatePhoto} // belum tau mau diisi apa sama di button ok jga benerin
+        onCancel={handleCancelThumbnail}
+        width={1000}
+        footer={[
+          <>
+            <Button key="back" onClick={handleCancelThumbnail}>Cancel</Button>
+            { viewThumbnailPhoto.length > 0 ? 
+              <Button key="submit" onClick={updatePhoto}>Update Photo</Button>
+            : '' }
+          </>
+        ]}
+      >
+        { viewThumbnailPhoto.length > 0 ? 
+        <>
+          <div className='my-4'>
+            <div className='text-center w-full '>
+              <p className='font-bold text-xl py-4'>Thumbnail Photo - {getPhoto.remeName}</p>
+              <img src={newPrimary.rempurl} className='h-64 object-center text-center mx-auto'></img>
+            </div>
+          </div>
+          <hr className='mb-4'/>
+          <div className='mb-4'>
+            Guides:
+            <ul>
+              <li>
+                - Select photo to set new thumbnail photo
+              </li>
+              <li>
+                - Klik delete to delete permanent photo 
+              </li>
+            </ul>
+          </div>
+          <div className='flex flex-wrap justify-center'>
+            {
+              viewThumbnailPhoto.map((photo: any, i:number) => (
+                <div className='w-48 border rounded-lg m-2 transition hover:bg-slate-200 hover:text-black-500 hover:font-bold'>
+                  <button onClick={()=>setPrimary(photo)}>
+                    <div  className=' p-2'>
+                      <img src={photo.rempurl} alt={photo.rempthumbnailfilename} className='h-32 w-48 object-cover' />
+                      <p className='text-base text-center'>Photo {i+1}</p> 
+                    </div>
+                  </button>
+                  <div className='text-center pb-2'>
+                    <button onClick={() => deletePhoto(photo.rempid)} className='text-red-500 text-center'><CloseOutlined /> Delete</button>
                   </div>
                 </div>
-                <hr className='mb-4' />
-                <div className='mb-4'>
-                  Guides:
-                  <ul>
-                    <li>
-                      - Select photo to set new thumbnail photo
-                    </li>
-                    <li>
-                      - Klik delete to delete permanent photo
-                    </li>
-                  </ul>
-                </div>
-                <div className='flex flex-wrap justify-center'>
-                  {
-                    viewThumbnailPhoto.map((photo: any, i: number) => (
-                      <div className='w-48 m-2 border rounded-lg transition ease-in-out delay-150 hover:scale-110 duration-300 hover:bg-slate-200 hover:text-black-400 hover:font-bold'>
-                        <a onClick={() => setPrimary(photo)}>
-                          <div className=' p-2'>
-                            <img src={photo.rempurl} alt={photo.rempthumbnailfilename} className='h-32 object-cover' />
-                            <p className='text-base text-center'>Photo {i + 1}</p>
-                          </div>
-                        </a>
-                        <div className='text-center pb-2'>
-                          <a onClick={() => deletePhoto(photo.rempid)} className='text-red-500 text-center'><CloseOutlined /> Delete</a>
-                        </div>
-                      </div>
-                    ))
-                  }
-                </div>
-                </>
-                : 
-                <div className='text-slate-300 text-center py-10 h-96 '>
-                  No photos available
-                  <p>Please upload photo</p>
-                </div>
-                }
-            </Modal>
-
-            <Modal
+              ))
+            }
+          </div>
+        </>
+        : 
+        <div className='text-slate-300 text-center py-10 h-96 '>
+          No photos available
+          <p>Please upload photo</p>
+        </div>
+        }
+      </Modal>
+      
+      {/* ------------------------- ADD MULTIPLE PHOTO ------------------------------- */}
+      <Modal
               title="Upload Photo Multiple"
               open={showAddMultiple}
               // onOk={handlePhoto}
@@ -1083,12 +904,14 @@ export default function restoMenu() {
               width={1000}
               footer={[
                 <>
-                  <Button key="back" onClick={handleCancelPhoto}>Cancel</Button>
+                  <Button key="back" onClick={cancelAddMultiple}>Cancel</Button>
                   {/* <Button key="submit" onClick={handlePhoto}>OK</Button> */}
                 </>
               ]}
             >
               <Form
+                // ref={inputRef}
+                // form={formMultiplePhoto}
                 // onFinish={}
                 // labelCol={{ span:8 }}  
                 // wrapperCol={{ span:14 }}
@@ -1132,16 +955,7 @@ export default function restoMenu() {
                   </Buttons>
                 </div> */}
 
-              </Form>
-              {/* <form onSubmit={()=>uploadMultiple(this)}>
-                <div className='mb-3'>
-                  <label htmlFor="formFile">Upload Multiple Picture</label>
-                  <input type="file" id='rempUrl' name='rempUrl' />
-                </div>
-                <div>
-                  <button type='submit'>Upload</button>
-                </div>
-              </form> */}
+              </Form> 
             </Modal>
 
           </Dashboard>
@@ -1155,3 +969,4 @@ export default function restoMenu() {
     </>
   )
 }
+)

@@ -1,10 +1,11 @@
+import withAuth from "@/PrivateRoute/WithAuth";
 import { getFacilityID, updateFacility } from "@/Redux/Action/Hotel/HotelAction";
 import { Form, Input, Typography } from "antd";
 import { useFormik } from "formik";
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
-export default function EditFacilityHotel(props: any) {
+export default withAuth( function EditFacilityHotel(props: any) {
   const dispatch = useDispatch();
   const { Title, Text } = Typography;
   const { faciById } = useSelector((state: any) => state.HotelReducer);
@@ -278,3 +279,4 @@ export default function EditFacilityHotel(props: any) {
     </Form>
   );
 }
+)

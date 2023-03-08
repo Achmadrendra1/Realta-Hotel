@@ -97,43 +97,76 @@ CREATE OR REPLACE PROCEDURE  payment.insertPaymentTrx(
 )
 AS $$
 DECLARE
-  result text;
+  lastOrderNumber text;
   orderType text;
   currentDate date := NOW();
   orderDate date;
   lastCount int;
   currentCount int;
+  lastCode int;
   newCount text;
+  newLastCount text;
   newCode text;
+  newLastCode text;
   debetAmount int := 0;
   creditAmount int := 0;
   note text;
-  TransactionNumberRef text := FLOOR(RANDOM() * POWER(CAST(10 as BIGINT), 15))::text;
+  TransactionNumberRef text;
 BEGIN
 	IF orderNumber IS NULL THEN
 		CASE
 			WHEN trxType = 'TP'
-				THEN 
-				orderDate := (SELECT COALESCE(MAX(SUBSTRING(patr_trx_id, '#(.*)-')::date), now()::date) from payment.payment_transaction where patr_type = trxType);
+				THEN
+				lastOrderNumber := (SELECT COALESCE(MAX(patr_trx_id)) from payment.payment_transaction where patr_type = trxType);
+				orderDate := (SELECT COALESCE(SUBSTRING(lastOrderNumber, '#(.*)-')::date, now()::date));
 				IF orderDate != currentDate
 					THEN currentCount := 1;
 				ELSE
-					currentCount := (SELECT COALESCE(MAX(SUBSTRING(patr_trx_id, '-(.*)'))::int, 0) from payment.payment_transaction where patr_type = trxType) +1;
+					currentCount := (SELECT COALESCE(SUBSTRING(lastOrderNumber, '-(.*)')::int, 0)) +1;
 				END IF;
 				newCount := lpad(currentCount::text, 4, '0');
 				newCode := CONCAT(trxType, '#', TO_CHAR(currentDate::date, 'YYYYMMDD'), '-', newCount);
 				note := 'Top Up';
 				debetAmount := amount;
+				call payment.insertOneTrx(
+					newCode,
+					debetAmount,
+					creditAmount,
+					trxType,
+					note,
+					OrderNumber,
+					sourceNumber::numeric,
+					targetNumber::numeric,
+					userId
+				);
+				lastCode := currentCount + 1;
+				newLastCount := lpad(lastCode::text, 4, '0');
+				newLastCode := CONCAT(trxType, '#', TO_CHAR(currentDate::date, 'YYYYMMDD'), '-', newLastCount);
+				note := 'Top Up';
+				creditAmount := amount;
+				debetAmount := 0;
+				call payment.insertOneTrx(
+					newLastCode,
+					debetAmount,
+					creditAmount,
+					trxType,
+					note,
+					OrderNumber,
+					sourceNumber::numeric,
+					targetNumber::numeric,
+					userId
+				);
 				UPDATE payment.user_accounts SET usac_saldo = usac_saldo + amount WHERE usac_account_number = targetNumber;
 				UPDATE payment.user_accounts SET usac_saldo = usac_saldo - amount WHERE usac_account_number = sourceNumber;
 
 			WHEN trxType = 'RF'
 				THEN 
-				orderDate := (SELECT COALESCE(MAX(SUBSTRING(patr_trx_id, '#(.*)-')::date), now()::date) from payment.payment_transaction where patr_type = trxType);
+				lastOrderNumber := (SELECT COALESCE(MAX(patr_trx_id)) from payment.payment_transaction where patr_type = trxType);
+				orderDate := (SELECT COALESCE(SUBSTRING(lastOrderNumber, '#(.*)-')::date, now()::date));
 				IF orderDate != currentDate
 					THEN currentCount := 1;
 				ELSE
-					currentCount := (SELECT COALESCE(MAX(SUBSTRING(patr_trx_id, '-(.*)'))::int, 0) from payment.payment_transaction where patr_type = trxType) +1;
+					currentCount := (SELECT COALESCE(SUBSTRING(lastOrderNumber, '-(.*)')::int, 0)) +1;
 				END IF;
 				newCount := lpad(currentCount::text, 4, '0');
 				newCode := CONCAT(trxType, '#', TO_CHAR(currentDate::date, 'YYYYMMDD'), '-', newCount);
@@ -143,45 +176,82 @@ BEGIN
 				
 			WHEN trxType = 'RPY'
 				THEN 
-				orderDate := (SELECT COALESCE(MAX(SUBSTRING(patr_trx_id, '#(.*)-')::date), now()::date) from payment.payment_transaction where patr_type = trxType);
+				lastOrderNumber := (SELECT COALESCE(MAX(patr_trx_id)) from payment.payment_transaction where patr_type = trxType);
+				orderDate := (SELECT COALESCE(SUBSTRING(lastOrderNumber, '#(.*)-')::date, now()::date));
 				IF orderDate != currentDate
 					THEN currentCount := 1;
 				ELSE
-					currentCount := (SELECT COALESCE(MAX(SUBSTRING(patr_trx_id, '-(.*)'))::int, 0) from payment.payment_transaction where patr_type = trxType) +1;
+					currentCount := (SELECT COALESCE(SUBSTRING(lastOrderNumber, '-(.*)')::int, 0)) +1;
 				END IF;
 				newCount := lpad(currentCount::text, 4, '0');
 				newCode := CONCAT(trxType, '#', TO_CHAR(currentDate::date, 'YYYYMMDD'), '-', newCount);
 				note := 'Repayment';
 				creditAmount := amount;
+				
 				UPDATE payment.user_accounts SET usac_saldo = usac_saldo + amount WHERE usac_account_number = targetNumber;
 				UPDATE payment.user_accounts SET usac_saldo = usac_saldo - amount WHERE usac_account_number = sourceNumber;	
 		END CASE;
 	ELSE
 		orderType := SUBSTRING(orderNumber, '(.*)#');
-		orderDate := SUBSTRING(orderNumber, '#(.*)-')::date;
-		lastCount := SUBSTRING(orderNumber, '-(.*)')::int;	
-		IF orderDate != currentDate
-			THEN currentCount := 1;
-		ELSE 
-			currentCount := lastCount + 1;
-		END IF;
-		newCount := lpad(currentCount::text, 4, '0');
 		IF orderType = 'BO'::text
 			THEN 
 			trxType := 'TRB';
+			lastOrderNumber := (SELECT COALESCE(MAX(patr_trx_id)) from payment.payment_transaction where patr_type = trxType);
+				orderDate := (SELECT COALESCE(SUBSTRING(lastOrderNumber, '#(.*)-')::date, now()::date));
+				IF orderDate != currentDate
+					THEN currentCount := 1;
+				ELSE
+					currentCount := (SELECT COALESCE(SUBSTRING(lastOrderNumber, '-(.*)')::int, 0)) +1;
+				END IF;
+			newCount := lpad(currentCount::text, 4, '0');
 			newCode := CONCAT(trxType, '#', TO_CHAR(currentDate::date, 'YYYYMMDD'), '-', newCount);
 			note := 'Booking';
 			creditAmount := amount;
+			
 			UPDATE payment.user_accounts SET usac_saldo = usac_saldo - amount WHERE usac_account_number = sourceNumber;	
 		ELSE
 			trxType := 'ORM';
+			lastOrderNumber := (SELECT COALESCE(MAX(patr_trx_id)) from payment.payment_transaction where patr_type = trxType);
+				orderDate := (SELECT COALESCE(SUBSTRING(lastOrderNumber, '#(.*)-')::date, now()::date));
+				IF orderDate != currentDate
+					THEN currentCount := 1;
+				ELSE
+					currentCount := (SELECT COALESCE(SUBSTRING(lastOrderNumber, '-(.*)')::int, 0)) +1;
+				END IF;
+			newCount := lpad(currentCount::text, 4, '0');
 		 	newCode := CONCAT(trxType, '#', TO_CHAR(currentDate::date, 'YYYYMMDD'), '-', newCount);
 			note := 'Food Order';
 			creditAmount := amount;
 			UPDATE payment.user_accounts SET usac_saldo = usac_saldo - amount WHERE usac_account_number = sourceNumber;	
 			UPDATE resto.order_menus SET orme_pay_type = payType, orme_cardnumber = sourceNumber, orme_is_paid = 'P' where orme_order_number = orderNumber;
 		END IF;
+		call payment.insertOneTrx(
+				newCode,
+				debetAmount,
+				creditAmount,
+				trxType,
+				note,
+				OrderNumber,
+				sourceNumber::numeric,
+				targetNumber::numeric,
+				userId
+			);
 	END IF;
+END; $$ 
+LANGUAGE plpgsql;
+
+CREATE OR REPLACE PROCEDURE payment.insertOneTrx(
+	patr_trx_id			varchar,
+	patr_debet			int,
+	patr_credit			int,
+	patr_type			varchar,
+	patr_note			varchar,
+	patr_order_number	varchar,
+	patr_source_id		numeric,
+	patr_target_id		numeric,
+	patr_user_id		int
+) AS $$
+BEGIN
 	INSERT INTO payment.payment_transaction (
 		patr_trx_id,
 		patr_debet,
@@ -195,19 +265,19 @@ BEGIN
 		patr_user_id,
 		patr_modified_date
 	) VALUES (
-		newCode,
-		debetAmount,
-		creditAmount,
-		trxType,
-		note,
-		OrderNumber,
-		sourceNumber::numeric,
-		targetNumber::numeric,
-		TransactionNumberRef,
-		userId,
+		patr_trx_id,
+		patr_debet,
+		patr_credit,
+		patr_type,
+		patr_note,
+		patr_order_number,
+		patr_source_id,
+		patr_target_id,
+		FLOOR(RANDOM() * POWER(CAST(10 as BIGINT), 15))::text,
+		patr_user_id,
 		now()
 	);
-END; $$ 
+END;$$
 LANGUAGE plpgsql;
 ----------------------------------------------------------------------
 
@@ -262,6 +332,22 @@ CREATE OR REPLACE VIEW payment.user_transactions AS (
 				ELSE 'Completed'
 			END
 		) AS "status",
+		(
+			CASE
+				WHEN p.patr_type = 'ORM'
+				THEN (
+					SELECT orme_pay_type
+					FROM resto.order_menus
+					WHERE orme_order_number = p.patr_order_number
+				)
+				WHEN p.patr_type = 'BO'
+				THEN (
+					SELECT boor_is_paid
+					FROM booking.booking_orders
+					WHERE boor_order_number = p.patr_order_number
+				)
+			END
+		) AS "payType"
 		p.patr_debet			"debit",
 		p.patr_credit			"credit",	
 		p.patr_type				"transactionType",
@@ -291,4 +377,25 @@ CREATE OR REPLACE VIEW payment.user_transactions AS (
 		u.user_full_name		"userFullName"
 	FROM payment.payment_transaction p
 	JOIN users.users u ON u.user_id = p.patr_user_id
+	order by "trxTime" desc
 )
+
+CREATE OR REPLACE VIEW payments_order as 
+(SELECT ptr.patr_trx_id, ptr.patr_order_number, boor.boor_total_amount, 
+ptr.patr_trx_number_ref, ptr.patr_modified_date::date, u.user_full_name
+FROM payment.payment_transaction ptr 
+JOIN booking.booking_orders boor ON boor.boor_order_number = ptr.patr_order_number
+JOIN users.users u ON u.user_id = ptr.patr_user_id
+WHERE boor.boor_is_paid = 'P' AND boor.boor_pay_type != 'C'
+UNION
+--RESTO--
+SELECT ptr.patr_trx_id, ptr.patr_order_number, rest.orme_total_amount, 
+ptr.patr_trx_number_ref, ptr.patr_modified_date::date, u.user_full_name
+FROM payment.payment_transaction ptr 
+JOIN resto.order_menus rest ON rest.orme_order_number = ptr.patr_order_number
+JOIN users.users u ON u.user_id = ptr.patr_user_id
+WHERE rest.orme_is_paid = 'P' AND rest.orme_pay_type != 'C')
+
+select
+(select sum(orme_total_amount) from resto.order_menus where orme_is_paid = 'P') as total_resto,
+(select sum(boor.boor_total_amount) from booking.booking_orders boor where boor_is_paid = 'P') as total_booking

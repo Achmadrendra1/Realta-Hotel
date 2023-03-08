@@ -3,9 +3,9 @@ import { API } from "@/Redux/Configs/consumeApi";
 import axios from "axios";
 import { put } from "redux-saga/effects";
 
-function* handleResto():any{
+function* handleResto(action:any):any{    
     try{
-        const result = yield axios(API('Get',`/list-restaurant`,null));
+        const result = yield axios(API('Get',`/list-restaurant/`+action.payload));
         yield put(doRestoRequestSucceed(result.data))
         return result.data;
     }catch(err:any){

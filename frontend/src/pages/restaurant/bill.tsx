@@ -9,36 +9,16 @@ import { useDispatch, useSelector } from "react-redux";
 
 function Bill() {
   let router = useRouter();
+  const { id } = router.query;
   const dispatch = useDispatch();
-  const [result, setResult] = useState({
-    ormeNumber: "",
-    trxNumber : '',
-    payType : '',
-    subtotal: 0,
-    tax: 0,
-    total: 0,
-  });
 
   const userLoggedIn = useSelector( (state: any) => state.GetUserReducer.getUser);
   const orderFromUser = useSelector( (state: any) => state.userOrderReducer.userOrder);
   const userid = userLoggedIn[0]?.user_id;
-
-    console.log('orderFromUser',orderFromUser);
-  console.log(orderFromUser)
-
+ 
   useEffect(() => {
-    // get order number fom local storage
-    const orderFromlocalstorage = localStorage.getItem("result");
-    const parsedOrderNumber =
-      orderFromlocalstorage !== null ? JSON.parse(orderFromlocalstorage) : [];
-    // const data = {
-    //   ormeNumber: parsedOrderNumber.ormeNumber,
-    //   userId: userid,
-    // };
-  
-    // setResult(parsedOrderNumber);
-    dispatch(doGetUserOrder(parsedOrderNumber.ormeNumber));
-  }, []);
+    dispatch(doGetUserOrder(id));
+  }, [id]);
 
   // back page
   function back() {
@@ -48,6 +28,16 @@ function Bill() {
     router.back();
     router.back();
   }
+  
+  let subtotal = 0;
+  orderFromUser && orderFromUser.map((order:any) => {
+    subtotal = subtotal +  parseInt(order.orme_subtotal.split(',')[0].replace(/[^0-9]/g, ''))
+  })
+ 
+  const total = parseInt(orderFromUser[0]?.orme_total_amount.split(',')[0].replace(/[^0-9]/g, ''))
+  const tax = total-subtotal
+  
+  console.log(orderFromUser)
   return (
     <>
       <Head>
@@ -58,7 +48,7 @@ function Bill() {
       </Head>
       <main>
         <Layouts>
-          <Breadcrumb className="pb-5">
+          {/* <Breadcrumb className="pb-5">
             <Breadcrumb.Item>
               <a href="/restaurant">Restaurant</a>
             </Breadcrumb.Item>
@@ -69,19 +59,21 @@ function Bill() {
               <a onClick={back}>Order</a>
             </Breadcrumb.Item>
             <Breadcrumb.Item>Bill</Breadcrumb.Item>
-          </Breadcrumb>
-          <div className="w-2/5 border rounded-lg shadow p-4 mx-auto">
-            {/* <p className='text-xl text-center font-bold uppercase'>Item Ordered</p> */}
+          </Breadcrumb> */}
+          <div className="w-96 mt-4 mb-6 bg-white border rounded-2xl shadow-lg p-4 mx-auto">
+            <p className="text-xl text-center font-bold uppercase">
+              Item Ordered
+            </p>
             <p className="text-lg font-semibold text-center uppercase">
               Hotel Realta
             </p>
-            <div className="flex justify-center">
-              <QRCode value={result.ormeNumber} size={96} />
+            <div className="flex justify-center mt-2">
+              <QRCode value={orderFromUser[0]?.orme_order_number} size={96} />
             </div>
-            <div className="mt-2">
+            <div className="mt-2 ml-6 font-semibold">
               <div className="flex">
                 <p className="min-w-[110px]">Order Number</p>
-                <p>: {result.ormeNumber}</p>
+                <p>: {orderFromUser[0]?.orme_order_number}</p>
               </div>
               <div className="flex">
                 <p className="min-w-[110px]">Invoice Number</p>
@@ -89,65 +81,61 @@ function Bill() {
               </div>
               <div className="flex">
                 <p className="min-w-[110px]">Payment Type</p>
-                <p>: {orderFromUser[0]?.payment_type == null ? 'Cash' : orderFromUser[0]?.payment_type}</p>
+                <p>
+                  :{" "}
+                  {orderFromUser[0]?.payment_type == null
+                    ? "Cash"
+                    : orderFromUser[0]?.payment_type}
+                </p>
               </div>
             </div>
-            <Divider />
-            {orderFromUser &&
-              orderFromUser.map((order: any) => (
-                <div className=" mt-2 my-2 hover:bg-slate-100 flex">
-                  <div className=" mt-1 w-full">
-                    <div className="flex">
-                      <p className="font-bold w-4/5 text-[16px]">
-                        {order.reme_name}
-                      </p>
-                    </div>
-                    <p className="flex">
-                      {order.orme_price}{" "}
-                      <span className="text-red-400 ml-4">
-                        x {order.orme_qty}
-                      </span>
-                      <span className="ml-2 flex">
-                        ={" "}
-                        <p className="ml-4 font-semibold text-md">
-                          {order.orme_subtotal}
-                        </p>
-                      </span>
+            <Divider className="border-2 bg-black" />
+            {orderFromUser.map((order: any, index: number) => (
+              <div key={index} className="flex items-center">
+                <div className=" mt-1 w-full ml-5">
+                  <div className="flex">
+                    <p className="font-bold w-4/5 text-lg">
+                      {order.reme_name}
                     </p>
                   </div>
+                  <p className="flex ml-6 items-center">
+                    {order.orme_price}{" "}
+                    <span className="text-red-400 ml-4"> x {order.orme_qty}</span>
+                    <span className="ml-2 flex">
+                      <p className="ml-4 font-semibold text-lg">
+                        = {order.orme_subtotal}
+                      </p>
+                    </span>
+                  </p>
                 </div>
-              ))}
-
-            <div className="mt-6">
-              <table className="py-5 bg-slate-100 w-full">
-                <p className="font-bold text-center py-4 text-lg">
-                  Payment Summary
-                </p>
+              </div>
+            ))}
+            <Divider className="border-2 bg-black" />
+            <div className="mt-6 mx-4">
+              <p className="font-bold text-center text-lg mb-4">
+                Payment Summary
+              </p>
+              <table className="py-5 w-full">
                 <tbody>
-                  {/* <div className="p-4"> */}
-                    <tr className="hover:bg-slate-300">
-                      <td className="w-full">Sub total</td>
-                      <td className="text-right">
-                        Rp.{result.subtotal.toLocaleString("id-ID")}
-                      </td>
-                    </tr>
-                    {/* <tr className='hover:bg-slate-300'>
-                                            <td>Discount [dapet dr manaa?]</td>
-                                            <td className='text-right'>Rp.0</td>
-                                            </tr> */}
-                    <tr className="hover:bg-slate-300">
-                      <td className=" py-2">Tax(11%)</td>
-                      <td className="text-right">
-                        {result.tax.toLocaleString("id-ID")}
-                      </td>
-                    </tr>
-                    <tr className="font-bold hover:bg-slate-300">
-                      <td className=" py-2">Total payment</td>
-                      <td className="text-right">
-                        Rp.{result.total.toLocaleString("id-ID")}
-                      </td>
-                    </tr>
-                  {/* </div> */}
+                  <tr className="">
+                    <td className="w-full">Sub total</td>
+                    <td className="text-right">
+                      {orderFromUser[0]?.orme_subtotal}
+                    </td>
+                  </tr>
+                  <tr className="">
+                    <td className=" py-2">Tax(11%)</td>
+                    <td className="text-right">{tax.toLocaleString("id-ID", {
+                        style: "currency",
+                        currency: "IDR",
+                      })}</td>
+                  </tr>
+                  <tr className="font-bold">
+                    <td className=" py-2">Total payment</td>
+                    <td className="text-right">
+                      {orderFromUser[0]?.orme_total_amount}
+                    </td>
+                  </tr>
                 </tbody>
               </table>
             </div>

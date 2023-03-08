@@ -44,14 +44,8 @@ export class RestoMenuPhotosController {
         })
     }))
     addMultiplePhoto(@UploadedFiles() rempUrl: Array<Express.Multer.File>, @Body() body){
-        console.log('di controller multiple:', rempUrl);
-        rempUrl.map(url => {
-            console.log(url);
-            
-        })
-
-       this.restoMenuPhotos.addMultiplePhoto(rempUrl,body)
-        return rempUrl;
+        return this.restoMenuPhotos.addMultiplePhoto(rempUrl,body)
+        
     }
  
  

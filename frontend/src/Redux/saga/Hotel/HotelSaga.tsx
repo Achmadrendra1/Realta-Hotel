@@ -39,7 +39,7 @@ import {
   updateHotelFailed,
   updateHotelSucceed,
 } from "@/Redux/Action/Hotel/HotelAction";
-import { API } from "@/Redux/Configs/consumeApi";
+import { API, FORMAPI } from "@/Redux/Configs/consumeApi";
 import axios from "axios";
 import { call, put } from "redux-saga/effects";
 
@@ -191,18 +191,19 @@ function* handleFapho(): any {
     yield put(getFaphoFailed(e));
   }
 }
+
 function* handleAddFapho(action: any): any {
   const { payload } = action;
   const id = payload.get(`faphoUrl`);
-  // console.log(id);
   try {
-    const result = yield axios(API("Post", `/facility-photos/`, payload));
+    const result = yield axios(FORMAPI("Post", `/facility-photos/`, payload));
     yield put(addFaphoSuccess(result.data));
     return result.data;
   } catch (error) {
     yield put(addFaphoFailed(error));
   }
 }
+
 function* handleUpdateFapho(action: any): any {
   const { payload } = action;
   try {
@@ -215,6 +216,7 @@ function* handleUpdateFapho(action: any): any {
     yield put(updateFaphoFailed(error));
   }
 }
+
 function* handleDeleteFapho(action: any): any {
   const { payload } = action;
   try {
@@ -234,6 +236,7 @@ function* handleFaph(): any {
     yield put(getFaphFailed(e));
   }
 }
+
 function* handleAddFaph(action: any): any {
   const { payload } = action;
   try {
@@ -246,6 +249,7 @@ function* handleAddFaph(action: any): any {
     yield put(addFaphFailed(error));
   }
 }
+
 function* handleUpdateFaph(action: any): any {
   const { payload } = action;
   try {
@@ -258,6 +262,7 @@ function* handleUpdateFaph(action: any): any {
     yield put(updateFaphFailed(error));
   }
 }
+
 function* handleDeleteFaph(action: any): any {
   const { payload } = action;
   try {

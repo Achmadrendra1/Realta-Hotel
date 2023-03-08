@@ -17,6 +17,7 @@ import {
   Modal,
   Space,
   Input,
+  Card,
 } from "antd";
 import { ColumnsType, TableProps } from "antd/es/table";
 import React, { useEffect, useState } from "react";
@@ -24,6 +25,7 @@ import { useDispatch, useSelector } from "react-redux";
 import AddBank from "./addBank";
 import EditBank from "./editBank";
 import Buttons from "@/components/Button";
+import withAuth from "@/PrivateRoute/WithAuth";
 
 interface DataType {
   key: React.Key;
@@ -32,17 +34,21 @@ interface DataType {
   bankEntityId: number;
 }
 
-export default function Bank() {
+export default withAuth( function Bank() {
   const dispatch = useDispatch();
   const [isOpenAddBank, setOpenAddBank] = useState(false);
   const [isOpenEditBank, setOpenEditBank] = useState(false);
   const [id, setId] = useState(0);
   const [filteredData, setFilteredData] = useState([]);
   const [messageApi, contextHolder] = message.useMessage();
-  const { payBank, error } = useSelector((state: any) => state.payBankReducer);
+  const { payBank, error, total, currentPage } = useSelector(
+    (state: any) => state.payBankReducer
+  );
+
   useEffect(() => {
     dispatch(doBankRequest());
   }, []);
+
   useEffect(() => {
     if (error !== null) {
       messageApi
@@ -95,7 +101,13 @@ export default function Bank() {
       },
     });
   };
-  let countBank = payBank.length;
+
+  useEffect(() => {
+    if (payBank.length === 0 && currentPage > 1) {
+      dispatch(doBankRequest({ page: currentPage - 1 }));
+    }
+  }, [total]);
+
   const columnsBank: ColumnsType<DataType> = [
     {
       title: "ID",
@@ -141,28 +153,16 @@ export default function Bank() {
     },
   ];
 
-  const onChange: TableProps<DataType>["onChange"] = (
-    pagination,
-    filters,
-    sorter,
-    extra
-  ) => {
-    console.log("params", pagination, filters, sorter, extra);
-  };
-
-  const onSearch = (value: string) => {
-    const filteredData = payBank.filter((item: any) => {
-      const values = Object.values(item).map((x: any) =>
-        x.toString().toLowerCase()
-      );
-      return values.some((x) => x.includes(value.toLowerCase()));
-    });
-    setFilteredData(filteredData);
-  };
-
-  const tableData = filteredData.length > 0 ? filteredData : payBank;
-
   const { Search } = Input;
+  const handleTableChange = (pagination: any) => {
+    dispatch(doBankRequest({ page: pagination }));
+  };
+
+  const handleSearch = (event: any) => {
+    event
+      ? dispatch(doBankRequest({ page: 1, keyword: event.target.value }))
+      : dispatch(doBankRequest());
+  };
   return (
     <div>
       {contextHolder}
@@ -192,29 +192,39 @@ export default function Bank() {
               <div className="flex justify-between mb-4">
                 <Search
                   placeholder="Search"
-                  onSearch={onSearch}
+                  onChange={handleSearch}
                   style={{ width: 200 }}
                 />
                 <Buttons funcs={() => setOpenAddBank(true)}>
-                Add New Bank
-              </Buttons>
+                  Add New Bank
+                </Buttons>
               </div>
               <Table
                 columns={columnsBank}
-                dataSource={tableData}
-                onChange={onChange}
+                dataSource={payBank}
+                pagination={{
+                  current: currentPage,
+                  total: total,
+                  pageSize: 10,
+                  showQuickJumper: true,
+                  showTotal: (total) => `${total} items`,
+                  onChange: handleTableChange,
+                }}
               />
             </div>
           </div>
         </Col>
         <Col span={8} className="text-center">
-          <Statistic
-            title="Total Bank"
-            value={countBank}
-            prefix={<BankOutlined />}
-          />
+          <Card className="bg-[#754CFF] text-white m-auto w-3/5" hoverable>
+            <Statistic
+              title={<span className="text-[#F2F1FA] uppercase text-lg font-semibold">Total Bank</span>}
+              value={total}
+              prefix={<BankOutlined />}
+              valueStyle={{color : '#F2F1FA', fontWeight: 'bold'}}
+            />
+          </Card>
         </Col>
       </Row>
     </div>
   );
-}
+})

@@ -19,9 +19,9 @@ export class OrderMenusService {
     async getOrderNumber(data:any){
         // console.log(data);
         // const id = Number(data.userId);
-        // const id = 1;
+        // const id = 1; 
          
-        return await this.orderMenuRepository.query(`SELECT * FROM resto.ordermenuscomplete($1)`,[data.ormeNumber])
+        return await this.orderMenuRepository.query(`SELECT * FROM resto.ordermenuscomplete($1)`,[data.orderNumber])
     }
  
     async getCodeDesc(){

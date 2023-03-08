@@ -10,15 +10,15 @@ export class UserAccountService {
     @InjectRepository(UserAccounts)
     private uacRepository: Repository<UserAccounts>,
   ) {}
-  x;
+  // x;
 
   async getAll() {
     return await this.uacRepository.find();
   }
 
-  async getPayment() {
+  async getAccount(id) {
     return await this.uacRepository.find({
-      where: { usacUserId: 1 },
+      where: { usacUserId: id},
     });
   }
 

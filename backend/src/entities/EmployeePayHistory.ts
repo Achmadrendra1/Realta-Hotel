@@ -1,9 +1,11 @@
-import { Column, Entity, Index, JoinColumn, ManyToOne } from "typeorm";
-import { Employee } from "./Employee";
+import { Column, Entity, Index } from "typeorm";
 
 @Index("pk_ephi_id", ["ephiRateChangeDate"], { unique: true })
 @Entity("employee_pay_history", { schema: "hr" })
 export class EmployeePayHistory {
+  @Column("integer", { name: "ephi_emp_id", nullable: true })
+  ephiEmpId: number | null;
+
   @Column("timestamp without time zone", {
     primary: true,
     name: "ephi_rate_change_date",
@@ -21,11 +23,4 @@ export class EmployeePayHistory {
     nullable: true,
   })
   ephiModifiedDate: Date | null;
-
-  @ManyToOne(() => Employee, (employee) => employee.employeePayHistories, {
-    onDelete: "CASCADE",
-    onUpdate: "CASCADE",
-  })
-  @JoinColumn([{ name: "ephi_emp_id", referencedColumnName: "empId" }])
-  ephiEmp: Employee;
 }

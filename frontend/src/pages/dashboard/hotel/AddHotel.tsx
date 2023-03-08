@@ -1,3 +1,4 @@
+import withAuth from "@/PrivateRoute/WithAuth";
 import {
   addHotel,
   getAddress,
@@ -8,7 +9,7 @@ import { useFormik } from "formik";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
-export default function AddHotelRealta(props: any) {
+export default withAuth( function AddHotelRealta(props: any) {
   const dispatch = useDispatch();
   const [form] = Form.useForm();
   const { Title, Text } = Typography;
@@ -189,3 +190,4 @@ export default function AddHotelRealta(props: any) {
     </Form>
   );
 }
+)

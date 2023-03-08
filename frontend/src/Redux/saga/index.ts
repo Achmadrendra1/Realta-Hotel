@@ -7,10 +7,10 @@ import {
 } from "./HR/department";
 import { deptType } from "../Constant/HR/deptType";
 import { empType } from "../Constant/HR/empType";
-import { handleAddEmployee, handleDelEmployee, handleDetailEmployee, handleGetEmployees } from "./HR/employees";
+import { handleAddEmployee, handleDelEmployee, handleDetailEmployee, handleGetEmployees, handleUpdateEmployee } from "./HR/employees";
 import UserConst from "../Constant/User/UserConst";
 import { HandleLoginUser } from "./User/auth";
-import { HandleEditProfile, HandleGetUser } from "./User/getUser";
+import { HandleEditProfile, HandleGetUser, HandleUpdatePassword } from "./User/getUser";
 import PaymentConst from "../Constant/Payment/PaymentConst";
 import {
   handleTrxDashRequest,
@@ -29,6 +29,7 @@ import {
   handleCheckSecure,
   handleGetHistoryTrx,
   handleCreateTransaction,
+  handleBankAllRequest,
 } from "./Payment/paymentSagas";
 
 //Master
@@ -131,6 +132,8 @@ import {
   handleUpdateHotel,
 } from "./Hotel/HotelSaga";
 import BookingConstant from "../Constant/Booking/BookingConstant";
+import { workType } from "../Constant/HR/workType";
+import { handleServicesList, handleWorkDetail, handleWorkorder } from "./HR/workorder";
 import { handleBoorCreateFinal, handleBoorLast, handleSpBoorInvoice, handleSpFacilities, handleSpHotel, handleSpHotelReviews, handleSpof } from "./Booking/BookingSaga";
 
 // Purchasing
@@ -158,9 +161,12 @@ import { handleUserMenu } from "./Resto/userMenuProcess";
 
 export default function* rootSaga() {
   yield all([
+    //user and auth
     takeEvery(UserConst.LOGIN_USER, HandleLoginUser),
     takeEvery(UserConst.GET_DATA_USER, HandleGetUser),
-    takeEvery(UserConst.EDIT_DATA_PROFILE, HandleEditProfile),
+    takeEvery(UserConst.EDIT_DATA_PROFILE,HandleEditProfile),
+    takeEvery(UserConst.UPDATE_PASSWORD,HandleUpdatePassword),
+
 
     takeEvery(deptType.GET_DATA, handleGetDept),
     takeEvery(deptType.ADD_DATA, handleAddDept),
@@ -176,6 +182,7 @@ export default function* rootSaga() {
     takeEvery(PaymentConst.UPDATE_PAYMENT_GATEWAY, handlePagaUpdate),
     takeEvery(PaymentConst.DELETE_PAYMENT_GATEWAY, handlePagaDelete),
     takeEvery(PaymentConst.GET_BANK_REQUEST, handleBankRequest),
+    takeEvery(PaymentConst.GET_ALL_BANK_REQUEST, handleBankAllRequest),
     takeEvery(PaymentConst.ADD_BANK, handleBankAdd),
     takeEvery(PaymentConst.UPDATE_BANK, handleUpdateBank),
     takeEvery(PaymentConst.DELETE_BANK, handleDeleteBank),
@@ -258,6 +265,11 @@ export default function* rootSaga() {
     takeEvery(jobType.GET_SELECT_JOB, handleSelectJob),
     takeEvery(empType.ADD_DATA, handleAddEmployee),
     takeEvery(empType.DEL_DATA, handleDelEmployee),
+    takeEvery(empType.UPDATE_DATA, handleUpdateEmployee),
+    takeEvery(workType.GET_WORK_ORDER, handleWorkorder),
+    takeEvery(workType.GET_DETAIL, handleWorkDetail),
+    takeEvery(workType.SERVICE_WORK, handleServicesList),
+
     //Hotel
     takeEvery(HotelConstant.GET_HOTEL, handleHotel),
     takeEvery(HotelConstant.GET_HOTEL_ID, handleHotelID),
@@ -322,10 +334,10 @@ export default function* rootSaga() {
     takeEvery(menuConstant.ADD_MENU, handleAddMenu),
     takeEvery(menuConstant.DELETE_MENU, handleDeleteMenu),
     takeEvery(restoConstant.GET_RESTOS, handleResto),
-    takeEvery(photoConstant.ADD_PHOTO, handleAddMenuPhoto),
     takeEvery(photoConstant.DELETE_PHOTO, handleDeletePhoto),
     takeEvery(photoConstant.GET_PHOTO, handleGetPhoto),
     takeEvery(photoConstant.UPDATE_PRIMARY, handleUpdatePrimary),
+    takeEvery(photoConstant.ADD_PHOTO, handleAddMenuPhoto),
     takeEvery(orderConstant.GET_ORDERS, handleOrder),
     takeEvery(orderConstant.ADD_ORDERS, handleAddOrder),
     takeEvery(numberOrderConst.GET_NUMBER_ORDER, handleOrderNumber),
@@ -333,4 +345,6 @@ export default function* rootSaga() {
     takeEvery(userMenuConstant.GET_MENU_USER, handleUserMenu),
 
   ]);
+  console.log('masuk saga index');
+  
 }
