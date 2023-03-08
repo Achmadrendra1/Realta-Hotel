@@ -14,28 +14,49 @@ import AddFacilities from "./AddFacility";
 import EditFacilityHotel from "./EditFacility";
 import AddPhoto from "./AddPhoto";
 import withAuth from "@/PrivateRoute/WithAuth";
+import Link from "next/link";
 
 export default withAuth( function HotelDetails() {
   const dispatch = useDispatch();
-  const router = useRouter();
-  const { hotelId } = router.query;
   const { hotelById } = useSelector((state: any) => state.HotelReducer);
   const { facilities } = useSelector((state: any) => state.HotelReducer);
-  const { Title, Text } = Typography;
-  const [add, setAdd] = useState(false);
-  const [edit, setEdit] = useState(false);
   const [IdFaci, setFaciId] = useState();
-  const [upload, setUpload] = useState(false);
+  const [OpenAdd, setOpenAdd] = useState(false);
+  const [OpenEdit, setOpenEdit] = useState(false);;
+  const [OpenUpload, setOpenUpload] = useState(false);
   const [refresh, setRefresh] = useState(false);
+  const router = useRouter();
+  const { hotelId } = router.query;
+  const { Title, Text } = Typography;
 
   useEffect(() => {
     dispatch(getHotelID(hotelId));
     setRefresh(false);
   }, [hotelId]);
 
+  const handleClose = (data: boolean) =>{
+    setOpenAdd(data);
+    setOpenEdit(data);
+    setOpenUpload(data);
+  }
+
+  const handleOk = () => {
+    setTimeout(() => {
+      setOpenAdd(false);
+      setOpenEdit(false);
+      setOpenUpload(false);
+    },2000)
+  }
+
+  const handleCancel = () => {
+    setOpenAdd(false);
+    setOpenEdit(false);
+    setOpenUpload(false);
+  }
+
   const onClickEdit = (id: any) => {
     setFaciId(id);
-    setEdit(true);
+    setOpenEdit(true);
   };
 
   const onDelete = (faciId: any) => {
@@ -43,9 +64,10 @@ export default withAuth( function HotelDetails() {
   };
 
   const onUpload = (id: any) => {
-    setUpload(true);
+    setOpenUpload(true);
     setFaciId(id);
   };
+
   const column = [
     {
       title: "ID",
@@ -150,59 +172,65 @@ export default withAuth( function HotelDetails() {
 
   return (
     <Dashboard>
-      {upload ? (
+      {OpenUpload ? 
         <AddPhoto
           id={IdFaci}
-          setDisplay={setUpload}
-          closeUpload={() => setUpload(false)}
-          onRefresh={() => setUpload(true)}
+          showUpload = {OpenUpload}
+          okUpload = {handleOk}
+          cancelUpload = {handleCancel}
+          handleClose={handleClose}
+          onRefresh={() => setRefresh(true)}
         />
-      ) : edit ? (
+       : null }
+      
+      {OpenEdit ? 
         <EditFacilityHotel
           id={IdFaci}
-          setDisplay={setEdit}
-          closeEdit={() => setEdit(false)}
-          onRefresh={() => setRefresh(true)}
+          showEdit={OpenEdit}
+          okEdit = {handleOk}
+          cancelEdit = {handleCancel}
+          handleClose={handleClose}
           htlid={hotelId}
           htlname={hotelById.hotelName}
         />
-      ) : add ? (
+       : null }
+      {OpenAdd ? 
         <AddFacilities
-          setDisplay={setAdd}
-          closeAdd={() => setAdd(false)}
-          onRefresh={() => setRefresh(true)}
+          showAdd={OpenAdd}
+          okAdd = {handleOk}
+          cancelAdd = {handleCancel}
+          handleClose={handleClose}
           htlid={hotelId}
           htlname={hotelById.hotelName}
         />
-      ) : (
-      <>
+       : null } 
         <Breadcrumb>
           <Breadcrumb.Item>
-            <a href="/dashboard/hotel"> Hotel</a>
+            <Link href="/dashboard/hotel"> Hotel</Link>
           </Breadcrumb.Item>
           <Breadcrumb.Item>
-            <a href={`/dashboard/hotel/${hotelId}`}> Facilities</a>
+            <Link href={`/dashboard/hotel/${hotelId}`}> Facilities</Link>
           </Breadcrumb.Item>
         </Breadcrumb>
 
         <Row>
           <Col span={5}>
             <img
-              src="https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png"
+              src={`${configuration.BASE_URL}/facility-photos/src/Gambar4-1678195893437-146391459.png`}
               width={200}
               className="rounded-xl"
             />
           </Col>
           <Col span={11}>
             <Title level={3}>{hotelById?.hotelName}</Title>
-            <Text type="secondary">{hotelById.hotelAddr?.addrLine1}</Text>
+            <Text type="secondary">{hotelById?.hotelAddr?.addrLine1}</Text>
             <br />
-            <Text strong>{hotelById.hotelDescription}</Text>
+            <Text strong>{hotelById?.hotelDescription}</Text>
           </Col>
           <Col span={8}>
             <Space direction="vertical">
-              <Text>{hotelById.hotelPhonenumber}</Text>
-              <Rate disabled defaultValue={hotelById.hotelRatingStar} />
+              <Rate defaultValue={hotelById.hotelRatingStar} disabled />
+              <Text>{hotelById.hotelPhonenumber}</Text>              
             </Space>
           </Col>
         </Row>
@@ -216,7 +244,7 @@ export default withAuth( function HotelDetails() {
               </Col>
               <Col></Col>
               <Col className="ml-auto">
-                <Buttons funcs={() => setAdd(true)}>Add Facilities</Buttons>
+                <Buttons funcs={() => setOpenAdd(true)}>Add Facilities</Buttons>
               </Col>
             </Row>
             <Table
@@ -226,8 +254,6 @@ export default withAuth( function HotelDetails() {
             />
           </Col>
         </Row>
-      </>
-      )}
     </Dashboard>
   );
 }
