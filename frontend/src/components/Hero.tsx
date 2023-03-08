@@ -10,7 +10,8 @@ import {
   DatePicker,
   Button,
 } from "antd";
-import Buttons from "./Button";
+import { useRouter } from "next/router";
+import { useState } from "react";
 
 const Hero = () => {
   const heros =
@@ -18,6 +19,20 @@ const Hero = () => {
   const float = "absolute bg-white rounded-lg drop-shadow-lg py-5 px-8 w-2/3";
   const input = "outline-0 text-md py-2";
   const { RangePicker } = DatePicker;
+  const router = useRouter()
+  const [location, setLocation] = useState('')
+  const [date, setDate] = useState([])
+  const onSearch = () => {
+    router.push(
+      { 
+          pathname: 'booking/', 
+          query: {
+              location: location,
+              date: date,
+          }
+      }, 'booking/'
+    )
+  }
   return (
     <Layout className="bg-[#f1f2fa] py-10">
       <div className={heros}>
@@ -30,34 +45,12 @@ const Hero = () => {
               <Row className="">
                 <Col span={8} className="px-4 text-start">
                   <p className="text-lg font-semibold ml-2">Locations</p>
-                  <Select
-                    showSearch
+                  <Input
                     bordered={false}
                     allowClear
                     className="w-full"
                     placeholder="Hotel Locations"
-                    optionFilterProp="children"
-                    // onChange={onChange}
-                    // onSearch={onSearch}
-                    filterOption={(input, option) =>
-                      (option?.label ?? "")
-                        .toLowerCase()
-                        .includes(input.toLowerCase())
-                    }
-                    options={[
-                      {
-                        value: "Bogor",
-                        label: "Bogor",
-                      },
-                      {
-                        value: "Jakarta",
-                        label: "Jakarta",
-                      },
-                      {
-                        value: "Bandung",
-                        label: "Bandung",
-                      },
-                    ]}
+                    onChange={e => setLocation(e.target.value)}
                   />
                 </Col>
                 <Divider
@@ -67,12 +60,15 @@ const Hero = () => {
                     height: 50,
                     borderLeftWidth: 2,
                     borderLeftStyle: "solid",
-                    borderLeftColor: "#000",
+                    borderLeftColor: "#C0C1C0",
                   }}
                 />
                 <Col span={10} className="mx-2">
                   <p className="text-lg font-semibold text-start">Date</p>
-                  <RangePicker className="w-full" bordered={false} />
+                  <RangePicker className="w-full" bordered={false} 
+                    onChange={(value, dateString: any) =>
+                      setDate(dateString)
+                    }/>
                 </Col>
                 <Divider
                   type="vertical"
@@ -81,12 +77,12 @@ const Hero = () => {
                     height: 50,
                     borderLeftWidth: 2,
                     borderLeftStyle: "solid",
-                    borderLeftColor: "#000",
+                    borderLeftColor: "#C0C1C0",
                   }}
                 />
                 <Col className="">
                   <div className="mt-1 ml-4">
-                    <Button className="rounded-full h-12 w-28 bg-[#744cff] text-lg text-[#f1f2fa] font-semibold">Search</Button>
+                    <Button className="rounded-full h-12 w-28 bg-[#744cff] text-md text-[#f1f2fa] font-regular" onClick={() => onSearch()}>Search</Button>
                   </div>
                 </Col>
               </Row>
