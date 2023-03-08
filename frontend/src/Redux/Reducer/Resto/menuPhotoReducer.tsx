@@ -16,6 +16,8 @@ function menuPhotoReducer(state = initialState, action:any){
             return {...state, menuPhoto: action.payload}
 
         case photoConstant.ADD_PHOTO:
+            console.log('masuk reducer add photo');
+            
             return {...state};
         case photoConstant.ADD_PHOTO_SUCCEED:
             return {

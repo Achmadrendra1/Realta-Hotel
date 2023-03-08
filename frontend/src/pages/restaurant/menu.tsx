@@ -4,10 +4,7 @@ import React, { useEffect, useState } from "react";
 import {
   Affix,
   Breadcrumb,
-  Button,
-  Card,
-  Carousel,
-  InputNumber,
+  Button, 
   Modal,
   Pagination,
   Radio,
@@ -15,7 +12,7 @@ import {
   Tag,
 } from "antd";
 import Image from "next/image";
-import { DeleteOutlined, DownOutlined, PlusOutlined } from "@ant-design/icons";
+import { DeleteOutlined, DownOutlined, MinusCircleOutlined, PlusCircleOutlined, PlusOutlined } from "@ant-design/icons";
 import type { MenuProps } from "antd";
 import { Dropdown, Space, Typography } from "antd";
 import Link from "next/link";
@@ -27,14 +24,9 @@ import { doAddOrder, doOrder } from "@/Redux/Action/Resto/orderAction";
 import { doOrderNumberReq } from "@/Redux/Action/Resto/numberOrderAction";
 import axios from "axios";
 import { API } from "@/Redux/Configs/consumeApi";
+import Buttons from "@/components/Button";
 
-// const cartFromLocalStorage = JSON.parse(localStorage.getItem("cart") || "[]" )
-
-export default function menu({ restaurant }) {
-  // console.log(restaurant,'restaurant');
-
-  // const checkout = typeof window !== 'undefined' ? JSON.parse(localStorage.getItem('cart') || "[]") : null;
-  // const [cart, setCart] = useState(checkout)
+export default function menu({ restaurant }:any) {
   let dispatch = useDispatch();
   const user = useSelector((state: any) => state.GetUserReducer.getUser);
   let userid = user[0]?.user_id;
@@ -43,12 +35,193 @@ export default function menu({ restaurant }) {
   let numberOrder = useSelector(
     (state: any) => state.numberOrderReducer.numberOrder
   );
+  let router = useRouter(); 
 
-  // console.log(userid);
+  let listmenu = menus.data; 
 
+  // search data
+  const [search, setSearch] = useState("");
+  const [sortedData, setSorted] = useState(""); 
+
+  // ------------------------ PAGINATION
+  const [currentpage, setCurrentPage] = useState(1);
+  const handlePagination = (page: any) => { 
+    setCurrentPage(page);
+  };
+
+  // panggil data per page
+  useEffect(() => { 
+    let faci_id = restaurant.faci_id; 
+
+    let data = {
+      faci_id,
+      search,
+      currentpage,
+      sortedData
+    }
+
+    dispatch(doUserMenuReq(data));
+    dispatch(doOrder());
+    dispatch(doOrderNumberReq());
+  }, [menus, search, currentpage, sortedData]);
+
+  const items: MenuProps["items"] = [
+    {
+      key: "1",
+      label: "Harga Terendah",
+      onClick: () => {
+        handlesort("ASC");
+      },
+    },
+    {
+      key: "2",
+      label: "Harga Tertinggi",
+      onClick: () => {
+        handlesort("DESC");
+      },
+    },
+  ];
+
+  const [cart, setCart] = useState([]);
+ 
+  useEffect(() => {
+    const cartdrlocalstorage = localStorage.getItem("cart");
+    const parsedCart = cartdrlocalstorage !== null ? JSON.parse(cartdrlocalstorage) : [];
+    cart ? setCart(parsedCart) : null;
+  }, []);
+
+  useEffect(() => {
+    if (cart.length === 0) return
+      localStorage.setItem("cart", JSON.stringify(cart)); 
+
+    localStorage.setItem("result", JSON.stringify(ormeNumber));
+  }, [cart]);
+
+  useEffect(() => {
+    const cartdrlocalstorage = localStorage.getItem("cart");
+    const parsedCart =
+      cartdrlocalstorage !== null ? JSON.parse(cartdrlocalstorage) : [];
+    setCart(parsedCart);
+  }, []);
+
+  const addtocart = (menu: any) => {
+    let newCart:any = [...cart];
+    let itemInCart:any = cart.find((item: any) => menu.remename === item.remename); 
+    if (!itemInCart) {
+      let itemInCart:any = {
+        ...menu, 
+        quantity: 1,
+        subtotal: 0,
+        orderNumber: code(),
+      };
+      let numberOfPrice = Number(
+        menu.remeprice.split(",")[0].replace(/[^0-9]/g, "")
+      ); 
+      itemInCart.subtotal = itemInCart.quantity * numberOfPrice;
+      newCart.push(itemInCart);
+    } else {
+      itemInCart.quantity++; 
+      let numberString = menu.remeprice.split(",")[0].replace(/[^0-9]/g, "");
+      const numberOfPrice = parseInt(numberString);
+      itemInCart.subtotal = itemInCart.quantity * numberOfPrice;
+      // console.log(typeof numberString)
+    }
+    setCart(newCart);
+  };
+ 
+  const removeFromCart = (productToRemove: any) => { 
+    setCart(cart.filter((product: any) => product !== productToRemove));
+    console.log(getCartTotal(),'cart');
+    
+    if(cart.length === 1){
+      localStorage.setItem("cart", JSON.stringify([]));
+    }
+  };
+
+  const clearCart = (): any => {
+    setCart([]);
+  };
+
+  const getCartTotal = (): number => {
+    return cart.reduce((sum: number, { quantity }) => sum + quantity, 0); 
+  };
+
+  const setQuantity = (product: any, amount: any) => {
+    // debugger;
+    const newCart:any = [...cart];
+    newCart.find((item:any) => item.remename === product.remename).quantity =
+      amount;
+    setCart(newCart);
+  };
+
+  
+  // quantity by incdecr 
+  function inc(product:any){
+    const newcart:any = [...cart];
+    newcart.map((cart:any) => {
+      let price = Number(cart.remeprice.split(",")[0].replace(/[^0-9]/g, ""))
+      if(cart.remename === product.remename){
+        cart.quantity += 1;
+        cart.subtotal = price * cart.quantity; 
+      }
+
+    }) 
+    setCart(newcart);
+  }
+
+  function dec(product:any){
+    let newcart:any = [...cart];
+    newcart.map((cart:any) => {
+      let price = Number(cart.remeprice.split(",")[0].replace(/[^0-9]/g, ""))
+      if(cart.remename === product.remename){
+        cart.quantity -= 1;
+        cart.subtotal = price * cart.quantity; 
+        
+      }
+    })
+    let pushCart:any = [];
+    newcart.map( (cart:any) => {
+      if(cart.quantity !== 0){
+        pushCart.push(cart) 
+    }
+    }) 
+    if(getCartTotal() === 0){
+      localStorage.setItem("cart", JSON.stringify([]));
+    }
+    setCart(pushCart)
+  }
+
+  // get total amount from selected products
+  const getTotalSum = (): number => { 
+    let jml = 0;
+    cart.map((item: any) => {
+      // ubah tipe data money ke integer agar bisa di hitung
+      let numberOfPrice = Number(item.remeprice.split(",")[0].replace(/[^0-9]/g, ""));
+
+      jml = numberOfPrice * item.quantity + jml;
+    });
+    return jml; 
+  };
+
+  function tax(): number {
+    const subtotal = getTotalSum();
+    const result = subtotal * (11 / 100);
+    return result;
+  }
+ 
+  function sumWithTax() {
+    const subtotal = getTotalSum();
+    const totaltax = tax();
+
+    // add tax 11% from sub total
+    const result = subtotal + totaltax;
+
+    return result;
+  }
+
+  
   let [ormeNumber, setOrmeNumber] = useState("");
-  function code() {
-    // console.log(numberOrder.ormeOrderNumber,'numberOrder'); // hasilnya MENUS#20230223-0001
+  function code() { 
     let lastCode = numberOrder.ormeOrderNumber;
     let getStr = lastCode.slice(0, 14); // MENUS#20230223
 
@@ -79,175 +252,7 @@ export default function menu({ restaurant }) {
     }
     return orderNumber;
   }
-  // console.log(code(), 'ini code');
-
-  let router = useRouter();
-  // let { query: {
-  //     hotel_name,
-  //     faci_name,
-  //     faci_description,
-  //     faci_id } } = router;
-
-  useEffect(() => {
-    // let {id} = router.query;
-    // let faci_id = Number({id}.id)
-    let faci_id = restaurant.faci_id;
-    console.log(faci_id, "faci_id");
-
-    dispatch(doUserMenuReq(faci_id));
-    dispatch(doOrder());
-    dispatch(doOrderNumberReq());
-  }, []);
-
-  const items: MenuProps["items"] = [
-    {
-      key: "1",
-      label: "Harga Terendah",
-      onClick: () => {
-        handlesort("ASC");
-      },
-    },
-    {
-      key: "2",
-      label: "Harga Tertinggi",
-      onClick: () => {
-        handlesort("DESC");
-      },
-    },
-  ];
-
-  const [cart, setCart] = useState([]);
-
-  // console.warn(cart, ' ini cart')
-
-  useEffect(() => {
-    if (cart.length === 0) return;
-    localStorage.setItem("cart", JSON.stringify(cart));
-    localStorage.setItem("result", JSON.stringify(ormeNumber));
-  }, [cart]);
-
-  useEffect(() => {
-    const cartdrlocalstorage = localStorage.getItem("cart");
-    const parsedCart =
-      cartdrlocalstorage !== null ? JSON.parse(cartdrlocalstorage) : [];
-    setCart(parsedCart);
-  }, []);
-
-  const addtocart = (menu: any) => {
-    let newCart = [...cart];
-    let itemInCart = cart.find((item: any) => menu.remename === item.remename);
-
-    // console.log(code(), 'isi code');
-
-    if (!itemInCart) {
-      let itemInCart = {
-        ...menu,
-        // menu,
-        quantity: 1,
-        subtotal: 0,
-        orderNumber: code(),
-      };
-      let numberOfPrice = Number(
-        menu.remeprice.split(",")[0].replace(/[^0-9]/g, "")
-      );
-
-      // split(',')[0].replace(/[^0-9]/g, '')
-      // let numberString = menu.remeprice.toString().replace(/[^0-9.-]+/g,"")
-      // const numberOfPrice = parseInt(numberString)
-      // console.log(menu.remeprice)
-
-      itemInCart.subtotal = itemInCart.quantity * numberOfPrice;
-      newCart.push(itemInCart);
-    } else {
-      itemInCart.quantity++;
-      // let numberOfPrice = Number(menu.remeprice.replace(/[^0-9.-]+/g,""));
-      console.log(menu.remeprice, "else");
-      let numberString = menu.remeprice.split(",")[0].replace(/[^0-9]/g, "");
-      const numberOfPrice = parseInt(numberString);
-      itemInCart.subtotal = itemInCart.quantity * numberOfPrice;
-      // console.log(typeof numberString)
-    }
-    setCart(newCart);
-  };
-
-  function subtotal(cart: any) {}
-  const removeFromCart = (productToRemove: any) => {
-    setCart(cart.filter((product: any) => product !== productToRemove));
-  };
-
-  const clearCart = (): any => {
-    setCart([]);
-  };
-
-  const getCartTotal = (): number => {
-    return cart.reduce((sum: number, { quantity }) => sum + quantity, 0);
-    // return 0;
-  };
-
-  const setQuantity = (product: any, amount: any) => {
-    // debugger;
-    const newCart = [...cart];
-    newCart.find((item) => item.remename === product.remename).quantity =
-      amount;
-    setCart(newCart);
-  };
-
-  // get total amount from selected products
-  const getTotalSum = (): number => {
-    // console.warn('total sum: ', cart)
-    let jml = 0;
-    cart.map((item: any) => {
-      // ubah tipe data money ke integer agar bisa di hitung
-      let numberOfPrice = Number(item.remeprice.split(",")[0].replace(/[^0-9]/g, ""));
-
-      jml = numberOfPrice * item.quantity + jml;
-    });
-    return jml;
-
-    //                  prevoious data, ambil cost, initial value
-    // return cart.reduce( (sum:number, { remeprice, quantity }) => sum+(remeprice*quantity),0)
-  };
-
-  function tax(): number {
-    const subtotal = getTotalSum();
-    const result = subtotal * (11 / 100);
-    return result;
-  }
-
-  //   useEffect( () => {
-  //     const totalamount = sumWithTax();
-  //     console.warn(totalamount,'totalitem');
-
-  //     setTotalOrder({...totalOrder, ormeTotalAmount:totalamount})
-  //   },[])
-
-  //   let [totalOrder, setTotalOrder] = useState({
-  //     ormeTotalItem: 0,
-  //     ormeTotalAmount: 0,
-  //     orme_pay_type: 'BO',
-  //     ormeIsPaid: 'B',
-  //     ormeUser: userid
-  //   });
-
-  function sumWithTax() {
-    const subtotal = getTotalSum();
-    const totaltax = tax();
-
-    // add tax 11% from sub total
-    const result = subtotal + totaltax;
-
-    return result;
-  }
-
-  //   console.log(menus);
-
-  const [payType, setPayType] = useState("cash");
-
-  function paymentType(e: any) {
-    if (e.target.value === "card") setPayType("card");
-    else setPayType("cash");
-  }
-
+ 
   //   --------------------------------------------------------------------- MODALS
   const [openMenu, setOpenMenu] = useState(false);
   const [menuDetail, setMenuDetail] = useState({
@@ -261,9 +266,7 @@ export default function menu({ restaurant }) {
 
   async function showModalsMenu(menu: any) {
     setOpenMenu(true);
-
-    // console.log('isi menu', menu);
-
+ 
     // ambil semua data photo per- menu yang di klik
     const result = await axios(
       API("Get", `/resto-menu-photos/${menu.remeid}`, null)
@@ -275,9 +278,7 @@ export default function menu({ restaurant }) {
 
     // isi semua data yang bukan primary
     let migratePhoto: any = [];
-    photos.map((photo: any) => {
-      if (photo.rempprimary == "1") {
-      }
+    photos.map((photo: any) => { 
       let newDataPhoto = {
         remename: photo.rempname,
         rempid: photo.rempid,
@@ -297,12 +298,7 @@ export default function menu({ restaurant }) {
       harga: menu.remeprice,
       status: menu.remestatus,
     });
-  }
-  //   const showModalsMenu = (menu:any) => {
-  //     setOpenMenu(true);
-  //     console.log(menu)
-
-  //   }
+  } 
   const handleOkButton = () => {
     // buat handle add menu kali ya disini
   };
@@ -331,48 +327,23 @@ export default function menu({ restaurant }) {
     localStorage.setItem("result", JSON.stringify(dataresult));
 
     let order = [{ summary: addorder, detail: cart }];
-    // console.warn(order,'order di menu');
     dispatch(doAddOrder(order));
-
-    // set detail order
-
-    router.push("/restaurant/order");
+ 
+    router.push({
+      pathname: "/restaurant/order",
+      query: {
+        orderNumber: code()
+      }
+    });
 
     localStorage.setItem("cart", JSON.stringify([]));
   }
-
-  // search data
-  const [search, setSearch] = useState("");
-  //   console.log('search',search);
-  //   console.log(menus);
-
-  // ------------------------ SORTED
-  // console.log(menus);
-  let sorted = menus.sort((a: any, b: any) =>
-    a.remeprice > b.remeprice ? 1 : -1
-  );
-  const [sortedData, setSorted] = useState("");
-
-  if (sortedData && sortedData == "DESC") {
-    sorted = menus.sort((a: any, b: any) =>
-      b.remeprice > a.remeprice ? 1 : -1
-    );
-  }
+ 
 
   function handlesort(sort: any) {
     setSorted(sort);
   }
-
-  // ------------------------ PAGINATION
-  const [currentpage, setCurrentPage] = useState(1);
-  const handlePagination = (page: any) => {
-    setCurrentPage(page);
-  };
-
-  const startIndex = (currentpage - 1) * 9;
-  const endIndex = startIndex + 9;
-  const menusWPagination = sorted.slice(startIndex, endIndex);
-
+ 
   // ------------------------- menu detail dengan photo
   const [selected, setSelected] = useState({
     rempurl: "",
@@ -381,6 +352,12 @@ export default function menu({ restaurant }) {
     setSelected({
       rempurl: photo.rempurl,
     });
+  }
+
+
+  // ---- LOGIN
+  function login(){
+    router.push('/users/login');
   }
 
   return (
@@ -395,9 +372,7 @@ export default function menu({ restaurant }) {
         <Layouts>
           <div className="container mx-auto">
             <Breadcrumb>
-              <Breadcrumb.Item>
-                <Link href="/restaurant"> Restaurant</Link>
-              </Breadcrumb.Item>
+              <Breadcrumb.Item><Link href="/restaurant"> Restaurant</Link></Breadcrumb.Item>
               <Breadcrumb.Item>Menu</Breadcrumb.Item>
             </Breadcrumb>
 
@@ -411,16 +386,15 @@ export default function menu({ restaurant }) {
               <div className="m-5">
                 <p className="text-2xl font-bold">{restaurant.hotel_name}</p>
                 <p className="text-xl font-bold">{restaurant.faci_name}</p>
-                <p>{/* {faci_description} */}</p>
               </div>
             </div>
 
             <hr className="my-5 border-t-2" />
 
-            <div className="mt-3 flex my-20">
-              <div className="w-3/5 border rounded-xl shadow p-3 mr-2 bg-white">
+            <div className="mt-3 lg:flex  my-20">
+              <div className="lg:w-3/5 sm:full sm:mb-4 border rounded-xl shadow p-3 lg:mr-2 bg-white">
                 <div className="text-xl font-bold text-center">
-                  Menu Makanan dan Minuman
+                  Menus
                 </div>
                 <div className="flex my-4">
                   <div className="w-1/2">
@@ -452,18 +426,8 @@ export default function menu({ restaurant }) {
                   </div>
                 </div>
 
-                <div className="flex flex-wrap ml-5 item-center">
-                  {menusWPagination
-                    .filter((menu: any) => {
-                      if (
-                        menu.remename
-                          .toLowerCase()
-                          .includes(search.toLowerCase())
-                      ) {
-                        return menu;
-                      }
-                    })
-                    .map(
+                <div className="flex flex-wrap ml-5 item-center justify-center">
+                {listmenu && listmenu.map(
                       (menu: any, key: any) => (
                         <div key={menu.remeid} className="w-52 mr-6 mb-12">
                           <div>
@@ -480,7 +444,7 @@ export default function menu({ restaurant }) {
                                 <p className="text-lg font-bold h-20">
                                   {menu.remename}
                                 </p>
-                                <p className="font-light my-2">{menu.remedescription}</p>
+                                {/* <p className="font-light my-2">{menu.remedescription}</p> */}
                                 {/* <p className="text-amber-600 my-2 text-[11px]">
                                   {menu.remestatus}
                                 </p> */}
@@ -488,7 +452,6 @@ export default function menu({ restaurant }) {
                                 <p className="text-[14px] font-bold text-right mr-4">{menu.remeprice}</p>
                               </div>
                             </a>
-                            {/* <div className='absolute'> */}
                             <div className="w-full flex mt-2">
                               {userid ? (
                                 <button
@@ -504,44 +467,40 @@ export default function menu({ restaurant }) {
                             {/* </div> */}
                           </div>
                         </div>
-                      )
-                      // <div className='border rouded shadow my-5 hover:bg-slate-100 flex' onClick={() => showModalsMenu(menu)}>
-                      //     <img src={`${configuration.BASE_URL}/${menu.rempurl}`} alt='cake' width={180} height={180}>
-                      //     </img>
-                      //     <div className='ml-3 mt-3'>
-                      //         <p className='text-lg font-bold'>{menu.remename}</p>
-                      //         <p>{menu.remedescription}</p>
-                      //         <p>{menu.remeprice}</p>
-                      //         <div className='mt-4 right'>
-                      //             <button onClick={()=>addtocart(menu)} className='inline-block px-5 py-1 bg-slate-600 text-white rounded shadow uppercase'>
-                      //                 Add item
-                      //             </button>
-                      //         </div>
-                      //     </div>
-
-                      // </div>
+                      ) 
                     )}
                 </div>
-
+                {/* PAGINATION */}
                 <Pagination
                   onChange={handlePagination}
                   current={currentpage}
-                  pageSize={10}
-                  total={menus.length}
+                  // pageSize={10}
+                  total={menus.counts}
                   className="text-center py-14"
                 />
               </div>
 
-              {
-                getCartTotal() === 0 || !userid ? (
-                  <Affix className="w-2/5">
-                    <div className="border font-semibold bg-white rounded-xl shadow py-20 ml-2 text-xl text-center">
-                      Welcome to Hotel Realta ! <br />
-                    </div>
-                  </Affix>
-                ) : (
-                  //    <Affix className='w-2/5'>
-                  <div className="bg-white rounded-lg shadow p-3 ml-2 sticky top-0 h-1/2 w-2/5">
+                 { getCartTotal()===0 || !userid ? 
+                   <Affix className='lg:w-2/5 sm:w-full'>
+                    <div className='border font-semibold bg-white rounded-lg shadow py-20 lg:ml-2 text-xl text-center'>
+                        Welcome to Hotel Realta ! <br/>
+
+                        { !userid ? 
+                          <div>
+                            Please sign in to order food
+                            <br /><br />
+                            <Buttons funcs={login}>
+                              Login
+                            </Buttons> 
+                          </div> 
+                        
+                          : 'Please click add to cart to order your favorite food!'
+                        }
+                    </div> 
+                   </Affix>
+                 
+                 : (
+                  <div className="bg-white rounded-lg shadow p-3 sticky top-0 h-1/2 lg:w-2/5 sm:w-full">
                     <div className="text-xl font-bold text-center">
                       Checkout
                     </div>
@@ -553,7 +512,7 @@ export default function menu({ restaurant }) {
                         <div className="border rounded-lg p-4 shadow-md gap-y-2 my-5 flex">
                           <img
                             src={`${configuration.BASE_URL}/${order.rempurl}`}
-                            alt="cake"
+                            alt={order.remename}
                             width={120}
                             height={120}
                           ></img>
@@ -582,18 +541,12 @@ export default function menu({ restaurant }) {
                                 maximumFractionDigits: 0,
                               })}
                             </p>
-                            <p>
-                              Qty:{" "}
-                              <input
-                                value={order.quantity}
-                                onChange={(event) =>
-                                  setQuantity(
-                                    order,
-                                    parseInt(event.target.value)
-                                  )
-                                }
-                              />{" "}
-                            </p>
+                            <div>
+                              {/* // quantity by incdecr */}
+                              <button onClick={()=>dec(order)} className='text-xl text-indigo-700'><MinusCircleOutlined className=" hover:bg-indigo-100 hover:rounded-full"/></button>
+                              {"   " + order.quantity + "   "}
+                              <button onClick={()=>inc(order)} className='text-xl text-indigo-700' ><PlusCircleOutlined className=" hover:bg-indigo-100 hover:rounded-full" /></button>
+                            </div>
                             <p>
                               Subtotal:{" "}
                               {order.subtotal.toLocaleString("id-ID", {
@@ -606,31 +559,6 @@ export default function menu({ restaurant }) {
                           </div>
                         </div>
                       ))}
-
-                    {/* <div className='border rounded py-5 bg-slate-100 my-5'>
-                            <p className='font-bold text-center py-2'>Payment Type</p>
-                            <div className='text-center'>
-                                <Radio.Group name='paymenttype' defaultValue={'cash'} onChange={paymentType} className='items-center'>
-                                    <Radio value={'card'}>Pay Card</Radio>
-                                    <Radio value={'cash'}>Pay Cash</Radio>
-                                </Radio.Group>
-                                <Select placeholder={'Select payment type...'} onChange={paymentType}>
-                                    <Select.Option value='card'>Pay with your card</Select.Option>
-                                    <Select.Option value='cash'>Pay cash</Select.Option>
-                                </Select>
-                                <br/>
-                                <div>
-                                { payType==='card' ? 
-                                    <Select placeholder={'Select card type...'} className='w-4/6 py-3'>
-                                        <Select.Option value='CR'>Credit Card</Select.Option>
-                                        <Select.Option value='D'>Debit</Select.Option>
-                                        <Select.Option value='PG'>Hotel Realta Wallet</Select.Option>
-                                    </Select> 
-                                  : null
-                                }
-                                </div>
-                            </div>
-                        </div> */}
 
                     <div className="border rounded-xl py-5">
                       <p className="text-lg font-bold text-center mb-4">Payment Summary</p>
@@ -646,11 +574,11 @@ export default function menu({ restaurant }) {
                           <tr className="">
                             <td className=" py-2">Tax(11%)</td>
                             <td className="text-right">
-                              {tax().toLocaleString("id-ID", {
+                              { tax().toLocaleString("id-ID", {
                                 style: "currency",
                                 currency: "IDR",
                                 minimumFractionDigits: 0,
-                                maximumFractionDigits: 0,
+                                                              maximumFractionDigits: 0,
                               })}
                             </td>
                           </tr>
@@ -675,12 +603,12 @@ export default function menu({ restaurant }) {
                     {/* </Link> */}
                   </div>
                 )
-                //    </Affix>
+                
               }
             </div>
           </div>
 
-          {/* ----------------------------- MODALS UNTUK MENU ------------------------------ */}
+          {/* ----------------------------- MODALS MENU ------------------------------ */}
           <Modal
             width={600}
             title={"Menu"}
@@ -723,9 +651,9 @@ export default function menu({ restaurant }) {
 
             {/* </Carousel> */}
 
-            <p>Nama menu: {menuDetail.nama}</p>
-            <p>Harga: {menuDetail.harga}</p>
-            <p>Desc: {menuDetail.desc}</p>
+            <p className="text-lg font-bold">{menuDetail.nama}</p>
+            <p>{menuDetail.desc}</p>
+            <p>{menuDetail.harga}</p>
           </Modal>
         </Layouts>
       </main>

@@ -1,8 +1,9 @@
 import restoConstant from "@/Redux/Constant/Resto/restoConstant";
 
-export function doRestoRequest(){
+export function doRestoRequest(payload:any){
     return {
-        type: restoConstant.GET_RESTOS
+        type: restoConstant.GET_RESTOS,
+        payload
     }
 }
 
