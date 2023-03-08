@@ -21,6 +21,19 @@ export class BookingOrderDetailExtraService {
     });
   }
 
+  async createExtraMultiple(body : any) {
+    body.map(async (body : any)=> {
+      const extraDetail = new BookingOrderDetailExtra()
+      extraDetail.boexPrit = body.boex_prit_id
+      extraDetail.boexPrice = body.boexPrice
+      extraDetail.boexQty = body.boexQty
+      extraDetail.boexSubtotal = body.boexSubtotal
+      extraDetail.boexMeasureUnit = body.boexMeasureUnit
+      extraDetail.boexBorde = body.boex_borde_id
+      return await this.bookingOrderDetailExtra.save(extraDetail)
+    })
+  }
+
   async createBookingOrderDetailExtra(
     field: BookingOrderDetailExtra,
   ): Promise<any> {

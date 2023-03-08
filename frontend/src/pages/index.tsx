@@ -1,22 +1,11 @@
-import Head from "next/head";
-import Image from "next/image";
-import { Inter } from "@next/font/google";
-import styles from "@/styles/Home.module.css";
-import Layouts from "@/layouts/layout";
-import Hero from "@/components/Hero";
-import {
-  DollarCircleOutlined,
-  CalendarOutlined,
-  PhoneOutlined,
-  RightOutlined,
-  StarFilled,
-  StarTwoTone,
-  StarOutlined,
-} from "@ant-design/icons";
-import { Card, Row, Col, Space, Input, Button } from "antd";
-import Link from "next/link";
 import Buttons from "@/components/Button";
-
+import Hero from "@/components/Hero";
+import Layouts from "@/layouts/layout";
+import {
+  StarOutlined
+} from "@ant-design/icons";
+import { Inter } from "@next/font/google";
+import { Card, Input, Space } from "antd";
 const inter = Inter({ subsets: ["latin"] });
 
 export default function Home() {
@@ -82,6 +71,8 @@ export default function Home() {
         </p>
         <div className="flex justify-center mt-10 gap-8">
           {services.map((item: any, index:number) => (
+        
+                   
             <Card
               key={index}
               className="justify-start w-[300px]"
@@ -93,6 +84,8 @@ export default function Home() {
               <p className="mt-4 h-24">{item.desc}</p>
               <p className="mt-4 text-[14px] text-[#754cff]">Find Now</p>
             </Card>
+           
+
           ))}
         </div>
       </div>

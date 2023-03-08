@@ -11,7 +11,7 @@ import { empType } from "../Constant/HR/empType";
 import { handleAddEmployee, handleAddPayhist, handleDelEmployee, handleDeptHist, handleDetailEmployee, handleGetEmployees, handleUpdateEmployee, handleUpdatePhotoEmp } from "./HR/employees";
 import UserConst from "../Constant/User/UserConst";
 import { HandleLoginUser } from "./User/auth";
-import { HandleEditProfile, HandleGetUser, HandleUpdatePassword } from "./User/getUser";
+import { HandleCreateUser, HandleEditProfile, HandleGetUser, HandleUpdatePassword } from "./User/getUser";
 import PaymentConst from "../Constant/Payment/PaymentConst";
 import {
   handleTrxDashRequest,
@@ -135,7 +135,7 @@ import {
 import BookingConstant from "../Constant/Booking/BookingConstant";
 import { workType } from "../Constant/HR/workType";
 import { handleServicesList, handleWorkDetail, handleWorkorder } from "./HR/workorder";
-import { handleBoorCreateFinal, handleBoorLast, handleSpBoorInvoice, handleSpFacilities, handleSpHotel, handleSpHotelReviews, handleSpof } from "./Booking/BookingSaga";
+import { handleBoorCreateFinal, handleBoorExtra, handleBoorLast, handleSpBoorInvoice, handleSpFacilities, handleSpHotel, handleSpHotelReviews, handleSpof } from "./Booking/BookingSaga";
 
 // Purchasing
 import PurchasingConst from '../Constant/Purchasing/PurchasingConst'
@@ -165,6 +165,7 @@ export default function* rootSaga() {
     //user and auth
     takeEvery(UserConst.LOGIN_USER, HandleLoginUser),
     takeEvery(UserConst.GET_DATA_USER, HandleGetUser),
+    takeEvery(UserConst.ADD_DATA_USER,HandleCreateUser),
     takeEvery(UserConst.EDIT_DATA_PROFILE,HandleEditProfile),
     takeEvery(UserConst.UPDATE_PASSWORD,HandleUpdatePassword),
 
@@ -332,6 +333,7 @@ export default function* rootSaga() {
     takeEvery(BookingConstant.GET_SP_HOTEL, handleSpHotel),
     takeEvery(BookingConstant.GET_SP_REVIEW, handleSpHotelReviews),
     takeEvery(BookingConstant.GET_SP_INVOICE, handleSpBoorInvoice),
+    takeEvery(BookingConstant.INSERT_BOOKING_EXTRA, handleBoorExtra),
 
     //Resto
     takeEvery(menuConstant.GET_MENUS, handleMenu),
