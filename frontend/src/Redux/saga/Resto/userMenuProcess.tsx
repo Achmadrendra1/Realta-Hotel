@@ -14,7 +14,7 @@ function* handleUserMenu(action:any):any{
         // });
         // console.warn(result.data,'result process');
         
-        const result = yield axios(API('Get','/resto-menus/list/'+action.payload))
+        const result = yield axios(API('Post','/resto-menus/user/'+action.payload.faci_id, action.payload))
         yield put(doUserMenuReqSucceed(result.data))
         return result.data;
     }catch(err:any){

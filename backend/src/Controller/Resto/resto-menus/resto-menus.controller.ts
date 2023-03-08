@@ -20,6 +20,17 @@ export class RestoMenusController {
         return this.restoMenuService.getMenuByFacility(Param)
     } 
 
+    @Post('menu-dashboard')
+    getMenuForAdmin(@Body() body){
+        return this.restoMenuService.getMenuForAdmin(body);
+    }
+    
+    @Post('/user/:id')
+    getMenuForUser(@Param() Param:any, @Body() body){
+        // console.log('masuk sini', Param);
+        
+        return this.restoMenuService.getMenuForUser(Param, body)
+    } 
     // @Get('/facility')
     // getFacility(){
     //     return this.restoMenuService.getFacility()

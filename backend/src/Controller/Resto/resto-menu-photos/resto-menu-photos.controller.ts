@@ -1,5 +1,5 @@
-import { Body, Controller, Get, Post, Put, UploadedFile, UseInterceptors } from '@nestjs/common';
-import { FileInterceptor } from '@nestjs/platform-express';
+import { Body, Controller, Get, Post, Put, UploadedFile, UseInterceptors, UploadedFiles } from '@nestjs/common';
+import { FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
 import { RestoMenuPhotosService } from 'src/Service/Resto/resto-menu-photos/resto-menu-photos.service';
 // import { diskStorage } from 'multer';
 import { diskStorage } from 'multer'
@@ -18,11 +18,11 @@ export class RestoMenuPhotosController {
 
     @Get(':id')
     getListPhoto(@Param() param){
-        console.warn('ini param', param);
+        // console.warn('ini param', param);
         
         return this.restoMenuPhotos.getListPhoto(param)
     }
-
+ 
     // add data
     @Post()
     @UseInterceptors(FileInterceptor('rempUrl', {
@@ -35,7 +35,26 @@ export class RestoMenuPhotosController {
         // console.log('ini file di controller: ', file)
         return this.restoMenuPhotos.addMenuPhoto(file,body);
     }
-    
+
+    @Post('multiple')
+    @UseInterceptors(FilesInterceptor('rempUrl',10,{
+        storage:diskStorage({
+            destination: Helper.storage,
+            filename: Helper.customFileName
+        })
+    }))
+    addMultiplePhoto(@UploadedFiles() rempUrl: Array<Express.Multer.File>, @Body() body){
+        console.log('di controller multiple:', rempUrl);
+        rempUrl.map(url => {
+            console.log(url);
+            
+        })
+
+       this.restoMenuPhotos.addMultiplePhoto(rempUrl,body)
+        return rempUrl;
+    }
+ 
+ 
     @Put('/primary')
     editPrimary(@Body() body){
         // return body;
@@ -63,6 +82,7 @@ export class RestoMenuPhotosController {
     deleteMenuPhoto(@Param() param){
         return this.restoMenuPhotos.deleteMenuPhoto(param)
     }
+ 
 }
 
 

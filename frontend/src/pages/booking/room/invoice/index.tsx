@@ -1,17 +1,18 @@
 import { getSpInvoice } from "@/Redux/Action/Booking/BookingAction";
 import Buttons from "@/components/Button";
-import Layouts from "@/layouts/layout";
 import { LeftCircleOutlined, LeftOutlined } from "@ant-design/icons";
 import { Col, Divider, QRCode, Row } from "antd";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 export default function index() {
   let root = useRouter();
   const { id } = root.query || {};
   const dispatch = useDispatch();
+
+  const router = useRouter()
 
   const invoiceView = useSelector(
     (state: any) => state.BoorInvoiceReducer.invoice
@@ -21,7 +22,9 @@ export default function index() {
     dispatch(getSpInvoice());
   }, [id]);
 
-  const Invoice = invoiceView?.filter((item: any) => item.boor_order_number == id);
+  const Invoice = invoiceView?.filter(
+    (item: any) => item.boor_order_number == id
+  );
   const boor_order_number =
     Invoice?.length > 0 ? Invoice[0].boor_order_number : "";
   const boor_order_date = Invoice?.length > 0 ? Invoice[0].boor_order_date : "";
@@ -41,8 +44,8 @@ export default function index() {
   const borde_price = Invoice?.length > 0 ? Invoice[0].borde_price : "";
   const borde_discount = Invoice?.length > 0 ? Invoice[0].borde_discount : "";
   const borde_subtotal = Invoice?.length > 0 ? Invoice[0].borde_subtotal : "";
-  const inv_number = Invoice?.length > 0 ? Invoice[0].patr_trx_id : '';
-  const inv_date = Invoice?.length > 0 ? Invoice[0].patr_modified_date : ''
+  const inv_number = Invoice?.length > 0 ? Invoice[0].patr_trx_id : "";
+  const inv_date = Invoice?.length > 0 ? Invoice[0].patr_modified_date : "";
 
   const [getInvoice, setGetinvoice] = useState({
     boor_order_number: "",
@@ -85,12 +88,17 @@ export default function index() {
       borde_discount: borde_discount,
       borde_subtotal: borde_subtotal,
       invoice_number: inv_number,
-      invoice_date : inv_date
-
+      invoice_date: inv_date,
     });
   }, [boor_order_number]);
 
-  console.log(Invoice);
+  // console.log(getInvoice);
+
+  // const email = "aryasamiftah@gmail.com"
+
+  // const handleEmailClick = () => {
+  //   window.location.href = `mailto:${email}`;
+  // };
 
   //Array Object untuk title and field
   const invoice1 = [
@@ -100,7 +108,7 @@ export default function index() {
     },
     {
       title: "Order Date",
-      field: getInvoice.boor_order_date?.split('T')[0],
+      field: getInvoice.boor_order_date?.split("T")[0],
     },
     {
       title: "Invoice Number",
@@ -108,7 +116,7 @@ export default function index() {
     },
     {
       title: "Invoice Date",
-      field: getInvoice.invoice_date?.split('T')[0],
+      field: getInvoice.invoice_date?.split("T")[0],
     },
     {
       title: "Status",
@@ -135,24 +143,31 @@ export default function index() {
     },
     {
       title: "Member Date",
-      field: getInvoice.usme_promote_date?.split('T')[0],
+      field: getInvoice.usme_promote_date?.split("T")[0],
     },
     {
       title: "Remaining Points",
       field: getInvoice.usme_points,
     },
   ];
-  const router = useRouter()
 
   return (
     <>
-      <div className="px-6 pt-4">
-        <Link href={'/booking'} className="text-xl mb-5" >
+      <div className="px-6 pt-4 flex justify-between">
+        <Link href={"/booking"} className="text-xl mb-5">
           <LeftCircleOutlined /> Kembali
         </Link>
+        <div className="mr-12 flex justify-end">
+          <div className="mr-2">
+            <Buttons funcs={''}>Print</Buttons>
+          </div>
+          <div>
+            <Buttons funcs={""}>Send To Email</Buttons>
+          </div>
+        </div>
       </div>
 
-      <div className=" w-11/12 shadow-lg m-auto p-6">
+      <div id="invoice" className=" w-11/12 shadow-lg m-auto p-4">
         <h1 className="text-2xl mb-3 font-bold">Invoice {id}</h1>
 
         <Row>
@@ -221,19 +236,26 @@ export default function index() {
         </Row>
         <Divider dashed style={{ borderColor: "black" }} />
         <div className="w-10/12 flex justify-between items-center">
-        <QRCode value={id} size={96} className="ml-14"/>
-        <div className="w-1/4">
-          <div className="flex justify-between min-w-[350px]">
-            <h2 className="flex text-lg font-semibold mb-1 mr-5">Total Amount</h2>
-            <h2 className="flex text-lg font-semibold mb-1">{getInvoice.borde_subtotal}</h2>
-          </div>
-          <div className="flex justify-between min-w-[350px]">
-          <h2 className="flex text-lg font-semibold mb-1 mr-5">Payment Amount</h2>
-          <h2 className="flex text-lg font-semibold mb-1">{getInvoice.borde_price}</h2>
+          <QRCode value={id} size={96} className="ml-14" />
+          <div className="w-1/4">
+            <div className="flex justify-between min-w-[350px]">
+              <h2 className="flex text-lg font-semibold mb-1 mr-5">
+                Total Amount
+              </h2>
+              <h2 className="flex text-lg font-semibold mb-1">
+                {getInvoice.borde_subtotal}
+              </h2>
+            </div>
+            <div className="flex justify-between min-w-[350px]">
+              <h2 className="flex text-lg font-semibold mb-1 mr-5">
+                Payment Amount
+              </h2>
+              <h2 className="flex text-lg font-semibold mb-1">
+                {getInvoice.borde_subtotal}
+              </h2>
+            </div>
           </div>
         </div>
-        </div>
-       
       </div>
     </>
   );

@@ -8,7 +8,7 @@ function* handleUserOrder(action:any):any{
         console.log('action di process', action);
         // debugger;
         const result = yield axios(API('Post', '/order-menus/order', action.payload))
-        console.log(result,'user order process');
+        // console.log(result,'user order process');
         yield put(doGetUserOrderSucceed(result.data))
         return result.data;
     }catch(err:any){

@@ -2,7 +2,8 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { RestoMenuPhotos } from 'src/entities/RestoMenuPhotos';
 import { Repository } from 'typeorm';
-
+// delete picture
+import { unlink } from 'fs/promises';
 @Injectable()
 export class RestoMenuPhotosService {
     constructor(@InjectRepository(RestoMenuPhotos) private restoMenuPhotoRepository:Repository<RestoMenuPhotos>){}
@@ -33,6 +34,43 @@ export class RestoMenuPhotosService {
             }
         )
     }
+ 
+    async addMultiplePhoto(files:any, body:any){
+        // console.log('files',files);
+        console.log('body service multiple', body.rempThumbnailFilename);
+        
+        
+        for(let i=0; i<files.length; i++){
+            await this.restoMenuPhotoRepository.insert(
+                {
+                    rempThumbnailFilename: body.rempThumbnailFilename,
+                    rempPhotoFilename: files[i].filename,
+                    rempPrimary: body.rempPrimary,
+                    rempUrl: files[i].path,
+                    rempReme: body.remeId
+    
+                }
+            )
+        }
+        // files.map(async (photo:any) => {
+        //     await this.restoMenuPhotoRepository.insert(
+        //         {
+        //             rempThumbnailFilename: body.rempThumbnailFilename,
+        //             rempPhotoFilename: photo.filename,
+        //             rempPrimary: body.rempPrimary,
+        //             rempUrl: photo.path,
+        //             rempReme: body.remeId
+    
+        //         }
+        //     )
+        // })
+        
+        return 'add successfully'
+        // let data = await files;
+        // console.log('di service', data);
+        // return data;
+        
+    }
 
             
     async editPrimary(data:any){
@@ -61,7 +99,7 @@ export class RestoMenuPhotosService {
                 // rempThumbnailFilename: body.rempThumbnailFilename,
                 rempPhotoFilename: file.filename,
                 rempPrimary: body.rempPrimary,
-                rempUrl: file.path ,
+                rempUrl: file.path,
                 // rempReme: body.remeId
             }
         )
@@ -69,6 +107,19 @@ export class RestoMenuPhotosService {
 
 
     async deleteMenuPhoto(param){
-        return await this.restoMenuPhotoRepository.delete(param.id)
-    }
+        const id = Number(param.id);
+        // ambil satu data photo untuk di hapus
+        const img = await this.restoMenuPhotoRepository.findOne({
+            where : {
+                rempId:id
+            }
+        });
+        // kalau datanya ada, hapus photonya
+        if(img){
+            // hapus photo di folder restomenuphotos
+            await unlink(img.rempUrl);
+            // hapus satu baris row photo (data photo) di db
+            await this.restoMenuPhotoRepository.delete(param.id)
+        }
+    } 
 }
