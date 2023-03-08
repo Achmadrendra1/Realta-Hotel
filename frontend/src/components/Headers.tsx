@@ -288,13 +288,15 @@ const Headers = ({
                     {user[0] ? user[0].user_full_name : "Guest"}
                   </p>
                   {isActive ? (
-                    <p className="text-sm text-blue-700 hover:underline hover:cursor-pointer">
+                    <p 
+                    onClick={() => router.push("/payment")}
+                    className="text-sm text-[#754cff] hover:underline hover:cursor-pointer">
                       <WalletOutlined /> {saldo}
                     </p>
                   ) : (
                     <p
                       onClick={() => router.push("/payment")}
-                      className="text-sm text-blue-700 hover:underline hover:cursor-pointer"
+                      className="text-sm text-[#754cff] hover:underline hover:cursor-pointer"
                     >
                       <WalletOutlined /> Activate
                     </p>

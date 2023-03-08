@@ -18,6 +18,7 @@ import {
 } from "@/Redux/Action/Payment/paymentDashAction";
 import { doGetHistory } from "@/Redux/Action/Payment/paymentUserAction";
 import withAuth from "@/PrivateRoute/WithAuth";
+import Buttons from "@/components/Button";
 
 export default withAuth(function index() {
   const dispacth = useDispatch();
@@ -112,6 +113,9 @@ export default withAuth(function index() {
               clickCancel={handleCancel}
               handleAct={handleActive}
               handleCancell={handleCancell}
+              phone={accNumberDompet}
+              dataUser={user}
+              dataPaga={payPaga}
             />
           ) : null}
           <div className="relative w-full h-60 justify-center p-4 bg-[#4728ae] text-[#F2F1FA] m-auto rounded-xl bg-center bg-cover bg-no-repeat flex mb-6">
@@ -135,7 +139,7 @@ export default withAuth(function index() {
                 </Col>
               </Row>
               <div className="absolute w-3/4 bg-white rounded-lg drop-shadow-lg py-6 px-8 m-auto mt-44">
-                <Row gutter={16} className="flex justify-around">
+                <Row gutter={16} className="flex justify-around items-center">
                   <Col
                     span={12}
                     className="p-4 border-0 hover:border-r-2 hover:cursor-pointer"
@@ -161,15 +165,17 @@ export default withAuth(function index() {
                       </Link>
                     ) : (
                       <div className="text-center">
-                        <p className="text-md text-[#4728ae] font-bold">
+                        <p className="text-lg text-[#4728ae] font-bold">
                           Activate Seamless Transactions with H-Pay Now!
                         </p>
-                        <Button
-                          className="mt-2"
-                          onClick={() => setOpenAct(true)}
+                        <div className="mt-2">
+                        <Buttons
+                          // className="mt-2"
+                          funcs={() => setOpenAct(true)}
                         >
                           Activate H-Pay Now!
-                        </Button>
+                        </Buttons>
+                        </div>
                       </div>
                     )}
                   </Col>
@@ -178,7 +184,7 @@ export default withAuth(function index() {
                     className="p-4 border-0 hover:border-l-2 hover:cursor-pointer"
                   >
                     <Link href={"payment/cards"}>
-                      <Row gutter={8}>
+                      <Row gutter={8} className="flex items-center">
                         <Col>
                           <CreditCardOutlined className="text-xl mt-2 mr-2 text-[#4728ae]" />
                         </Col>
@@ -186,8 +192,8 @@ export default withAuth(function index() {
                           <p className="text-md text-[#4728ae] font-bold">
                             My Cards
                           </p>
-                          {bankAcc.length < 0 ? (
-                            <p>Add Your Card Here</p>
+                          {bankAcc.length <= 0 ? (
+                            <p className="text-gray-700">Add Your Card Here</p>
                           ) : (
                             <p className="text-md text-gray-700">
                               {bankAcc.length} Cards

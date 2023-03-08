@@ -226,7 +226,7 @@ export default function AddCard(props: any) {
             <div className="mr-2">
               <Buttons>Submit</Buttons>
             </div>
-            <Buttons type={"danger"}>Cancel</Buttons>
+            <Buttons type={"danger"} funcs={props.clickCancel}>Cancel</Buttons>
           </div>
         </Form>
         {cardNumber}

@@ -269,15 +269,14 @@ export default function MyAccount() {
                   </div>
                 ) : (
                   <div>
-                    <Link
-                      href={""}
+                    <p
                       onClick={() => {
                         setShowActivation(true);
                       }}
-                      style={{ color: "blue" }}
+                      className="text-[#754cff] text-[14px] font-semibold hover:cursor-pointer"
                     >
                       Activate
-                    </Link>
+                    </p>
                   </div>
                 )}
               </div>
@@ -310,15 +309,15 @@ export default function MyAccount() {
                   </div>
                 ) : (
                   <div>
-                    <Link
-                      href={""}
+                    <p
+                      
                       onClick={() => {
                         setShowLink(true);
                       }}
-                      style={{ color: "blue" }}
+                      className="text-[#754cff] text-[14px] font-semibold hover:cursor-pointer"
                     >
                       Link Account
-                    </Link>
+                    </p>
                   </div>
                 )}
               </div>
