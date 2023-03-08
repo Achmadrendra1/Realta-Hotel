@@ -1,8 +1,9 @@
 import menuConstant from "@/Redux/Constant/Resto/menuConstant"
 
-export const doMenuRequest = () => {
+export const doMenuRequest = (payload:any) => {
     return {
-        type: menuConstant.GET_MENUS
+        type: menuConstant.GET_MENUS,
+        payload
     }
 }
 

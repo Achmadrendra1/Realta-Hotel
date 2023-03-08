@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Hotels } from 'src/entities/Hotels';
-import { Repository } from 'typeorm';
+import { Like, Repository } from 'typeorm';
 
 @Injectable()
 export class HotelsService {
@@ -10,11 +10,15 @@ export class HotelsService {
     private hotelRepository: Repository<Hotels>,
   ) {}
 
-  async findAllHotels(): Promise<any> {
-    return await this.hotelRepository.find({
-      // order: {
-      //   hotelName: 'ASC',
-      // },
+  async findAllHotels(query?) {
+    const take = query?.take || 10;
+    const page = query?.page || 1;
+    const skip = (page - 1) * take;
+    const keywords = query?.keywords || '';
+    const [data, total] = await this.hotelRepository.findAndCount({
+      order: {
+        hotelName: 'ASC',
+      },
       relations: {
         facilities: {
           facilityPhotos: true,
@@ -24,7 +28,16 @@ export class HotelsService {
         hotelReviews: true,
         hotelAddr: true,
       },
+      where: { hotelName: Like(`%${keywords}%`) },
+      skip,
+      take,
     });
+    return {
+      data,
+      page,
+      count: total,
+      currentPage: +page,
+    };
   }
 
   async findByNameId(hotelId: number): Promise<any> {

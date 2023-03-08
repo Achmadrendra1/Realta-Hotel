@@ -28,6 +28,7 @@ import {
   getSpHotel,
   getSpInvoice,
   getSpReview,
+  insertBookingExtra,
 } from "@/Redux/Action/Booking/BookingAction";
 import { useRouter } from "next/router";
 import { CaretRightFilled, DeleteOutlined, LeftOutlined } from "@ant-design/icons";
@@ -150,8 +151,6 @@ export default function bookingRoom() {
     pritMeasure : [] as any []
   });
 
-  console.log(valueExtra)
-
   //State untuk extraTotal
   const [extraTotal, setExtraTotal] = useState({
     extraSubTotal: 0,
@@ -224,8 +223,6 @@ export default function bookingRoom() {
       boexMeasure : valueExtra.pritMeasure[index]
     };
   });
-
-  console.log(dataExtra)
 
   let spofDiscInt = parseInt(
     spofPrice.spofDiscount.split(",")[0].replace(/[^0-9]/g, "")
@@ -359,7 +356,6 @@ export default function bookingRoom() {
     boor_cardnumber: "",
   });
 
-  console.log(dataBooking)
 
   const [dataPayment, setDataPayment] = useState({
     userId: 0,
@@ -551,6 +547,11 @@ export default function bookingRoom() {
       }
     }
   };
+
+  const handleAddExtra = () => {
+    dispacth(insertBookingExtra(dataExtra))
+    console.log(dataExtra)
+  }
 
   const handleAdultsValue = (value: any) => {
     setDataBooking({...dataBooking, borde_adults : value})
@@ -1212,7 +1213,7 @@ export default function bookingRoom() {
                 </div>
               </Modal>
               <Table columns={columnsExtra} dataSource={dataExtra} />
-              <button>Finish</button>
+              <button onClick={handleAddExtra}>Finish</button>
             </div>
             <div className="flex justify-between">
               {/* <div className='flex justify-between'>

@@ -23,6 +23,9 @@ export class AddressService {
       order: {
         addrId: 'ASC',
       },
+      relations: {
+        addrProv: true,
+      },
     });
   }
 

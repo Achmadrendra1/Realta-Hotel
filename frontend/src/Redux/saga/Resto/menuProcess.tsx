@@ -4,10 +4,10 @@ import axios from "axios";
 import { call, put } from "redux-saga/effects";
 
 
-function* handleMenu():any{
+function* handleMenu(action:any):any{
     try{
         // console.log('masuk menu saga');
-        const result = yield axios(API('Get',`/resto-menus`,null))
+        const result = yield axios(API('Post',`/resto-menus/menu-dashboard`,action.payload))
         // console.log(result.data)
         yield put(doMenuRequestSucceed(result.data))
         return result.data;

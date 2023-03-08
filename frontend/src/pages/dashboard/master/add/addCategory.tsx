@@ -16,6 +16,7 @@ import { useDispatch } from 'react-redux';
 export default function AddCategory(props: any) {
   const dispatch = useDispatch();
   const { handleClose } = props;
+  const dataPolicy = props.dataPolicy;
 
   //D  versi
   const onFinish = (e: any) => {
@@ -23,9 +24,7 @@ export default function AddCategory(props: any) {
     dispatch(doAddCategoryGroup(dataUp));
     console.log(dataUp)
     handleClose(false);
-    // window.location.reload();
-
-    alert;
+    window.location.reload();
   };
 
   const onFinishFailed = (errorInfo: any) => {
@@ -35,7 +34,6 @@ export default function AddCategory(props: any) {
   //D PICTURE
 
   const [dataUp, setDataUp] = useState(new FormData());
-  const [selectedImage, setSelectedImage] = useState('');
   // body inputan
   const [namaCagro, setNamaCagro] = useState('');
   const [tipeCagro, setTipeCagro] = useState('');
@@ -65,32 +63,14 @@ export default function AddCategory(props: any) {
     console.log(formData)
   };
 
-  const [form] = Form.useForm();
-
-  const getSrcFromFile = (file: any) => {
-    return new Promise((resolve) => {
-      const reader = new FileReader();
-      reader.readAsDataURL(file.originFileObj);
-      reader.onload = () => resolve(reader.result);
+  let optionValPolicy: any = [{ value: '', label: 'Please choose' }];
+  dataPolicy &&
+    dataPolicy.map((res: any, index: any) => {
+      optionValPolicy = [
+        ...optionValPolicy,
+        { value: res.poliId, label: res.poliName },
+      ];
     });
-  };
-
-  const [fileList, setFileList] = useState([
-    {
-      name: '',
-      uid: '-1',
-      url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
-    },
-  ]);
-  //Alert
-  const [visible, setVisible] = useState('hidden');
-  const alert = (e: any) => {
-    // window.location.reload();
-    setVisible('');
-    setTimeout(() => {
-      setVisible('hidden');
-    }, 777);
-  };
 
   return (
     <>
@@ -148,6 +128,30 @@ export default function AddCategory(props: any) {
             </Select>
           </Form.Item>
           <Form.Item
+            style={{
+              width: '80%',
+              marginLeft: '10%',
+              marginTop: '1%',
+            }}
+            label="Policy Rules"
+            name={`poli_id`}
+          >
+            <Select
+              showSearch
+              placeholder="Input full name"
+              optionFilterProp="children"
+              onChange={(value) => {
+                console.log(value);
+              }}
+              filterOption={(input, option) =>
+                (option?.label ?? '')
+                  .toLowerCase()
+                  .includes(input.toLowerCase())
+              }
+              options={optionValPolicy}
+            />
+          </Form.Item>
+          <Form.Item
             style={{ marginTop: '3%' }}
             label="Descriptions"
             name={'cagroDescription'}
@@ -167,6 +171,7 @@ export default function AddCategory(props: any) {
           <Form.Item label="Upload">
             <Input type="file" onChange={onUploadLogo} accept="image/*" />
           </Form.Item>
+
           <Form.Item label=" " colon={false} style={{ textAlign: 'right' }}>
             <Button htmlType="reset" onClick={props.clickCancel}>
               <UndoOutlined style={{ color: '#FF8002' }} />

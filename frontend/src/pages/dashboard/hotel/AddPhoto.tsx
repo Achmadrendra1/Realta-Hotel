@@ -14,6 +14,7 @@ export default withAuth( function AddPhoto(props: any) {
   const [uploading, setUploading] = useState(false);
   const [form] = Form.useForm();
   const { handleClose } = props;
+  
 
   const formik = useFormik({
     initialValues: {
