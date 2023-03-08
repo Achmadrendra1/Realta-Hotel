@@ -17,31 +17,31 @@ export class VendorController {
 
     @Get()
     getVendor() {
-        return this.vendorService.findAllVendor();
+        return this.vendorService.findAllVendor()
     }
 
     @Get(':id')
     getVendorId(@Param() params: any) {
-        return this.vendorService.findVendorId(params.id);
+        return this.vendorService.findVendorId(params.id)
     }
 
     @Get(':name')
     getVendorName(@Param() params: any) {
-        return this.vendorService.findVendorName(params.name);
+        return this.vendorService.findVendorName(params.name)
     }
 
     @Post()
     createVendor(@Body() body: any) {
-        return this.vendorService.addVendor(body);
+        return this.vendorService.addVendor(body)
     }
 
     @Put(':id')
     updateVendor(@Param() params: any, @Body() body: any) {
-        return this.vendorService.editVendor(params.id, body);
+        return this.vendorService.editVendor(params.id, body)
     }
 
     @Delete(':id')
     deleteVendor(@Param() params: any) {
-        return this.vendorService.dropVendor(params.id);
+        return this.vendorService.dropVendor(params.id)
     }
 }

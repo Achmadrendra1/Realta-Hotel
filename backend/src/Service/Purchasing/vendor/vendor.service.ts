@@ -7,7 +7,7 @@ import { Vendor } from 'src/entities/Vendor';
 export class VendorService {
   constructor(
     @InjectRepository(Vendor)
-    private vendorRepository: Repository<Vendor>,
+    private vendorRepository: Repository<Vendor>
   ) { }
 
   async findAllVendor(): Promise<any> {
@@ -17,7 +17,7 @@ export class VendorService {
   async findVendorId(id: number): Promise<any> {
     return await this.vendorRepository.find(
       { where: { vendorId: id } }
-    );
+    )
   }
 
   async findVendorName(vendor: Vendor): Promise<any> {
