@@ -48,7 +48,8 @@ export class CategoryGroupService {
   async storeFileInfo(file: { filename: any; originalName: any }, body: any) {
     const fileInfo = new CategoryGroup();
 
-    fileInfo.cagroIconUrl = `http://localhost:3500/category/public/upload/${file.filename}`;
+    console.log(file)
+    fileInfo.cagroIconUrl = `http://localhost:3600/category/public/upload/${file.filename}`;
     fileInfo.cagroIcon = file.filename; //.svg .jpg
     fileInfo.cagroName = body.cagroName;
     fileInfo.cagroDescription = body.cagroDescription;

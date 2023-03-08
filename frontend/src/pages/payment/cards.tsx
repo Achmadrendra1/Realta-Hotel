@@ -128,7 +128,7 @@ export default function Cards() {
               </div>
             </div>
             <div className="flex overflow-x-auto pb-8 overflow-hidden">
-              <div className="flex flex-nowrap lg:ml-40 md:ml-20 ml-10 ">
+              <div className="flex flex-nowrap lg:ml-40 md:ml-20  ">
                 {bankAcc.map((item: any) => (
                   <div className="inline-block px-3">
                     <div className="w-96 h-56 m-auto bg-red-100 rounded-xl relative text-white shadow-xl transition-transform transform hover:scale-95">

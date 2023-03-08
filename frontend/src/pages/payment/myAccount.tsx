@@ -50,7 +50,7 @@ export default function MyAccount() {
   const [showDetail, setShowDetail] = useState(false);
   const [dataCard, setDataCard] = useState();
   const user = useSelector((state: any) => state.GetUserReducer.getUser);
-  const { payBank } = useSelector((state: any) => state.payBankReducer);
+  const { allBank } = useSelector((state: any) => state.payBankReducer);
   const { payPaga } = useSelector((state: any) => state.payPagaReducer);
   const { account, error } = useSelector(
     (state: any) => state.payUserAccReducer
@@ -197,7 +197,7 @@ export default function MyAccount() {
           handleAct={handleActive}
           handleCancell={handleClose}
           dataUser={user}
-          dataBank={payBank}
+          dataBank={allBank}
         />
       ) : null}
       {showTopUp ? (
@@ -220,7 +220,7 @@ export default function MyAccount() {
           handleAct={handleActive}
           handleCancell={handleClose}
           data = {dataCard}
-          dataBank={payBank}
+          dataBank={allBank}
         />
       ) : null}
       <Card title="Fintech" className="mb-4">
@@ -357,7 +357,7 @@ export default function MyAccount() {
                 </p>
                 <p className="font-bold text-lg">
                   {
-                    payBank?.find(
+                    allBank?.find(
                       (obj: any) => obj.bankEntityId == item.usacEntityId
                     )?.bankName
                   }

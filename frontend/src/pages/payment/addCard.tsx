@@ -1,5 +1,5 @@
 import { doBankRequest } from "@/Redux/Action/Payment/paymentDashAction";
-import { doCreateAccount } from "@/Redux/Action/Payment/paymentUserAction";
+import { doCreateAccount, doGetAllBank } from "@/Redux/Action/Payment/paymentUserAction";
 import Buttons from "@/components/Button";
 import {
   Button,
@@ -19,11 +19,11 @@ export default function AddCard(props: any) {
   const [cardNumber, setCardNumber] = useState("");
   const [displayValue, setDisplayValue] = useState("");
   const { dataUser, dataBank, handleCancell } = props;
-  const {payBank} = useSelector((state:any) => state.payBankReducer)
+  const {allBank} = useSelector((state:any) => state.payBankReducer)
   useEffect(()=>{
-    dispacth(doBankRequest())
+    dispacth(doGetAllBank())
   }, [])
-  const optionsBank = payBank?.map((items: any) => ({
+  const optionsBank = allBank?.map((items: any) => ({
     label: items.bankName,
     value: items.bankEntityId,
   }));
@@ -90,10 +90,12 @@ export default function AddCard(props: any) {
               onChange={handleInputChange("usacAccountNumber")}
               placeholder="Enter Card Number"
               maxLength={16}
+              size="large"
+              className="focus:border-[#754cff] hover:border-[#754cff]"
             />
           </Form.Item>
           <Row gutter={16}>
-            <Col>
+            <Col> 
               <Form.Item
                 label="Bank"
                 name={"usacEntityId"}
@@ -102,10 +104,11 @@ export default function AddCard(props: any) {
                 ]}
               >
                 <Select
+                  size="large"
+                  allowClear
                   showSearch
                   placeholder="Select Bank"
-                  // mode="multiple"
-                  style={{ width: 200 }}
+                  style={{ width: 250 }}
                   optionFilterProp="children"
                   filterOption={(input, option) =>
                     (option?.label.toString() ?? "")
@@ -124,6 +127,7 @@ export default function AddCard(props: any) {
                   onChange={(value) => {
                     setFormValues({ ...formValues, usacEntityId: value });
                   }}
+                  
                 />
               </Form.Item>
             </Col>
@@ -136,6 +140,8 @@ export default function AddCard(props: any) {
                 ]}
               >
                 <Select
+                size="large"
+                allowClear
                   placeholder="Select Card Type"
                   style={{ width: 200 }}
                   onChange={(value) =>
@@ -161,6 +167,7 @@ export default function AddCard(props: any) {
                 ]}
               >
                 <Input
+                
                   placeholder="MM"
                   maxLength={2}
                   onChange={handleInputChange("usacExpmonth")}
@@ -222,11 +229,11 @@ export default function AddCard(props: any) {
               </Form.Item>
             </Col>
           </Row>
-          <div className="flex">
-            <div className="mr-2">
+          <div className="flex justify-end">
+            <Buttons type={"danger"} funcs={props.clickCancel}>Cancel</Buttons>
+            <div className="ml-2">
               <Buttons>Submit</Buttons>
             </div>
-            <Buttons type={"danger"} funcs={props.clickCancel}>Cancel</Buttons>
           </div>
         </Form>
         {cardNumber}
