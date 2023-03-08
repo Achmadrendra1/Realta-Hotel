@@ -41,3 +41,12 @@ export function* handleDeleteDept( action:any ):any{
         Promise.resolve(e.message)
     }
 }
+
+export function* handleDeptSelect():any{
+    try {
+        const res = yield axios(API('get', `/dept/select`))
+        yield put({ type: deptType.GET_SELECT_SUCCESS, payload: res.data})
+    } catch (e:any) {
+        yield put({ type: deptType.GET_SELECT_FAILED})
+    }
+}

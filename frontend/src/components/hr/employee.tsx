@@ -26,7 +26,7 @@ const Employee = () => {
     const dispatch = useDispatch()
     const { employees } = useSelector((state:any) => state.employeesReducer)
     const { selectJob } = useSelector((state:any) => state.selectReducer)
-    const datas = employees.filter((item:any) => item.status == (value == 'Active' ? 1 : 0))
+    const datas = employees.filter((item:any) => item.empCurrentFlag == (value == 'Active' ? 1 : 0))
     const addCommas = (num:any) => num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     const removeNonNumeric = (num:any) => num.toString().replace(/[^0-9]/g, "");
 
@@ -34,7 +34,7 @@ const Employee = () => {
         if (search === "") {
           return item;
         } else {
-          return item.fullname.toLowerCase().includes(search.toLocaleLowerCase());
+          return item.empUser.userFullName.toLowerCase().includes(search.toLocaleLowerCase());
         }
     });
 
@@ -74,45 +74,43 @@ const Employee = () => {
     }
     const columns = [
         {
-            title: 'Id',
-            dataIndex: 'id',
-            key: 'id',
+            title: 'Employee ID',
+            dataIndex: 'empId',
+            key: 'empId',
             width: '10%'
         },
         {
             title: 'NationalId',
-            dataIndex: 'nationalid',
-            key: 'nationalid',
+            dataIndex: 'empNationalId',
+            key: 'empNationalId',
         },
         {
             title: 'Full Name',
-            dataIndex: 'fullname',
-            key: 'fullname',
+            render: (_:any, record:any) => record.empUser.userFullName,
             width: '20%'
         },
         {
             title: 'Birth Date',
-            dataIndex: 'birthdate',
             key: 'birthdate',
             render: (_:any, record:any) => {
-                const birth = record.birthdate.split('T')
+                const birth = record.empBirthDate.split('T')
                 return birth[0]
             }
         },
         {
             title: 'Hire Date',
-            dataIndex: 'hire',
+            dataIndex: 'empHireDate',
             key: 'hire',
             render: (_:any, record:any) => {
-                const hires = record.hire.split('T')
+                const hires = record.empHireDate.split('T')
                 return hires[0]
             }
         },
         {
             title: 'Status',
-            dataIndex: 'status',
+            dataIndex: 'empCurrentFlag',
             key: 'status',
-            render: (_:any, record:any) => record.status == 0 ? 'Inactive' : 'Active'
+            render: (_:any, record:any) => record.empCurrentFlag == 0 ? 'Inactive' : 'Active'
         },
         {
             title: 'Action',
@@ -120,8 +118,8 @@ const Employee = () => {
             width: '20%',
             render: (_:any, record:any) => (
                 <Space size={10}>
-                    <Link href={`/dashboard/hr/${record.id}/${record.fullname}`}><EyeOutlined /></Link>
-                    <Button className="border-none text-red-400" onClick={() => dispatch(delEmployee(record.id))}><DeleteOutlined /></Button>
+                    <Link href={`/dashboard/hr/${record.empId}/${record.empUser.userFullName}`}><EyeOutlined /></Link>
+                    <Button className="border-none text-red-400" onClick={() => dispatch(delEmployee(record.empUser.userId))}><DeleteOutlined /></Button>
                 </Space>
             )
         }
@@ -219,7 +217,7 @@ const Employee = () => {
             <Row justify='space-between' className="my-5">
                 <Col>
                     <Space size={17}>
-                        <Input className="w-96 py-2 rounded-full" placeholder="Department Name" onChange={e => setSearch(e.target.value)} prefix={<SearchOutlined />}/>
+                        <Input className="w-96 py-2 rounded" placeholder="Department Name" onChange={e => setSearch(e.target.value)} prefix={<SearchOutlined />}/>
                     </Space>
                 </Col>
                 <Col>

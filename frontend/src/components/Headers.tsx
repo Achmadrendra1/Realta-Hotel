@@ -201,7 +201,7 @@ const Headers = ({
                   className={`px-7 py-2 leading-5 text-md rounded-full transition ease-in ${
                     item.href == "/" + splits[1]
                       ? " text-[#754CFF] hover:text-black font-semibold text-[14px]"
-                      : 'hover:text-[#754cff] font-semibold text-[14px]'
+                      : 'hover:text-[#754cff] text-[#959595] font-medium text-[14px]'
                   }`}
                 >
                   {item.name}
