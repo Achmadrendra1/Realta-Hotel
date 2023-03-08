@@ -2,7 +2,6 @@ import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Like, Repository } from 'typeorm';
 import { StockPhoto } from 'src/entities/StockPhoto';
-import * as path from 'path';
 
 @Injectable()
 export class SphoService {
@@ -18,25 +17,24 @@ export class SphoService {
   async findSphoId(id: number): Promise<any> {
     return await this.sphoRepository.find(
       { where: { sphoId: id } }
-    );
+    )
   }
 
   async findSphoName(stockPhoto: StockPhoto): Promise<any> {
     return await this.sphoRepository.find(
       { where: { sphoPhotoFilename: Like('%' + stockPhoto.sphoPhotoFilename + '%') } }
-    );
+    )
   }
 
   async addSpho(url: any, stockPhoto: StockPhoto): Promise<any> {
     for (const data of url) {
-      console.log(data);
       await this.sphoRepository.save(
         {
           sphoThumbnailFilename: data.originalname,
           sphoPhotoFilename: data.filename,
           sphoPrimary: stockPhoto.sphoPrimary,
           sphoUrl: data.filename,
-          sphoStock: stockPhoto.sphoStock,
+          sphoStock: stockPhoto.sphoStock
         }
       )
       const res = await this.findAllSpho()
@@ -56,9 +54,9 @@ export class SphoService {
         sphoPhotoFilename: spho.sphoPhotoFilename,
         sphoPrimary: spho.sphoPrimary,
         sphoUrl: spho.sphoUrl,
-        sphoStock: spho.sphoStock,
+        sphoStock: spho.sphoStock
       })
-      return { message: `Congrats, you're stock photo has been changed` };
+      return { message: `Congrats, you're stock photo has been changed` }
     } catch (error) {
       throw new HttpException({
         message: error.message

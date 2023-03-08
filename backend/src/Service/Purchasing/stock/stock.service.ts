@@ -1,4 +1,4 @@
-import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Like, Repository } from 'typeorm';
 import { Stocks } from 'src/entities/Stocks';
@@ -64,33 +64,6 @@ export class StockService {
       stockColor: stock.stockColor,
       stockModifiedDate: new Date()
     })
-    // const res = await this.findStockId(id)
-    // if (res[0]) {
-    //   try {
-    //     await this.stockRepository.update({
-    //       stockId: id
-    //     }, {
-    //       stockName: stock.stockName,
-    //       stockDescription: stock.stockDescription,
-    //       stockQuantity: stock.stockQuantity,
-    //       stockReorderPoint: stock.stockReorderPoint,
-    //       stockUsed: stock.stockUsed,
-    //       stockScrap: stock.stockScrap,
-    //       stockSize: stock.stockSize,
-    //       stockColor: stock.stockColor,
-    //       stockModifiedDate: new Date()
-    //     })
-    //     return { message: `Congrats, you're Stock has been changed`, result: res}
-    //   } catch (error) {
-    //     throw new HttpException({
-    //       message: error.message
-    //     }, HttpStatus.BAD_REQUEST)
-    //   }
-    // } else {
-    //   throw new HttpException({
-    //     message: `Data Stock does'nt Exist`
-    //   }, HttpStatus.BAD_REQUEST)
-    // }
   }
 
   async dropStock(id: number): Promise<any> {

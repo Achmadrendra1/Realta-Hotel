@@ -84,7 +84,6 @@ export default function EditPodes(props: any) {
                             </div>
                         </div>
                     </Form.Item>
-
                 </Form>
             </Modal>
         </>

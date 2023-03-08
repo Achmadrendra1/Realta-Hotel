@@ -47,7 +47,6 @@ export default function EditStods(props: any) {
         console.log("Failed:", errorInfo)
     }
 
-
     return (
         <>
             <Modal
@@ -103,7 +102,6 @@ export default function EditStods(props: any) {
                             </div>
                         </div>
                     </Form.Item>
-
                 </Form>
             </Modal>
         </>

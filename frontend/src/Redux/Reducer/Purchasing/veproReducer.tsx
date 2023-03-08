@@ -4,7 +4,7 @@ const initialState = {
     vepros: []
 }
 
-export default function VeproReducer(state = initialState, action: any) {
+export const VeproReducer = (state = initialState, action: any) => {
     switch (action.type) {
         case PurchasingConst.GET_VEPRO:
         case PurchasingConst.ADD_VEPRO:

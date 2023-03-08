@@ -4,7 +4,7 @@ const initialState = {
     stods: []
 }
 
-export default function StodReducer(state = initialState, action: any) {
+export const StodReducer = (state = initialState, action: any) => {
     switch (action.type) {
         case PurchasingConst.GET_STOD:
         case PurchasingConst.ADD_STOD:
@@ -17,9 +17,7 @@ export default function StodReducer(state = initialState, action: any) {
             return { ...state, stods: action.payload }
 
         case PurchasingConst.EDIT_STOD_SUCCESS:
-            const index = state.stods.findIndex(
-                (item: any) => item.stockdet_id == action.payload.stockdet_id
-            )
+            const index = state.stods.findIndex((item: any) => item.stockdet_id == action.payload.stockdet_id)
             state.stods.splice(index, 1, action.payload)
             return {
                 ...state,

@@ -12,10 +12,10 @@ export default function Pode() {
     const dispatch = useDispatch()
     const router = useRouter()
     const { podes } = useSelector((state: any) => state.PodeReducer)
+    const { pohes } = useSelector((state: any) => state.PoheReducer)
     const [id, setId] = useState(0)
     const [updatePode, setUpdatePode] = useState(false)
 
-    const { pohes } = useSelector((state: any) => state.PoheReducer)
     const { id_pohe } = router.query
     const data = pohes.find((item: any) => item.pove_id == id_pohe)
 
@@ -134,8 +134,7 @@ export default function Pode() {
                     clickOk={handleOk}
                     clickCancel={handleCancel}
                     handleClose={handleClose}
-                />
-                : null}
+                /> : null}
 
             <Link href={'/dashboard/purchasing'}><ArrowLeftOutlined /> Back</Link>
 

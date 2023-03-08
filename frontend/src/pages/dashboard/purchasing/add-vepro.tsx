@@ -39,13 +39,15 @@ export default function AddVepros(props: any) {
                     <p className='text-center text-xl py-5 font-bold'>
                         Add Vendor Product
                     </p>
-                    <Form.Item name="vestock_vendor_id" initialValue={props.id} hidden/>
+
+                    <Form.Item name="vestock_vendor_id" initialValue={props.id} hidden />
+
                     <Form.Item
                         name="vestock_name" label='Stock Name'
                         rules={[{ required: true, message: 'Please input stock name!' }]}
                     >
-                        <Select>
-                            {stocks && stocks.map((item: any, index: any) => (
+                        <Select placeholder="Select stock">
+                            {stocks && stocks.map((item: any) => (
                                 <option value={item.stockId}>
                                     {item.stockName}
                                 </option>
@@ -53,30 +55,26 @@ export default function AddVepros(props: any) {
                         </Select>
                     </Form.Item>
 
-
                     <Form.Item
                         name="vestock_qty_stocked" label='Qty Stocked'
                         rules={[{ required: true, message: 'Please input qty Stocked!' }]}
                     >
-                        <Input />
+                        <Input placeholder="Input quantity stocked" />
                     </Form.Item>
-
 
                     <Form.Item
                         name="vestock_qty_remaining" label='Remaining'
                         rules={[{ required: true, message: 'Please input remaining!' }]}
                     >
-                        <Input />
+                        <Input placeholder="Input quantity remaining" />
                     </Form.Item>
-
 
                     <Form.Item
                         name="vestock_price" label='Sell Price'
                         rules={[{ required: true, message: 'Please input price!' }]}
                     >
-                        <Input />
+                        <Input placeholder="Input price" />
                     </Form.Item>
-
 
                     <Form.Item label=" " colon={false}>
                         <div className="flex justify-end">
@@ -88,8 +86,6 @@ export default function AddVepros(props: any) {
                             </div>
                         </div>
                     </Form.Item>
-
-
                 </Form>
             </Modal>
         </>

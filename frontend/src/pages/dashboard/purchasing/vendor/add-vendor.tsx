@@ -74,24 +74,22 @@ export default function AddVendors(props: any) {
                         name="vendorName" label='Vendor'
                         rules={[{ required: true, message: 'Please input vendor name!' }]}
                     >
-                        <Input />
+                        <Input placeholder='Input name'/>
                     </Form.Item>
 
                     <Form.Item name="vendorActive" label="Status"
                         rules={[{ required: true, message: 'Please select status!' }]}>
                         <Select
-                            placeholder='Select Status'
+                            placeholder='Select status'
                             options={active} />
                     </Form.Item>
-
 
                     <Form.Item name="vendorPriority" label="Priority"
                         rules={[{ required: true, message: 'Please select priority!' }]}>
                         <Select
-                            placeholder='Select Priority'
+                            placeholder='Select priority'
                             options={priority} />
                     </Form.Item>
-
 
                     <Form.Item
                         name="vendorRegisterDate" label="Register Date"
@@ -100,12 +98,11 @@ export default function AddVendors(props: any) {
                         <DatePicker onChange={onChangeDate} format={customFormat} />
                     </Form.Item>
 
-
                     <Form.Item
                         name="vendorWeburl" label='Site'
                         rules={[{ required: true, message: 'Please input web site!' }]}
                     >
-                        <Input />
+                        <Input placeholder='Input web url'/>
                     </Form.Item>
 
                     <Form.Item label=" " colon={false}>
@@ -118,7 +115,6 @@ export default function AddVendors(props: any) {
                             </div>
                         </div>
                     </Form.Item>
-
                 </Form>
             </Modal>
         </>

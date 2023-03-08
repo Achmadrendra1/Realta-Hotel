@@ -39,55 +39,49 @@ export default function AddStocks(props: any) {
                         name="stockName" label='Stock Name'
                         rules={[{ required: true, message: 'Please input stock name!' }]}
                     >
-                        <Input />
+                        <Input placeholder='Input name'/>
                     </Form.Item>
-
 
                     <Form.Item
                         name="stockQuantity" label='Quantity'
                         rules={[{ required: true, message: 'Please input quantity!' }]}
                     >
-                        <Input />
+                        <Input placeholder='Input quantity'/>
                     </Form.Item>
-
 
                     <Form.Item
                         name="stockReorderPoint" label='Reorder Point'
                         rules={[{ required: true, message: 'Please input reorder point!' }]}
                     >
-                        <Input />
+                        <Input placeholder='Input reorder point'/>
                     </Form.Item>
-
 
                     <Form.Item
                         name="stockUsed" label='Used'
                         rules={[{ required: true, message: 'Please input used!' }]}
                     >
-                        <Input />
+                        <Input placeholder='Input quantity used'/>
                     </Form.Item>
-
 
                     <Form.Item
                         name="stockScrap" label='Scrap'
                         rules={[{ required: true, message: 'Please input scrap!' }]}
                     >
-                        <Input />
+                        <Input placeholder='Input quantity scrap'/>
                     </Form.Item>
-
 
                     <Form.Item
                         name="stockSize" label='Size'
                         rules={[{ required: true, message: 'Please input size!' }]}
                     >
-                        <Input />
+                        <Input placeholder='Input size'/>
                     </Form.Item>
-
 
                     <Form.Item
                         name="stockColor" label='Color'
                         rules={[{ required: true, message: 'Please input color!' }]}
                     >
-                        <Input />
+                        <Input placeholder='Input color'/>
                     </Form.Item>
 
                     <Form.Item label=" " colon={false}>
@@ -100,7 +94,6 @@ export default function AddStocks(props: any) {
                             </div>
                         </div>
                     </Form.Item>
-
                 </Form>
             </Modal>
         </>

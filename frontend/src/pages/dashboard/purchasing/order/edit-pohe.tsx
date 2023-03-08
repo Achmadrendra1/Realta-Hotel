@@ -32,10 +32,6 @@ export default function EditPohes(props: any) {
         }
     ]
 
-    const eventHandler = (item: any) => (event: any) => {
-        setDataPohe({ ...dataPohe, [item]: event.target.value })
-    }
-
     const onFinish = () => {
         dispatch(EditPohe(dataPohe));
         handleClose(false)
@@ -63,11 +59,12 @@ export default function EditPohes(props: any) {
                 >
 
                     <Form.Item name="pove_status" label="Status"
-                        rules={[{ required: true, message: 'Please select status!' }]}>
+                        rules={[{ required: true, message: 'Please select status!' }]}
+                    >
                         <Select
                             options={status}
                             onChange={(value) => {
-                                setDataPohe({ ...dataPohe, poheStatus: value });
+                                setDataPohe({ ...dataPohe, poheStatus: value })
                             }} />
                     </Form.Item>
 
@@ -81,7 +78,6 @@ export default function EditPohes(props: any) {
                             </div>
                         </div>
                     </Form.Item>
-
                 </Form>
             </Modal>
         </>

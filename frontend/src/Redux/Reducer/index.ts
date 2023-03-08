@@ -33,12 +33,12 @@ import { serviceListReducer } from './HR/serviceList';
 import BoorInvoiceReducer from './Booking/BoorInvoiceReducer';
 // Purchasing
 import { StockReducer } from './Purchasing/stockReducer';
-import StodReducer from './Purchasing/stodReducer';
+import { StodReducer } from './Purchasing/stodReducer';
 import { SphoReducer } from './Purchasing/sphoReducer';
-import VendorReducer from './Purchasing/vendorReducer';
-import VeproReducer from './Purchasing/veproReducer';
-import PoheReducer from './Purchasing/poheReducer';
-import PodeReducer from './Purchasing/podeReducer';
+import { VendorReducer } from './Purchasing/vendorReducer';
+import { VeproReducer } from './Purchasing/veproReducer';
+import { PoheReducer } from './Purchasing/poheReducer';
+import { PodeReducer } from './Purchasing/podeReducer';
 
 import restoMenuReducer from './Resto/restoMenuReducer';
 import menuReducer from './Resto/menuReducer';

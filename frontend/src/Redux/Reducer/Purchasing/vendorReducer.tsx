@@ -4,7 +4,7 @@ const initialState = {
     vendors: []
 }
 
-export default function VendorReducer(state = initialState, action: any) {
+export const VendorReducer = (state = initialState, action: any) => {
     switch (action.type) {
         case PurchasingConst.GET_VENDOR:
         case PurchasingConst.ADD_VENDOR:
@@ -17,9 +17,7 @@ export default function VendorReducer(state = initialState, action: any) {
             return { ...state, vendors: action.payload }
 
         case PurchasingConst.EDIT_VENDOR_SUCCESS:
-            const index = state.vendors.findIndex(
-                (item: any) => item.vendorId == action.payload.vendorId
-            )
+            const index = state.vendors.findIndex((item: any) => item.vendorId == action.payload.vendorId)
             state.vendors.splice(index, 1, action.payload)
             return {
                 ...state,

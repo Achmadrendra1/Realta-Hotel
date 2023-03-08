@@ -4,7 +4,7 @@ const initialState = {
     pohes: []
 }
 
-export default function PoheReducer(state = initialState, action: any) {
+export const PoheReducer = (state = initialState, action: any) => {
     switch (action.type) {
         case PurchasingConst.GET_POHE:
         case PurchasingConst.ADD_POHE:

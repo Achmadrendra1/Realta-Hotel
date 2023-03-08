@@ -23,24 +23,24 @@ export class SphoController {
 
     @Get()
     getSpho() {
-        return this.sphoService.findAllSpho();
+        return this.sphoService.findAllSpho()
     }
 
     @Get('src/:filename')
     getSphoFile(@Param('filename') filename: string, @Res() res: any) {
         return res.sendFile(filename, {
             root: join('src', 'Service', 'Purchasing', 'stock-photo', 'photos')
-        });
+        })
     }
 
     @Get(':id')
     getSphoId(@Param() params: any) {
-        return this.sphoService.findSphoId(params.id);
+        return this.sphoService.findSphoId(params.id)
     }
 
     @Get(':name')
     getSphoName(@Param() params: any) {
-        return this.sphoService.findSphoName(params.name);
+        return this.sphoService.findSphoName(params.name)
     }
 
     @Post('')
@@ -58,28 +58,16 @@ export class SphoController {
             })
         })
     ) createSpho(@UploadedFiles() file: Express.Multer.File, @Body() body: any) {
-        return this.sphoService.addSpho(file, body);
+        return this.sphoService.addSpho(file, body)
     }
-
-    // @Post()
-    // @UseInterceptors(FilesInterceptor('files'))
-    // async uploadFile(@UploadedFiles() files: Array<Express.Multer.File>) {
-    //     console.log(files);
-    //     return `File's uploaded successfully`;
-    // }
-
-    // @Post()
-    // createSpho(@Body() body: any) {
-    //     return this.sphoService.addSpho(body);
-    // }
 
     @Put(':id')
     updateSpho(@Param() params: any, @Body() body: any) {
-        return this.sphoService.editSpho(params.id, body);
+        return this.sphoService.editSpho(params.id, body)
     }
 
     @Delete(':id')
     deleteSpho(@Param() params: any) {
-        return this.sphoService.dropSpho(params.id);
+        return this.sphoService.dropSpho(params.id)
     }
 }

@@ -98,11 +98,11 @@ export default function AddProduct() {
         <Dashboard>
             {addVepro ?
                 <AddVepros
+                    id={data.vendorId}
                     show={addVepro}
                     clickOk={handleOk}
                     clickCancel={handleCancel}
                     handleClose={handleClose}
-                    id = {data.vendorId}
                 /> : null}
 
             {updateVepro ?
@@ -113,8 +113,7 @@ export default function AddProduct() {
                     clickOk={handleOk}
                     clickCancel={handleCancel}
                     handleClose={handleClose}
-                />
-                : null}
+                /> : null}
 
             <Link href={'/dashboard/purchasing'}><ArrowLeftOutlined /> Back</Link>
 

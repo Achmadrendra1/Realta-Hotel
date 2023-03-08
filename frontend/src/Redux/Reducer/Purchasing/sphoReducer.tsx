@@ -17,10 +17,8 @@ export const SphoReducer = (state = initialState, action: any) => {
             return { ...state, sphos: action.payload }
 
         case PurchasingConst.EDIT_SPHO_SUCCESS:
-            const index = state.sphos.findIndex(
-                (item: any) => item.sphoId == action.payload.sphoId
-            )
-            state.sphos.splice(index, 1)
+            const index = state.sphos.findIndex((item: any) => item.sphoId == action.payload.sphoId)
+            state.sphos.splice(index, 1, action.payload)
             return {
                 ...state,
                 sphos: [...state.sphos]

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { DatePicker, DatePickerProps, Form, Input, Modal, Select } from 'antd';
+import { Form, Input, Modal, Select } from 'antd';
 import Buttons from '@/components/Button';
 import { EditVendor } from '@/Redux/Action/Purchasing/purchasingAction';
 
@@ -12,16 +12,6 @@ export default function EditVendors(props: any) {
 
     const editVendors = data.find((item: any) => item.vendorId == id)
     const [dataVendor, setDataVendor] = useState(editVendors)
-
-    const date = editVendors.vendorRegisterDate.split('T')[0]
-
-    const onChangeDate: DatePickerProps["onChange"] = (date, dateString) => {
-        console.log(dateString)
-    }
-
-    const dateFormat = "YYYY/MM/DD"
-    const customFormat: DatePickerProps["format"] = (value: any) =>
-        `${value.format(dateFormat)}`
 
     const active = [
         {
@@ -88,7 +78,6 @@ export default function EditVendors(props: any) {
                         name="vendorRegisterDate" label="Register Date"
                         rules={[{ required: true, message: 'Please input register date!' }]}
                     >
-                        {/* <DatePicker onChange={eventHandler("vendorRegisterDate")} format={customFormat} /> */}
                         <Input type='Date' onChange={eventHandler("vendorRegisterDate")} />
                     </Form.Item>
 
@@ -102,7 +91,6 @@ export default function EditVendors(props: any) {
                                 setDataVendor({ ...dataVendor, vendorActive: value })
                             }} />
                     </Form.Item>
-
 
                     <Form.Item
                         name="vendorPriority" label="Priority"
@@ -132,7 +120,6 @@ export default function EditVendors(props: any) {
                             </div>
                         </div>
                     </Form.Item>
-
                 </Form>
             </Modal>
         </>

@@ -7,21 +7,19 @@ import { PurchaseOrderHeader } from 'src/entities/PurchaseOrderHeader';
 export class PoheService {
   constructor(
     @InjectRepository(PurchaseOrderHeader)
-    private poheRepository: Repository<PurchaseOrderHeader>,
+    private poheRepository: Repository<PurchaseOrderHeader>
   ) { }
 
   async findAllPohe(): Promise<any> {
-    return await this.poheRepository.query(
-      'select * from purchasing.getALLPoheVendor()',
-    );
+    return await this.poheRepository.query('select * from purchasing.getALLPoheVendor()')
   }
 
   async findPoheId(id: number): Promise<any> {
-    return await this.poheRepository.find({ where: { poheId: id } });
+    return await this.poheRepository.find({ where: { poheId: id } })
   }
 
   async findPoheNumber(pohe: PurchaseOrderHeader): Promise<any> {
-    return await this.poheRepository.findOneBy({ poheNumber: pohe.poheNumber });
+    return await this.poheRepository.findOneBy({ poheNumber: pohe.poheNumber })
   }
 
   async addPohe(pohe: PurchaseOrderHeader): Promise<any> {
@@ -36,13 +34,13 @@ export class PoheService {
       poheArrivalDate: pohe.poheArrivalDate,
       pohePayType: pohe.pohePayType,
       poheEmp: pohe.poheEmpId,
-      poheVendor: pohe.poheVendor,
-    });
-    const res = await this.findAllPohe();
+      poheVendor: pohe.poheVendor
+    })
+    const res = await this.findAllPohe()
     return {
       message: `Congrats, you have new Purchase Order Header`,
-      result: res,
-    };
+      result: res
+    }
   }
 
   async editPohe(id: number, pohe: PurchaseOrderHeader): Promise<any> {
@@ -61,7 +59,7 @@ export class PoheService {
   }
 
   async dropPohe(id: number): Promise<any> {
-    await this.poheRepository.delete({ poheId: id });
-    return `Congrats, you're purchase order header has been deleted`;
+    await this.poheRepository.delete({ poheId: id })
+    return `Congrats, you're purchase order header has been deleted`
   }
 }

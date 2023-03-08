@@ -114,8 +114,7 @@ export default function Stod() {
                     clickOk={handleOk}
                     clickCancel={handleCancel}
                     handleClose={handleClose}
-                />
-                : null}
+                /> : null}
 
             <Link href={'/dashboard/purchasing'}><ArrowLeftOutlined /> Back</Link>
 

@@ -17,27 +17,27 @@ export class PodeController {
 
     @Get()
     getPode() {
-        return this.podeService.findAllPode();
+        return this.podeService.findAllPode()
     }
 
     @Get(':id')
     getPodeId(@Param() params: any) {
-        return this.podeService.findPodeId(params.id);
+        return this.podeService.findPodeId(params.id)
     }
 
     @Post()
     createPode(@Body() body: any) {
-        return this.podeService.addPode(body);
+        return this.podeService.addPode(body)
     }
 
     @Put(':id')
     updatePode(@Param() params: any, @Body() body: any) {
-        return this.podeService.editPode(params.id, body);
+        return this.podeService.editPode(params.id, body)
     }
 
     @Delete(':id')
     deletePode(@Param() params: any) {
-        return this.podeService.dropPode(params.id);
+        return this.podeService.dropPode(params.id)
     }
 
 }

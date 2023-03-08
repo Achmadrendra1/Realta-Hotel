@@ -52,14 +52,12 @@ export default function EditStocks(props: any) {
                         <Input onChange={eventHandler("stockName")}/>
                     </Form.Item>
 
-
                     <Form.Item
                         name="stockQuantity" label='Quantity'
                         rules={[{ required: true, message: 'Please input quantity!' }]}
                     >
                         <Input onChange={eventHandler("stockQuantity")}/>
                     </Form.Item>
-
 
                     <Form.Item
                         name="stockReorderPoint" label='Reorder Point'
@@ -68,14 +66,12 @@ export default function EditStocks(props: any) {
                         <Input onChange={eventHandler("stockReorderPoint")}/>
                     </Form.Item>
 
-
                     <Form.Item
                         name="stockUsed" label='Used'
                         rules={[{ required: true, message: 'Please input used!' }]}
                     >
                         <Input onChange={eventHandler("stockUsed")}/>
                     </Form.Item>
-
 
                     <Form.Item
                         name="stockScrap" label='Scrap'
@@ -84,14 +80,12 @@ export default function EditStocks(props: any) {
                         <Input onChange={eventHandler("stockScrap")}/>
                     </Form.Item>
 
-
                     <Form.Item
                         name="stockSize" label='Size'
                         rules={[{ required: true, message: 'Please input size!' }]}
                     >
                         <Input onChange={eventHandler("stockSize")}/>
                     </Form.Item>
-
 
                     <Form.Item
                         name="stockColor" label='Color'
@@ -110,7 +104,6 @@ export default function EditStocks(props: any) {
                             </div>
                         </div>
                     </Form.Item>
-
                 </Form>
             </Modal>
         </>

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { Button, Form, Input, Modal, Upload, UploadFile, message, } from 'antd';
+import { useDispatch } from 'react-redux';
+import { Button, Form, Modal, Upload, UploadFile, message, } from 'antd';
 import Buttons from '@/components/Button';
 import { EditStock } from '@/Redux/Action/Purchasing/purchasingAction';
 import { UploadOutlined } from '@ant-design/icons';
@@ -12,8 +12,8 @@ export default function AddSphos(props: any) {
     const { handleClose } = props
     const dispatch = useDispatch()
 
-    const [fileList, setFileList] = useState<UploadFile[]>([]);
-    const [uploading, setUploading] = useState(false);
+    const [fileList, setFileList] = useState<UploadFile[]>([])
+    const [uploading, setUploading] = useState(false)
 
     // const { sphos } = useSelector((state: any) => state.SphoReducer)
 
@@ -33,14 +33,12 @@ export default function AddSphos(props: any) {
         console.log("Failed:", errorInfo)
     }
 
-
-
     const handleUpload = () => {
-        const formData = new FormData();
+        const formData = new FormData()
         fileList.forEach((file) => {
-            formData.append('files[]', file as RcFile);
-        });
-        setUploading(true);
+            formData.append('files[]', file as RcFile)
+        })
+        setUploading(true)
         // You can use any AJAX library you like
         fetch('https://www.mocky.io/v2/5cc8019d300000980a055e76', {
             method: 'POST',
@@ -49,33 +47,30 @@ export default function AddSphos(props: any) {
             .then((res) => res.json())
             .then(() => {
                 setFileList([]);
-                message.success('upload successfully.');
+                message.success('Upload successfully')
             })
             .catch(() => {
-                message.error('upload failed.');
+                message.error('Upload failed')
             })
             .finally(() => {
-                setUploading(false);
-            });
-    };
+                setUploading(false)
+            })
+    }
 
     const propsUpload: UploadProps = {
         onRemove: (file) => {
-            const index = fileList.indexOf(file);
-            const newFileList = fileList.slice();
-            newFileList.splice(index, 1);
-            setFileList(newFileList);
+            const index = fileList.indexOf(file)
+            const newFileList = fileList.slice()
+            newFileList.splice(index, 1)
+            setFileList(newFileList)
         },
         beforeUpload: (file) => {
-            setFileList([...fileList, file]);
+            setFileList([...fileList, file])
 
-            return false;
+            return false
         },
-        fileList,
-    };
-
-
-
+        fileList
+    }
 
     return (
         <>
@@ -120,7 +115,6 @@ export default function AddSphos(props: any) {
                             </div>
                         </div>
                     </Form.Item>
-
                 </Form>
             </Modal>
         </>

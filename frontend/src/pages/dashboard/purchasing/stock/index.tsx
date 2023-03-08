@@ -2,12 +2,11 @@ import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useRouter } from 'next/router';
 import { Table, MenuProps, Modal, Button, Tooltip, Input } from 'antd';
-import { PlusOutlined, EditOutlined, DeleteOutlined, MoreOutlined, SearchOutlined, CameraOutlined, EyeOutlined } from '@ant-design/icons';
+import { PlusOutlined, EditOutlined, DeleteOutlined, SearchOutlined, CameraOutlined, EyeOutlined } from '@ant-design/icons';
 import { AllStock, DelStock } from '@/Redux/Action/Purchasing/purchasingAction';
 import AddStocks from './add-stock';
 import EditStocks from './edit-stock';
 import AddSphos from '../add-spho';
-import Link from 'next/link';
 
 export default function Stock() {
     const { stocks } = useSelector((state: any) => state.StockReducer)
@@ -67,7 +66,7 @@ export default function Stock() {
             okType: 'danger',
             cancelText: 'No',
             onOk() {
-                console.log(id);
+                console.log(id)
                 dispatch(DelStock(id))
             },
             onCancel() {
@@ -75,32 +74,6 @@ export default function Stock() {
             }
         })
     }
-
-    const items: MenuProps["items"] = [
-        {
-            label: <p onClick={(record: any) => uploadPhoto(record.stockId)}>Upload Photo</p>,
-            key: "0"
-        },
-        {
-            label: <p onClick={(record: any) => uploadPhoto(record.stockId)}>Upload Photo</p>,
-            key: "0"
-        },
-        {
-            label: <p onClick={(record: any) => uploadPhoto(record.stockId)}>Upload Photo</p>,
-            key: "0"
-        },
-        {
-            label:
-                <span
-                    onClick={(record: any) => router.push({
-                        pathname: '/dashboard/purchasing/stock-detail',
-                        query: { id_stock: record.stockId }
-                    }, '/dashboard/purchasing/stock-detail')}>
-                    Detail Info Stock
-                </span>,
-            key: "1"
-        }
-    ]
 
     useEffect(() => {
         dispatch(AllStock())
@@ -168,16 +141,13 @@ export default function Stock() {
                                     name_stock: record.stockName
                                 }
                             }, `/dashboard/purchasing/stock/${record.stockId}/${record.stockName}`)}
-                            className="mx-2" />
+                            className="mx-2 text-blue-400" />
                     </Tooltip>
-                    <Tooltip placement="top" title='Upload Photo'>
+                    {/* <Tooltip placement="top" title='Upload Photo'>
                         <CameraOutlined
                             onClick={(record: any) => uploadPhoto(record.stockId)}
                             className="mx-2" />
-                    </Tooltip>
-                    {/* <Dropdown menu={{ items }} trigger={["click"]} className="h-8">
-                        <MoreOutlined className="mx-2" />
-                    </Dropdown> */}
+                    </Tooltip> */}
                 </>
             )
         }
@@ -201,8 +171,7 @@ export default function Stock() {
                     clickOk={handleOk}
                     clickCancel={handleCancel}
                     handleClose={handleClose}
-                />
-                : null}
+                /> : null}
 
             {addSpho ?
                 <AddSphos

@@ -4,7 +4,7 @@ const initialState = {
     podes: []
 }
 
-export default function PodeReducer(state = initialState, action: any) {
+export const PodeReducer = (state = initialState, action: any) => {
     switch (action.type) {
         case PurchasingConst.GET_PODE:
         case PurchasingConst.ADD_PODE:

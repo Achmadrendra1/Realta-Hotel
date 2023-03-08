@@ -24,7 +24,6 @@ export function* handleVepro(): any {
 
 export function* handleVeproAdd(action: any): any {
     try {
-        // console.log(action.payload);
         const res = yield axios(API('POST', '/vendor-product', action.payload))
         yield put(AddVeproSuccess(res.data.result))
         return res.data.result
@@ -34,10 +33,10 @@ export function* handleVeproAdd(action: any): any {
 }
 
 export function* handleVeproUpdate(action: any): any {
-    const { payload } = action
     try {
-        yield axios(API('put', `/vendor-product/` + payload.vestock_id, payload))
-        yield put(EditVeproSuccess(payload))
+        const res = yield axios(API('put', `/vendor-product/` + action.payload.vestock_id, action.payload))
+        yield put(EditVeproSuccess(action.payload))
+        return res.data.result
     } catch (error: any) {
         yield put(EditVeproFailed(error.response.data.message))
     }

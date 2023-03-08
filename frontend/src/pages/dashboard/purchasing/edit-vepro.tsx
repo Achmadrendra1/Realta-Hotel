@@ -28,7 +28,7 @@ export default function EditVepros(props: any) {
     }
 
     const onFinishFailed = (errorInfo: any) => {
-        console.log("Failed:", errorInfo);
+        console.log("Failed:", errorInfo)
     }
 
     return (
@@ -74,14 +74,12 @@ export default function EditVepros(props: any) {
                         <Input onChange={eventHandler("vestock_qty_stocked")}/>
                     </Form.Item>
 
-
                     <Form.Item
                         name="vestock_qty_remaining" label='Remaining'
                         rules={[{ required: true, message: 'Please input remaining!' }]}
                     >
                         <Input onChange={eventHandler("vestock_qty_remaining")}/>
                     </Form.Item>
-
 
                     <Form.Item
                         name="vestock_price" label='Sell Price'
@@ -100,7 +98,6 @@ export default function EditVepros(props: any) {
                             </div>
                         </div>
                     </Form.Item>
-
                 </Form>
             </Modal >
         </>

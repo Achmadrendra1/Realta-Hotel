@@ -1,5 +1,4 @@
-import { InstagramOutlined } from "@ant-design/icons"
-import { MailOutlined, TwitterOutlined } from "@ant-design/icons/lib/icons"
+import { InstagramOutlined, HeartOutlined, MailOutlined, TwitterOutlined } from "@ant-design/icons"
 import { Layout, Row, Col } from "antd"
 import Link from "next/link"
 import React from "react"
@@ -35,8 +34,8 @@ const Footer = ({service} : {service:any}) =>{
         }
     ]
     return(
-        <Layout className="bg-slate-100 py-8 px-5">
-            <div className="w-5/6 m-auto">
+        <Layout className="bg-slate-100 px-5">
+            <div className="w-5/6 m-auto py-8">
                 <Row gutter={{ xs: 8, sm: 16, md: 24, lg: 32 }} justify='space-between'>
                     <Col span={5}>
                         <div className="flex">
@@ -48,16 +47,16 @@ const Footer = ({service} : {service:any}) =>{
                     <Col span={5}>
                         <h3 className="text-lg font-bold mb-4">Sitemap</h3>
                         {
-                            service.map((item:any) => 
-                                <Link href={item.href} className="block mb-3">{item.name}</Link>
+                            service.map((item:any, index:number) => 
+                                <Link key={index} href={item.href} className="block mb-3">{item.name}</Link>
                             )
                         }
                     </Col>
                     <Col span={5}>
                         <h3 className="text-lg font-bold mb-4">Contact</h3>
                         {
-                            contact.map((item:any) =>
-                                <Link href={item.href} className="flex mb-3 items-center">
+                            contact.map((item:any, index:number) =>
+                                <Link key={index} href={item.href} className="flex mb-3 items-center">
                                     {React.createElement(item.icon)}
                                     <span className="ml-2">{item.name}</span>
                                 </Link>
@@ -67,14 +66,17 @@ const Footer = ({service} : {service:any}) =>{
                     <Col span={5}>
                         <h3 className="text-lg font-bold mb-4">Support</h3>
                         {
-                            support.map((item:any) => 
-                                <Link href={item.href} className="block mb-3">
+                            support.map((item:any, index:number) => 
+                                <Link key={index} href={item.href} className="block mb-3">
                                     {item.name}
                                 </Link>
                             )
                         }
                     </Col>
                 </Row>
+            </div>
+            <div className="text-center py-3">
+                <p className="text-sm text-gray-500">Copyright by Team 2 Code X academy Batch 1</p>
             </div>
         </Layout>
     )

@@ -34,8 +34,8 @@ export function* handleStodAdd(action: any): any {
 
 export function* handleStodUpdate(action: any): any {
     try {
-        const res = yield axios(API('PUT', `/stock-detail/${action.payload.stockdet_id}`, action.payload))
-        yield put(EditStodSuccess(res.data.result[0]))
+        const res = yield axios(API('PUT', `/stock-detail/` + action.payload.stockdet_id, action.payload))
+        yield put(EditStodSuccess(action.payload))
         return res.data.result
     } catch (error: any) {
         yield put(EditStodFailed(error.response.data.message))

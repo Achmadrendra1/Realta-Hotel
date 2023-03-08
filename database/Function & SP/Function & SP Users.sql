@@ -117,12 +117,13 @@ BEGIN
  INSERT INTO users.user_bonus_points(ubpo_user_id,ubpo_total_points,ubpo_bonus_type,ubpo_created_on)
 	values(user_id,5,'R',now());
 	
-	INSERT INTO hr.work_orders(woro_user_id)
-	VAlues(user_id);
+	INSERT INTO hr.employee(emp_id)
+	Values(user_id);
 	
 	
 END;
 $$;
+
 
 -- New Role 
 INSERT INTO users.roles(

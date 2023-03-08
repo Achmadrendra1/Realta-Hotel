@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useRouter } from 'next/router';
-import { Button, Col, Dropdown, Input, MenuProps, Modal, Row, Segmented, Space, Table, Tooltip } from 'antd';
+import { Button, Col, Input, Modal, Row, Segmented, Space, Table, Tooltip } from 'antd';
 import { DeleteOutlined, EditOutlined, EyeOutlined, MoreOutlined, PlusOutlined, SearchOutlined } from '@ant-design/icons';
 import { AllVendor, DelVendor } from '@/Redux/Action/Purchasing/purchasingAction';
 import AddVendors from './add-vendor';
@@ -21,9 +21,9 @@ export default function Vendor() {
     const [search, setSearch] = useState('')
     const filterData = filterVendors.filter((item: any) => {
         if (search === "") {
-            return item;
+            return item
         } else {
-            return item.vendorName.toLowerCase().includes(search.toLocaleLowerCase());
+            return item.vendorName.toLowerCase().includes(search.toLocaleLowerCase())
         }
     });
 
@@ -58,7 +58,7 @@ export default function Vendor() {
             okType: 'danger',
             cancelText: 'No',
             onOk() {
-                console.log(id);
+                console.log(id)
                 dispatch(DelVendor(id))
             },
             onCancel() {
@@ -70,24 +70,6 @@ export default function Vendor() {
     useEffect(() => {
         dispatch(AllVendor())
     }, [])
-
-    // const items: MenuProps["items"] = [
-    //     {
-    //         label: <Button onClick={(record: any) => uploadPhoto(record.stockId)}>Upload Photo</Button>,
-    //         key: "0"
-    //     },
-    //     {
-    //         label:
-    //             <span
-    //                 onClick={(record: any) => router.push({
-    //                     pathname: '/dashboard/purchasing/stock-detail',
-    //                     query: { id_stock: record.stockId }
-    //                 }, '/dashboard/purchasing/stock-detail')}>
-    //                 Detail Info Stock
-    //             </span>,
-    //         key: "1"
-    //     }
-    // ]
 
     const columnsVendor = [
         {
@@ -139,9 +121,6 @@ export default function Vendor() {
             render: (record: any) => {
                 return (
                     <>
-                        {/* <Dropdown menu={{ items }} trigger={["click"]} className="h-8">
-                            <MoreOutlined className="mx-2" />
-                        </Dropdown> */}
                         <Tooltip placement="top" title='Edit Vendor'>
                             <EditOutlined style={{ color: '#13c2c2' }} onClick={() => editVendor(record.vendorId)} className="mx-2" />
                         </Tooltip>
@@ -157,14 +136,7 @@ export default function Vendor() {
                                         name_vendor: record.vendorName
                                     }
                                 }, `/dashboard/purchasing/vendor/${record.vendorId}/${record.vendorName}`)}
-                                // onClick={() => router.push({
-                                //     pathname: `/dashboard/purchasing/vendor/${record.vendorId}/${record.vendorName}`,
-                                //     query: { 
-                                //         id_vendor: record.vendorId,
-                                //         name_vendor: record.vendorName
-                                //      }
-                                // }, `/dashboard/purchasing/vendor/${record.vendorId}/${record.vendorName}`)}
-                                className="mx-2" />
+                                className="mx-2 text-blue-400" />
                         </Tooltip>
                     </>
                 )
@@ -190,8 +162,7 @@ export default function Vendor() {
                     clickOk={handleOk}
                     clickCancel={handleCancel}
                     handleClose={handleClose}
-                />
-                : null}
+                /> : null}
 
             <Row justify='space-between' className="my-5">
                 <Col>

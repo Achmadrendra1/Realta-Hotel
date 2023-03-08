@@ -25,7 +25,7 @@ export class VeproService {
                 veproQtyRemaining: vepro.vestock_qty_remaining,
                 veproPrice: vepro.vestock_price,
                 veproStock: vepro.vestock_name,
-                veproVendor: vepro.vestock_vendor_id,
+                veproVendor: vepro.vestock_vendor_id
             }
         )
         const res = await this.findAllVepro()

@@ -1,21 +1,11 @@
-import Head from "next/head";
-import Image from "next/image";
-import { Inter } from "@next/font/google";
-import styles from "@/styles/Home.module.css";
-import Layouts from "@/layouts/layout";
-import Hero from "@/components/Hero";
-import {
-  DollarCircleOutlined,
-  CalendarOutlined,
-  PhoneOutlined,
-  RightOutlined,
-  StarFilled,
-  StarTwoTone,
-} from "@ant-design/icons";
-import { Card, Row, Col, Space, Input, Button } from "antd";
-import Link from "next/link";
 import Buttons from "@/components/Button";
-
+import Hero from "@/components/Hero";
+import Layouts from "@/layouts/layout";
+import {
+  StarOutlined
+} from "@ant-design/icons";
+import { Inter } from "@next/font/google";
+import { Card, Input, Space } from "antd";
 const inter = Inter({ subsets: ["latin"] });
 
 export default function Home() {
@@ -80,8 +70,11 @@ export default function Home() {
           Facilities That Provide An Experience During Your Stay At Our Hotel
         </p>
         <div className="flex justify-center mt-10 gap-8">
-          {services.map((item: any) => (
+          {services.map((item: any, index:number) => (
+        
+                   
             <Card
+              key={index}
               className="justify-start w-[300px]"
               style={{ boxShadow: "0px 15px 100px rgba(117, 76, 255, 0.27)" }}
               hoverable
@@ -91,6 +84,8 @@ export default function Home() {
               <p className="mt-4 h-24">{item.desc}</p>
               <p className="mt-4 text-[14px] text-[#754cff]">Find Now</p>
             </Card>
+           
+
           ))}
         </div>
       </div>
@@ -104,8 +99,9 @@ export default function Home() {
           </div>
         </div>
         <div className="flex gap-8 mt-8 justify-center">
-          {dummy.map((item: any) => (
+          {dummy.map((item: any, index:number) => (
             <Card
+              key={index}
               style={{ width: 300 }}
               cover={<img alt="example" src="../assets/dummy.png" />}
             >
@@ -113,8 +109,10 @@ export default function Home() {
               <p className="text-[#adaeb8]">{item.location}</p>
               <div className="flex justify-between items-center mt-4">
                 <Space>
-                  <StarTwoTone />
-                  {item.rating}
+                  <StarOutlined className="text-[#F7C934]"/>
+                  <span className="font-semibold">
+                    {item.rating}
+                  </span>
                 </Space>
                 <div>
                   <Buttons funcs={""}>Book Now</Buttons>
@@ -127,7 +125,7 @@ export default function Home() {
       <div className="container mt-14">
         <div className="flex justify-between items-center">
           <p className="font-semibold text-[24px] w-[450px]">
-            Discover Your Destination Restaurants From Our Hotel's Best
+            Discover Your Destination Restaurants From Our Hotel&apos;s Best
             Restaurants
           </p>
           <div className="">
@@ -135,8 +133,9 @@ export default function Home() {
           </div>
         </div>
         <div className="flex gap-8 mt-8 justify-center">
-          {dummy.map((item: any) => (
+          {dummy.map((item: any, index:number) => (
             <Card
+              key={index}
               style={{ width: 300 }}
               cover={<img alt="example" src="../assets/dummy.png" />}
             >
@@ -144,8 +143,10 @@ export default function Home() {
               <p className="text-[#adaeb8]">{item.location}</p>
               <div className="flex justify-between items-center mt-4">
                 <Space>
-                  <StarTwoTone />
-                  {item.rating}
+                  <StarOutlined className="text-[#F7C934]"/>
+                  <span className="font-semibold">
+                    {item.rating}
+                  </span>
                 </Space>
                 <div>
                   <Buttons funcs={""}>Book Now</Buttons>
