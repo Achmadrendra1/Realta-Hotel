@@ -31,6 +31,7 @@ import { workorderReducer } from './HR/workorder';
 import { workorderDetailReducer } from './HR/workDetail';
 import { serviceListReducer } from './HR/serviceList';
 import BoorInvoiceReducer from './Booking/BoorInvoiceReducer';
+import BoorExtraReducer from './Booking/BoorExtraReducer';
 // Purchasing
 import { StockReducer } from './Purchasing/stockReducer';
 import { StodReducer } from './Purchasing/stodReducer';
@@ -88,7 +89,7 @@ export default combineReducers({
   HotelBoorReducer,
   ReviewBoorReducer,
   BoorInvoiceReducer,
-
+  BoorExtraReducer,
 
   //Purchasing
   StockReducer,
