@@ -37,9 +37,9 @@ export default function DetailCards(props: any) {
         centered
         footer={null}
       >
-        <div className="h-44 w-80 m-auto mt-4 max-w-xs overflow-hidden rounded-lg shadow-md bg-white hover:shadow-xl transition-shadow duration-300 ease-in-out">
+        {/* <div className="h-44 w-80 m-auto mt-4 max-w-xs overflow-hidden rounded-lg shadow-md bg-white hover:shadow-xl transition-shadow duration-300 ease-in-out">
           <Card bordered={true} hoverable className="bg-blue-200">
-            <div className="flex justify-between items-center">
+            <div className="flex justify-between datas-center">
               <p className="font-semibold">
                 {
                   dataBank?.find(
@@ -72,7 +72,59 @@ export default function DetailCards(props: any) {
               </div>
             </div>
           </Card>
-        </div>
+        </div> */}
+          <div className="w-96 h-56 m-auto bg-red-100 rounded-xl relative text-white shadow-xl transition-transform transform hover:scale-95">
+                      <img
+                        className="relative object-cover w-full h-full rounded-xl"
+                        src={
+                          data.usacType == "Debet"
+                            ? "https://i.imgur.com/kGkSg1v.png"
+                            : "https://i.imgur.com/Zi6v09P.png"
+                        }
+                      />
+
+                      <div className="w-full px-8 absolute top-8">
+                        <div className="flex justify-between">
+                          <div className="">
+                            <p className="font-semiBold text-lg">{dataBank.find((obj:any) => obj.bankEntityId == data.usacEntityId)?.bankName}</p>
+                          </div>
+                          <p className="font-semibold text-lg">
+                            {data.usacType}
+                          </p>
+                        </div>
+                        <div className="pt-8">
+                          <p className="font-medium tracking-more-wider text-3xl">
+                            {maskCardNumber(data.usacAccountNumber)}
+                          </p>
+                        </div>
+                        <div className="mt-8">
+                          <div className="flex justify-between">
+                            <div className="">
+                              <p className="font-light text-xs">Exp :</p>
+                              <p className="font-medium tracking-wider text-sm">
+                                {`${data.usacExpmonth}/${data.usacExpyear}`}
+                              </p>
+                            </div>
+                            <div className="min-w-[120px]">
+                              <p className="font-light text-xs">
+                                Balance :
+                              </p>
+                              <p className="font-medium tracking-wider text-sm">
+                                {parseInt(data.usacSaldo).toLocaleString(
+                                  "id-ID",
+                                  {
+                                    style: "currency",
+                                    currency: "IDR",
+                                    minimumFractionDigits: 0,
+                                    maximumFractionDigits: 0,
+                                  }
+                                )}
+                              </p>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
         <div className="text-center mt-6">
           <Buttons funcs={()=>handleDelete(data.usacAccountNumber)} type={"danger"}>
             DELETE CARD

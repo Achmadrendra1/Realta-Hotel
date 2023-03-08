@@ -37,6 +37,7 @@ import ActivationGoto from "./activationGoto";
 import DetCard from "./detCard";
 import DetailCard from "./detailCard";
 import { randomBytes } from "crypto";
+import { doGetAllBank } from "@/Redux/Action/Payment/paymentUserAction";
 
 export default function MyAccount() {
   const dispacth = useDispatch();
@@ -59,7 +60,7 @@ export default function MyAccount() {
   const accNumberGoto = user[0]?.user_phone_number;
 
   useEffect(() => {
-    dispacth(doBankRequest());
+    dispacth(doGetAllBank());
     // dispacth(doUsacRequest());
     dispacth(doPagaRequest());
   }, []);
@@ -337,7 +338,7 @@ export default function MyAccount() {
           </Buttons>
         }
       >
-        {bankAcc.map((item: any) => (
+        {bankAcc.length != 0 ? bankAcc.map((item: any) => (
           <Card
             size="small"
             hoverable
@@ -365,7 +366,7 @@ export default function MyAccount() {
               </div>
             </div>
           </Card>
-        ))}
+        )) : <Empty className="mt-10 font-bold text-xl" />}
       </Card>
     </div>
   );

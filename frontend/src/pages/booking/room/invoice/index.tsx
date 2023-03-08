@@ -19,7 +19,7 @@ export default function index() {
     (state: any) => state.BoorInvoiceReducer.invoice
   );
 
-  // console.log(invoiceView);
+  console.log(invoiceView);
 
   useEffect(() => {
     dispatch(getSpInvoice());

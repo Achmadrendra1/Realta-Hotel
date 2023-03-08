@@ -4,7 +4,7 @@ import {
   DollarCircleOutlined,
   RightOutlined,
 } from "@ant-design/icons";
-import { Button, Card, Col, DatePicker, List, Row } from "antd";
+import { Button, Card, Col, DatePicker, Empty, List, Row } from "antd";
 import Head from "next/head";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
@@ -44,10 +44,10 @@ export default withAuth(function index() {
     dispacth(doTransactionRequest());
   }, []);
 
-  //Filter History By User
-  // const dataTrx = payHistoryTrx?.filter(
-  //   (obj: any) => obj.userId === user[0]?.user_id
-  // );
+  // Filter History By User
+  const dataTrx = payDashTrx?.filter(
+    (obj: any) => obj.userId === user[0]?.user_id
+  );
 
   //Get User Account By User Id yang login
   // const userAcc = account?.filter(
@@ -169,12 +169,12 @@ export default withAuth(function index() {
                           Activate Seamless Transactions with H-Pay Now!
                         </p>
                         <div className="mt-2">
-                        <Buttons
-                          // className="mt-2"
-                          funcs={() => setOpenAct(true)}
-                        >
-                          Activate H-Pay Now!
-                        </Buttons>
+                          <Buttons
+                            // className="mt-2"
+                            funcs={() => setOpenAct(true)}
+                          >
+                            Activate H-Pay Now!
+                          </Buttons>
                         </div>
                       </div>
                     )}
@@ -212,81 +212,69 @@ export default withAuth(function index() {
           </div>
           <div className="mt-32 mb-6 drop-shadow-lg m-auto border-b-md rounded-md ">
             <div className="flex justify-between p-6 bg-white rounded-lg">
-              <p className="text-lg font-semibold text-[#252525]">History Transaction</p>
-              <RangePicker  />
+              <p className="text-lg font-semibold text-[#252525]">
+                History Transaction
+              </p>
+              <RangePicker />
             </div>
-            <List className="pb-4" pagination={{
-                    current: currentPage,
-                    total: total,
-                    pageSize: 10,}}>
-              {payDashTrx.map((item: any) => (
-                <Card
-                  title={item.transactionNumber}
-                  extra={item.trxDate?.split("T")[0]}
-                  className="m-4"
-                >
-                  <div>
-                    <div className="flex justify-between">
-                      <p className="font-bold text-lg">
-                        {item.transactionNote}
-                      </p>
-                      {item.debit != 0 ? (
-                        <p className="text-md text-green-600 font-semibold">
-                          {parseInt(item.debit).toLocaleString("id-ID", {
-                            style: "currency",
-                            currency: "IDR",
-                            minimumFractionDigits: 0,
-                            maximumFractionDigits: 0,
-                          })}
+            <List
+              className="pb-4"
+              pagination={{
+                current: currentPage,
+                total: total,
+                pageSize: 10,
+              }}
+            >
+              {dataTrx.length != 0 ? (
+                dataTrx.map((item: any) => (
+                  <Card
+                    title={item.transactionNumber}
+                    extra={item.trxDate?.split("T")[0]}
+                    className="m-4"
+                  >
+                    <div>
+                      <div className="flex justify-between">
+                        <p className="font-bold text-lg">
+                          {item.transactionNote}
                         </p>
-                      ) : (
-                        <p className="text-md text-red-600 font-semibold">
-                          {parseInt(item.credit).toLocaleString("id-ID", {
-                            style: "currency",
-                            currency: "IDR",
-                            minimumFractionDigits: 0,
-                            maximumFractionDigits: 0,
-                          })}
+                        {item.debit != 0 ? (
+                          <p className="text-md text-green-600 font-semibold">
+                            {parseInt(item.debit).toLocaleString("id-ID", {
+                              style: "currency",
+                              currency: "IDR",
+                              minimumFractionDigits: 0,
+                              maximumFractionDigits: 0,
+                            })}
+                          </p>
+                        ) : (
+                          <p className="text-md text-red-600 font-semibold">
+                            {parseInt(item.credit).toLocaleString("id-ID", {
+                              style: "currency",
+                              currency: "IDR",
+                              minimumFractionDigits: 0,
+                              maximumFractionDigits: 0,
+                            })}
+                          </p>
+                        )}
+                      </div>
+                      <div className="flex justify-between">
+                        <p className="text-md">
+                          {item.orderNumber
+                            ? item.orderNumber
+                            : "Dompet Realta"}
                         </p>
-                      )}
+                        <p className="text-md font-semibold">
+                          {item.sourcePaymentName == null
+                            ? "Cash"
+                            : item.sourcePaymentName}
+                        </p>
+                      </div>
                     </div>
-                    <div className="flex justify-between">
-                      <p className="text-md">{item.orderNumber ? item.orderNumber : 'Dompet Realta'}</p>
-                      <p className="text-md font-semibold">
-                        {item.sourcePaymentName == null
-                          ? "Cash"
-                          : item.sourcePaymentName}
-                      </p>
-                    </div>
-                  </div>
-                </Card>
-              ))}
-              {/* <Card
-                  type="inner"
-                  title="TRB#20230123-0001"
-                  extra={'23-01-2023'}
-                  className="mb-4"
-                >
-                  <div>
-                  <p className="font-bold text-lg">Booking</p>
-                  <p className="text-md">Hotel ABC</p>
-                  <p className="text-right text-md">Rp. 500.000</p>
-                  <p className="text-right text-md text-green-600 font-semibold">Credit Card</p>
-                  </div>
-                </Card>
-                <Card
-                  type="inner"
-                  title="RF#20230123-0001"
-                  extra={'23-01-2023'}
-                  className="mb-4"
-                >
-                  <div>
-                  <p className="font-bold text-lg">Refund</p>
-                  <p className="text-md">For Transaction BO#20230123-0002</p>
-                  <p className="text-right text-md">Rp. 500.000</p>
-                  <p className="text-right text-md text-green-600 font-semibold">Debet Card</p>
-                  </div>
-                </Card> */}
+                  </Card>
+                ))
+              ) : (
+                <Empty className="mt-10 font-bold text-xl"/>
+              )}
             </List>
           </div>
         </Layouts>

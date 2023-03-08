@@ -43,11 +43,13 @@ export default function Cards() {
   const { payDashTrx, total, currentPage } = useSelector(
     (state: any) => state.payTrxHistoryReducer
   );
-  const dispacth = useDispatch();
+
   useEffect(() => {
-    dispacth(doTransactionRequest());
-    dispacth(doGetAllBank())
+    dispatch(doTransactionRequest());
+    dispatch(doGetAllBank())
   }, []);
+
+  console.log(payDashTrx)
 
   useEffect(() => {
     // user[0]?.role_name != "Guest" ? setIsAdmin(true) : setIsAdmin(false);
