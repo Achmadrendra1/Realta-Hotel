@@ -23,7 +23,7 @@ export default function AddCategory(props: any) {
     console.log('Success:', e);
     dispatch(doAddCategoryGroup(dataUp));
     handleClose(false);
-    window.location.reload();
+    window.location.reload()
   };
 
   const onFinishFailed = (errorInfo: any) => {
