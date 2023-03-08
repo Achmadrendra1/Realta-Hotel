@@ -380,6 +380,47 @@ import { Department } from 'src/entities/Department';
 })
 export class GlobalModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
-    consumer.apply(AuthMiddleware).forRoutes();
+    consumer
+      .apply(AuthMiddleware)
+      .forRoutes(
+        ServiceTaskController,
+        RegionsController,
+        ProvincesController,
+        PriceItemsController,
+        PolicyController,
+        MembersController,
+        CountryController,
+        CategoryGroupController,
+        AddressController,
+        StockController,
+        StodController,
+        SphoController,
+        VendorController,
+        VeproController,
+        PoheController,
+        PodeController,
+        EmployeeController,
+        DepartmentController,
+        JobRoleController,
+        WorkorderController,
+        EntitysController,
+        BankController,
+        PaymentGatewayController,
+        FacilitiesController,
+        FacilityPhotosController,
+        FacilityPriceHistoryController,
+        HotelsController,
+        HotelReviewsController,
+        UserAccountController,
+        PaymentTransactionController,
+        RestoMenusController,
+        RestoMenuPhotosController,
+        OrderMenusController,
+        UsersPasswordController,
+        UsersController,
+        AuthController,
+        OrderMenusController,
+        RestoMenusController,
+      );
   }
 }
