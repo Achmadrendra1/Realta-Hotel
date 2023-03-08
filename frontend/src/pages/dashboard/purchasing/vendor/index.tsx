@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useRouter } from 'next/router';
-import { Button, Col, Input, Modal, Row, Segmented, Space, Table, Tooltip } from 'antd';
+import { Button, Col, Dropdown, Input, MenuProps, Modal, Row, Segmented, Space, Table, Tooltip } from 'antd';
 import { DeleteOutlined, EditOutlined, EyeOutlined, MoreOutlined, PlusOutlined, SearchOutlined } from '@ant-design/icons';
 import { AllVendor, DelVendor } from '@/Redux/Action/Purchasing/purchasingAction';
 import AddVendors from './add-vendor';
@@ -71,6 +71,24 @@ export default function Vendor() {
         dispatch(AllVendor())
     }, [])
 
+    // const items: MenuProps["items"] = [
+    //     {
+    //         label: <Button onClick={(record: any) => uploadPhoto(record.stockId)}>Upload Photo</Button>,
+    //         key: "0"
+    //     },
+    //     {
+    //         label:
+    //             <span
+    //                 onClick={(record: any) => router.push({
+    //                     pathname: '/dashboard/purchasing/stock-detail',
+    //                     query: { id_stock: record.stockId }
+    //                 }, '/dashboard/purchasing/stock-detail')}>
+    //                 Detail Info Stock
+    //             </span>,
+    //         key: "1"
+    //     }
+    // ]
+
     const columnsVendor = [
         {
             title: 'Vendor',
@@ -86,9 +104,6 @@ export default function Vendor() {
                 return (
                     <span>{record === 0 ? "InActive" : "Active"}</span>
                 )
-            },
-            sorter: {
-                compare: (a: any, b: any) => a.vendorActive - b.vendorActive
             }
         },
         {
@@ -98,9 +113,6 @@ export default function Vendor() {
                 return (
                     <span>{record === 0 ? "Non Priority" : "Priority"}</span>
                 )
-            },
-            sorter: {
-                compare: (a: any, b: any) => a.vendorPriority - b.vendorPriority
             }
         },
         {
@@ -127,6 +139,9 @@ export default function Vendor() {
             render: (record: any) => {
                 return (
                     <>
+                        {/* <Dropdown menu={{ items }} trigger={["click"]} className="h-8">
+                            <MoreOutlined className="mx-2" />
+                        </Dropdown> */}
                         <Tooltip placement="top" title='Edit Vendor'>
                             <EditOutlined style={{ color: '#13c2c2' }} onClick={() => editVendor(record.vendorId)} className="mx-2" />
                         </Tooltip>
@@ -184,7 +199,7 @@ export default function Vendor() {
                         <Input
                             className="w-96 py-2 rounded-full my-5"
                             value={search}
-                            placeholder="Vendor Name"
+                            placeholder="Search Vendor Name"
                             prefix={<SearchOutlined />}
                             onChange={e => setSearch(e.target.value)} />
                     </Space>

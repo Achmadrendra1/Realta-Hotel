@@ -23,7 +23,7 @@ export default function EditVepros(props: any) {
     }, [])
 
     const onFinish = () => {
-        dispatch(EditVepro(dataVepro));
+        dispatch(EditVepro(dataVepro))
         handleClose(false)
     }
 

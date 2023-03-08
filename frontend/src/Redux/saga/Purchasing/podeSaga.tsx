@@ -33,10 +33,10 @@ export function* handlePodeAdd(action: any): any {
 }
 
 export function* handlePodeUpdate(action: any): any {
+    const { payload } = action
     try {
-        const res = yield axios(API('PUT', '/purchase-order-detail/' + action.payload.podhe_id, action.payload))
-        yield put(EditPodeSuccess(action.payload))
-        return res.data.result
+        yield axios(API('put', '/purchase-order-detail/' + payload.podhe_id, payload))
+        yield put(EditPodeSuccess(payload))
     } catch (error: any) {
         yield put(EditPodeFailed(error.response.data.message))
     }

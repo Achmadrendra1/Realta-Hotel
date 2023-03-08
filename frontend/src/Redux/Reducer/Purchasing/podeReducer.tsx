@@ -17,9 +17,7 @@ export default function PodeReducer(state = initialState, action: any) {
             return { ...state, podes: action.payload }
 
         case PurchasingConst.EDIT_PODE_SUCCESS:
-            const index = state.podes.findIndex(
-                (item: any) => item.podhe_id == action.payload.podhe_id
-            )
+            const index = state.podes.findIndex((item: any) => item.podhe_id === action.payload.podhe_id)
             state.podes.splice(index, 1, action.payload)
             return {
                 ...state,

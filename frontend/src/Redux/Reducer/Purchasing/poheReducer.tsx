@@ -17,9 +17,7 @@ export default function PoheReducer(state = initialState, action: any) {
             return { ...state, pohes: action.payload }
 
         case PurchasingConst.EDIT_POHE_SUCCESS:
-            const index = state.pohes.findIndex(
-                (item: any) => item.pove_id == action.payload.pove_id
-            )
+            const index = state.pohes.findIndex((item: any) => item.pove_id === action.payload.pove_id)
             state.pohes.splice(index, 1, action.payload)
             return {
                 ...state,

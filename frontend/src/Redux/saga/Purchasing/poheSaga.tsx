@@ -33,10 +33,10 @@ export function* handlePoheAdd(action: any): any {
 }
 
 export function* handlePoheUpdate(action: any): any {
+    const { payload } = action
     try {
-        const res = yield axios(API('PUT', '/purchase-order-header/' + action.payload.pove_id, action.payload))
-        yield put(EditPoheSuccess(action.payload))
-        return res.data.result
+        yield axios(API('put', '/purchase-order-header/' + payload.pove_id, payload))
+        yield put(EditPoheSuccess(payload))
     } catch (error: any) {
         yield put(EditPoheFailed(error.response.data.message))
     }

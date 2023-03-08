@@ -8,7 +8,7 @@ export class PoheService {
   constructor(
     @InjectRepository(PurchaseOrderHeader)
     private poheRepository: Repository<PurchaseOrderHeader>,
-  ) {}
+  ) { }
 
   async findAllPohe(): Promise<any> {
     return await this.poheRepository.query(
@@ -47,34 +47,16 @@ export class PoheService {
 
   async editPohe(id: number, pohe: PurchaseOrderHeader): Promise<any> {
     try {
-      await this.poheRepository.update(
-        {
-          poheId: id,
-        },
-        {
-          poheNumber: pohe.poheNumber,
-          poheStatus: pohe.poheStatus,
-          poheOrderDate: pohe.poheOrderDate,
-          poheSubtotal: pohe.poheSubtotal,
-          poheTax: pohe.poheTax,
-          poheTotalAmount: pohe.poheTotalAmount,
-          poheRefund: pohe.poheRefund,
-          poheArrivalDate: pohe.poheArrivalDate,
-          pohePayType: pohe.pohePayType,
-          poheEmpId: pohe.poheEmpId,
-          poheVendor: pohe.poheVendor,
-        },
-      );
-      return {
-        message: `Congrats, you're purchase order header has been changed`,
-      };
+      await this.poheRepository.update({
+        poheId: id,
+      }, {
+        poheStatus: pohe.poheStatus
+      })
+      return { message: `Congrats, you're purchase order header has been changed` }
     } catch (error) {
-      throw new HttpException(
-        {
-          message: error.message,
-        },
-        HttpStatus.BAD_REQUEST,
-      );
+      throw new HttpException({
+        message: error.message
+      }, HttpStatus.BAD_REQUEST)
     }
   }
 

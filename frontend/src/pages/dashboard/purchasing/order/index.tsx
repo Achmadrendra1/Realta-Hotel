@@ -14,7 +14,7 @@ export default function Pohe() {
     const [addPohe, setAddPohe] = useState(false)
     const [updatePohe, setUpdatePohe] = useState(false)
 
-    const [value, setValue] = useState<string | number>('Status')
+    const [value, setValue] = useState<string | number>('Pending')
     const filterPohes = pohes.filter((item: any) => item.pove_status == (value == 'Pending' ? 1 : value == "Approve" ? 2 : value == "Rejected" ? 3 : value == "Received" ? 4 : 5))
 
     const status = [
@@ -32,7 +32,7 @@ export default function Pohe() {
         },
         {
             value: 4,
-            label: "Complete"
+            label: "Received"
         }
     ]
 
@@ -183,7 +183,7 @@ export default function Pohe() {
                         <Input
                             className="w-96 py-2 rounded-full my-5"
                             value={search}
-                            placeholder="Order Number / Vendor Name"
+                            placeholder="Search Order Number / Vendor Name"
                             prefix={<SearchOutlined />}
                             onChange={e => setSearch(e.target.value)} />
                     </Space>

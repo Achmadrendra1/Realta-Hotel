@@ -17,9 +17,7 @@ export default function VeproReducer(state = initialState, action: any) {
             return { ...state, vepros: action.payload }
 
         case PurchasingConst.EDIT_VEPRO_SUCCESS:
-            const index = state.vepros.findIndex(
-                (item: any) => item.vestock_id == action.payload.vestock_id
-            )
+            const index = state.vepros.findIndex((item: any) => item.vestock_id === action.payload.vestock_id)
             state.vepros.splice(index, 1, action.payload)
             return {
                 ...state,

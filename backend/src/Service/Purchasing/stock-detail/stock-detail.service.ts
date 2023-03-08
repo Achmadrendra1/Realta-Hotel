@@ -48,13 +48,8 @@ export class StodService {
         message: `Congrats, you're Stock Detail has been changed`,
         result: res
       }
-      // console.log(stod);
     } catch (error) {
-      console.log(error);
-      // throw new HttpException({
-      //   er: error,
-      //   message: error.message
-      // }, HttpStatus.BAD_REQUEST)
+      console.log(error)
     }
   }
 

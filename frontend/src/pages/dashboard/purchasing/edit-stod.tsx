@@ -38,10 +38,6 @@ export default function EditStods(props: any) {
         }
     ]
 
-    const eventHandler = (item: any) => (event: any) => {
-        setDataStod({ ...dataStod, [item]: event.target.value })
-    }
-
     const onFinish = () => {
         dispatch(EditStod(dataStod))
         handleClose(false)
@@ -89,7 +85,7 @@ export default function EditStods(props: any) {
                                 setDataStod({ ...dataStod, stockdet_facilities: value })
                             }}
                         >
-                            {facilities && facilities.map((item: any, index: any) => (
+                            {facilities && facilities.map((item: any) => (
                                 <option value={item.faciId}>
                                     {item.faciName}
                                 </option>

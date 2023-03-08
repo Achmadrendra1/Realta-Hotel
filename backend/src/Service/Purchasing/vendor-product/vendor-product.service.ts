@@ -56,24 +56,6 @@ export class VeproService {
         }
     }
 
-    // async editVepro(data: any): Promise<any> {
-    //     const res = await this.veproRepository.query(`call purchasing.update_stock_vepro($1, $2, $3, $4, $5, $6)`,
-    //         [
-    //             data.vestock_id,
-    //             data.vestock_name,
-    //             data.vestock_vendor_id,
-    //             data.vestock_qty_stocked,
-    //             data.vestock_qty_remaining,
-    //             data.vestock_price,
-    //         ]
-    //     )
-    //     if (res) {
-    //         return { message: `Congrats, you're vendor product has been changed` }
-    //     } else {
-    //         return { message: 'Failed' }
-    //     }
-    // }
-
     async dropVepro(id: number): Promise<any> {
         await this.veproRepository.delete(
             { veproId: id }

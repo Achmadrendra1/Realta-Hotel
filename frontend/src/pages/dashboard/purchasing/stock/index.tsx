@@ -7,6 +7,7 @@ import { AllStock, DelStock } from '@/Redux/Action/Purchasing/purchasingAction';
 import AddStocks from './add-stock';
 import EditStocks from './edit-stock';
 import AddSphos from '../add-spho';
+import Link from 'next/link';
 
 export default function Stock() {
     const { stocks } = useSelector((state: any) => state.StockReducer)
@@ -77,7 +78,15 @@ export default function Stock() {
 
     const items: MenuProps["items"] = [
         {
-            label: <Button onClick={(record: any) => uploadPhoto(record.stockId)}>Upload Photo</Button>,
+            label: <p onClick={(record: any) => uploadPhoto(record.stockId)}>Upload Photo</p>,
+            key: "0"
+        },
+        {
+            label: <p onClick={(record: any) => uploadPhoto(record.stockId)}>Upload Photo</p>,
+            key: "0"
+        },
+        {
+            label: <p onClick={(record: any) => uploadPhoto(record.stockId)}>Upload Photo</p>,
             key: "0"
         },
         {
@@ -208,7 +217,7 @@ export default function Stock() {
             <Input
                 className="w-96 py-2 rounded-full my-5"
                 value={search}
-                placeholder="Stock Name"
+                placeholder="Search Stock Name"
                 prefix={<SearchOutlined />}
                 onChange={e => setSearch(e.target.value)} />
 
