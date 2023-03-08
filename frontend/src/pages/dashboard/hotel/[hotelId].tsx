@@ -1,4 +1,9 @@
-import { deleteFacility, getHotelID } from "@/Redux/Action/Hotel/HotelAction";
+import {
+  deleteFacility,
+  getFacility,
+  getFacilityID,
+  getHotelID,
+} from "@/Redux/Action/Hotel/HotelAction";
 import Buttons from "@/components/Button";
 import Dashboard from "@/layouts/dashboard";
 import {
@@ -17,43 +22,45 @@ import withAuth from "@/PrivateRoute/WithAuth";
 import Link from "next/link";
 import { configuration } from "@/Redux/Configs/url";
 
-export default withAuth( function HotelDetails() {
+export default withAuth(function HotelDetails() {
   const dispatch = useDispatch();
   const { hotelById } = useSelector((state: any) => state.HotelReducer);
   const { facilities } = useSelector((state: any) => state.HotelReducer);
   const [IdFaci, setFaciId] = useState();
   const [OpenAdd, setOpenAdd] = useState(false);
-  const [OpenEdit, setOpenEdit] = useState(false);;
+  const [OpenEdit, setOpenEdit] = useState(false);
   const [OpenUpload, setOpenUpload] = useState(false);
   const [refresh, setRefresh] = useState(false);
   const router = useRouter();
   const { hotelId } = router.query;
   const { Title, Text } = Typography;
+  const rating = hotelById.hotelRatingStar;
 
   useEffect(() => {
     dispatch(getHotelID(hotelId));
+    dispatch(getFacility());
     setRefresh(false);
   }, [hotelId]);
 
-  const handleClose = (data: boolean) =>{
+  const handleClose = (data: boolean) => {
     setOpenAdd(data);
     setOpenEdit(data);
     setOpenUpload(data);
-  }
+  };
 
   const handleOk = () => {
     setTimeout(() => {
       setOpenAdd(false);
       setOpenEdit(false);
       setOpenUpload(false);
-    },2000)
-  }
+    }, 2000);
+  };
 
   const handleCancel = () => {
     setOpenAdd(false);
     setOpenEdit(false);
     setOpenUpload(false);
-  }
+  };
 
   const onClickEdit = (id: any) => {
     setFaciId(id);
@@ -155,11 +162,17 @@ export default withAuth( function HotelDetails() {
           <div>
             <a>
               {" "}
-              <EditOutlined onClick={() => onClickEdit(index)} />
+              <EditOutlined
+                style={{ color: "#13c2c2" }}
+                onClick={() => onClickEdit(index)}
+              />
             </a>{" "}
             <a>
               {" "}
-              <DeleteOutlined onClick={() => onDelete(index)} />
+              <DeleteOutlined
+                style={{ color: 'red' }}
+                onClick={() => onDelete(index)}
+              />
             </a>{" "}
             <a>
               {" "}
@@ -173,89 +186,91 @@ export default withAuth( function HotelDetails() {
 
   return (
     <Dashboard>
-      {OpenUpload ? 
+      {OpenUpload ? (
         <AddPhoto
           id={IdFaci}
-          showUpload = {OpenUpload}
-          okUpload = {handleOk}
-          cancelUpload = {handleCancel}
+          showUpload={OpenUpload}
+          okUpload={handleOk}
+          cancelUpload={handleCancel}
           handleClose={handleClose}
           onRefresh={() => setRefresh(true)}
         />
-       : null }
-      
-      {OpenEdit ? 
+      ) : null}
+
+      {OpenEdit ? (
         <EditFacilityHotel
           id={IdFaci}
           showEdit={OpenEdit}
-          okEdit = {handleOk}
-          cancelEdit = {handleCancel}
+          okEdit={handleOk}
+          cancelEdit={handleCancel}
           handleClose={handleClose}
           htlid={hotelId}
           htlname={hotelById.hotelName}
         />
-       : null }
-      {OpenAdd ? 
+      ) : null}
+      {OpenAdd ? (
         <AddFacilities
           showAdd={OpenAdd}
-          okAdd = {handleOk}
-          cancelAdd = {handleCancel}
+          okAdd={handleOk}
+          cancelAdd={handleCancel}
           handleClose={handleClose}
           htlid={hotelId}
           htlname={hotelById.hotelName}
         />
-       : null } 
-        <Breadcrumb>
-          <Breadcrumb.Item>
-            <Link href="/dashboard/hotel"> Hotel</Link>
-          </Breadcrumb.Item>
-          <Breadcrumb.Item>
-            <Link href={`/dashboard/hotel/${hotelId}`}> Facilities</Link>
-          </Breadcrumb.Item>
-        </Breadcrumb>
+      ) : null}
+      <Breadcrumb>
+        <Breadcrumb.Item>
+          <Link href="/dashboard/hotel"> Hotel</Link>
+        </Breadcrumb.Item>
+        <Breadcrumb.Item>
+          <Link href={`/dashboard/hotel/${hotelId}`}> Facilities</Link>
+        </Breadcrumb.Item>
+      </Breadcrumb>
 
-        <Row>
-          <Col span={5}>
+      <Row>
+        {/* <Col span={5}>
             <img
-              src={`${configuration.BASE_URL}/facility-photos/src/Gambar4-1678195893437-146391459.png`}
+              src={`${configuration.BASE_URL}/facility-photos/src/Gambar4-1678273598077-44332439.png`}
               width={200}
               className="rounded-xl"
             />
-          </Col>
-          <Col span={11}>
-            <Title level={3}>{hotelById?.hotelName}</Title>
-            <Text type="secondary">{hotelById?.hotelAddr?.addrLine1}</Text>
-            <br />
-            <Text strong>{hotelById?.hotelDescription}</Text>
-          </Col>
-          <Col span={8}>
-            <Space direction="vertical">
-              <Rate defaultValue={hotelById.hotelRatingStar} disabled />
-              <Text>{hotelById.hotelPhonenumber}</Text>              
-            </Space>
-          </Col>
-        </Row>
-        <Row gutter={16}>
-          <Col span={24}>
-            <Row gutter={5} className=" mt-6 mb-8">
-              <Col span={6}>
-                <h1 className="text-xl font-medium mt-3">
-                  {hotelById?.hotelName} Facilities
-                </h1>
-              </Col>
-              <Col></Col>
-              <Col className="ml-auto">
-                <Buttons funcs={() => setOpenAdd(true)}>Add Facilities</Buttons>
-              </Col>
-            </Row>
-            <Table
-              columns={column}
-              dataSource={hotelById?.facilities}
-              pagination={{ pageSize: 5 }}
+          </Col> */}
+        <Col span={16}>
+          <Title level={3}>{hotelById?.hotelName}</Title>
+          <Text type="secondary">{hotelById?.hotelAddr?.addrLine1}</Text>
+          <br />
+          <Text strong>{hotelById?.hotelDescription}</Text>
+        </Col>
+        <Col span={8}>
+          <Space direction="vertical">
+            <Rate
+              defaultValue={rating}
+              disabled
             />
-          </Col>
-        </Row>
+            <Text>{hotelById?.hotelPhonenumber}</Text>
+          </Space>
+        </Col>
+      </Row>
+      <Row gutter={16}>
+        <Col span={24}>
+          <Row gutter={5} className=" mt-6 mb-8">
+            <Col span={6}>
+              <h1 className="text-xl font-medium mt-3">
+                {hotelById?.hotelName} Facilities
+              </h1>
+            </Col>
+            <Col></Col>
+            <Col className="ml-auto">
+              <Buttons funcs={() => setOpenAdd(true)}>Add Facilities</Buttons>
+            </Col>
+          </Row>
+          <Table
+            columns={column}
+            dataSource={hotelById?.facilities}
+            pagination={{ pageSize: 5 }}
+          />
+        </Col>
+      </Row>
     </Dashboard>
   );
-}
-)
+});

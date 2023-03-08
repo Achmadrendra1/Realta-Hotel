@@ -82,7 +82,7 @@ const WorkDetail = () => {
         {
             title: 'Assign to',
             key: 'empId',
-            render: (_:any, record:any) => record.wodeEmp.empUser.userFullName
+            render: (_:any, record:any) => record?.wodeEmp?.empUser?.userFullName
         },
         {
             title: 'Action',
