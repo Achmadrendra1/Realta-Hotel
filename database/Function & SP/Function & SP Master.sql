@@ -121,3 +121,46 @@ $$ LANGUAGE plpgsql;
 -- select *from master.locationsRCPA()
 
 -- /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+CREATE OR REPLACE FUNCTION master.getPoCa()
+RETURNS TABLE(
+poca_poli_id integer,
+poli_id integer,
+poli_name varchar(55),
+poli_description varchar(255),
+poca_cagro_id integer,
+cagro_id integer,
+cagro_name varchar(25),
+cagro_description varchar(255),
+cagro_type varchar(25),
+cagro_icon varchar(255),
+cagro_icon_url varchar(255),
+poca_id integer
+)
+AS $$
+BEGIN
+RETURN QUERY 
+SELECT
+pcg.poca_poli_id,
+po.poli_id,
+po.poli_name,
+po.poli_description,
+pcg.poca_cagro_id,
+cg.cagro_id,
+cg.cagro_name,
+cg.cagro_description,
+cg.cagro_type,
+cg.cagro_icon,
+cg.cagro_icon_url,
+pcg.poca_id
+
+FROM 
+master.policy_category_group pcg
+JOIN 
+master.category_group cg ON pcg.poca_cagro_id = cg.cagro_id
+JOIN
+master.policy po ON pcg.poca_poli_id = po.poli_id;
+END;
+$$ LANGUAGE plpgsql;
+
+-- select * from master.getPoCa() order by poca_poli_id
