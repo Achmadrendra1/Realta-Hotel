@@ -11,6 +11,7 @@ import {
   Carousel,
   Col,
   DatePicker,
+  Empty,
   List,
   Row,
 } from "antd";
@@ -25,7 +26,7 @@ import {
   doTransactionRequest,
   doUsacRequest,
 } from "@/Redux/Action/Payment/paymentDashAction";
-import { doGetAllBank } from "@/Redux/Action/Payment/paymentUserAction";
+import { doGetAllBank, doGetHistory } from "@/Redux/Action/Payment/paymentUserAction";
 
 export default function Cards() {
   const dispatch = useDispatch();
@@ -40,21 +41,25 @@ export default function Cards() {
   );
   const user = useSelector((state:any) => state.GetUserReducer.getUser)
   const {payBank, allBank} = useSelector((state:any) => state.payBankReducer)
-  const { payDashTrx, total, currentPage } = useSelector(
+  const { payDashTrx, total, currentPage, payHistoryTrx } = useSelector(
     (state: any) => state.payTrxHistoryReducer
   );
 
   useEffect(() => {
-    dispatch(doTransactionRequest());
+    dispatch(doGetHistory());
     dispatch(doGetAllBank())
   }, []);
-
-  console.log(payDashTrx)
 
   useEffect(() => {
     // user[0]?.role_name != "Guest" ? setIsAdmin(true) : setIsAdmin(false);
     dispatch(doUsacRequest(user[0]?.user_id));
   }, [user]);
+
+  const dataHistory = payHistoryTrx?.filter(
+    (obj: any) => obj.userId === user[0]?.user_id && obj.sourcePaymentName !== null && obj.sourcePaymentName !== 'H-Pay'
+  )
+
+  console.log(dataHistory)
 
   const bankAcc = account?.filter(
     (obj: any) => obj.usacType === "Credit Card" || obj.usacType === "Debet"
@@ -231,7 +236,7 @@ export default function Cards() {
                 pageSize: 10,
               }}
             >
-              {payDashTrx.map((item: any) => (
+              {dataHistory.length != 0 ? dataHistory.map((item: any) => (
                 <Card
                   title={item.transactionNumber}
                   extra={item.trxDate?.split("T")[0]}
@@ -274,7 +279,9 @@ export default function Cards() {
                     </div>
                   </div>
                 </Card>
-              ))}
+              )) : (
+                <Empty className="mt-10 font-bold text-xl"/>
+              )}
             </List>
           </div>
         </Layouts>

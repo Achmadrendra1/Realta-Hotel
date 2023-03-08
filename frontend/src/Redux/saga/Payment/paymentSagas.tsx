@@ -51,6 +51,17 @@ function* handleTrxDashRequest(action : any): any {
   }
 }
 
+function* handleGetHistoryTrx(action:any):any{
+  try {
+    const dateQueryParam = action.payload?.startDate ? `&startDate=${action.payload.startDate}&endDate=${action.payload.endDate}` : '';
+    const res = yield axios(API('GET', `/payment-transaction/all?${dateQueryParam}`))
+    yield put(doGetHistorySuccess(res.data))
+  } catch (error:any) {
+    yield put(doGetHistoryFailed(error))
+  }
+}
+
+
 //Bank
 function* handleBankRequest(action: any): any {
   try {
@@ -246,14 +257,6 @@ function* handleCreateTransaction(action:any):any {
   yield put(doCreateTransactionSuccess({message : null}))
 }
 
-function* handleGetHistoryTrx():any{
-  try {
-    const res = yield axios(API('GET', '/payment-transaction'))
-    yield put(doGetHistorySuccess(res.data))
-  } catch (error:any) {
-    yield put(doGetHistoryFailed(error))
-  }
-}
 
 export {
   handleTrxDashRequest,

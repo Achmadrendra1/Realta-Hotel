@@ -29,10 +29,6 @@ export default function index() {
     (item: any) => item.boor_order_number === id
   );
 
-<<<<<<< HEAD
-=======
-  // console.log(invoiceView, id)
->>>>>>> 643f5058b6609369ec32e878972ef24073342ea7
   const boor_order_number =
     Invoice?.length > 0 ? Invoice[0].boor_order_number : "";
   const boor_order_date = Invoice?.length > 0 ? Invoice[0].boor_order_date : "";
@@ -101,7 +97,7 @@ export default function index() {
     });
   }, [boor_order_number]);
 
-  console.log(getInvoice);
+  // console.log(getInvoice);
 
   // const email = "aryasamiftah@gmail.com"
 
@@ -132,13 +128,8 @@ export default function index() {
       field: getInvoice.boor_is_paid,
     },
     {
-<<<<<<< HEAD
       title: "Payment Type",
       field: getInvoice.boor_pay_type == null ? "Cash" : getInvoice.boor_pay_type,
-=======
-      title: "Payment Type", //
-      field: getInvoice?.boor_pay_type,
->>>>>>> 643f5058b6609369ec32e878972ef24073342ea7
     },
   ];
 
@@ -171,7 +162,7 @@ export default function index() {
   return (
     <>
       <div className="px-6 pt-4 flex justify-between">
-        <Link href={"/booking"} className="text-xl mb-5">
+        <Link href={"/users#history"} className="text-xl mb-5">
           <LeftCircleOutlined /> Kembali
         </Link>
         <div className="mr-12 flex justify-end">

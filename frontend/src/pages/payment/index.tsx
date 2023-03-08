@@ -29,7 +29,7 @@ export default withAuth(function index() {
   const user = useSelector((state: any) => state.GetUserReducer.getUser);
   const { payBank } = useSelector((state: any) => state.payBankReducer);
   const { payPaga } = useSelector((state: any) => state.payPagaReducer);
-  const { payDashTrx, total, currentPage } = useSelector(
+  const { payDashTrx, total, currentPage, payHistoryTrx } = useSelector(
     (state: any) => state.payTrxHistoryReducer
   );
   const { account, error } = useSelector(
@@ -41,13 +41,14 @@ export default withAuth(function index() {
   useEffect(() => {
     dispacth(doBankRequest());
     dispacth(doPagaRequest());
-    dispacth(doTransactionRequest());
+    dispacth(doGetHistory());
   }, []);
 
   // Filter History By User
-  const dataTrx = payDashTrx?.filter(
+  const dataTrx = payHistoryTrx?.filter(
     (obj: any) => obj.userId === user[0]?.user_id
   );
+ 
 
   //Get User Account By User Id yang login
   // const userAcc = account?.filter(
@@ -220,9 +221,9 @@ export default withAuth(function index() {
             <List
               className="pb-4"
               pagination={{
-                current: currentPage,
                 total: total,
                 pageSize: 10,
+                
               }}
             >
               {dataTrx.length != 0 ? (

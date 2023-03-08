@@ -299,9 +299,9 @@ export default function bookingRoom() {
     if(date !== null){
       setDataBooking({
         ...dataBooking,
-        borde_checkin : dateString[0],
-        boor_arrival_date : dateString[0],
-        borde_checkout : dateString[1]
+        borde_checkin : dateString[0].replace(/ /g, '-'),
+        boor_arrival_date : dateString[0].replace(/ /g, '-'),
+        borde_checkout : dateString[1].replace(/ /g, '-')
       })
       setInDate(date[0])
       setOutDate(date[1])
