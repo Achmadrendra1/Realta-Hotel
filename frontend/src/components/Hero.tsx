@@ -93,11 +93,8 @@ const Hero = () => {
             </div>
           </div>
         </div>
-<<<<<<< HEAD
-=======
 
        
->>>>>>> f2c1114e83660503af8814bd31980f7ae815a70e
       </div>
     </Layout>
   );

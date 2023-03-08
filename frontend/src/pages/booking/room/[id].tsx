@@ -88,15 +88,16 @@ export default function bookingRoom() {
   //useSelector Get Special Offers
   let spof = useSelector((state: any) => state.SpofReducer.spof);
   const typeSpof = spof?.filter((item : any) => {
-    if (getUser[0].user_type === "C" && item.spofType === "Corporate") {
+    if (getUser[0]?.user_type === "C" && item.spofType === "Corporate") {
       return true;
-    } else if (getUser[0].user_type === "I" && item.spofType === "Individual") {
+    } else if (getUser[0]?.user_type === "I" && item.spofType === "Individual") {
       return true;
-    } else if (getUser[0].user_type === "T" && item.spofType === "Travel Agent") {
+    } else if (getUser[0]?.user_type === "T" && item.spofType === "Travel Agent") {
       return true;
     }
     return false;
   });
+  console.log(spof)
   
   //useSelector Get Price Items for Booking Extra
   let extra = useSelector((state: any) => state.priceItemsReducer.priceItems);
@@ -367,16 +368,6 @@ export default function bookingRoom() {
     const totalGuest = parseInt(dataBooking.borde_adults) + parseInt(dataBooking.borde_kids)
     setDataBooking({
       ...dataBooking,
-<<<<<<< HEAD
-      borde_price: parseInt(priceRoom.faci_rate_price.split(",")[0].replace(/[^0-9]/g, "")),
-      borde_discount: parseInt(spofPrice.spofDiscount.split(",")[0].replace(/[^0-9]/g, "")),
-      boor_discount: parseInt(spofPrice.spofDiscount.split(",")[0].replace(/[^0-9]/g, "")),
-      borde_tax: parseInt(priceRoom.faci_tax_rate.split(",")[0].replace(/[^0-9]/g, "")),
-      boor_total_tax: parseInt(priceRoom.faci_tax_rate.split(",")[0].replace(/[^0-9]/g, "")),
-      boor_total_guest : totalGuest
-    });;
-  }, [priceRoom.faci_rate_price, priceRoom.faci_tax_rate, spofPrice.spofDiscount, dataBooking.borde_adults, dataBooking.borde_kids]);
-=======
       borde_price: ratePriceInt,
       borde_discount: spofDiscInt,
       boor_total_room : 1,
@@ -387,7 +378,6 @@ export default function bookingRoom() {
       soco_spof_id: spofPrice.spofId,
     });
   }, [ratePriceInt, spofDiscInt, taxRateInt, priceRoom.faci_id]);
->>>>>>> f2c1114e83660503af8814bd31980f7ae815a70e
 
   // useEffect list hotel into Booking Detail
   // useEffect(()=> {
@@ -411,7 +401,7 @@ export default function bookingRoom() {
 
   //Handle button add Special Offers
   const handleButtonModal = (index: any) => {
-    const selected = typeSpof[index];
+    const selected = spof[index];
     setSpofPrice({
       spofId: selected.spofId,
       spofName: selected.spofName,
@@ -459,11 +449,6 @@ export default function bookingRoom() {
     const disc = dataBooking.borde_discount || 0
     const extra = extraTotal.extraSubTotal
     const total = ((((rate*days)*room)-disc)+extra)
-<<<<<<< HEAD
-    console.log(rate)
-=======
-    console.log(dataBooking.borde_price, rate, room, days, disc, extra)
->>>>>>> f2c1114e83660503af8814bd31980f7ae815a70e
     const subTotal = () => {
           setDataBooking({...dataBooking, boor_total_amount : total, borde_subtotal : total, borde_extra : extra})
           setDataPayment({...dataPayment, amount : total})
@@ -478,7 +463,6 @@ export default function bookingRoom() {
     const totalExtra = () => {
     const sumExtra = valueExtra.pritTotal.reduce((a,b)=> a + b, 0)
     setExtraTotal({...extraTotal, extraSubTotal : sumExtra})
-    console.log(extraTotal)
     };
     totalExtra();
   }, [valueExtra.pritTotal]);

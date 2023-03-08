@@ -1,22 +1,31 @@
 --Get Special Offers Coupons
 CREATE VIEW booking.getSpecialOffers
 AS
-SELECT * 
+SELECT 
+spof_id "spofId",
+spof_name  "spofName",
+spof_description "spofDescription",
+spof_type "spofType",
+spof_discount "spofDiscount",
+spof_start_date "spofStartDate",
+spof_end_date "spofEndDate",
+spof_min_qty "spofMinQty",
+spof_max_qty "spofMaxQty",
+spof_modified_date "spofModifiedDate"
 FROM booking.special_offers spof
-JOIN (
+LEFT JOIN (
 	SELECT soco_spof_id, COUNT(soco_spof_id) AS socount
 	FROM booking.special_offer_coupons
 	GROUP BY soco_spof_id
 ) soco
 ON spof.spof_id = soco.soco_spof_id
 WHERE
-(spof.spof_max_qty > soco.socount 
-OR 
-soco.socount IS NULL)
-AND
-(spof.spof_start_date <= CURRENT_TIMESTAMP
-AND
-spof.spof_end_date >= CURRENT_TIMESTAMP)
+spof.spof_start_date <= CURRENT_TIMESTAMP
+AND spof.spof_end_date >= CURRENT_TIMESTAMP
+AND (
+	spof.spof_max_qty > COALESCE(soco.socount, 0)
+	OR soco.socount IS NULL
+)
 
 --Booking.CreateBooking()
 CREATE OR REPLACE PROCEDURE booking.InsertBooking(
@@ -528,21 +537,3 @@ BEGIN
 
 END; $$
 LANGUAGE plpgsql;
-
-CREATE VIEW booking.getSpecialOffers
-AS
-SELECT * 
-FROM booking.special_offers spof
-LEFT JOIN (
-	SELECT soco_spof_id, COUNT(soco_spof_id) AS socount
-	FROM booking.special_offer_coupons
-	GROUP BY soco_spof_id
-) soco
-ON spof.spof_id = soco.soco_spof_id
-WHERE
-spof.spof_start_date <= CURRENT_TIMESTAMP
-AND spof.spof_end_date >= CURRENT_TIMESTAMP
-AND (
-	spof.spof_max_qty > COALESCE(soco.socount, 0)
-	OR soco.socount IS NULL
-)
