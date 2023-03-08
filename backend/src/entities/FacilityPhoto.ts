@@ -39,7 +39,7 @@ export class FacilityPhoto {
   faphoUrl: string | null;
 
   @Column('date', { name: 'fapho_modified_date', nullable: true })
-  faphoModifiedDate: string | null;
+  faphoModifiedDate: Date | null;
 
   @ManyToOne(() => Facilities, (facilities) => facilities.facilityPhotos, {
     onDelete: 'CASCADE',

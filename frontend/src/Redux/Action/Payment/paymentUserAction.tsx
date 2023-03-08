@@ -1,5 +1,25 @@
 import PaymentConst from "@/Redux/Constant/Payment/PaymentConst"
 
+export const doGetAllBank = () => {
+    return {
+        type : PaymentConst.GET_ALL_BANK_REQUEST
+    }
+}
+
+export const doGetAllBankSuccess = (payload :any) => {
+    return {
+        type : PaymentConst.GET_ALL_BANK_REQUEST_SUCCESS,
+        payload
+    }
+}
+
+export const doGetAllBankFailed = (payload: any) => {
+    return {
+        type : PaymentConst.GET_ALL_BANK_REQUEST_FAILED,
+        payload
+    }
+}
+
 export const doCreateAccount = (payload: any) => {
     return {
         type: PaymentConst.CREATE_ACCOUNT,

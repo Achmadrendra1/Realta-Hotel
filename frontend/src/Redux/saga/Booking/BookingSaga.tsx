@@ -57,8 +57,7 @@ function* handleSpHotel() : any {
       yield put(getSpHotelSuccess(result.data));
       return result.data
     }catch(e : any) {
-      // yield put(getSpHotelFailed(e))
-      console.log(e)
+      yield put(getSpHotelFailed(e))
     }
   }
 
@@ -68,8 +67,7 @@ function* handleSpFacilities() : any {
       yield put(getSpFacilitiesSuccess(result.data));
       return result.data
     }catch(e : any) {
-      // yield put(getSpHotelFailed(e))
-      console.log(e)
+      yield put(getSpHotelFailed(e))
     }
   }
 

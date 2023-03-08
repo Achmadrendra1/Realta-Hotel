@@ -18,21 +18,13 @@ export default function AddProvinces(props: any) {
     (item: any) => item.prov_country_id == countryId
   );
   const [formValues, setFormValues] = useState(details);
-  // console.log('countryNamee :', countryNamee);
-  // console.log('countryId :', countryId);
-  // console.log('dataProvinces :', dataProvinces);
-  // console.log('details provinces :', details);
-  // console.log('formValues provinces :', formValues);
 
   const handleInputChange = (input: any) => (e: any) => {
     setFormValues({ ...formValues, [input]: e.target.value });
   };
 
-  // console.log('handleInputChange :', handleInputChange);
-
   const onFinish = (data: any) => {
     dispatch(doAddProvinces(data));
-    // console.log('add provinces data :', data);
     dispatch(doUpdateProvinces(formValues));
     handleClose(false);
     window.location.reload();
@@ -40,7 +32,6 @@ export default function AddProvinces(props: any) {
   };
 
   const onFinishFailed = (errorInfo: any) => {
-    // console.log('Failed:', errorInfo);
   };
 
   //Alert

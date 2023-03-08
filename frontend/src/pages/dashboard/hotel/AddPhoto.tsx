@@ -2,7 +2,7 @@ import withAuth from "@/PrivateRoute/WithAuth";
 import { addFapho } from "@/Redux/Action/Hotel/HotelAction";
 import Buttons from "@/components/Button";
 import { UploadOutlined } from "@ant-design/icons";
-import { Button, Form, Select, Upload, UploadProps } from "antd";
+import { Button, Form, Modal, Select, Upload, UploadProps } from "antd";
 import { RcFile, UploadFile } from "antd/es/upload";
 import { useFormik } from "formik";
 import React, { useState } from "react";
@@ -10,9 +10,10 @@ import { useDispatch } from "react-redux";
 
 export default withAuth( function AddPhoto(props: any) {
   const dispatch = useDispatch();
-  const [form] = Form.useForm();
   const [fileList, setFileList] = useState<UploadFile[]>([]);
   const [uploading, setUploading] = useState(false);
+  const [form] = Form.useForm();
+  const { handleClose } = props;
 
   const formik = useFormik({
     initialValues: {
@@ -32,7 +33,7 @@ export default withAuth( function AddPhoto(props: any) {
       try {
         setUploading(true);
         await dispatch(addFapho(formData));
-        props.closeUpload();
+        handleClose(false);
         props.onRefresh();
         // window.location.reload();
       } catch (error) {
@@ -62,18 +63,25 @@ export default withAuth( function AddPhoto(props: any) {
     },
     fileList,
   };
+
   const stat = [
     { value: true, label: "Primary" },
     { value: false, label: "Not Primary" },
   ];
 
   return (
-    <Form
+    <Modal
+    open = {props.showUpload}
+    onOk={props.okUpload}
+    onCancel={props.cancelUpload}
+    centered
+    footer={null}
+    >
+      <Form
       form={form}
-      onFinish={formik.handleSubmit}
+      onFinish={handleUpload}
       layout="vertical"
       style={{ maxWidth: 600 }}
-      className="px-5 py-5 border shadow rounded-lg mx-auto"
     >
       <Form.Item
         name="faphoPrimary"
@@ -98,8 +106,17 @@ export default withAuth( function AddPhoto(props: any) {
           <Button icon={<UploadOutlined />}>Select File</Button>
         </Upload>
       </Form.Item>
-
-      <Form.Item>
+      <Form.Item label=" " colon={false}>
+        <div className="flex justify-end">
+          <Buttons type={"danger"} funcs={props.cancleAdd}>
+            Cancel
+          </Buttons>
+          <div className="ml-2">
+            <Buttons>Save</Buttons>
+          </div>
+        </div>
+      </Form.Item>
+      {/* <Form.Item>
         <Button
           type="primary"
           onClick={handleUpload}
@@ -107,10 +124,11 @@ export default withAuth( function AddPhoto(props: any) {
           loading={uploading}
           style={{ marginTop: 16 }}
         >
-          {uploading ? "Uploading" : "Start Upload"}
+          {uploading ? 'Uploading' : 'Start Upload'}
         </Button>
-      </Form.Item>
+      </Form.Item> */}
     </Form>
+    </Modal>
   );
 }
 )

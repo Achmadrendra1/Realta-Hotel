@@ -51,9 +51,10 @@ create table master.policy(
 	constraint poli_id_pk primary key (poli_id)
 );
 create table master.policy_category_group(
-	poca_poli_id serial,
-	poca_cagro_id int,
-	constraint poca_poli_id_pk primary key (poca_poli_id), --1 PK
+	poca_id serial,
+	poca_poli_id int not null,
+	poca_cagro_id int not null,
+	constraint poca_poli_id_pk primary key (poca_id ), --1 PK
 	constraint poca_poli_id_fk foreign key (poca_poli_id) references master.policy(poli_id) 
 	on delete cascade on update cascade,
 	constraint poca_cagro_id_fk foreign key (poca_cagro_id) references master.category_group(cagro_id) 
@@ -215,7 +216,7 @@ create table hotel.facility_photo(
 	fapho_photo_filename varchar(125),
 	fapho_primary bool,
 	fapho_url varchar(255),
-	fapho_modified_date date,
+	fapho_modified_date timestamp,
 	constraint pk_fapho_id primary key(fapho_id),
 	constraint fk_fapho_faci_id foreign key (fapho_faci_id) references hotel.facilities(faci_id) on delete cascade on update cascade
 );
@@ -349,7 +350,6 @@ CREATE TABLE resto.resto_menus(
 	reme_name VARCHAR(55),
 	reme_description VARCHAR(255),
 	reme_price MONEY,
-	reme_discount money,
 	reme_status VARCHAR(15), --AVAILABLE | EMPTY
 	reme_modified_date TIMESTAMP,
 	reme_discount MONEY,

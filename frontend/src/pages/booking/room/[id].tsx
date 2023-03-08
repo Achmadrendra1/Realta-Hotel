@@ -7,6 +7,7 @@ import {
   DatePicker,
   Form,
   Input,
+  InputNumber,
   Modal,
   Pagination,
   Progress,
@@ -25,6 +26,7 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   getSpFacilities,
   getSpHotel,
+  getSpInvoice,
   getSpReview,
 } from "@/Redux/Action/Booking/BookingAction";
 import { useRouter } from "next/router";
@@ -52,7 +54,7 @@ import Link from "next/link";
 
 export default function bookingRoom() {
   const root = useRouter();
-  const { id } = root.query || {};
+  const { id } = root.query;
   const dispatch = useDispatch();
 
   //useEffect Reducer
@@ -82,21 +84,20 @@ export default function bookingRoom() {
   
   //useSelector Get User
   let getUser = useSelector((state: any) => state.GetUserReducer.getUser);
-  const userSpof = getUser.filter((item: any) => item.user_id == id);
 
   //useSelector Get Special Offers
   let spof = useSelector((state: any) => state.SpofReducer.spof);
   const typeSpof = spof?.filter((item : any) => {
-    if (userSpof[0]?.user_type === "C" && item.spofType === "Corporate") {
+    if (getUser[0]?.user_type === "C" && item.spofType === "Corporate") {
       return true;
-    } else if (userSpof[0]?.user_type === "I" && item.spofType === "Individual") {
+    } else if (getUser[0]?.user_type === "I" && item.spofType === "Individual") {
       return true;
-    } else if (userSpof[0]?.user_type === "T" && item.spofType === "Travel Agent") {
+    } else if (getUser[0]?.user_type === "T" && item.spofType === "Travel Agent") {
       return true;
     }
     return false;
   });
-
+  console.log(spof)
   
   //useSelector Get Price Items for Booking Extra
   let extra = useSelector((state: any) => state.priceItemsReducer.priceItems);
@@ -104,41 +105,11 @@ export default function bookingRoom() {
   //useSelector Get Last Booking Order
   let boorNumber = useSelector((state: any) => state.BoorReducer.boor);
 
-
   //State untuk View More Amanities
   const [more, setMore] = useState(false);
-
-  //State untuk Price Room
-  const [priceRoom, setPriceRoom] = useState({
-    faci_id: Number,
-    faci_name: "",
-    faci_high_price: "",
-    faci_rate_price: "",
-    faci_tax_rate: "",
-  });
-
+  
   //State untuk modal Special Offers
   const [spofOpen, setSpofOpen] = useState(false);
-
-  //State untuk table Special Offers
-  const [spofPrice, setSpofPrice] = useState({
-    spofId: 0,
-    spofName: "",
-    spofDiscount: "",
-  });
-
-  let spofDiscInt = parseInt(
-    spofPrice.spofDiscount.split(",")[0].replace(/[^0-9]/g, "")
-  );
-  let ratePriceInt = parseInt(
-    priceRoom.faci_rate_price.split(",")[0].replace(/[^0-9]/g, "")
-  );
-  let taxRateInt = parseInt(
-    priceRoom.faci_tax_rate.split(",")[0].replace(/[^0-9]/g, "")
-  );
-
-  //State untuk totalPrice Rate Hotel dikurangin Special Offers
-  const [totalPrice, setTotalPrice] = useState(0);
 
   //State untuk menampilkan Booking Detail
   const [detail, setDetail] = useState(false);
@@ -149,32 +120,67 @@ export default function bookingRoom() {
   //State untuk button modal booking extra
   const [addExtra, setAddExtra] = useState(false);
 
-  //State untuk table Booking Extra
-  const [valueExtra, setValueExtra] = useState({
-    pritName: [] as any[],
-    pritPrice: [] as any[],
-  });
-
   //State untuk Checkin-Checkout Date
   const [inDate, setInDate] = useState(null)
   const [outDate, setOutDate] = useState(null)
   const [numDays, setNumDays] = useState(null)
 
-  //Looping Map untuk menampilkan data booking extra
-  const dataExtra = valueExtra.pritName.map((name: any, index: any) => {
-    return {
-      key: index,
-      name: name,
-      price: valueExtra.pritPrice[index],
-    };
+  //State untuk Price Room
+  const [priceRoom, setPriceRoom] = useState({
+    faci_id: Number,
+    faci_name: "",
+    faci_high_price: "",
+    faci_rate_price: "",
+    faci_tax_rate: "",
+  });
+
+  //State untuk table Special Offers
+  const [spofPrice, setSpofPrice] = useState({
+    spofId: 0,
+    spofName: "",
+    spofDiscount: "",
+  });
+
+  //State untuk table Booking Extra
+  const [valueExtra, setValueExtra] = useState({
+    pritId: [] as any [],
+    pritName: [] as any[],
+    pritPrice: [] as any[],
+    pritQty : [] as any [],
+    pritTotal : [] as any [],
+    pritMeasure : [] as any []
   });
 
   //State untuk extraTotal
   const [extraTotal, setExtraTotal] = useState({
-    extraSubTotal: "",
+    extraSubTotal: 0,
   });
 
-  //Table Column untuk Booking Extra
+  //Table column untuk Price Items dalam Modal
+  const columnsExtraModal = [
+    {
+      title: "Item Name",
+      dataIndex: "pritName",
+    },
+    {
+      title: "Price",
+      dataIndex: "pritPrice",
+    },
+    {
+      title : "Description",
+      dataIndex : "Description"
+    },
+    {
+      key: "action",
+      render: (text: any, record: any, index: any) => (
+        <div className="flex justify-end">
+          <button onClick={() => handleValueExtra(record.pritId)}>Add</button>
+        </div>
+      ),
+    },
+  ];
+
+  //Table untuk Booking Extra
   const columnsExtra = [
     {
       title: "Item Name",
@@ -186,11 +192,11 @@ export default function bookingRoom() {
     },
     {
       title: "Quantity",
-      dataIndex: "",
+      dataIndex: "quantity",
     },
     {
       title: "SubTotal",
-      dataIndex: "",
+      dataIndex: "subTotal",
     },
     {
       title: (
@@ -205,27 +211,26 @@ export default function bookingRoom() {
     },
   ];
 
-  //Table column untuk Booking Extra dalam Modal
-  const columnsExtraModal = [
-    {
-      title: "Item Name",
-      dataIndex: "pritName",
-      key: 1,
-    },
-    {
-      title: "Price",
-      dataIndex: "pritPrice",
-      key: 2,
-    },
-    {
-      key: "action",
-      render: (text: any, record: any, index: any) => (
-        <div className="flex justify-end">
-          <button onClick={() => handleValueExtra(index)}>Add</button>
-        </div>
-      ),
-    },
-  ];
+  //Looping Map untuk menampilkan data booking extra
+  const dataExtra = valueExtra.pritName.map((name: any, index: any) => {
+    return {
+      key: index,
+      name: name,
+      price: valueExtra.pritPrice[index],
+      quantity : valueExtra.pritQty[index],
+      subTotal : valueExtra.pritTotal[index]
+    };
+  });
+
+  let spofDiscInt = parseInt(
+    spofPrice.spofDiscount.split(",")[0].replace(/[^0-9]/g, "")
+  );
+  let ratePriceInt = parseInt(
+    priceRoom.faci_rate_price.split(",")[0].replace(/[^0-9]/g, "")
+  );
+  let taxRateInt = parseInt(
+    priceRoom.faci_tax_rate.split(",")[0].replace(/[^0-9]/g, "")
+  );
 
   //Google Maps
   let maps = 'https://www.google.com/maps/search/?api=1&query='
@@ -271,6 +276,9 @@ export default function bookingRoom() {
     ratingClass = "Very Bad";
   }
 
+  //Rangepicker ANTD
+  const {RangePicker} = DatePicker
+
   //Configure Date untuk Booking
   const dateFormat = "DD MM YYYY";
   const disabledDate = (current: any, checkInDate: any) => {
@@ -282,21 +290,29 @@ export default function bookingRoom() {
     return current < dayjs().startOf("day");
   };
 
-  const onCheckInChange = (date: any, dateString: any) => {
-    setDataBooking({
-      ...dataBooking,
-      borde_checkin: dateString,
-      boor_arrival_date: dateString,
-    });
-    setInDate(date)
-    calculateNumDays(date, outDate)
-  };
-
-  const onCheckOutChange = (date: any, dateString: any) => {
-    setDataBooking({ ...dataBooking, borde_checkout: dateString });
-    setOutDate(date)
-    calculateNumDays(inDate, date)
-  };
+  const handleDateRangeChange = (date : any, dateString : any) => {
+    if(date !== null){
+      setDataBooking({
+        ...dataBooking,
+        borde_checkin : dateString[0],
+        boor_arrival_date : dateString[0],
+        borde_checkout : dateString[1]
+      })
+      setInDate(date[0])
+      setOutDate(date[1])
+      calculateNumDays(date[0], date[1])
+    } else {
+      setDataBooking({
+        ...dataBooking,
+        borde_checkin : '',
+        boor_arrival_date : '',
+        borde_checkout : ''
+      })
+      setInDate(null)
+      setOutDate(null)
+      calculateNumDays('', '')
+    }
+  }
 
   const calculateNumDays = (start : any, end : any) => {
     if (start && end) {
@@ -306,7 +322,6 @@ export default function bookingRoom() {
       setNumDays(null);
     }
   };
-
 
   const [dataBooking, setDataBooking] = useState({
     boor_user_id: 0,
@@ -329,7 +344,7 @@ export default function bookingRoom() {
     borde_checkout: "",
     borde_adults: 0,
     borde_kids: 0,
-    borde_price: 0,
+    borde_price: ratePriceInt,
     borde_extra: 0,
     borde_discount: 0,
     borde_tax: 0,
@@ -338,7 +353,6 @@ export default function bookingRoom() {
     soco_spof_id: spofPrice.spofId,
     boor_cardnumber: "",
   });
-
 
   const [dataPayment, setDataPayment] = useState({
     userId: 0,
@@ -351,21 +365,19 @@ export default function bookingRoom() {
   });
 
   useEffect(() => {
-    setTotalPrice(0);
-  }, [id]);
-
-  useEffect(() => {
+    const totalGuest = parseInt(dataBooking.borde_adults) + parseInt(dataBooking.borde_kids)
     setDataBooking({
       ...dataBooking,
       borde_price: ratePriceInt,
       borde_discount: spofDiscInt,
+      boor_total_room : 1,
+      borde_adults : 1,
       borde_tax: taxRateInt,
-      borde_subtotal: totalPrice,
-      boor_total_amount: totalPrice,
       boor_total_tax: taxRateInt,
+      borde_faci_id: priceRoom.faci_id,
+      soco_spof_id: spofPrice.spofId,
     });
-    setDataPayment({ ...dataPayment, amount: totalPrice });
-  }, [ratePriceInt, spofDiscInt, taxRateInt, totalPrice]);
+  }, [ratePriceInt, spofDiscInt, taxRateInt, priceRoom.faci_id]);
 
   // useEffect list hotel into Booking Detail
   // useEffect(()=> {
@@ -373,67 +385,6 @@ export default function bookingRoom() {
   //         faci_id, faci_name, faci_rate_price, faci_high_price, faci_tax_rate
   //     })
   // }, [faci_name])
-
-  //UseEffect untuk change auto totalPrice di booking
-  useEffect(() => {
-    const subTotal = () => {
-        const sumDays = numDays * ratePriceInt
-        const sumRoom = sumDays * dataBooking.boor_total_room
-        const sumPriceSpof = sumRoom - spofDiscInt
-        setTotalPrice(sumPriceSpof)
-    };
-    subTotal();
-  }, [faciRoom.faci_rate_price, spofPrice.spofDiscount]);
-
-
-  useEffect(() => {
-    setTotalPrice(ratePriceInt);
-  }, [priceRoom.faci_rate_price]);
-
-  //useEffect untuk input price room ke state insert
-  useEffect(() => {
-    if (priceRoom) {
-      setDataBooking({
-        ...dataBooking,
-        borde_price: parseInt(priceRoom.faci_rate_price),
-        borde_tax: parseInt(priceRoom.faci_tax_rate),
-        borde_faci_id: priceRoom.faci_id,
-      });
-    }
-  }, [priceRoom]);
-
-  //useEffect untuk input special offer ke state insert
-  useEffect(() => {
-    if (spofPrice) {
-      setDataBooking({
-        ...dataBooking,
-        soco_spof_id: spofPrice.spofId,
-        borde_discount: parseInt(spofPrice.spofDiscount),
-      });
-    }
-  }, [spofPrice]);
-
-  //useEffect untuk auto munculin perhitungan extra
-  useEffect(() => {
-    // const totalExtra = () => {
-    const sumEx = valueExtra.pritPrice.map((a) =>
-      parseInt(a.substring(2).replace(".", ""))
-    );
-    const sumExTotal = sumEx.reduce((a, b) => a + b, 0);
-    const sumTotal = sumExTotal.toLocaleString("id-ID", {
-      style: "currency",
-      currency: "IDR",
-    });
-    setExtraTotal({ ...extraTotal, extraSubTotal: sumTotal });
-    // };
-    // totalExtra();
-    // // const empTotalPrice = parseInt(totalPrice.substring(2).replace('.',''))
-    // const empTotalPrice = totalPrice
-    // const newExtraTotal = parseInt(extraTotal.extraSubTotal.substring(2).replace('.',''))
-    // const moneyTotal = (totalPrice + sumExTotal).toLocaleString("id-ID", {style : "currency", currency:"IDR"})
-    // // setTotalPrice((moneyTotal))
-    // console.log(moneyTotal, sumTotal)
-  }, [valueExtra.pritPrice]);
 
   //Handle button selected room into booking
   const handleButtonSelected = (index: any) => {
@@ -445,11 +396,12 @@ export default function bookingRoom() {
       faci_rate_price: selected.faci_rate_price,
       faci_tax_rate: selected.faci_tax_rate,
     });
+    setDataBooking({...dataBooking, borde_faci_id : selected.faci_id, borde_price : ratePriceInt })
   };
 
   //Handle button add Special Offers
   const handleButtonModal = (index: any) => {
-    const selected = typeSpof[index];
+    const selected = spof[index];
     setSpofPrice({
       spofId: selected.spofId,
       spofName: selected.spofName,
@@ -459,34 +411,71 @@ export default function bookingRoom() {
   };
 
   // Handle untuk Booking Extra di dalam Modal
-  const handleValueExtra = (index: any) => {
-    const selected = extra[index];
-    const newValueExtraName = [...valueExtra.pritName, selected.pritName];
-    const newValueExtraPrice = [...valueExtra.pritPrice, selected.pritPrice];
-    setValueExtra({
-      pritName: newValueExtraName,
-      pritPrice: newValueExtraPrice,
-    });
-    setAddExtra(false);
+  const handleValueExtra = (id: any) => {
+    const selected = extra.find((items:any) => items.pritId == id)
+    const index = valueExtra.pritName.indexOf(selected.pritName);
+    if(index >= 0){
+      const newQuantity = [...valueExtra.pritQty]
+      newQuantity[index] += 1
+      const newPrice = [...valueExtra.pritTotal]
+      newPrice[index] += parseInt(selected.pritPrice.split(",")[0].replace(/[^0-9]/g, ""));
+      setValueExtra({
+        ...valueExtra,
+        pritQty : newQuantity,
+        pritTotal : newPrice
+      })
+    }else {
+      let measureUnit = '';
+      if(selected.pritType === "SNACK") {
+        measureUnit = "Kg"
+      }
+      setValueExtra({
+        pritId:[...valueExtra.pritId, selected.pritId],
+        pritName:[...valueExtra.pritName,selected.pritName],
+        pritPrice : [...valueExtra.pritPrice, parseInt(selected.pritPrice.split(",")[0].replace(/[^0-9]/g, ""))],
+        pritQty : [...valueExtra.pritQty, 1],
+        pritTotal : [...valueExtra.pritTotal, parseInt(selected.pritPrice.split(",")[0].replace(/[^0-9]/g, ""))],
+        pritMeasure : [...valueExtra.pritMeasure, measureUnit]
+      })
+    }
+    setAddExtra(false)
   };
 
-  // const handleValueExtra = (id : any) => {
-  //     const selected = extra.find(item => item.idExtra === id);
-  //     if (selected) {
-  //         const newValueExtraName = [...valueExtra.pritName, selected.pritName];
-  //         const newValueExtraPrice = [...valueExtra.pritPrice, selected.pritPrice];
-  //         setValueExtra({
-  //         pritName: newValueExtraName,
-  //         pritPrice: newValueExtraPrice
-  //         });
-  //     }
-  // }
+  //UseEffect untuk change auto totalPrice di booking
+  useEffect(() => {
+    const rate = dataBooking.borde_price
+    const room = dataBooking.boor_total_room
+    const days = numDays || 1
+    const disc = dataBooking.borde_discount || 0
+    const extra = extraTotal.extraSubTotal
+    const total = ((((rate*days)*room)-disc)+extra)
+    const subTotal = () => {
+          setDataBooking({...dataBooking, boor_total_amount : total, borde_subtotal : total, borde_extra : extra})
+          setDataPayment({...dataPayment, amount : total})
+        };
+        if(dataBooking.borde_price !== 0 || dataBooking.borde_discount !== 0){
+          subTotal()
+        }
+  }, [dataBooking.borde_price, dataBooking.boor_total_room, dataBooking.borde_checkin, dataBooking.borde_checkout, dataBooking.borde_discount, extraTotal.extraSubTotal]);
 
-  //Handle delete untuk tabel extra
+  //useEffect untuk auto munculin perhitungan extra
+  useEffect(() => {
+    const totalExtra = () => {
+    const sumExtra = valueExtra.pritTotal.reduce((a,b)=> a + b, 0)
+    setExtraTotal({...extraTotal, extraSubTotal : sumExtra})
+    };
+    totalExtra();
+  }, [valueExtra.pritTotal]);
+
+  // Handle delete untuk tabel extra
   const handleDelete = (index: any) => {
-    const delPritName = valueExtra.pritName.filter((name, i) => i !== index);
-    const delPritPrice = valueExtra.pritPrice.filter((price, i) => i !== index);
-    setValueExtra({ pritName: delPritName, pritPrice: delPritPrice });
+    const delPritId = valueExtra.pritId.filter((name, i) => i !== index)
+    const delPritName = valueExtra.pritName.filter((name, i) => i !== index)
+    const delPritPrice = valueExtra.pritPrice.filter((price, i) => i !== index)
+    const delPritQty = valueExtra.pritQty.filter((qty, i) => i !== index)
+    const delPritTotal = valueExtra.pritTotal.filter((total, i) => i !== index)
+    const delPritMeasure = valueExtra.pritMeasure.filter((measure, i) => i !== index)
+    setValueExtra({ pritName: delPritName, pritPrice: delPritPrice, pritId : delPritId, pritMeasure : delPritMeasure, pritQty : delPritQty, pritTotal : delPritTotal })
   };
 
   //Handle untuk generate booking code otomatis
@@ -546,16 +535,16 @@ export default function bookingRoom() {
     }
   };
 
-  const handleGuestValue = (value: any) => {
-    setDataBooking({
-      ...dataBooking,
-      boor_total_guest: value,
-      borde_adults: value,
-    });
+  const handleAdultsValue = (value: any) => {
+    setDataBooking({...dataBooking, borde_adults : value})
+  };
+
+  const handleKidsValue = (value: any) => {
+    setDataBooking ({...dataBooking, borde_kids : value})
   };
 
   const handleRoomValue = (value: any) => {
-    setDataBooking({ ...dataBooking, boor_total_room: value });
+    setDataBooking({...dataBooking, boor_total_room : value})
   };
 
   // const handleDeleteSpof = () => {
@@ -601,13 +590,13 @@ export default function bookingRoom() {
     const id = boor_id + 1;
     dispatch(insertBooking(dataBooking));
     dispacth(doCreateTransaction(dataPayment));
-    
+
     setTimeout(() =>
       router.push({
         pathname: `/booking/room/invoice`,
         query: {id : dataBooking.boor_order_number},
       })
-    );
+    , 1000);
   };
 
   //   useEffect(() => {
@@ -718,7 +707,7 @@ export default function bookingRoom() {
   const [payMsg, setPayMsg] = useState("");
 
   useEffect(() => {
-    if (selectCard.balance < totalPrice) {
+    if (selectCard.balance < dataBooking.boor_total_amount) {
       setPayMsg(
         "Your Card Balance Is Insufficient, Please Check Or Select Another Card !"
       );
@@ -731,7 +720,7 @@ export default function bookingRoom() {
       setPayMsg("");
       setDisaled(true);
     }
-  }, [selectCard, totalPrice]);
+  }, [selectCard, dataBooking.boor_total_amount]);
 
   return (
     <Layouts>
@@ -1467,56 +1456,44 @@ export default function bookingRoom() {
                   <p>{priceRoom.faci_high_price}</p>
                 </div>
               </div>
-              <div className="text-m mt-1 mb-3">Include Tax</div>
-              <div className="flex mb-3">
-                <div className="mr-2">
-                  <DatePicker
-                    placeholder="Check-In"
-                    onChange={onCheckInChange}
-                    disabledDate={(current) => disabledDate(current, dayjs())}
-                    format={dateFormat}
+              <p className="my-3">Include Tax</p>
+              <Row gutter={10}>
+                  <Col span={12}>
+                    <p>Please input date :</p>
+                  </Col>
+                  <Col span={12} className="flex">
+                    <Col span={8}>
+                    <p>Room : </p>
+                    </Col>
+                    <Col span={8}>
+                    <p>Adults : </p>
+                    </Col>
+                    <Col span={8}>
+                    <p>Kids : </p>
+                    </Col>
+                  </Col>
+              </Row>
+              <Row gutter={10}>
+                  <Col span={12}>
+                  <RangePicker
+                  onChange={handleDateRangeChange}
+                  format={dateFormat}
+                  disabledDate={(current) => disabledDate(current, dayjs())}
                   />
-                </div>
-                <div>
-                  <DatePicker
-                    placeholder="Check-Out"
-                    onChange={onCheckOutChange}
-                    disabledDate={(current) => disabledDate(current, dayjs())}
-                    format={dateFormat}
-                  />
-                </div>
-                <div className="mr-2">
-                  <Select
-                    defaultValue="0"
-                    style={{ width: 50 }}
-                    onChange={handleGuestValue}
-                    options={[
-                      { value: 1, label: "1" },
-                      { value: 2, label: "2" },
-                      { value: 3, label: "3" },
-                      { value: 4, label: "4" },
-                    ]}
-                  />
-                </div>
-                <div className="flex mr-2 items-center">Guest</div>
-                <div className="mr-2">
-                  <Select
-                    defaultValue="0"
-                    style={{ width: 50 }}
-                    onChange={handleRoomValue}
-                    options={[
-                      { value: 1, label: "1" },
-                      { value: 2, label: "2" },
-                      { value: 3, label: "3" },
-                    ]}
-                  />
-                </div>
-                <div className="flex mr-2 items-center">Room</div>
-              </div>
-              <div className="text-xl font-semibold mt-1 mb-3">
-                <p>{priceRoom.faci_name}</p>
-              </div>
-              <div className="flex justify-between items-center mb-3">
+                  </Col>
+                  <Col span={12} className="flex gap-5">
+                    <Col span={6}>
+                    <InputNumber type="number" className="w-14" min={1} max={3}  value={dataBooking.boor_total_room} onChange={handleRoomValue}/>
+                    </Col>
+                    <Col span={6}>
+                    <InputNumber type="number" className="w-14" min={1} max={4}  value={dataBooking.borde_adults} onChange={handleAdultsValue}/>
+                    </Col>
+                    <Col span={6}>
+                    <InputNumber type="number" className="w-14" min={0} max={2}  value={dataBooking.borde_kids} onChange={handleKidsValue}/>
+                    </Col>
+                  </Col>
+              </Row>
+              <div className="flex justify-between items-center mt-2 mb-3">
                 <div className=" flex my-1 items-center">
                   <Modal
                     title="Special Offers"
@@ -1592,7 +1569,11 @@ export default function bookingRoom() {
                 <div className="flex text-l items-center">Total Price</div>
                 <div className="flex text-xl items-center">
                   <p>
-                    {totalPrice.toLocaleString("id-ID", {
+                    {/* {totalPrice.toLocaleString("id-ID", {
+                      style: "currency",
+                      currency: "IDR",
+                    })} */}
+                    {dataBooking.boor_total_amount.toLocaleString("id-ID", {
                       style: "currency",
                       currency: "IDR",
                     })}
