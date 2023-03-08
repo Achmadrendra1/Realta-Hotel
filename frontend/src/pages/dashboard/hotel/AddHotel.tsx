@@ -4,12 +4,13 @@ import {
   getAddress,
   getProvince,
 } from "@/Redux/Action/Hotel/HotelAction";
+import Buttons from "@/components/Button";
 import { Cascader, Form, Input, Modal, Typography } from "antd";
 import { useFormik } from "formik";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
-export default withAuth( function AddHotelRealta(props: any) {
+export default withAuth(function AddHotelRealta(props: any) {
   const dispatch = useDispatch();
   const { addrs } = useSelector((state: any) => state.HotelReducer);
   const { prov } = useSelector((state: any) => state.HotelReducer);
@@ -17,9 +18,11 @@ export default withAuth( function AddHotelRealta(props: any) {
   const { Title, Text } = Typography;
   const { handleClose } = props;
 
+  console.log(addrs);
+
   useEffect(() => {
-    dispatch(getAddress())
-    dispatch(getProvince())
+    dispatch(getAddress());
+    dispatch(getProvince());
   }, []);
 
   const formik = useFormik({
@@ -39,9 +42,9 @@ export default withAuth( function AddHotelRealta(props: any) {
       payload.append("hotelPhonenumber", values.hotelPhonenumber);
       payload.append("hotelModifiedDate", values.hotelModifiedDate);
       payload.append("hotelAddr", cascaderValue);
-      
+
       values.hotelAddr = cascaderValue;
-      
+
       dispatch(addHotel(payload));
       window.alert("Data Successfully Added");
       handleClose(false);
@@ -49,20 +52,19 @@ export default withAuth( function AddHotelRealta(props: any) {
     },
   });
 
+  const handleCascaderChange = (value: any) => {
+    setCascaderValue(value[1]);
+  };
+
   return (
     <Modal
-    title = "Add New Hotel"
-    open = {props.showAdd}
-    onOk = {props.okAdd}
-    onCancel={props.cancelAdd}
-    centered
-    footer = {null}
+      open={props.showAdd}
+      onOk={props.okAdd}
+      onCancel={props.cancelAdd}
+      centered
+      footer={null}
     >
-      <Form
-      layout="vertical"
-      onFinish={formik.handleSubmit}
-      autoComplete="off"
-      >
+      <Form layout="vertical" onFinish={formik.handleSubmit} autoComplete="off">
         <Title level={4} style={{ textAlign: "center" }}>
           Add Realta Hotel
         </Title>
@@ -83,7 +85,9 @@ export default withAuth( function AddHotelRealta(props: any) {
         <Form.Item
           name="hotelDescription"
           label="Hotel Description"
-          rules={[{ required: true, message: "Please input Hotel Description!" }]}
+          rules={[
+            { required: true, message: "Please input Hotel Description!" },
+          ]}
         >
           <Input.TextArea
             showCount
@@ -98,7 +102,7 @@ export default withAuth( function AddHotelRealta(props: any) {
         <Form.Item
           name="hotelAddr"
           label="Hotel Address"
-          rules={[{ required: true, message: "Please input Hotel Address!" }]}
+          rules={[{ required: true, message: "Please input Hotel!" }]}
         >
           <Cascader
             options={
@@ -118,25 +122,20 @@ export default withAuth( function AddHotelRealta(props: any) {
                     })),
               }))
             }
-            value={formik.values?.hotelAddr} // nilai Cascader aktual diatur dari state
+            value={cascaderValue} // set the value of Cascader to cascaderValue state
             onChange={(value: any) => {
               setCascaderValue(value[1]); // update the state variable with selected value
               formik.setValues({ ...formik.values, hotelAddr: value[1] }); // update the formik values with selected value
             }}
           />
-
-          {/* <Input
-          name="hotelAddr"
-          id="hotelAddr"
-          value={formik.values?.hotelAddr}
-          onChange={formik.handleChange}
-          autoComplete="hotelAddr"
-        /> */}
         </Form.Item>
+
         <Form.Item
           name="hotelRatingStar"
           label="Hotel Rating"
-          rules={[{ required: true, message: "Please input Hotel Rating Star!" }]}
+          rules={[
+            { required: true, message: "Please input Hotel Rating Star!" },
+          ]}
         >
           <Input
             name="hotelRatingStar"
@@ -161,7 +160,7 @@ export default withAuth( function AddHotelRealta(props: any) {
         </Form.Item>
         <Form.Item label=" " colon={false}>
           <div className="flex justify-end">
-            <Buttons type={"danger"} funcs={props.cancleAdd}>
+            <Buttons type="danger" funcs={props.cancelAdd}>
               Cancel
             </Buttons>
             <div className="ml-2">
@@ -169,10 +168,7 @@ export default withAuth( function AddHotelRealta(props: any) {
             </div>
           </div>
         </Form.Item>
-
       </Form>
     </Modal>
-      
   );
-}
-)
+});

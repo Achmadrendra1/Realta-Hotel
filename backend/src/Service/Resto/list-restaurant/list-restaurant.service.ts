@@ -7,7 +7,16 @@ import { Repository } from 'typeorm';
 export class ListRestaurantService {
     constructor(@InjectRepository(Facilities) private readonly restoRepository:Repository<Facilities> ){}
 
-    async getListResto(){
-        return await this.restoRepository.query('SELECT * FROM resto.resto_detail');
+    async getListResto(param){ 
+        // console.log(param);
+        const data = await this.restoRepository.query('SELECT * FROM resto.resto_detail($1)',[param.page]);
+        const selectcount = await this.restoRepository.query('SELECT * FROM resto.count_resto()')
+        const counts = selectcount[0].count_resto;        
+        
+        const result = {
+            data,
+            counts
+        }
+        return result;
     }
 }

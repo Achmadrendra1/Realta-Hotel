@@ -9,6 +9,7 @@ import {
   Req,
   Res,
   Next,
+  Query,
 } from '@nestjs/common';
 import { HotelsService } from 'src/Service/Hotel/hotels/hotels.service';
 
@@ -17,8 +18,8 @@ export class HotelsController {
   constructor(private hotelsService: HotelsService) {}
 
   @Get()
-  getHotels() {
-    return this.hotelsService.findAllHotels();
+  getHotels(@Query() query) {
+    return this.hotelsService.findAllHotels(query);
   }
   @Get(':id')
   getHotelsId(@Param('id') id: number) {

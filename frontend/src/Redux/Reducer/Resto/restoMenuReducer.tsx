@@ -14,7 +14,8 @@ function restoMenuReducer( state = initialState, action:any ){
         case menuConstant.UPDATE_MENU:
             return {...state}
         case menuConstant.UPDATE_MENU_SUCCEED:
-            return applyUpdateMenu(state, action);
+            return {...state, restoMenus: action.payload};
+            // return applyUpdateMenu(state, action);
 
         case menuConstant.ADD_MENU:
             return {...state};

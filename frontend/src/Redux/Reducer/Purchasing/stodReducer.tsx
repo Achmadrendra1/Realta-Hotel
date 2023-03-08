@@ -1,39 +1,35 @@
 import PurchasingConst from "@/Redux/Constant/Purchasing/PurchasingConst";
 
 const initialState = {
-    stods: [],
-    stod: []
+    stods: []
 }
 
-export default function StodReducer(state = initialState, action: any) {
+export const StodReducer = (state = initialState, action: any) => {
     switch (action.type) {
-        case PurchasingConst.GETONE_STOD:
-            return { ...state }
-        case PurchasingConst.GETONE_STOD_SUCCESS:
-            return { ...state, stods: action.payload }
         case PurchasingConst.GET_STOD:
-            return { ...state }
-        case PurchasingConst.GET_STOD_SUCCESS:
-            return { ...state, stods: action.payload }
         case PurchasingConst.ADD_STOD:
-            return { ...state }
-        case PurchasingConst.ADD_STOD_SUCCESS:
-            return { ...state, stods: action.payload }
         case PurchasingConst.EDIT_STOD:
-            return { ...state }
-        case PurchasingConst.EDIT_STOD_SUCCESS:
-            state.stods.splice(state.stods.findIndex((i: any) => i.stodId == action.payload.stodId), 1)
-            return {
-                ...state,
-                stod: [...state.stods]
-            }
         case PurchasingConst.DEL_STOD:
             return { ...state }
+
+        case PurchasingConst.GET_STOD_SUCCESS:
+        case PurchasingConst.ADD_STOD_SUCCESS:
+            return { ...state, stods: action.payload }
+
+        case PurchasingConst.EDIT_STOD_SUCCESS:
+            const index = state.stods.findIndex((item: any) => item.stockdet_id == action.payload.stockdet_id)
+            state.stods.splice(index, 1, action.payload)
+            return {
+                ...state,
+                stods: [...state.stods]
+            }
+
         case PurchasingConst.DEL_STOD_SUCCESS:
             return {
                 ...state,
-                stod: state.stods.filter((stods: any) => stods.id !== +action.payload)
+                stods: state.stods.filter((item: any) => item.stockdet_id !== action.payload)
             }
+
         default:
             return state
     }

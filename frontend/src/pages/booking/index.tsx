@@ -19,6 +19,7 @@ export default function index() {
   
   const root = useRouter()
   const dispatch = useDispatch();
+  const { location, date } = root.query
 
   useEffect(() => {
     dispatch(getSpHotel())
@@ -33,6 +34,13 @@ export default function index() {
 
   //Get data Hotel
   let hotel = useSelector((state : any) => state.HotelBoorReducer.hotel)
+  const locationHotel = hotel.filter((item:any) => {
+    if (!location) {
+      return item;
+    } else {
+      return item?.city.toLowerCase().includes(location.toLowerCase());
+    }
+  })
 
   //Hook untuk View More
   const [more, setMore] = useState(false)
@@ -47,10 +55,10 @@ export default function index() {
   const [mapHotel, setMapHotel] = useState()
 
   useEffect(()=>{
-    setMapHotel(hotel)
+    setMapHotel(locationHotel)
   }, [hotel])
 
-  const filterHotel = hotel?.filter((items : any) => 
+  const filterHotel = locationHotel?.filter((items : any) => 
   parseInt((items.faci_rateprice).substring(3).replace(".","")) >= filter.lowest
   &&
   parseInt((items.faci_rateprice).substring(3).replace(".","")) <= filter.highest
@@ -63,7 +71,7 @@ export default function index() {
 
   const handleClear = () => {
     setFilter({...filter, highest : 0, lowest : 0})
-    setMapHotel(hotel)
+    setMapHotel(locationHotel)
   }
 
   const handleFilter = () => {
@@ -147,29 +155,29 @@ export default function index() {
               <div>
                 {
                   mapHotel &&
-                  mapHotel.map((hotel : any)=>{
+                  mapHotel.map((hotel : any, index:number)=>{
                     let room = hotel.faci_hotelall;
                     let arrRoom = room.split(',');
                     let ratePrice = hotel.faci_rateprice;
                     let arrRatePrice = ratePrice?.split('-');
                     let highPrice = hotel.faci_highprice;
                     let arrHighPrice = highPrice.split('-')
-                    let pict = hotel.url
-                    let arrPict = pict.split(",")
+                    let pict = hotel?.url
+                    let arrPict = pict?.split(",")
                     return (
-                      <Card>
+                      <Card key={index}>
                         <Row>
                           <Col span={6} className="flex items-center">
                               <Row gutter={10}>
                                 <Col span={18}>
                                       <Carousel autoplay autoplaySpeed={5000}>
-                                        {arrPict.map((each : any) => (
+                                        {arrPict?.map((each : any) => (
                                             <img className="w-full" src={each.slice(1)} alt="hotels"/>
                                         ))}
                                       </Carousel>
                                 </Col>
                                 <Col span={6}>
-                                    {arrPict.map((image : any, index : any)=> (
+                                    {arrPict?.map((image : any, index : any)=> (
                                       <img key={index} src={image} className="w-16 py-1"/>
                                     ))}
                                 </Col>

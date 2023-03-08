@@ -45,12 +45,66 @@ export class WorkorderService {
     });
     data.map((item: any) => {
       newData.push({
-        value: item.setaName,
+        value: item.setaId,
+        label: item.setaName,
       });
     });
     return {
       task: newData,
       employeeName: employeData,
     };
+  }
+
+  async addWorkOrder(datas: any): Promise<any> {
+    const newDatas = {
+      woroUser: datas.userId,
+      woroStartDate: datas.startDate,
+      woroStatus: datas.status,
+    };
+    const newAdd = await this.workorder.save(newDatas);
+    return await this.workorder.findOne({
+      where: { woroId: newAdd.woroId },
+      relations: { woroUser: true },
+    });
+  }
+
+  async addWorkDetail(datas: any): Promise<any> {
+    const newDatas = {
+      wodeWoro: datas.woroId,
+      wodeEmpId: datas.empId,
+      wodeTaskName: datas.task,
+      wodeStatus: 'INPROGRESS',
+      wodeNotes: datas.notes,
+      wodeSeta: datas.setaId,
+      wodeStartDate: new Date(),
+    };
+
+    return await this.workorderdetail.save(newDatas);
+  }
+
+  async deleteDetail(id: any): Promise<any> {
+    await this.workorderdetail.delete({ wodeId: id });
+    return {
+      id: id,
+      message: 'Success',
+    };
+  }
+
+  async updateWorkDetail(datas: any): Promise<any> {
+    await this.workorderdetail
+      .createQueryBuilder()
+      .update(WorkOrderDetail)
+      .set({
+        wodeEmpId: datas.empId,
+        wodeTaskName: datas.task,
+        wodeNotes: datas.notes,
+        wodeSeta: datas.setaId,
+      })
+      .where({ wodeId: datas.id })
+      .execute();
+    return await this.workorderdetail.findOne({
+      where: { wodeId: datas.id },
+      relations: { wodeEmp: true },
+    });
   }
 }

@@ -23,6 +23,8 @@ export const doGetPhotoFailed = (payload:any) => {
 }
 
 export const doAddPhoto = (payload:any) => {
+    console.log('masuk action');
+    
     return{
         type: photoConstant.ADD_PHOTO,
         payload

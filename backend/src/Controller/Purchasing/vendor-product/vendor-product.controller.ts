@@ -17,26 +17,26 @@ export class VeproController {
 
     @Get()
     getVepro() {
-        return this.veproService.findAllVepro();
+        return this.veproService.findAllVepro()
     }
 
     @Get(':id')
     getVeproId(@Param() params: any) {
-        return this.veproService.findVeproId(params.id);
+        return this.veproService.findVeproId(params.id)
     }
 
     @Post()
     createVepro(@Body() body: any) {
-        return this.veproService.addVepro(body);
+        return this.veproService.addVepro(body)
     }
 
     @Put(':id')
-    updateVepro(@Param() params: any, @Body() body: any) {
-        return this.veproService.editVepro(params.id, body);
+    updateStod(@Param() params: any, @Body() body: any) {
+        return this.veproService.editVepro(params.id, body)
     }
 
     @Delete(':id')
     deleteVepro(@Param() params: any) {
-        return this.veproService.dropVepro(params.id);
+        return this.veproService.dropVepro(params.id)
     }
 }
