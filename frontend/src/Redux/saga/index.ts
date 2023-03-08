@@ -135,7 +135,7 @@ import {
 import BookingConstant from "../Constant/Booking/BookingConstant";
 import { workType } from "../Constant/HR/workType";
 import { handleServicesList, handleWorkDetail, handleWorkorder } from "./HR/workorder";
-import { handleBoorCreateFinal, handleBoorLast, handleSpBoorInvoice, handleSpFacilities, handleSpHotel, handleSpHotelReviews, handleSpof } from "./Booking/BookingSaga";
+import { handleBoorCreateFinal, handleBoorExtra, handleBoorLast, handleSpBoorInvoice, handleSpFacilities, handleSpHotel, handleSpHotelReviews, handleSpof } from "./Booking/BookingSaga";
 
 // Purchasing
 import PurchasingConst from '../Constant/Purchasing/PurchasingConst'
@@ -333,6 +333,7 @@ export default function* rootSaga() {
     takeEvery(BookingConstant.GET_SP_HOTEL, handleSpHotel),
     takeEvery(BookingConstant.GET_SP_REVIEW, handleSpHotelReviews),
     takeEvery(BookingConstant.GET_SP_INVOICE, handleSpBoorInvoice),
+    takeEvery(BookingConstant.INSERT_BOOKING_EXTRA, handleBoorExtra),
 
     //Resto
     takeEvery(menuConstant.GET_MENUS, handleMenu),

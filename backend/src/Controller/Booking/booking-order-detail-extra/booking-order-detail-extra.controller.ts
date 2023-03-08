@@ -20,6 +20,14 @@ export class BookingOrderDetailExtraController {
         return this.BookingOrderDetailExtraService.createBookingOrderDetailExtra(body)
     }
 
+    @Post('createArray')
+    createExtraMultiple(@Body() body){
+        const result =  this.BookingOrderDetailExtraService.createExtraMultiple(body)
+        if(result){
+            return "WOW"
+        }
+    }
+
     @Put('edit/:id')
     updateBookingOrderDetailExtra(@Param() params, @Body() body){
         return this.BookingOrderDetailExtraService.updateBookingOrderDetailExtra(params.id, body)

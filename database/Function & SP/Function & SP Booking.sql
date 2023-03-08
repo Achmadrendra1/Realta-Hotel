@@ -220,7 +220,7 @@ SELECT * FROM booking.getBookingInvoice
 --Get Hotel
 CREATE VIEW hotel.viewHotel AS 
 select h.hotel_id, h.hotel_name, h.hotel_description, h.hotel_rating_star, h.hotel_phonenumber,
-		faci_group.faci_hotelall,faci_group_rprice.faci_rateprice,faci_group_lprice.faci_lowprice,faci_group_hprice.faci_highprice,string_agg(photo_hotel.url, ',')as url, addrees.place,faci_room_group.faci_hotelroom
+		faci_group.faci_hotelall,faci_group_rprice.faci_rateprice,faci_group_lprice.faci_lowprice,faci_group_hprice.faci_highprice,string_agg(photo_hotel.url, ',')as url, addrees.place,place.city,faci_room_group.faci_hotelroom
 from hotel.hotels h 
 join 
 (select faci_hotel_id, string_agg(faci_name, ', ')as faci_hotelall
@@ -263,7 +263,15 @@ from master.address a
 join master.proviences p on a.addr_prov_id = p.prov_id
 join master.country c on p.prov_country_id = c.country_id
 join master.regions r on r.region_code = c.country_region_id)addrees
-on h.hotel_addr_id = addrees.hotel_addr_id group by h.hotel_id, faci_group_rprice.faci_rateprice, faci_group.faci_hotelall,faci_group_lprice.faci_lowprice,faci_group_hprice.faci_highprice, addrees.place,faci_room_group.faci_hotelroom;
+on h.hotel_addr_id = addrees.hotel_addr_id
+join
+(select (a.addr_id)hotel_addr_id, (a.addr_line2)city
+from master.address a
+join master.proviences p on a.addr_prov_id = p.prov_id
+join master.country c on p.prov_country_id = c.country_id
+join master.regions r on r.region_code = c.country_region_id)place
+on h.hotel_addr_id = addrees.hotel_addr_id
+group by h.hotel_id, faci_group_rprice.faci_rateprice, faci_group.faci_hotelall,faci_group_lprice.faci_lowprice,faci_group_hprice.faci_highprice, addrees.place,place.cityfaci_room_group.faci_hotelroom;
 
 SELECT * FROM hotel.viewHotel
 
