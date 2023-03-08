@@ -88,15 +88,16 @@ export default function bookingRoom() {
   //useSelector Get Special Offers
   let spof = useSelector((state: any) => state.SpofReducer.spof);
   const typeSpof = spof?.filter((item : any) => {
-    if (getUser[0].user_type === "C" && item.spofType === "Corporate") {
+    if (getUser[0]?.user_type === "C" && item.spofType === "Corporate") {
       return true;
-    } else if (getUser[0].user_type === "I" && item.spofType === "Individual") {
+    } else if (getUser[0]?.user_type === "I" && item.spofType === "Individual") {
       return true;
-    } else if (getUser[0].user_type === "T" && item.spofType === "Travel Agent") {
+    } else if (getUser[0]?.user_type === "T" && item.spofType === "Travel Agent") {
       return true;
     }
     return false;
   });
+  console.log(spof)
   
   //useSelector Get Price Items for Booking Extra
   let extra = useSelector((state: any) => state.priceItemsReducer.priceItems);
@@ -364,6 +365,7 @@ export default function bookingRoom() {
   });
 
   useEffect(() => {
+    const totalGuest = parseInt(dataBooking.borde_adults) + parseInt(dataBooking.borde_kids)
     setDataBooking({
       ...dataBooking,
       borde_price: ratePriceInt,
@@ -384,14 +386,6 @@ export default function bookingRoom() {
   //     })
   // }, [faci_name])
 
-  useEffect(()=>{
-      const totalGuest = parseInt(dataBooking.borde_adults) + parseInt(dataBooking.borde_kids)
-      setDataBooking({
-        ...dataBooking,
-        boor_total_guest : totalGuest
-    })
-  }, [dataBooking.borde_adults, dataBooking.borde_kids])
-
   //Handle button selected room into booking
   const handleButtonSelected = (index: any) => {
     const selected = faciRoom[index];
@@ -407,7 +401,7 @@ export default function bookingRoom() {
 
   //Handle button add Special Offers
   const handleButtonModal = (index: any) => {
-    const selected = typeSpof[index];
+    const selected = spof[index];
     setSpofPrice({
       spofId: selected.spofId,
       spofName: selected.spofName,
@@ -455,7 +449,6 @@ export default function bookingRoom() {
     const disc = dataBooking.borde_discount || 0
     const extra = extraTotal.extraSubTotal
     const total = ((((rate*days)*room)-disc)+extra)
-    console.log(dataBooking.borde_price, rate, room, days, disc, extra)
     const subTotal = () => {
           setDataBooking({...dataBooking, boor_total_amount : total, borde_subtotal : total, borde_extra : extra})
           setDataPayment({...dataPayment, amount : total})
@@ -470,7 +463,6 @@ export default function bookingRoom() {
     const totalExtra = () => {
     const sumExtra = valueExtra.pritTotal.reduce((a,b)=> a + b, 0)
     setExtraTotal({...extraTotal, extraSubTotal : sumExtra})
-    console.log(extraTotal)
     };
     totalExtra();
   }, [valueExtra.pritTotal]);

@@ -155,6 +155,7 @@ export default function index() {
   ];
 
   const componentRef = React.useRef(null);
+  
 
   return (
     <>
@@ -247,7 +248,7 @@ export default function index() {
           </Row>
           <Divider dashed style={{ borderColor: "black" }} />
           <div className="w-10/12 flex justify-between items-center">
-            <QRCode value={id} size={96} className="ml-14" />
+            <QRCode value={`http://localhost:3000/${root.asPath}`} size={96} className="ml-14" />
             <div className="w-1/4">
               <div className="flex justify-between min-w-[350px]">
                 <h2 className="flex text-lg font-semibold mb-1 mr-5">

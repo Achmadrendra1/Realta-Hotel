@@ -57,8 +57,7 @@ function* handleSpHotel() : any {
       yield put(getSpHotelSuccess(result.data));
       return result.data
     }catch(e : any) {
-      // yield put(getSpHotelFailed(e))
-      console.log(e)
+      yield put(getSpHotelFailed(e))
     }
   }
 
@@ -68,8 +67,7 @@ function* handleSpFacilities() : any {
       yield put(getSpFacilitiesSuccess(result.data));
       return result.data
     }catch(e : any) {
-      // yield put(getSpHotelFailed(e))
-      console.log(e)
+      yield put(getSpHotelFailed(e))
     }
   }
 
@@ -86,7 +84,6 @@ function* handleSpFacilities() : any {
   function* handleSpBoorInvoice () : any {
     try{
       const result = yield axios (API('Get', '/booking-orders/invoice', null))
-      console.log('test', result)
       yield put(getSpInvoiceSuccess(result.data))
       return result.data
     }catch(e : any) {
