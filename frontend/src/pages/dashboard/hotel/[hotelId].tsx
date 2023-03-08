@@ -15,6 +15,7 @@ import EditFacilityHotel from "./EditFacility";
 import AddPhoto from "./AddPhoto";
 import withAuth from "@/PrivateRoute/WithAuth";
 import Link from "next/link";
+import { configuration } from "@/Redux/Configs/url";
 
 export default withAuth( function HotelDetails() {
   const dispatch = useDispatch();
