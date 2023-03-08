@@ -50,6 +50,8 @@ function HotelReducer(state = initialState, action: any) {
       return { ...state };
     case HotelConstant.GET_FACILITIES_SUCCESS:
       return { ...state, facilities: action.payload };
+    case HotelConstant.ADD_FACILITIES:
+      return {...state}
     case HotelConstant.ADD_FACILITIES_SUCCESS:
       return AddFacilitySuccessed(state, action);
     case HotelConstant.UPDATE_FACILITIES:
@@ -64,6 +66,8 @@ function HotelReducer(state = initialState, action: any) {
       return { ...state };
     case HotelConstant.GET_FAPHO_SUCCESS:
       return { ...state, fapho: action.payload };
+    case HotelConstant.ADD_FAPHO:
+      return { ...state}
     case HotelConstant.ADD_FAPHO_SUCCESS:
       return AddFaphoSuccessed(state, action);
     case HotelConstant.UPDATE_FAPHO:

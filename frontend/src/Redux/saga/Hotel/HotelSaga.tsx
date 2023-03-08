@@ -87,8 +87,9 @@ function* handleProvince(): any {
 function* handleAddHotel(action: any): any {
   const { payload } = action;
   try {
-    const hotel = yield axios(API("Post", `/hotels/Add`, payload));
-    yield put(addHotelSuccess(hotel.data));
+    const result = yield axios(API("Post", `/hotels/Add`, payload));
+    yield put(addHotelSuccess(result.data));
+    return result.data;
   } catch (error: any) {
     yield put(addHotelFailed(error));
   }
@@ -97,14 +98,10 @@ function* handleAddHotel(action: any): any {
 function* handleUpdateHotel(action: any): any {
   const { payload } = action;
   const id = parseInt(payload.get(`hotelId`));
-  // console.log(id);
-
   try {
     const result = yield axios(API("Put", `/hotels/${id}`, payload));
     yield put(updateHotelSucceed(result.data));
-    // console.log(result.data);
-
-    return result.data;
+    return payload;
   } catch (error) {
     yield put(updateHotelFailed(error));
   }
@@ -112,8 +109,6 @@ function* handleUpdateHotel(action: any): any {
 
 function* handleDeleteHotel(action: any): any {
   const { payload } = action;
-  // console.log(payload);
-
   try {
     const result = yield axios(API("Delete", `/hotels/${payload}`));
     yield put(deleteHotelSucceed(payload));
@@ -137,10 +132,7 @@ function* handleFacilityID(action: any): any {
 
   try {
     const result = yield axios(API("Get", `/facilities/${payload}`, null));
-
     yield put(getFacilityIDSuccess(result.data[0]));
-    // console.log(result.data);
-
     return result.data[0];
   } catch (e: any) {
     yield put(getFacilityIDFailed(e));
@@ -150,9 +142,9 @@ function* handleFacilityID(action: any): any {
 function* handleAddFacilities(action: any): any {
   const { payload } = action;
   try {
-    const result = yield axios(API("Post", `/facilities/Add`, payload));
+    const result = yield axios(API("Post", `/facilities/`, payload));
     yield put(addFacilitySuccess(result.data));
-    return result.data;
+    return payload;
   } catch (error) {
     yield put(addFacilityFailed(error));
   }
@@ -161,11 +153,10 @@ function* handleAddFacilities(action: any): any {
 function* handleUpdateFacilities(action: any): any {
   const { payload } = action;
   const id = parseInt(payload.get(`faciId`));
-
   try {
     const result = yield axios(API("Put", `/facilities/${id}`, payload));
     yield put(updateFacilitySuccess(result.data));
-    return result.data;
+    return payload;
   } catch (error) {
     yield put(updateFacilityFailed(error));
   }
@@ -194,9 +185,8 @@ function* handleFapho(): any {
 
 function* handleAddFapho(action: any): any {
   const { payload } = action;
-  const id = payload.get(`faphoUrl`);
   try {
-    const result = yield axios(FORMAPI("Post", `/facility-photos/`, payload));
+   const result = yield axios(FORMAPI("Post", `/facility-photos/`, payload));
     yield put(addFaphoSuccess(result.data));
     return result.data;
   } catch (error) {
@@ -216,7 +206,6 @@ function* handleUpdateFapho(action: any): any {
     yield put(updateFaphoFailed(error));
   }
 }
-
 function* handleDeleteFapho(action: any): any {
   const { payload } = action;
   try {
@@ -236,7 +225,6 @@ function* handleFaph(): any {
     yield put(getFaphFailed(e));
   }
 }
-
 function* handleAddFaph(action: any): any {
   const { payload } = action;
   try {
@@ -249,7 +237,6 @@ function* handleAddFaph(action: any): any {
     yield put(addFaphFailed(error));
   }
 }
-
 function* handleUpdateFaph(action: any): any {
   const { payload } = action;
   try {
@@ -262,7 +249,6 @@ function* handleUpdateFaph(action: any): any {
     yield put(updateFaphFailed(error));
   }
 }
-
 function* handleDeleteFaph(action: any): any {
   const { payload } = action;
   try {
