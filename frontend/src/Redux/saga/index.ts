@@ -356,10 +356,10 @@ export default function* rootSaga() {
     takeEvery(menuConstant.ADD_MENU, handleAddMenu),
     takeEvery(menuConstant.DELETE_MENU, handleDeleteMenu),
     takeEvery(restoConstant.GET_RESTOS, handleResto),
-    takeEvery(photoConstant.ADD_PHOTO, handleAddMenuPhoto),
     takeEvery(photoConstant.DELETE_PHOTO, handleDeletePhoto),
     takeEvery(photoConstant.GET_PHOTO, handleGetPhoto),
     takeEvery(photoConstant.UPDATE_PRIMARY, handleUpdatePrimary),
+    takeEvery(photoConstant.ADD_PHOTO, handleAddMenuPhoto),
     takeEvery(orderConstant.GET_ORDERS, handleOrder),
     takeEvery(orderConstant.ADD_ORDERS, handleAddOrder),
     takeEvery(numberOrderConst.GET_NUMBER_ORDER, handleOrderNumber),
@@ -367,4 +367,6 @@ export default function* rootSaga() {
     takeEvery(userMenuConstant.GET_MENU_USER, handleUserMenu),
 
   ]);
+  console.log('masuk saga index');
+  
 }

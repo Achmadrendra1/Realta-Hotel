@@ -1,7 +1,6 @@
 import { doAddPhotoFailed, doAddPhotoSucceed, doDeletePhotoFailed, doGetPhotoFailed, doGetPhotoSucceed, doUpdatePrimaryFailed, doUpdatePrimarySucceed } from "@/Redux/Action/Resto/menuPhotoAction";
 import { doDeleteMenuSucceed } from "@/Redux/Action/Resto/restoMenuAction";
-import { apiPicture } from "@/Redux/Configs/addPhoto";
-import { API } from "@/Redux/Configs/consumeApi"
+import { API, FORMAPI } from "@/Redux/Configs/consumeApi"
 import axios from "axios"
 import { put } from "redux-saga/effects";
 
@@ -18,10 +17,11 @@ function* handleGetPhoto():any{
 }
 
 function* handleAddMenuPhoto(action:any):any{
-    // console.warn('ini di photo process: ', action.payload);
+    debugger;
+    console.warn('ini di photo process: ', action.payload);
     
     try{
-        const result = yield axios(apiPicture('Post',`/resto-menu-photos`,(action.payload)));
+        const result = yield axios(FORMAPI('Post','/resto-menu-photos/multiple',(action.payload)));
         yield put(doAddPhotoSucceed(action.payload))
         return result.data
     }catch(err:any){
