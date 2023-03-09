@@ -166,6 +166,7 @@ import { RestoMenuDetailService } from 'src/Service/Resto/resto-menu-detail/rest
 import { ListRestaurantService } from 'src/Service/Resto/list-restaurant/list-restaurant.service';
 import { OrderMenuDetailService } from 'src/Service/Resto/order-menu-detail/order-menu-detail.service';
 import { Department } from 'src/entities/Department';
+import { LandingController } from 'src/Controller/Hotel/facilities/landing.controller';
 
 //Booking Service
 
@@ -242,9 +243,13 @@ import { Department } from 'src/entities/Department';
   ],
   controllers: [
     AppController,
+
+    //Payment
     EntitysController,
     BankController,
     PaymentGatewayController,
+    PaymentTransactionController,
+    UserAccountController,
 
     //Hotel
     FacilitiesController,
@@ -252,11 +257,10 @@ import { Department } from 'src/entities/Department';
     FacilityPriceHistoryController,
     HotelsController,
     HotelReviewsController,
-    UserAccountController,
-    PaymentTransactionController,
     RestoMenusController,
     RestoMenuPhotosController,
     OrderMenusController,
+    LandingController,
 
     //Booking
     BookingOrderDetailController,
@@ -413,12 +417,8 @@ export class GlobalModule implements NestModule {
         HotelReviewsController,
         UserAccountController,
         PaymentTransactionController,
-        RestoMenusController,
-        RestoMenuPhotosController,
-        OrderMenusController,
         UsersPasswordController,
         OrderMenusController,
-        RestoMenusController,
       );
   }
 }

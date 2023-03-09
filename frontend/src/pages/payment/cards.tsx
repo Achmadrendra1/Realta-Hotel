@@ -11,6 +11,7 @@ import {
   Carousel,
   Col,
   DatePicker,
+  Empty,
   List,
   Row,
 } from "antd";
@@ -25,7 +26,8 @@ import {
   doTransactionRequest,
   doUsacRequest,
 } from "@/Redux/Action/Payment/paymentDashAction";
-import { doGetAllBank } from "@/Redux/Action/Payment/paymentUserAction";
+import { doGetAllBank, doGetHistory } from "@/Redux/Action/Payment/paymentUserAction";
+import { PaginationAlign, PaginationPosition } from "antd/es/pagination/Pagination";
 
 export default function Cards() {
   const dispatch = useDispatch();
@@ -40,19 +42,25 @@ export default function Cards() {
   );
   const user = useSelector((state:any) => state.GetUserReducer.getUser)
   const {payBank, allBank} = useSelector((state:any) => state.payBankReducer)
-  const { payDashTrx, total, currentPage } = useSelector(
+  const { payDashTrx, total, currentPage, payHistoryTrx } = useSelector(
     (state: any) => state.payTrxHistoryReducer
   );
-  const dispacth = useDispatch();
+
   useEffect(() => {
-    dispacth(doTransactionRequest());
-    dispacth(doGetAllBank())
+    dispatch(doGetHistory());
+    dispatch(doGetAllBank())
   }, []);
 
   useEffect(() => {
     // user[0]?.role_name != "Guest" ? setIsAdmin(true) : setIsAdmin(false);
     dispatch(doUsacRequest(user[0]?.user_id));
   }, [user]);
+
+  const dataHistory = payHistoryTrx?.filter(
+    (obj: any) => obj.userId === user[0]?.user_id && obj.sourcePaymentName !== null && obj.sourcePaymentName !== 'H-Pay'
+  )
+
+  console.log(dataHistory)
 
   const bankAcc = account?.filter(
     (obj: any) => obj.usacType === "Credit Card" || obj.usacType === "Debet"
@@ -92,6 +100,12 @@ export default function Cards() {
 
 
   const { RangePicker } = DatePicker;
+  const handleDateChange = (value:any, dateString:any) => {
+    // console.log("Selected Time: ", value);
+    // console.log("Formatted Selected Time: ", dateString);
+    dispatch(doGetHistory({startDate: dateString[0], endDate: dateString[1]}))
+    // setDateRange(dateString);
+  };
 
   const handleActive = (data: boolean) => {
     setOpenAdd(data)
@@ -99,6 +113,9 @@ export default function Cards() {
   const handleClose = (data: boolean) => {
     setOpenAdd(data)
   }
+
+  const [position, setPosition] = useState<PaginationPosition>('bottom');
+  const [align, setAlign] = useState<PaginationAlign>('end');
   return (
     <>
       <Head>
@@ -128,7 +145,7 @@ export default function Cards() {
               </div>
             </div>
             <div className="flex overflow-x-auto pb-8 overflow-hidden">
-              <div className="flex flex-nowrap lg:ml-40 md:ml-20 ml-10 ">
+              <div className="flex flex-nowrap lg:ml-40 md:ml-20  ">
                 {bankAcc.map((item: any) => (
                   <div className="inline-block px-3">
                     <div className="w-96 h-56 m-auto bg-red-100 rounded-xl relative text-white shadow-xl transition-transform transform hover:scale-95">
@@ -219,21 +236,17 @@ export default function Cards() {
               <p className="text-lg font-semibold text-[#252525]">
                 History Transaction
               </p>
-              <RangePicker />
+              <RangePicker onChange={handleDateChange}/>
             </div>
             <List
               className="pb-4"
-              pagination={{
-                current: currentPage,
-                total: total,
-                pageSize: 10,
-              }}
-            >
-              {payDashTrx.map((item: any) => (
+              dataSource={dataHistory}
+              pagination={{ position, align,pageSize:5 }}
+              renderItem={(item:any) => (
                 <Card
                   title={item.transactionNumber}
                   extra={item.trxDate?.split("T")[0]}
-                  className="m-4"
+                  className="mb-1 mt-2 w-full"
                 >
                   <div>
                     <div className="flex justify-between">
@@ -272,7 +285,9 @@ export default function Cards() {
                     </div>
                   </div>
                 </Card>
-              ))}
+              )}
+
+            >
             </List>
           </div>
         </Layouts>

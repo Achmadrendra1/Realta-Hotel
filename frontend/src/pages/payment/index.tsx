@@ -4,7 +4,7 @@ import {
   DollarCircleOutlined,
   RightOutlined,
 } from "@ant-design/icons";
-import { Button, Card, Col, DatePicker, List, Row } from "antd";
+import { Button, Card, Col, DatePicker, Empty, List, Row } from "antd";
 import Head from "next/head";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
@@ -16,11 +16,13 @@ import {
   doTransactionRequest,
   doUsacRequest,
 } from "@/Redux/Action/Payment/paymentDashAction";
-import { doGetHistory } from "@/Redux/Action/Payment/paymentUserAction";
+import { doGetAllBank, doGetHistory } from "@/Redux/Action/Payment/paymentUserAction";
 import withAuth from "@/PrivateRoute/WithAuth";
+import Buttons from "@/components/Button";
+import { PaginationAlign, PaginationPosition } from "antd/es/pagination/Pagination";
 
 export default withAuth(function index() {
-  const dispacth = useDispatch();
+  const dispatch = useDispatch();
   const [isActive, setIsActive] = useState(false);
   const [isOpenAct, setOpenAct] = useState(false);
   const [isEmpty, setEmpty] = useState(false);
@@ -28,7 +30,7 @@ export default withAuth(function index() {
   const user = useSelector((state: any) => state.GetUserReducer.getUser);
   const { payBank } = useSelector((state: any) => state.payBankReducer);
   const { payPaga } = useSelector((state: any) => state.payPagaReducer);
-  const { payDashTrx, total, currentPage } = useSelector(
+  const { payDashTrx, total, currentPage, payHistoryTrx } = useSelector(
     (state: any) => state.payTrxHistoryReducer
   );
   const { account, error } = useSelector(
@@ -38,15 +40,16 @@ export default withAuth(function index() {
   const accNumberGoto = user[0]?.user_phone_number;
 
   useEffect(() => {
-    dispacth(doBankRequest());
-    dispacth(doPagaRequest());
-    dispacth(doTransactionRequest());
+    dispatch(doGetAllBank());
+    dispatch(doPagaRequest());
+    dispatch(doGetHistory());
   }, []);
 
-  //Filter History By User
-  // const dataTrx = payHistoryTrx?.filter(
-  //   (obj: any) => obj.userId === user[0]?.user_id
-  // );
+  // Filter History By User
+  const dataTrx = payHistoryTrx?.filter(
+    (obj: any) => obj.userId === user[0]?.user_id
+  );
+ 
 
   //Get User Account By User Id yang login
   // const userAcc = account?.filter(
@@ -95,6 +98,18 @@ export default withAuth(function index() {
   };
   // console.log(dataTrx);
   const { RangePicker } = DatePicker;
+ 
+  const handleDateChange = (value:any, dateString:any) => {
+    // console.log("Selected Time: ", value);
+    // console.log("Formatted Selected Time: ", dateString);
+    dispatch(doGetHistory({startDate: dateString[0], endDate: dateString[1]}))
+    // setDateRange(dateString);
+  };
+
+  const [position, setPosition] = useState<PaginationPosition>('bottom');
+  const [align, setAlign] = useState<PaginationAlign>('end');
+  
+
   return (
     <>
       <Head>
@@ -112,6 +127,9 @@ export default withAuth(function index() {
               clickCancel={handleCancel}
               handleAct={handleActive}
               handleCancell={handleCancell}
+              phone={accNumberDompet}
+              dataUser={user}
+              dataPaga={payPaga}
             />
           ) : null}
           <div className="relative w-full h-60 justify-center p-4 bg-[#4728ae] text-[#F2F1FA] m-auto rounded-xl bg-center bg-cover bg-no-repeat flex mb-6">
@@ -135,7 +153,7 @@ export default withAuth(function index() {
                 </Col>
               </Row>
               <div className="absolute w-3/4 bg-white rounded-lg drop-shadow-lg py-6 px-8 m-auto mt-44">
-                <Row gutter={16} className="flex justify-around">
+                <Row gutter={16} className="flex justify-around items-center">
                   <Col
                     span={12}
                     className="p-4 border-0 hover:border-r-2 hover:cursor-pointer"
@@ -161,15 +179,17 @@ export default withAuth(function index() {
                       </Link>
                     ) : (
                       <div className="text-center">
-                        <p className="text-md text-[#4728ae] font-bold">
+                        <p className="text-lg text-[#4728ae] font-bold">
                           Activate Seamless Transactions with H-Pay Now!
                         </p>
-                        <Button
-                          className="mt-2"
-                          onClick={() => setOpenAct(true)}
-                        >
-                          Activate H-Pay Now!
-                        </Button>
+                        <div className="mt-2">
+                          <Buttons
+                            // className="mt-2"
+                            funcs={() => setOpenAct(true)}
+                          >
+                            Activate H-Pay Now!
+                          </Buttons>
+                        </div>
                       </div>
                     )}
                   </Col>
@@ -178,7 +198,7 @@ export default withAuth(function index() {
                     className="p-4 border-0 hover:border-l-2 hover:cursor-pointer"
                   >
                     <Link href={"payment/cards"}>
-                      <Row gutter={8}>
+                      <Row gutter={8} className="flex items-center">
                         <Col>
                           <CreditCardOutlined className="text-xl mt-2 mr-2 text-[#4728ae]" />
                         </Col>
@@ -186,8 +206,8 @@ export default withAuth(function index() {
                           <p className="text-md text-[#4728ae] font-bold">
                             My Cards
                           </p>
-                          {bankAcc.length < 0 ? (
-                            <p>Add Your Card Here</p>
+                          {bankAcc.length <= 0 ? (
+                            <p className="text-gray-700">Add Your Card Here</p>
                           ) : (
                             <p className="text-md text-gray-700">
                               {bankAcc.length} Cards
@@ -206,81 +226,63 @@ export default withAuth(function index() {
           </div>
           <div className="mt-32 mb-6 drop-shadow-lg m-auto border-b-md rounded-md ">
             <div className="flex justify-between p-6 bg-white rounded-lg">
-              <p className="text-lg font-semibold text-[#252525]">History Transaction</p>
-              <RangePicker  />
+              <p className="text-lg font-semibold text-[#252525]">
+                History Transaction
+              </p>
+              <RangePicker onChange={handleDateChange}/>
             </div>
-            <List className="pb-4" pagination={{
-                    current: currentPage,
-                    total: total,
-                    pageSize: 10,}}>
-              {payDashTrx.map((item: any) => (
-                <Card
-                  title={item.transactionNumber}
-                  extra={item.trxDate?.split("T")[0]}
-                  className="m-4"
-                >
-                  <div>
-                    <div className="flex justify-between">
-                      <p className="font-bold text-lg">
-                        {item.transactionNote}
-                      </p>
-                      {item.debit != 0 ? (
-                        <p className="text-md text-green-600 font-semibold">
-                          {parseInt(item.debit).toLocaleString("id-ID", {
-                            style: "currency",
-                            currency: "IDR",
-                            minimumFractionDigits: 0,
-                            maximumFractionDigits: 0,
-                          })}
+            <List
+              className="pb-4"
+              dataSource={dataTrx}
+              pagination={{ position, align, pageSize:5 }}
+              renderItem={(items : any, index) => (
+                  <Card
+                    title={items.transactionNumber}
+                    extra={items.trxDate?.split("T")[0]}
+                    className="mb-1 mt-2 w-full"
+                  >
+                    <div>
+                      <div className="flex justify-between">
+                        <p className="font-bold text-lg">
+                          {items.transactionNote}
                         </p>
-                      ) : (
-                        <p className="text-md text-red-600 font-semibold">
-                          {parseInt(item.credit).toLocaleString("id-ID", {
-                            style: "currency",
-                            currency: "IDR",
-                            minimumFractionDigits: 0,
-                            maximumFractionDigits: 0,
-                          })}
+                        {items.debit != 0 ? (
+                          <p className="text-md text-green-600 font-semibold">
+                            {parseInt(items.debit).toLocaleString("id-ID", {
+                              style: "currency",
+                              currency: "IDR",
+                              minimumFractionDigits: 0,
+                              maximumFractionDigits: 0,
+                            })}
+                          </p>
+                        ) : (
+                          <p className="text-md text-red-600 font-semibold">
+                            {parseInt(items.credit).toLocaleString("id-ID", {
+                              style: "currency",
+                              currency: "IDR",
+                              minimumFractionDigits: 0,
+                              maximumFractionDigits: 0,
+                            })}
+                          </p>
+                        )}
+                      </div>
+                      <div className="flex justify-between">
+                        <p className="text-md">
+                          {items.orderNumber
+                            ? items.orderNumber
+                            : "Dompet Realta"}
                         </p>
-                      )}
+                        <p className="text-md font-semibold">
+                          {items.sourcePaymentName == null
+                            ? "Cash"
+                            : items.sourcePaymentName}
+                        </p>
+                      </div>
                     </div>
-                    <div className="flex justify-between">
-                      <p className="text-md">{item.orderNumber ? item.orderNumber : 'Dompet Realta'}</p>
-                      <p className="text-md font-semibold">
-                        {item.sourcePaymentName == null
-                          ? "Cash"
-                          : item.sourcePaymentName}
-                      </p>
-                    </div>
-                  </div>
-                </Card>
-              ))}
-              {/* <Card
-                  type="inner"
-                  title="TRB#20230123-0001"
-                  extra={'23-01-2023'}
-                  className="mb-4"
-                >
-                  <div>
-                  <p className="font-bold text-lg">Booking</p>
-                  <p className="text-md">Hotel ABC</p>
-                  <p className="text-right text-md">Rp. 500.000</p>
-                  <p className="text-right text-md text-green-600 font-semibold">Credit Card</p>
-                  </div>
-                </Card>
-                <Card
-                  type="inner"
-                  title="RF#20230123-0001"
-                  extra={'23-01-2023'}
-                  className="mb-4"
-                >
-                  <div>
-                  <p className="font-bold text-lg">Refund</p>
-                  <p className="text-md">For Transaction BO#20230123-0002</p>
-                  <p className="text-right text-md">Rp. 500.000</p>
-                  <p className="text-right text-md text-green-600 font-semibold">Debet Card</p>
-                  </div>
-                </Card> */}
+                  </Card>
+              
+              )}
+            >
             </List>
           </div>
         </Layouts>

@@ -37,6 +37,7 @@ import ActivationGoto from "./activationGoto";
 import DetCard from "./detCard";
 import DetailCard from "./detailCard";
 import { randomBytes } from "crypto";
+import { doGetAllBank } from "@/Redux/Action/Payment/paymentUserAction";
 
 export default function MyAccount() {
   const dispacth = useDispatch();
@@ -50,16 +51,16 @@ export default function MyAccount() {
   const [showDetail, setShowDetail] = useState(false);
   const [dataCard, setDataCard] = useState();
   const user = useSelector((state: any) => state.GetUserReducer.getUser);
-  const { payBank } = useSelector((state: any) => state.payBankReducer);
+  const { allBank } = useSelector((state: any) => state.payBankReducer);
   const { payPaga } = useSelector((state: any) => state.payPagaReducer);
   const { account, error } = useSelector(
     (state: any) => state.payUserAccReducer
   );
   const accNumberDompet = `131${user[0]?.user_phone_number}`;
-  const accNumberGoto = user[0]?.user_phone_number;
+  const accNumberGoto = user[0]?.user_phone_number.slice(1);
 
   useEffect(() => {
-    dispacth(doBankRequest());
+    dispacth(doGetAllBank());
     // dispacth(doUsacRequest());
     dispacth(doPagaRequest());
   }, []);
@@ -184,7 +185,7 @@ export default function MyAccount() {
           clickOk={handleOk}
           clickCancel={handleCancel}
           handleCancell={handleClose}
-          phone={user[0]?.user_phone_number}
+          phone={accNumberGoto}
           dataUser={user}
           dataPaga={payPaga}
         />
@@ -197,7 +198,7 @@ export default function MyAccount() {
           handleAct={handleActive}
           handleCancell={handleClose}
           dataUser={user}
-          dataBank={payBank}
+          dataBank={allBank}
         />
       ) : null}
       {showTopUp ? (
@@ -220,7 +221,7 @@ export default function MyAccount() {
           handleAct={handleActive}
           handleCancell={handleClose}
           data = {dataCard}
-          dataBank={payBank}
+          dataBank={allBank}
         />
       ) : null}
       <Card title="Fintech" className="mb-4">
@@ -269,15 +270,14 @@ export default function MyAccount() {
                   </div>
                 ) : (
                   <div>
-                    <Link
-                      href={""}
+                    <p
                       onClick={() => {
                         setShowActivation(true);
                       }}
-                      style={{ color: "blue" }}
+                      className="text-[#754cff] text-[14px] font-semibold hover:cursor-pointer"
                     >
                       Activate
-                    </Link>
+                    </p>
                   </div>
                 )}
               </div>
@@ -310,15 +310,15 @@ export default function MyAccount() {
                   </div>
                 ) : (
                   <div>
-                    <Link
-                      href={""}
+                    <p
+                      
                       onClick={() => {
                         setShowLink(true);
                       }}
-                      style={{ color: "blue" }}
+                      className="text-[#754cff] text-[14px] font-semibold hover:cursor-pointer"
                     >
                       Link Account
-                    </Link>
+                    </p>
                   </div>
                 )}
               </div>
@@ -338,7 +338,7 @@ export default function MyAccount() {
           </Buttons>
         }
       >
-        {bankAcc.map((item: any) => (
+        {bankAcc.length != 0 ? bankAcc.map((item: any) => (
           <Card
             size="small"
             hoverable
@@ -358,7 +358,7 @@ export default function MyAccount() {
                 </p>
                 <p className="font-bold text-lg">
                   {
-                    payBank?.find(
+                    allBank?.find(
                       (obj: any) => obj.bankEntityId == item.usacEntityId
                     )?.bankName
                   }
@@ -366,7 +366,7 @@ export default function MyAccount() {
               </div>
             </div>
           </Card>
-        ))}
+        )) : <Empty className="mt-10 font-bold text-xl" />}
       </Card>
     </div>
   );

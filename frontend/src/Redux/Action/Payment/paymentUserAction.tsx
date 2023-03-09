@@ -102,9 +102,10 @@ export const doTopUpFailed = (payload : any) => {
     }
 }
 
-export const doGetHistory = () => {
+export const doGetHistory = (payload?:any) => {
     return {
-        type : PaymentConst.GET_HISTORY_PAYMENT
+        type : PaymentConst.GET_HISTORY_PAYMENT,
+        payload
     }
 }
 export const doGetHistorySuccess = (payload:any) => {

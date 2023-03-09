@@ -110,6 +110,7 @@ import ActionTypes from "../Constant/Master/masterActionType";
 import { jobType } from "../Constant/HR/jobType";
 import { handleSelectJob } from "./HR/select";
 import HotelConstant from "../Constant/Hotel/HotelConstant";
+import LandingConstant from "../Constant/Hotel/LandingConstant";
 import {
   handleAddFacilities,
   handleAddFaph,
@@ -126,6 +127,7 @@ import {
   handleFapho,
   handleHotel,
   handleHotelID,
+  handleLanding,
   handleProvince,
   handleUpdateFacilities,
   handleUpdateFaph,
@@ -283,6 +285,7 @@ export default function* rootSaga() {
     takeEvery(workType.UPDATE_WORK_DETAIL, handleUpdateWork),
 
     //Hotel
+    takeEvery(LandingConstant.GET_LANDING,handleLanding),
     takeEvery(HotelConstant.GET_HOTEL, handleHotel),
     takeEvery(HotelConstant.GET_HOTEL_ID, handleHotelID),
     takeEvery(HotelConstant.ADD_HOTEL, handleAddHotel),
@@ -370,6 +373,5 @@ export default function* rootSaga() {
     takeEvery(userOrderConstant.GET_ORDER_COMPLETE, handleUserOrder),
     takeEvery(userMenuConstant.GET_MENU_USER, handleUserMenu),
 
-  ]);
-  
+  ]); 
 }

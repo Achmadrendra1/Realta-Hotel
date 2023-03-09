@@ -1,5 +1,19 @@
 -- ALL 
 
+CREATE OR REPLACE FUNCTION master.getCagroId()
+RETURNS int
+AS $$
+
+BEGIN
+	RETURN (
+		SELECT setval('master."category_group_cagro_id_seq"',
+					  (SELECT COALESCE(MAX(cagro_id), 0) FROM master.category_group) + 1
+		)
+	);
+
+END; $$
+LANGUAGE plpgsql;
+
 CREATE OR REPLACE FUNCTION master.locationsAll()
 RETURNS TABLE(
 	region_code integer,

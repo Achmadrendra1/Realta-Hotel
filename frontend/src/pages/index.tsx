@@ -1,4 +1,5 @@
 import { doRestoRequest } from "@/Redux/Action/Resto/restoAction";
+import { getSpHotel } from "@/Redux/Action/Booking/BookingAction";
 import Buttons from "@/components/Button";
 import Hero from "@/components/Hero";
 import Layouts from "@/layouts/layout";
@@ -67,6 +68,11 @@ export default function Home() {
   }, [])
 
   const { Meta } = Card;
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(getSpHotel())
+  }, []);
+  let hotel = useSelector((state : any) => state.HotelBoorReducer.hotel.slice(0,4))
 
   return (
     <Layouts>

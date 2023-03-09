@@ -32,18 +32,18 @@ export default withAuth(function index() {
   const { Search } = Input;
   const { confirm } = Modal;
 
-  const filterData = hotel.filter((item: any) => {
-    if (search === "") {
-      return item;
-    } else {
-      return (
-        item.hotelName.toLowerCase().includes(search.toLocaleLowerCase()) ||
-        item.hotelAddr?.addrLine2
-          .toLowerCase()
-          .includes(search.toLocaleLowerCase())
-      );
-    }
-  });
+  // const filterData = hotel.filter((item: any) => {
+  //   if (search === "") {
+  //     return item;
+  //   } else {
+  //     return (
+  //       item.hotelName.toLowerCase().includes(search.toLocaleLowerCase()) ||
+  //       item.hotelAddr?.addrLine2
+  //         .toLowerCase()
+  //         .includes(search.toLocaleLowerCase())
+  //     );
+  //   }
+  // });
 
   useEffect(() => {
     dispatch(getHotel());
@@ -91,7 +91,7 @@ export default withAuth(function index() {
     });
   };
   useEffect(() => {
-    if (hotel.length === 0 && currentPage > 1) {
+    if (hotel?.length === 0 && currentPage > 1) {
       dispatch(getHotel({ page: currentPage - 1 }));
     }
   }, [total]);
@@ -167,9 +167,9 @@ export default withAuth(function index() {
     dispatch(getHotel({ page: pagination }));
   };
 
-  const handleSearch = (e: any) => {
-    e
-      ? dispatch(getHotel({ page: 1, keyword: e.target.value }))
+  const handleSearch = (event: any) => {
+    event
+      ? dispatch(getHotel({ page: 1, keyword: event.target.value }))
       : dispatch(getHotel());
   };
 

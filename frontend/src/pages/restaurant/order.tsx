@@ -23,7 +23,7 @@ import CheckSecure from "../payment/checkSecure";
 import ActivationGoto from "../payment/activationGoto";
 import ActivationHpay from "../payment/activationHpay";
 import AddCard from "../payment/addCard";
-import { doCreateTransaction } from "@/Redux/Action/Payment/paymentUserAction";
+import { doCreateTransaction, doGetAllBank } from "@/Redux/Action/Payment/paymentUserAction";
 
 function Order({orderNumberUser}:any) {
   let dispatch = useDispatch();
@@ -67,12 +67,12 @@ function Order({orderNumberUser}:any) {
   const [showActivation, setShowActivation] = useState(false);
   const [showLinked, setShowLinked] = useState(false);
   const [showCheck, setShowCheck] = useState(false);
-  const { payBank } = useSelector((state: any) => state.payBankReducer);
+  const { allBank } = useSelector((state: any) => state.payBankReducer);
   const { payPaga } = useSelector((state: any) => state.payPagaReducer);
   const user = useSelector((state: any) => state.GetUserReducer.getUser);
   const { account, error } = useSelector( (state: any) => state.payUserAccReducer);
   const accNumberDompet = `131${user[0]?.user_phone_number}`;
-  const accNumberGoto = user[0]?.user_phone_number;
+  const accNumberGoto = user[0]?.user_phone_number.slice(1);
 
   const [finalForm, setFinalForm] = useState({
     userId: 0,
@@ -90,9 +90,10 @@ function Order({orderNumberUser}:any) {
       ...finalForm,
       amount: parseInt(orderFromUser[0]?.orme_total_amount.split(',')[0].replace(/[^0-9]/g, '')),
       orderNumber: orderFromUser[0]?.orme_order_number,
-      trxType : 'ORM'
+      trxType : 'ORM',
+      userId: user[0]?.user_id
     })
-  },[orderFromUser])
+  },[orderFromUser, user])
 
   const [payMsg, setPayMsg] = useState("");
 
@@ -112,9 +113,6 @@ function Order({orderNumberUser}:any) {
     } 
   }, [selectCard, result.total]);
 
-  useEffect(() => {
-    setFinalForm({ ...finalForm, userId: user[0]?.user_id });
-  }, [user]);
 
   const onComplete = () => {
     console.log(finalForm);
@@ -137,7 +135,7 @@ function Order({orderNumberUser}:any) {
   };
 
   useEffect(() => {
-    dispatch(doBankRequest());
+    dispatch(doGetAllBank());
     dispatch(doUsacRequest(user[0]?.user_id));
     dispatch(doPagaRequest());
   }, [user]);
@@ -246,49 +244,49 @@ function Order({orderNumberUser}:any) {
       </Head>
       <main>
         <Layouts>
-        {openAdd ? (
-        <AddCard
-          show={openAdd}
-          clickOk={handleOk}
-          clickCancel={handleCancel}
-          handleAct={handleActive}
-          handleCancell={handleClose}
-          dataUser={user}
-          dataBank={payBank}
-        />
-      ) : null}
-      {showActivation ? (
-        <ActivationHpay
-          show={showActivation}
-          clickOk={handleOk}
-          clickCancel={handleCancel}
-          handleCancell={handleClose}
-          phone={accNumberDompet}
-          dataUser={user}
-          dataPaga={payPaga}
-        />
-      ) : null}
-      {showLinked ? (
-        <ActivationGoto
-          show={showLinked}
-          clickOk={handleOk}
-          clickCancel={handleCancel}
-          handleCancell={handleClose}
-          phone={user[0]?.user_phone_number}
-          dataUser={user}
-          dataPaga={payPaga}
-        />
-      ) : null}
-      {showCheck ? (
-        <CheckSecure
-          show={showCheck}
-          clickOk={handleOk}
-          clickCancel={handleCancel}
-          handleCancell={handleClose}
-          dataPayment={finalForm}
-          // dataBooking={dataBooking}
-        />
-      ) : null}
+          {openAdd ? (
+            <AddCard
+              show={openAdd}
+              clickOk={handleOk}
+              clickCancel={handleCancel}
+              handleAct={handleActive}
+              handleCancell={handleClose}
+              dataUser={user}
+              dataBank={payBank}
+            />
+          ) : null}
+          {showActivation ? (
+            <ActivationHpay
+              show={showActivation}
+              clickOk={handleOk}
+              clickCancel={handleCancel}
+              handleCancell={handleClose}
+              phone={accNumberDompet}
+              dataUser={user}
+              dataPaga={payPaga}
+            />
+          ) : null}
+          {showLinked ? (
+            <ActivationGoto
+              show={showLinked}
+              clickOk={handleOk}
+              clickCancel={handleCancel}
+              handleCancell={handleClose}
+              phone={accNumberGoto}
+              dataUser={user}
+              dataPaga={payPaga}
+            />
+          ) : null}
+          {showCheck ? (
+            <CheckSecure
+              show={showCheck}
+              clickOk={handleOk}
+              clickCancel={handleCancel}
+              handleCancell={handleClose}
+              dataPayment={finalForm}
+              // dataBooking={dataBooking}
+            />
+          ) : null}
           <div className="container mx-auto">
             <Breadcrumb className="pb-5">
               <Breadcrumb.Item>
@@ -325,7 +323,7 @@ function Order({orderNumberUser}:any) {
                       placeholder="hp"
                       value={userLoggedIn[0]?.user_phone_number}
                       readOnly
-                    ></Input> 
+                    ></Input>
                   </Form.Item>
                 </Form>
                 <p className="text-2xl">Payment</p>
@@ -427,7 +425,7 @@ function Order({orderNumberUser}:any) {
                               </div>
                             </Card>
                           ) : (
-                            <Card size={"small"}>
+                            <Card size={"small"} className="mb-2">
                               <div className="flex justify-between items-center px-6">
                                 <p className="text-[16px] font-semibold">
                                   Dompet Realta
@@ -438,7 +436,7 @@ function Order({orderNumberUser}:any) {
                                     accDompet?.usacAccountNumber
                                       ? "text-white"
                                       : "text-blue-700"
-                                  }`}
+                                  } hover:cursor-pointer`}
                                   onClick={() => setShowActivation(true)}
                                 >
                                   Activate
@@ -447,44 +445,57 @@ function Order({orderNumberUser}:any) {
                             </Card>
                           )}
 
-                          <Card
-                            size={"small"}
-                            className={`mb-2 ${
-                              selectCard.accNumber ===
-                                accGoto?.usacAccountNumber &&
-                              "bg-[#754cff] text-white"
-                            }`}
-                            hoverable
-                            onClick={() =>
-                              isLinked
-                                ? setSelectCard({
-                                    accNumber: accGoto?.usacAccountNumber,
-                                    balance: accGoto?.usacSaldo,
-                                  })
-                                : ""
-                            }
-                          >
-                            <div className="flex justify-between px-6">
-                              <p className="text-[16px] font-semibold">GOTO</p>
-                              {isLinked ? (
+                          {isLinked ? (
+                            <Card
+                              size={"small"}
+                              className={`mb-2 ${
+                                selectCard.accNumber ===
+                                  accGoto?.usacAccountNumber &&
+                                "bg-[#754cff] text-white"
+                              }`}
+                              hoverable
+                              onClick={() => {
+                                setSelectCard({
+                                  accNumber: accGoto?.usacAccountNumber,
+                                  balance: accGoto?.usacSaldo,
+                                });
+                                setFinalForm({
+                                  ...finalForm,
+                                  sourceNumber: accGoto?.usacAccountNumber,
+                                  targetNumber: 13198989898,
+                                  payType: "PG",
+                                });
+                              }}
+                            >
+                              <div className="flex justify-between px-6">
+                                <p className="text-[16px] font-semibold">
+                                  GOTO
+                                </p>
                                 <p className="text-[16px] font-semibold">
                                   {saldoGoto}
                                 </p>
-                              ) : (
+                              </div>
+                            </Card>
+                          ) : (
+                            <Card size={"small"} className="mb-2">
+                              <div className="flex justify-between px-6">
+                                <p className="text-[16px] font-semibold">
+                                  GOTO
+                                </p>
                                 <p
                                   className={`${
                                     selectCard.accNumber ===
                                     accGoto?.usacAccountNumber
                                       ? "text-white"
                                       : "text-blue-700"
-                                  }`}
+                                  } hover:cursor-pointer`}
                                   onClick={() => setShowLinked(true)}
                                 >
                                   Link Account
                                 </p>
-                              )}
-                            </div>
-                          </Card>
+                              </div>
+                            </Card>
+                          )}
 
                           <p className="m-4">Debet/Credit Card</p>
                           {bankAcc.map((item: any) => (
@@ -519,7 +530,7 @@ function Order({orderNumberUser}:any) {
                                 </p>
                                 <p>
                                   {
-                                    payBank?.find(
+                                    allBank?.find(
                                       (obj: any) =>
                                         obj.bankEntityId == item.usacEntityId
                                     )?.bankName
@@ -550,7 +561,9 @@ function Order({orderNumberUser}:any) {
                 </div>
               </div>
               <div className="lg:w-2/5 sm:w-full border rounded-lg shadow bg-white p-3 my-4 sticky top-0 h-1/2 ">
-                <p className="text-center text-2xl font-semibold mt-3">Order Summary</p>
+                <p className="text-center text-2xl font-semibold mt-3">
+                  Order Summary
+                </p>
                 <p className="font-semibold py-4 text-center">{orme}</p>
                 {orderFromUser &&
                   orderFromUser.map((order: any) => (
@@ -563,53 +576,53 @@ function Order({orderNumberUser}:any) {
                             {order.reme_name}
                           </p>
                         </div>
-                        
-                          <p>{order.orme_price}
-                            <span className="text-red-400 ml-4">
-                              x {order.orme_qty}
-                            </span>
-                          </p> 
-                          <p className="mb-2 text-[14px] text-right mr-4">Subtotal: {order.orme_subtotal}</p>
+
+                        <p>
+                          {order.orme_price}
+                          <span className="text-red-400 ml-4">
+                            x {order.orme_qty}
+                          </span>
+                        </p>
+                        <p className="mb-2 text-[14px] text-right mr-4">
+                          Subtotal: {order.orme_subtotal}
+                        </p>
                       </div>
                     </div>
-                    
                   ))}
                 <div className="w-full mx-auto bg-slate-200 rounded-lg my-4 p-4">
-                    <p className="font-bold text-center text-xl py-4">
-                      Payment Summary
-                    </p>
+                  <p className="font-bold text-center text-xl py-4">
+                    Payment Summary
+                  </p>
                   <table className="w-full">
                     <tbody>
-                        <tr className="">
-                          <td className="w-full">Sub total</td>
-                          <td className="text-right">
-                            {subtotal.toLocaleString("id-ID", {
-                              style: "currency",
-                              currency: "IDR",
-                              
-                            })}
-                          </td>
-                        </tr>
-                        {/* <tr className='hover:bg-slate-300'>
+                      <tr className="">
+                        <td className="w-full">Sub total</td>
+                        <td className="text-right">
+                          {subtotal.toLocaleString("id-ID", {
+                            style: "currency",
+                            currency: "IDR",
+                          })}
+                        </td>
+                      </tr>
+                      {/* <tr className='hover:bg-slate-300'>
                           <td>Discount [dapet dr manaa?]</td>
                           <td className='text-right'>Rp.0</td>
                         </tr> */}
-                        <tr>
-                          <td className=" py-2">Tax(11%)</td>
-                          <td className="text-right">
-                            {tax.toLocaleString("id-ID", {
-                              style: "currency",
-                              currency: "IDR",
-                              
-                            })}
-                          </td>
-                        </tr>
-                        <tr >
-                          <td className=" py-2">Total payment</td>
-                          <td className="text-right">
-                            {orderFromUser[0]?.orme_total_amount}
-                          </td>
-                        </tr>
+                      <tr>
+                        <td className=" py-2">Tax(11%)</td>
+                        <td className="text-right">
+                          {tax.toLocaleString("id-ID", {
+                            style: "currency",
+                            currency: "IDR",
+                          })}
+                        </td>
+                      </tr>
+                      <tr>
+                        <td className=" py-2">Total payment</td>
+                        <td className="text-right">
+                          {orderFromUser[0]?.orme_total_amount}
+                        </td>
+                      </tr>
                     </tbody>
                   </table>
                   {/* <a onClick={goToBill}>
@@ -624,10 +637,10 @@ function Order({orderNumberUser}:any) {
                     <p>{finalForm.payType + " pay"} </p>
                     <p>{finalForm.orderNumber + " order number"} </p>
                     <p>{finalForm.trxType + " trxtype"} </p>
+                    <p>{finalForm.userId + " userID"}</p>
                   </div> */}
                 </div>
               </div>
-            
             </div>
           </div>
         </Layouts>
