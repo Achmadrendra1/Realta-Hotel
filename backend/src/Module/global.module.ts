@@ -166,6 +166,7 @@ import { RestoMenuDetailService } from 'src/Service/Resto/resto-menu-detail/rest
 import { ListRestaurantService } from 'src/Service/Resto/list-restaurant/list-restaurant.service';
 import { OrderMenuDetailService } from 'src/Service/Resto/order-menu-detail/order-menu-detail.service';
 import { Department } from 'src/entities/Department';
+import { LandingController } from 'src/Controller/Hotel/facilities/landing.controller';
 
 //Booking Service
 
@@ -259,6 +260,7 @@ import { Department } from 'src/entities/Department';
     RestoMenusController,
     RestoMenuPhotosController,
     OrderMenusController,
+    LandingController,
 
     //Booking
     BookingOrderDetailController,
