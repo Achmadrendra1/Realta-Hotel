@@ -1,9 +1,8 @@
 import LandingConstant from "@/Redux/Constant/Hotel/LandingConstant";
 
-export const getLanding = (payload?: any) => {
+export const getLanding = () => {
     return {
         type: LandingConstant.GET_LANDING,
-        payload
     };
 };
 
