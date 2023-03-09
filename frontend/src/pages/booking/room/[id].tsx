@@ -297,6 +297,18 @@ export default function bookingRoom() {
   //Rangepicker ANTD
   const { RangePicker } = DatePicker;
 
+  //New Date Now
+  const date = new Date();
+
+  const format:any = {
+    day: "2-digit",
+    month: "short",
+    year: "numeric",
+  };
+
+  const dateFormatter = new Intl.DateTimeFormat("id-ID", format);
+  const currentDate = dateFormatter.format(date);
+
   //Configure Date untuk Booking
   const dateFormat = "DD MM YYYY";
   const disabledDate = (current: any, checkInDate: any) => {
@@ -341,13 +353,11 @@ export default function bookingRoom() {
     }
   };
 
-  console.log(new Date());
-
   const [dataBooking, setDataBooking] = useState({
     boor_user_id: 0,
     boor_hotel_id: id,
     boor_order_number: "",
-    boor_order_date: new Date(),
+    boor_order_date: currentDate,
     boor_arrival_date: "",
     boor_total_room: 0,
     boor_total_guest: 0,
@@ -373,6 +383,8 @@ export default function bookingRoom() {
     soco_spof_id: spofPrice.spofId,
     boor_cardnumber: "",
   });
+
+  console.log(dataBooking.boor_order_date)
 
   const [dataPayment, setDataPayment] = useState({
     userId: 0,
@@ -1686,8 +1698,8 @@ export default function bookingRoom() {
                   // onClick={handleBookingCode}
                   onClick={() => {
                     setPayment(!payment), 
-                    dispacth(insertBookingExtra(dataExtra)), 
-                    console.log(dataBooking, dataPayment)
+                    dispacth(insertBookingExtra(dataExtra)) 
+                    // console.log(dataBooking, dataPayment)
                   }}
                   className={`text-white bg-[#754CFF] ${!detail || payment ? "hidden" : "block"}`}
                 >

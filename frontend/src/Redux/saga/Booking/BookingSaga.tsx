@@ -54,7 +54,6 @@ function* handleBoorCreateFinal(action : any): any {
 function* handleBoorExtra(action : any) : any {
   try {
     const res = yield axios (API('Post', `/booking-order-detail-extra/createArray`, action.payload))
-    console.log(res)
     yield put(insertBookingExtraSuccess(res.data.result))
     return res.data.result
   }catch(e : any){
