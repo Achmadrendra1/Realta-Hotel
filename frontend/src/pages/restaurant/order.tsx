@@ -58,7 +58,7 @@ function Order({orderNumberUser}:any) {
     };
 
     dispatch(doGetUserOrder(orme));
-  }, [orderFromUser]); 
+  }, [orme]); 
 
   // BACK TO PREVIOUS PAGE
   function back() {

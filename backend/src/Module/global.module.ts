@@ -416,14 +416,12 @@ export class GlobalModule implements NestModule {
         HotelReviewsController,
         UserAccountController,
         PaymentTransactionController,
-        RestoMenusController,
         RestoMenuPhotosController,
         OrderMenusController,
         UsersPasswordController,
         UsersController,
         AuthController,
         OrderMenusController,
-        RestoMenusController,
       );
   }
 }

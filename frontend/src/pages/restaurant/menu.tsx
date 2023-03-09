@@ -97,12 +97,12 @@ export default function menu({ restaurant }:any) {
     localStorage.setItem("result", JSON.stringify(ormeNumber));
   }, [cart]);
 
-  useEffect(() => {
-    const cartdrlocalstorage = localStorage.getItem("cart");
-    const parsedCart =
-      cartdrlocalstorage !== null ? JSON.parse(cartdrlocalstorage) : [];
-    setCart(parsedCart);
-  }, []);
+  // useEffect(() => {
+  //   const cartdrlocalstorage = localStorage.getItem("cart");
+  //   const parsedCart =
+  //     cartdrlocalstorage !== null ? JSON.parse(cartdrlocalstorage) : [];
+  //   setCart(parsedCart);
+  // }, []);
 
   const addtocart = (menu: any) => {
     let newCart:any = [...cart];

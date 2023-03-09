@@ -30,6 +30,8 @@ export default withAuth( function restoMenu() {
   let [search, setSearch] = useState('');
   let list_restaurant = restaurant.data;
 
+  console.log(list_restaurant);
+  
   // ------------------------ PAGINATION
   const [currentpage, setCurrentPage] = useState(1);
   const handlePagination = (page: any) => { 

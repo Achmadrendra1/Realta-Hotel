@@ -61,7 +61,7 @@ export class OrderMenusService {
     }
 
     async addOrderMenus(data:OrderMenus){
-        console.log(data);
+        // console.log(data);
 
         // // konfig buat transaction commit - rollback
         // const connection = getConnection();
