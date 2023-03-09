@@ -285,7 +285,7 @@ export default function* rootSaga() {
     takeEvery(workType.UPDATE_WORK_DETAIL, handleUpdateWork),
 
     //Hotel
-    takeEvery(LandingConstant.GET_LANDING,handleLanding),
+    takeEvery(LandingConstant.GET_LANDING, handleLanding),
     takeEvery(HotelConstant.GET_HOTEL, handleHotel),
     takeEvery(HotelConstant.GET_HOTEL_ID, handleHotelID),
     takeEvery(HotelConstant.ADD_HOTEL, handleAddHotel),
