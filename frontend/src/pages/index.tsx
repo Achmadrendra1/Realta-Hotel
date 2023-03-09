@@ -11,6 +11,7 @@ import { Inter } from "@next/font/google";
 import { Card, Input, Space } from "antd";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useRouter } from "next/router";
 const inter = Inter({ subsets: ["latin"] });
 
 export default function Home() {
@@ -69,12 +70,11 @@ export default function Home() {
   }, [])
 
   const { Meta } = Card;
-  const dispatch = useDispatch();
   useEffect(() => {
     dispatch(getLanding())
   }, []);
   let {landing} = useSelector((state : any) => state.LandingReducer)
-  console.log(landing.slice(2))
+const router = useRouter()
 
   return (
     <Layouts>
@@ -112,7 +112,7 @@ export default function Home() {
             Find The Best Room For Your Destination
           </p>
           <div className="">
-            <Buttons funcs={""}>View More</Buttons>
+            <Buttons funcs={()=>router.push('/booking')}>View More</Buttons>
           </div>
         </div>
         <div className="flex gap-6 mt-8 justify-center flex-wrap">
