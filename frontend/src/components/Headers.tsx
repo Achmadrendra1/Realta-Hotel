@@ -41,7 +41,7 @@ const Headers = ({
   nav?: any;
   logo?: string;
   click?: any;
-  queries?: any;
+  queries: any[];
 }) => {
   const router = useRouter();
   const dispatch = useDispatch();
@@ -50,7 +50,6 @@ const Headers = ({
   const [isAdmin, setIsAdmin] = useState(false);
   const [location, setLocation] = useState("");
   const [date, setDate] = useState([]);
-  const [guest, setGuest] = useState(0);
   const [open, setOpen] = useState(false);
   const [isActive, setIsActive] = useState(false);
 
@@ -123,6 +122,19 @@ const Headers = ({
     router.push("/");
   };
 
+  const searchs = () => {
+    router.push(
+        { 
+            pathname: 'booking/', 
+            query: {
+                location: location,
+                date: date,
+            }
+        }, 'booking/'
+    )
+    setOpen(false)
+  }
+
   //Dropdown menu user & admin
   const menuUser = (
     <Menu>
@@ -167,7 +179,6 @@ const Headers = ({
     { value: "Banten" },
   ];
 
-  // console.log(queries)
   return (
     <div className="w-full">
       <div className="container mx-auto">
@@ -212,41 +223,29 @@ const Headers = ({
             router.asPath == "/" ? null : (
               <Item className="ml-auto mr-5 relative">
                 <div className="flex items-center gap-3 text-gray-400 z-50">
-                  <button onClick={() => setOpen(!open)}>
-                    {queries ? queries[0] : "Locations"}
+                  <button className="capitalize" onClick={() => setOpen(!open)}>
+                    {queries[0] !== undefined ? queries[0] : "Locations"}
                   </button>
                   <Divider type="vertical" />
                   <button onClick={() => setOpen(!open)}>
-                    {queries
-                      ? queries[1].replace(" ", ", ")
+                    {queries[1].date !== undefined 
+                      ? `Start Date : ${queries[1].date[0]} - End Date : ${queries[1].date[1]}`
                       : "Start date & End date"}
-                  </button>
-                  <Divider type="vertical" />
-                  <button onClick={() => setOpen(!open)}>
-                    {queries ? "Guest : " + queries[2] : "Guest"}
                   </button>
                 </div>
                 {open && (
                   <div
-                    className="absolute right-0 bg-white drop-shadow-md px-5 py-2"
-                    style={{ width: "55vw" }}
-                  >
-                    <Row gutter={5} align="stretch" justify="space-between">
-                      <Col span={6}>
-                        <AutoComplete
+                    className="absolute right-0 bg-white drop-shadow-md px-5 py-2 z-50 w-[680px]">
+                    <Row gutter={5}>
+                      <Col span={9}>
+                        <Input
                           className="w-full"
                           style={{ borderRadius: 0 }}
-                          options={options}
                           placeholder="Locations"
-                          filterOption={(inputValue, option) =>
-                            option!.value
-                              .toUpperCase()
-                              .indexOf(inputValue.toUpperCase()) !== -1
-                          }
-                          onChange={(value: any) => setLocation(value)}
+                          onChange={e => setLocation(e.target.value)}
                         />
                       </Col>
-                      <Col>
+                      <Col span={10}>
                         <RangePicker
                           className="w-full"
                           onChange={(value, dateString: any) =>
@@ -254,24 +253,8 @@ const Headers = ({
                           }
                         />
                       </Col>
-                      <Col>
-                        <Input
-                          placeholder="Guest"
-                          className="w-full"
-                          type="number"
-                          onChange={(e) => setGuest(parseInt(e.target.value))}
-                        />
-                      </Col>
-                      <Col>
-                        <Link
-                          href={`/hotel/${location}/${
-                            date.length > 0 ? date[0] + " " + date[1] : ""
-                          }/${guest ? guest : ""}`}
-                          className="bg-sky-500 py-2 rounded px-5 text-white hover:text-white"
-                          onClick={() => setOpen(false)}
-                        >
-                          Search
-                        </Link>
+                      <Col span={4}>
+                        <Buttons funcs={() => searchs()}>Search</Buttons>
                       </Col>
                     </Row>
                   </div>
@@ -288,13 +271,15 @@ const Headers = ({
                     {user[0] ? user[0].user_full_name : "Guest"}
                   </p>
                   {isActive ? (
-                    <p className="text-sm text-blue-700 hover:underline hover:cursor-pointer">
+                    <p 
+                    onClick={() => router.push("/payment")}
+                    className="text-sm text-[#754cff] hover:underline hover:cursor-pointer">
                       <WalletOutlined /> {saldo}
                     </p>
                   ) : (
                     <p
                       onClick={() => router.push("/payment")}
-                      className="text-sm text-blue-700 hover:underline hover:cursor-pointer"
+                      className="text-sm text-[#754cff] hover:underline hover:cursor-pointer"
                     >
                       <WalletOutlined /> Activate
                     </p>

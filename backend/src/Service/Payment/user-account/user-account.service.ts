@@ -10,7 +10,7 @@ export class UserAccountService {
     @InjectRepository(UserAccounts)
     private uacRepository: Repository<UserAccounts>,
   ) {}
-  x;
+  // x;
 
   async getAll() {
     return await this.uacRepository.find();

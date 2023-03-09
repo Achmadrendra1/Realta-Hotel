@@ -22,6 +22,7 @@ export default function AddCategory(props: any) {
   const onFinish = (e: any) => {
     console.log('Success:', e);
     dispatch(doAddCategoryGroup(dataUp));
+    console.log(dataUp)
     handleClose(false);
     window.location.reload();
   };
@@ -48,15 +49,18 @@ export default function AddCategory(props: any) {
     setDeskCagro(value.target.value);
   };
 
+ 
+
   const onUploadLogo = (e: any) => {
     const img = e.target.files[0];
-
+    
     let formData = new FormData();
     formData.append('file', img);
     formData.append('cagroName', namaCagro);
     formData.append('cagroDescription', tipeCagro);
     formData.append('cagroType', deskCagro);
     setDataUp(formData);
+    console.log(formData)
   };
 
   let optionValPolicy: any = [{ value: '', label: 'Please choose' }];

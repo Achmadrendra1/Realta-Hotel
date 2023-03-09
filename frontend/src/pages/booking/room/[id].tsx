@@ -28,6 +28,7 @@ import {
   getSpHotel,
   getSpInvoice,
   getSpReview,
+  insertBookingExtra,
 } from "@/Redux/Action/Booking/BookingAction";
 import { useRouter } from "next/router";
 import { CaretRightFilled, DeleteOutlined, LeftOutlined } from "@ant-design/icons";
@@ -49,7 +50,7 @@ import AddCard from "@/pages/payment/addCard";
 import ActivationHpay from "@/pages/payment/activationHpay";
 import ActivationGoto from "@/pages/payment/activationGoto";
 import CheckSecure from "@/pages/payment/checkSecure";
-import { doCreateTransaction } from "@/Redux/Action/Payment/paymentUserAction";
+import { doCreateTransaction, doGetAllBank } from "@/Redux/Action/Payment/paymentUserAction";
 import Link from "next/link";
 
 export default function bookingRoom() {
@@ -150,8 +151,6 @@ export default function bookingRoom() {
     pritMeasure : [] as any []
   });
 
-  console.log(valueExtra)
-
   //State untuk extraTotal
   const [extraTotal, setExtraTotal] = useState({
     extraSubTotal: 0,
@@ -225,8 +224,6 @@ export default function bookingRoom() {
     };
   });
 
-  console.log(dataExtra)
-
   let spofDiscInt = parseInt(
     spofPrice.spofDiscount.split(",")[0].replace(/[^0-9]/g, "")
   );
@@ -299,9 +296,9 @@ export default function bookingRoom() {
     if(date !== null){
       setDataBooking({
         ...dataBooking,
-        borde_checkin : dateString[0],
-        boor_arrival_date : dateString[0],
-        borde_checkout : dateString[1]
+        borde_checkin : dateString[0].replace(/ /g, '-'),
+        boor_arrival_date : dateString[0].replace(/ /g, '-'),
+        borde_checkout : dateString[1].replace(/ /g, '-')
       })
       setInDate(date[0])
       setOutDate(date[1])
@@ -359,7 +356,6 @@ export default function bookingRoom() {
     boor_cardnumber: "",
   });
 
-  console.log(dataBooking)
 
   const [dataPayment, setDataPayment] = useState({
     userId: 0,
@@ -552,6 +548,11 @@ export default function bookingRoom() {
     }
   };
 
+  const handleAddExtra = () => {
+    dispacth(insertBookingExtra(dataExtra))
+    console.log(dataExtra)
+  }
+
   const handleAdultsValue = (value: any) => {
     setDataBooking({...dataBooking, borde_adults : value})
   };
@@ -577,7 +578,7 @@ export default function bookingRoom() {
   const [showActivation, setShowActivation] = useState(false);
   const [showLinked, setShowLinked] = useState(false);
   const [showCheck, setShowCheck] = useState(false);
-  const { payBank } = useSelector((state: any) => state.payBankReducer);
+  const { allBank } = useSelector((state: any) => state.payBankReducer);
   const { payPaga } = useSelector((state: any) => state.payPagaReducer);
   const user = useSelector((state: any) => state.GetUserReducer.getUser);
   const { account, error } = useSelector(
@@ -630,8 +631,8 @@ export default function bookingRoom() {
   const dispacth = useDispatch();
 
   useEffect(() => {
-    dispacth(doBankRequest());
-    dispacth(doUsacRequest());
+    dispacth(doGetAllBank());
+    // dispacth(doUsacRequest());
     dispacth(doPagaRequest());
   }, []);
 
@@ -749,7 +750,7 @@ export default function bookingRoom() {
           handleAct={handleActive}
           handleCancell={handleClose}
           dataUser={user}
-          dataBank={payBank}
+          dataBank={allBank}
         />
       ) : null}
       {showActivation ? (
@@ -1212,7 +1213,7 @@ export default function bookingRoom() {
                 </div>
               </Modal>
               <Table columns={columnsExtra} dataSource={dataExtra} />
-              <button>Finish</button>
+              <button onClick={handleAddExtra}>Finish</button>
             </div>
             <div className="flex justify-between">
               {/* <div className='flex justify-between'>
@@ -1425,7 +1426,7 @@ export default function bookingRoom() {
                               </p>
                               <p>
                                 {
-                                  payBank?.find(
+                                  allBank?.find(
                                     (obj: any) =>
                                       obj.bankEntityId == item.usacEntityId
                                   )?.bankName

@@ -4,23 +4,18 @@ import {
   doPagaRequest,
   doUsacRequest,
 } from "@/Redux/Action/Payment/paymentDashAction";
-import { doGetUserOrder } from "@/Redux/Action/Resto/userOrderAction";
-import { configuration } from "@/Redux/Configs/url";
+import withAuth from '@/PrivateRoute/WithAuth'
+import { doGetUserOrder } from "@/Redux/Action/Resto/userOrderAction"; 
 import {
   Breadcrumb,
   Button,
   Card,
-  Col,
-  Dropdown,
+  Col, 
   Form,
-  Input,
-  InputNumber,
-  Radio,
-  Row,
-  Select,
+  Input, 
+  Row, 
 } from "antd";
-import Head from "next/head";
-import Link from "next/link";
+import Head from "next/head"; 
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -30,15 +25,13 @@ import ActivationHpay from "../payment/activationHpay";
 import AddCard from "../payment/addCard";
 import { doCreateTransaction } from "@/Redux/Action/Payment/paymentUserAction";
 
-export default function Order() {
+function Order({orderNumberUser}:any) {
   let dispatch = useDispatch();
   let router = useRouter();
-  const userLoggedIn = useSelector(
-    (state: any) => state.GetUserReducer.getUser
-  );
-  const orderFromUser = useSelector(
-    (state: any) => state.userOrderReducer.userOrder
-  )
+  const userLoggedIn = useSelector((state: any) => state.GetUserReducer.getUser);
+  const orderFromUser = useSelector((state:any)=> state.userOrderReducer.userOrder); 
+  // console.log('orderFromUser',orderFromUser);
+  const orme = orderNumberUser.orderNumber;
 
   let [cart, setCart] = useState([]);
   let [result, setResult] = useState({
@@ -48,27 +41,24 @@ export default function Order() {
     total: 0,
   });
 
-
+  // console.log('orderFromUser',orderNumberUser.orderNumber);
+  
   useEffect(() => {
     // get order number fom local storage
     const orderFromlocalstorage = localStorage.getItem("result");
-    const parsedOrderNumber =
-      orderFromlocalstorage !== null ? JSON.parse(orderFromlocalstorage) : [];
+    const parsedOrderNumber = orderFromlocalstorage !== null ? JSON.parse(orderFromlocalstorage) : []; 
+    const notParsedCart = localStorage.getItem("cart");
+    const parsedCart = notParsedCart ? JSON.parse(notParsedCart) : [];
 
-    dispatch(doGetUserOrder(parsedOrderNumber.ormeNumber));
-  }, []);
+    const userid = userLoggedIn[0]?.user_id; 
+    setResult(parsedOrderNumber); 
+    
+    let data = {
+      orderNumber: parsedOrderNumber.ormeNumber, 
+    };
 
-  // let userOrder = useSelector((state:any) => state.userOrderReducer.userOrder);
-
-  // console.log('orderNumber', userOrder[0].orme_order_number);
-
-  // payment versi soffie
-  const [payType, setPayType] = useState("cash");
-
-  function paymentType(e: any) {
-    if (e.target.value === "card") setPayType("card");
-    else setPayType("cash");
-  }
+    dispatch(doGetUserOrder(orme));
+  }, [orderFromUser]); 
 
   // BACK TO PREVIOUS PAGE
   function back() {
@@ -78,39 +68,7 @@ export default function Order() {
   // ke halaman struk pembelian
   function goToBill() {
     router.push("bill");
-  }
-  // --------------------- PAYMENT DR RENRA
-
-  // //State untuk menampilkan payment
-  // const [payment, setPayment] = useState(false);
-  // const [payMsg, setPayMsg] = useState('');
-
-  // const [isCash, setIsCash] = useState(true);
-
-  // const [dataOrder, setDataOrder] = useState({
-  //   ormePayType: ''
-  // })
-
-  // const [dataPayment, setDataPayment] = useState({
-  //   userId: 0,
-  //   amount: 0,
-  //   sourceNumber: "",
-  //   targetNumber: "",
-  //   trxType: "TRB",
-  //   secureCode: "",
-  //   orderNumber: "",
-  // });
-
-  // const [selectCard, setSelectCard] = useState({accNumber : '', balance : ''});
-  // const onCompleteCash = () => {
-  //   console.log(dataPayment)
-  //   // dispatch(insertBooking(dataBooking));
-  // };
-
-  // useEffect(()=>{
-
-  //   setDataPayment({ ...dataPayment, userId: userLoggedIn[0]?.user_id });
-  // },[])
+  } 
 
   const [isActive, setIsActive] = useState(false);
   const [isLinked, setIsLinked] = useState(false);
@@ -124,9 +82,7 @@ export default function Order() {
   const { payBank } = useSelector((state: any) => state.payBankReducer);
   const { payPaga } = useSelector((state: any) => state.payPagaReducer);
   const user = useSelector((state: any) => state.GetUserReducer.getUser);
-  const { account, error } = useSelector(
-    (state: any) => state.payUserAccReducer
-  );
+  const { account, error } = useSelector( (state: any) => state.payUserAccReducer);
   const accNumberDompet = `131${user[0]?.user_phone_number}`;
   const accNumberGoto = user[0]?.user_phone_number;
 
@@ -165,8 +121,7 @@ export default function Order() {
     if (selectCard.balance == "") {
       setPayMsg("");
       setDisabled(true);
-    }
-    
+    } 
   }, [selectCard, result.total]);
 
   useEffect(() => {
@@ -285,10 +240,13 @@ export default function Order() {
     const maskedCardNumber = `${maskedDigits} ${lastFourDigits}`;
     return maskedCardNumber;
   }
-
-  const subTotal = parseInt(orderFromUser[0]?.orme_subtotal.split(',')[0].replace(/[^0-9]/g, ''))
+  let subtotal = 0;
+  orderFromUser && orderFromUser.map((order:any) => {
+    subtotal = subtotal +  parseInt(order.orme_subtotal.split(',')[0].replace(/[^0-9]/g, ''))
+  })
+ 
   const total = parseInt(orderFromUser[0]?.orme_total_amount.split(',')[0].replace(/[^0-9]/g, ''))
-  const tax = total-subTotal
+  const tax = total-subtotal
 
   return (
     <>
@@ -353,39 +311,33 @@ export default function Order() {
               </Breadcrumb.Item>
               <Breadcrumb.Item>Order</Breadcrumb.Item>
             </Breadcrumb>
-            <div className="flex">
-              <div className="w-3/5 border rounded-xl bg-white shadow p-6 mr-4">
+            <div className="lg:flex">
+              <div className="lg:w-3/5 sm:full sm:mb-4 border rounded-xl bg-white shadow p-6 lg:mr-4">
                 <p className="text-2xl font-semibold">Enter Your Details</p>
                 <p className="pb-5">
-                  We will use these detais to share your order information
+                  We will use these details to share your order information
                 </p>
                 <Form layout="vertical">
                   <Form.Item label={"Fullname"}>
                     <Input
                       placeholder="fullname"
                       value={userLoggedIn[0]?.user_full_name}
+                      readOnly
                     ></Input>
                   </Form.Item>
                   <Form.Item label={"E-mail"}>
                     <Input
                       placeholder="e-mail"
                       value={userLoggedIn[0]?.user_email}
+                      readOnly
                     ></Input>
                   </Form.Item>
                   <Form.Item label={"No Handphone"}>
                     <Input
                       placeholder="hp"
                       value={userLoggedIn[0]?.user_phone_number}
-                    ></Input>
-                    {/* <Input.Group compact>
-                        <Select defaultValue="+62" style={{ width: '30%' }}>
-                          <Select.Option value="+1">+1 (USA)</Select.Option>
-                          <Select.Option value="+44">+44 (UK)</Select.Option>
-                          <Select.Option value="+62">+62 (Indonesia)</Select.Option>
-                        </Select>
-                      <Input style={{ width: '70%' }} placeholder="Nomor Telepon" />
-      
-                      </Input.Group> */}
+                      readOnly
+                    ></Input> 
                   </Form.Item>
                 </Form>
                 <p className="text-2xl">Payment</p>
@@ -609,30 +561,33 @@ export default function Order() {
                   </Row>
                 </div>
               </div>
-              <div className="w-2/5  border rounded shadow bg-white p-3 mr-2">
-                <p className="text-center text-2xl font-bold">Order Summary</p>
-                <p className="font-semibold py-4">Order Number : {orderFromUser[0]?.orme_order_number}</p>
+              <div className="lg:w-2/5 sm:w-full border rounded-lg shadow bg-white p-3 my-4 sticky top-0 h-1/2 ">
+                <p className="text-center text-2xl font-semibold mt-3">Order Summary</p>
+                <p className="font-semibold py-4 text-center">{orme}</p>
                 {orderFromUser &&
                   orderFromUser.map((order: any) => (
-                    <div className="border rounded-lg p-2 shadow-md flex">
+                    <div className="border rounded-lg p-2 shadow-md flex my-2">
                       {/* <img src={`${configuration.BASE_URL}/${order.rempurl}`} alt='cake' width={120} height={120}>
                       </img> */}
                       <div className="ml-3 mt-1 w-full">
                         <div className="flex">
                           <p className="font-bold w-4/5 text-lg">
                             {order.reme_name}
+                          </p>
+                        </div>
+                        
+                          <p>{order.orme_price}
                             <span className="text-red-400 ml-4">
                               x {order.orme_qty}
                             </span>
-                          </p>
-                        </div>
-                        <p className="mb-2 font-semibold">{order.orme_price}</p>
-                        <p className="mb-2 text-[14px] text-right mr-4">Subtotal: {order.orme_subtotal}</p>
+                          </p> 
+                          <p className="mb-2 text-[14px] text-right mr-4">Subtotal: {order.orme_subtotal}</p>
                       </div>
                     </div>
+                    
                   ))}
-                <div className="w-[450px] m-auto">
-                    <p className="font-bold text-center text-xl py-5">
+                <div className="w-full mx-auto bg-slate-200 rounded-lg my-4 p-4">
+                    <p className="font-bold text-center text-xl py-4">
                       Payment Summary
                     </p>
                   <table className="w-full">
@@ -640,14 +595,18 @@ export default function Order() {
                         <tr className="">
                           <td className="w-full">Sub total</td>
                           <td className="text-right">
-                            {orderFromUser[0]?.orme_subtotal}
+                            {subtotal.toLocaleString("id-ID", {
+                              style: "currency",
+                              currency: "IDR",
+                              
+                            })}
                           </td>
                         </tr>
                         {/* <tr className='hover:bg-slate-300'>
                           <td>Discount [dapet dr manaa?]</td>
                           <td className='text-right'>Rp.0</td>
                         </tr> */}
-                        <tr className="hover:bg-slate-300">
+                        <tr>
                           <td className=" py-2">Tax(11%)</td>
                           <td className="text-right">
                             {tax.toLocaleString("id-ID", {
@@ -657,7 +616,7 @@ export default function Order() {
                             })}
                           </td>
                         </tr>
-                        <tr className="font-bold hover:bg-slate-300">
+                        <tr >
                           <td className=" py-2">Total payment</td>
                           <td className="text-right">
                             {orderFromUser[0]?.orme_total_amount}
@@ -670,20 +629,40 @@ export default function Order() {
                       Complete Your Request
                     </div>
                   </a> */}
-                  {/* <div className="flex-col">
+                  <div className="flex-col">
                     <p>{finalForm.amount + " Amount"} </p>
                     <p>{finalForm.sourceNumber + " Source"} </p>
                     <p>{finalForm.targetNumber + " Target"} </p>
                     <p>{finalForm.payType + " pay"} </p>
                     <p>{finalForm.orderNumber + " order number"} </p>
                     <p>{finalForm.trxType + " trxtype"} </p>
-                  </div> */}
+                  </div>
                 </div>
               </div>
+            
             </div>
           </div>
         </Layouts>
       </main>
     </>
   );
+}
+
+export default withAuth(Order)
+
+export async function getServerSideProps(context: any) {
+  const { query } = context;
+  const {
+    orderNumber
+  } = query;
+
+  const orderNumberUser = {
+    orderNumber
+  };
+
+  return {
+    props: {
+      orderNumberUser,
+    },
+  };
 }

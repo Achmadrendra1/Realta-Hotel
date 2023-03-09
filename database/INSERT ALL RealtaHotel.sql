@@ -1957,31 +1957,30 @@ VALUES
 
 INSERT INTO resto.resto_menus
 VALUES
-	(9, 1, 'Regular Tea', 'Teh', 20000, 'AVAILABLE', NOW(), 0),
-	(9, 2, 'Green Tea', 'Green Tea sedap', 25000, 'AVAILABLE', NOW(), 0),
-	(9, 3, 'Jasmine Tea', 'Teh melati sedap', 20000, 'AVAILABLE', NOW(), 0),
-	(9, 4, 'Caesar salad', 'Heart of romainde lettuce, crispy bacon, toasted brioche bread, shaved parmesan cheese', 80000, 'AVAILABLE', NOW(), 2500),
-	(9, 5, 'Gado-gado', 'Raw and semi cooked vegetables with pestle grounded peanut sauce and chili', 65000, 'AVAILABLE', NOW(), 2500),
-	(9, 6, 'Crispy vegetable spring rolls', 'Served with chilli sauce', 75000, 'AVAILABLE', NOW(), 0),
-	(9, 7, 'Porcini mushroom cappuccino', 'Summer truffle, sundried tomatos and olive biscotti', 55000, 'AVAILABLE', NOW(), 0),
-	(2, 8, 'Deep fried thai fish cake', 'Served with thai sauce', 80000, 'AVAILABLE', NOW(), 10000),
-	(2, 9, 'Crab meat spring rolls', 'Served with thai sauce', 80000, 'AVAILABLE', NOW(), 0),
-	(2, 10, 'Vegetable spring roll', 'Served with thai sauce', 65000, 'AVAILABLE', NOW(), 0),
-	(2, 11, 'Vegetable samosa with raita', 'Served with mint yoghurt sauce', 85000, 'AVAILABLE', NOW(), 0),
-	(2, 12, 'Thai barbecue chicken with sweet chili sauce', 'Served with sweet chili sauce', 60000, 'AVAILABLE', NOW(), 0),
-	(2, 13, 'Fried pawns', 'Served with mint yoghurt sauce', 80000, 'AVAILABLE', NOW(), 0),
-	(2, 14, 'Pan fried gyoza', 'Served with soyu sauce', 65000, 'AVAILABLE', NOW(), 0),
-	(16, 15, 'Profiteroles tart', 'Shortbread, almond choux puff, light grand marnier cream, dark chocolate glaze', 65000, 'AVAILABLE', NOW(), 0),
-	(16, 16, 'Strawberry Shortcake', 'Ladyfinger sponge, light vanilla cream, fresh strawberry', 50000, 'AVAILABLE', NOW(), 0),
-	(16, 17, 'US Cheese Cake', 'Ladyfinger sponge, American cream cheese', 55000, 'AVAILABLE', NOW(), 0),
-	(16, 18, 'Vanilla Parisian Flan', 'Shortbread, vanilla custard', 55000, 'AVAILABLE', NOW(), 0),
-	(16, 19, 'Chocolate Orange', 'Chocolate almond sponge, light orange mousse, milk chocolate mousse', 50000, 'AVAILABLE', NOW(), 2500),
-	(16, 20, 'Chocolate Coconut', 'Ladyfinger sponge, light yoghurt mousse, milk chocolate mousse, coconut chantilly', 45000, 'AVAILABLE', NOW(), 10000);
+	(9, 1, 'Regular Tea', 'Teh', 20000, 'AVAILABLE', NOW()),
+	(9, 2, 'Green Tea', 'Green Tea sedap', 25000, 'AVAILABLE', NOW()),
+	(9, 3, 'Jasmine Tea', 'Teh melati sedap', 20000, 'AVAILABLE', NOW()),
+	(9, 4, 'Caesar salad', 'Heart of romainde lettuce, crispy bacon, toasted brioche bread, shaved parmesan cheese', 80000, 'AVAILABLE', NOW()),
+	(9, 5, 'Gado-gado', 'Raw and semi cooked vegetables with pestle grounded peanut sauce and chili', 65000, 'AVAILABLE', NOW()),
+	(9, 6, 'Crispy vegetable spring rolls', 'Served with chilli sauce', 75000, 'AVAILABLE', NOW()),
+	(9, 7, 'Porcini mushroom cappuccino', 'Summer truffle, sundried tomatos and olive biscotti', 55000, 'AVAILABLE', NOW()),
+	(2, 8, 'Deep fried thai fish cake', 'Served with thai sauce', 80000, 'AVAILABLE', NOW()),
+	(2, 9, 'Crab meat spring rolls', 'Served with thai sauce', 80000, 'AVAILABLE', NOW()),
+	(2, 10, 'Vegetable spring roll', 'Served with thai sauce', 65000, 'AVAILABLE', NOW()),
+	(2, 11, 'Vegetable samosa with raita', 'Served with mint yoghurt sauce', 85000, 'AVAILABLE', NOW()),
+	(2, 12, 'Thai barbecue chicken with sweet chili sauce', 'Served with sweet chili sauce', 60000, 'AVAILABLE', NOW()),
+	(2, 13, 'Fried pawns', 'Served with mint yoghurt sauce', 80000, 'AVAILABLE', NOW()),
+	(2, 14, 'Pan fried gyoza', 'Served with soyu sauce', 65000, 'AVAILABLE', NOW()),
+	(16, 15, 'Profiteroles tart', 'Shortbread, almond choux puff, light grand marnier cream, dark chocolate glaze', 65000, 'AVAILABLE', NOW()),
+	(16, 16, 'Strawberry Shortcake', 'Ladyfinger sponge, light vanilla cream, fresh strawberry', 50000, 'AVAILABLE', NOW()),
+	(16, 17, 'US Cheese Cake', 'Ladyfinger sponge, American cream cheese', 55000, 'AVAILABLE', NOW()),
+	(16, 18, 'Vanilla Parisian Flan', 'Shortbread, vanilla custard', 55000, 'AVAILABLE', NOW()),
+	(16, 19, 'Chocolate Orange', 'Chocolate almond sponge, light orange mousse, milk chocolate mousse', 50000, 'AVAILABLE', NOW()),
+	(16, 20, 'Chocolate Coconut', 'Ladyfinger sponge, light yoghurt mousse, milk chocolate mousse, coconut chantilly', 45000, 'AVAILABLE', NOW());
 
 INSERT INTO resto.resto_menu_photos
 VALUES
-	(1, 'Regular tea', 'tea11676605414722-453096302.jpg', B
-'1','restomenuphotos\tea11676605414722-453096302.jpg',1),
+(1, 'Regular tea', 'tea11676605414722-453096302.jpg', B'1','restomenuphotos\tea11676605414722-453096302.jpg',1),
 (2,'Regular tea 2','tea21676605458603-717688705.jpg',B'0','restomenuphotos\tea21676605458603-717688705.jpg',1),
 (3,'Green Tea','gtea31676605515548-5675050.jpg',B'1','restomenuphotos\gtea31676605515548-5675050.jpg',2),
 (4,'Green Tea 2','gtea11676613292710-736558373.jpg',B'0','restomenuphotos\gtea11676613292710-736558373.jpg',2),

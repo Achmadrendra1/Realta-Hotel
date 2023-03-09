@@ -1,29 +1,34 @@
 
+import Buttons from '@/components/Button'
 import Hero from '@/components/restaurant.tsx/Hero'
 import Layouts from '@/layouts/layout'
 import { doRestoRequest } from '@/Redux/Action/Resto/restoAction'
-import { Card, Carousel, Col, Row } from 'antd'
+import { Card, Carousel, Col, Pagination, Row } from 'antd'
 import Head from 'next/head'
 import Image from 'next/image'
 import Link from 'next/link'
 import Router, { useRouter } from 'next/router'
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 
 export default function index() {
   let dispatch = useDispatch();
-  let restaurant = useSelector((state:any) => state.restoReducer.resto);
-  // console.warn(restaurant);
-
-  // restaurant.map( (resto:any) => {
-  //   console.log('satu1: ', resto);
-  // })
+  let restaurant = useSelector((state:any) => state.restoReducer.resto); 
+  let router = useRouter()
+  
+  console.log(restaurant);
+  
+  // PAGINATION
+  
+  const [currentpage, setCurrentPage] = useState(1);
+  function handlePagination(page:any){
+    setCurrentPage(page)
+  }
 
   useEffect( () => {
-    dispatch(doRestoRequest())
-  })
+    dispatch(doRestoRequest(currentpage))
+  },[currentpage])
 
-    let router = useRouter()
   function seeMenus(hotel:any){
     const hotel_name = hotel.hotel_name;
     const faci_name = hotel.faci_name;
@@ -40,7 +45,7 @@ export default function index() {
         faci_id
       },
     })
-  }
+  } 
   return (
     <>
       <Head>
@@ -50,8 +55,9 @@ export default function index() {
         <link rel="icon" href="/assets/Hotel_Icon.png" />
       </Head>
       <main>
-        <Layouts>
-          {/* <Hero/> */}
+        <Layouts> 
+          <br />
+          <br />
         
           <div className='-z-10'>
           <Carousel autoplay>
@@ -60,26 +66,26 @@ export default function index() {
             <img src="/assets/resto/3.jpg" alt="Restaurant" className='w-full object-cover h-80' />
           </Carousel>
           </div>
-          <div className='mt-5 '>
-            <h1 className='text-2xl text-center'>HOTEL REALTA SYSTEM RESTAURANT LIST</h1>
+          <div className='my-20 '>
+            <h1 className='text-2xl text-center font-bold'>HOTEL REALTA SYSTEM RESTAURANT LIST</h1>
 
-            <hr className='my-5 border-t-2' />
+            {/* <hr className='my-10 border-t-2' /> */}
 
             <div className='container mx-auto '>
 
               {
-                restaurant && restaurant.map( (hotel:any,index:any) =>
+                restaurant.data && restaurant.data.map( (hotel:any,index:any) =>
                   <>
-                    <div className='border rounded-lg shadow-lg p-3 flex my-5 hover:bg-slate-100'>
+                    <div className='border rounded-lg shadow-lg p-3 flex my-10 hover:bg-slate-100 bg-white'>
                       <img  src={`/assets/resto/${index+1}.jpg`} alt='Resto' width={250} height={250}></img>
                       <div className='ml-5'>
-                        <h1 className='text-xl'>{hotel.hotel_name}</h1>
+                        <h1 className='text-xl font-bold'>{hotel.hotel_name}</h1>
                         <h2 className='text-lg'>{hotel.faci_name}</h2>
                         <p>{hotel.faci_description}</p>
                         <div className='mt-4 right'>
-                          <a onClick={ () => seeMenus(hotel)} className='inline-block px-5 py-2 bg-slate-600 text-white rounded shadow uppercase'>
-                            See Menus
-                          </a>
+                          <Buttons funcs={ () => seeMenus(hotel)}>
+                            See menu
+                          </Buttons>
                         </div>
                       </div>
 
@@ -87,6 +93,10 @@ export default function index() {
                   </>
                 )
               }
+
+              
+              <Pagination onChange={handlePagination} current={currentpage} total={restaurant.counts} className='text-center py-14' />
+
             </div>
 
           </div>
@@ -95,8 +105,4 @@ export default function index() {
     </>
 
   )
-}
-function jwtDecode(token: string | null) {
-  throw new Error('Function not implemented.')
-}
-
+} 

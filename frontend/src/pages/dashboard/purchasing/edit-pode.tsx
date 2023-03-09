@@ -46,28 +46,28 @@ export default function EditPodes(props: any) {
                         name="podhe_stock_name" label='Stock'
                         rules={[{ required: true, message: 'Please input stock order!' }]}
                     >
-                        <Input />
+                        <Input disabled />
                     </Form.Item>
 
                     <Form.Item
                         name="podhe_order_qty" label='Order Qty'
                         rules={[{ required: true, message: 'Please input order quantity!' }]}
                     >
-                        <Input />
+                        <Input onChange={eventHandler("podhe_order_qty")} />
                     </Form.Item>
 
                     <Form.Item
                         name="podhe_received_qty" label='Received'
                         rules={[{ required: true, message: 'Please input order received quantity!' }]}
                     >
-                        <Input />
+                        <Input onChange={eventHandler("podhe_received_qty")} />
                     </Form.Item>
 
                     <Form.Item
                         name="podhe_rejected_qty" label='Rejected'
                         rules={[{ required: true, message: 'Please input order rejected quantity!' }]}
                     >
-                        <Input />
+                        <Input onChange={eventHandler("podhe_rejected_qty")} />
                     </Form.Item>
 
                     <Form.Item label=" " colon={false}>
@@ -84,7 +84,6 @@ export default function EditPodes(props: any) {
                             </div>
                         </div>
                     </Form.Item>
-
                 </Form>
             </Modal>
         </>

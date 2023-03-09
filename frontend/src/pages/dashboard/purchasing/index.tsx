@@ -3,7 +3,8 @@ import { Tabs, TabsProps } from 'antd';
 import Dashboard from '@/layouts/dashboard';
 import Stock from './stock';
 import Vendor from './vendor';
-import Pohe from './pohe';
+import Pohe from './order';
+import Cart from './cart';
 
 export default function index() {
   const onChange = (key: string) => {
@@ -25,7 +26,12 @@ export default function index() {
       key: '3',
       label: `Purchase Order Header`,
       children: [<Pohe />]
-    }
+    },
+    // {
+    //   key: '4',
+    //   label: `Cart Order`,
+    //   children: [<Cart />]
+    // }
   ]
 
   return (

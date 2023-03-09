@@ -36,7 +36,7 @@ export class UsersController {
   
 
   @Post()
-  async register(@Body() data,): Promise<any> {
+  async register(@Body() data): Promise<any> {
     return await this.UsersService.register(data);
   }
 

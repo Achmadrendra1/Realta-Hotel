@@ -21,7 +21,7 @@ export class OrderMenusController {
  
     @Post('/order')
     getOrderNumber(@Body() data){
-        console.log('data controller', data);
+        // console.log('data controller', data);
         
         return this.orderMenusService.getOrderNumber(data);
     }

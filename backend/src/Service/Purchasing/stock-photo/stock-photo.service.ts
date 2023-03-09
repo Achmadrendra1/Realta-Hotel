@@ -17,29 +17,32 @@ export class SphoService {
   async findSphoId(id: number): Promise<any> {
     return await this.sphoRepository.find(
       { where: { sphoId: id } }
-    );
+    )
   }
 
   async findSphoName(stockPhoto: StockPhoto): Promise<any> {
     return await this.sphoRepository.find(
       { where: { sphoPhotoFilename: Like('%' + stockPhoto.sphoPhotoFilename + '%') } }
-    );
+    )
   }
 
-  async addSpho(stockPhoto: StockPhoto): Promise<any> {
-    await this.sphoRepository.save(
-      {
-        sphoThumbnailFilename: stockPhoto.sphoThumbnailFilename,
-        sphoPhotoFilename: stockPhoto.sphoPhotoFilename,
-        sphoPrimary: stockPhoto.sphoPrimary,
-        sphoUrl: stockPhoto.sphoUrl,
-        sphoStock: stockPhoto.sphoStock,
-      }
-    )
-    const res = await this.findAllSpho()
-    return (
-      { message: `Congrats, you have new Stock photo`, result: res }
-    )
+  async addSpho(url: any, stockPhoto: StockPhoto): Promise<any> {
+    for (const data of url) {
+      await this.sphoRepository.save(
+        {
+          sphoThumbnailFilename: data.originalname,
+          sphoPhotoFilename: data.filename,
+          sphoPrimary: stockPhoto.sphoPrimary,
+          sphoUrl: data.filename,
+          sphoStock: stockPhoto.sphoStock
+        }
+      )
+      const res = await this.findAllSpho()
+      return (
+        { message: `Congrats, you have new Stock photo`, result: res }
+      )
+    }
+
   }
 
   async editSpho(id: number, spho: StockPhoto): Promise<any> {
@@ -51,9 +54,9 @@ export class SphoService {
         sphoPhotoFilename: spho.sphoPhotoFilename,
         sphoPrimary: spho.sphoPrimary,
         sphoUrl: spho.sphoUrl,
-        sphoStock: spho.sphoStock,
+        sphoStock: spho.sphoStock
       })
-      return { message: `Congrats, you're stock photo has been changed` };
+      return { message: `Congrats, you're stock photo has been changed` }
     } catch (error) {
       throw new HttpException({
         message: error.message

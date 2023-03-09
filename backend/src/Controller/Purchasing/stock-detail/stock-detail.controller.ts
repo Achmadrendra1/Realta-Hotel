@@ -15,26 +15,26 @@ export class StodController {
 
   @Get()
   getStod() {
-    return this.stodService.findAllStod();
+    return this.stodService.findAllStod()
   }
 
   @Get(':id')
   getStodId(@Param() params: any) {
-    return this.stodService.findStodId(params.id);
+    return this.stodService.findStodId(params.id)
   }
 
   @Post()
   createStod(@Body() body: any) {
-    return this.stodService.addNewStod(body);
+    return this.stodService.addNewStod(body)
   }
 
   @Put(':id')
   updateStod(@Param() params: any, @Body() body: any) {
-    return this.stodService.editStod(params.id, body);
+    return this.stodService.editStod(params.id, body)
   }
 
   @Delete(':id')
   deleteStod(@Param() params: any) {
-    return this.stodService.dropStod(params.id);
+    return this.stodService.dropStod(params.id)
   }
 }
