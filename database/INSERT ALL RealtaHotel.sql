@@ -1587,6 +1587,76 @@ booking.special_offers
 VALUES
 	(20, 'WorkFromHotel', 'Discount, WFH 2023 Travel Agent', 'Travel Agent', 125000, '2023-02-6', '2023-02-27', '1', '25', current_timestamp);
 
+--21
+INSERT INTO 
+booking.special_offers
+(spof_name, spof_description, spof_type, spof_discount, spof_start_date, spof_end_date, spof_min_qty, spof_max_qty, spof_modified_date) 
+VALUES
+('STAYWITHCODEX', 'Diskon Staycation Code X - Travel Agent', 'Travel Agent', 200000,'2023-03-1','2023-04-1','1', '10', current_timestamp);
+
+--22
+INSERT INTO 
+booking.special_offers
+(spof_name, spof_description, spof_type, spof_discount, spof_start_date, spof_end_date, spof_min_qty, spof_max_qty, spof_modified_date) 
+VALUES
+('CODEXHOLIDAY', 'Diskon Holiday Code X - Individual', 'Individual', 225000,'2023-03-2','2023-05-2','1', '15', current_timestamp);
+
+--23
+INSERT INTO 
+booking.special_offers
+(spof_name, spof_description, spof_type, spof_discount, spof_start_date, spof_end_date, spof_min_qty, spof_max_qty, spof_modified_date) 
+VALUES
+('CODEXOUTING', 'Diskon Outing Code X - Corporate', 'Corporate', 175000,'2023-03-3','2023-04-3','1', '7', current_timestamp);
+
+--24
+INSERT INTO 
+booking.special_offers
+(spof_name, spof_description, spof_type, spof_discount, spof_start_date, spof_end_date, spof_min_qty, spof_max_qty, spof_modified_date) 
+VALUES
+('CODEXRAMADHAN', 'Diskon Ramadhan Code X - Travel Agent', 'Travel Agent', 325000,'2023-03-1','2023-04-1','1', '10', current_timestamp);
+
+--25
+INSERT INTO 
+booking.special_offers
+(spof_name, spof_description, spof_type, spof_discount, spof_start_date, spof_end_date, spof_min_qty, spof_max_qty, spof_modified_date) 
+VALUES
+('CODEXFASTING', 'Diskon Fasting Code X - Individual', 'Individual', 275000,'2023-03-2','2023-05-2','1', '15', current_timestamp);
+
+--26
+INSERT INTO 
+booking.special_offers
+(spof_name, spof_description, spof_type, spof_discount, spof_start_date, spof_end_date, spof_min_qty, spof_max_qty, spof_modified_date) 
+VALUES
+('CODEXIEDFITR', 'Diskon Ied Fitr Code X - Corporate', 'Corporate', 250000,'2023-03-3','2023-04-3','1', '7', current_timestamp);
+
+--27
+INSERT INTO 
+booking.special_offers
+(spof_name, spof_description, spof_type, spof_discount, spof_start_date, spof_end_date, spof_min_qty, spof_max_qty, spof_modified_date) 
+VALUES
+('CODEXYEAREND', 'Diskon Year End Code X - Travel Agent', 'Travel Agent', 285000,'2023-03-1','2023-04-1','1', '10', current_timestamp);
+
+--28
+INSERT INTO 
+booking.special_offers
+(spof_name, spof_description, spof_type, spof_discount, spof_start_date, spof_end_date, spof_min_qty, spof_max_qty, spof_modified_date) 
+VALUES
+('CODEXYEAREND', 'Diskon Year End Code X - Individual', 'Individual', 315000,'2023-03-2','2023-05-2','1', '15', current_timestamp);
+
+--29
+INSERT INTO 
+booking.special_offers
+(spof_name, spof_description, spof_type, spof_discount, spof_start_date, spof_end_date, spof_min_qty, spof_max_qty, spof_modified_date) 
+VALUES
+('CODEXYEAREND', 'Diskon Year End Code X - Corporate', 'Corporate', 245000,'2023-03-3','2023-04-3','1', '7', current_timestamp);
+
+--30
+INSERT INTO 
+booking.special_offers
+(spof_name, spof_description, spof_type, spof_discount, spof_start_date, spof_end_date, spof_min_qty, spof_max_qty, spof_modified_date) 
+VALUES
+('CODEXBATCH#1', 'Diskon Batch#1 Code X - Individual', 'Individual', 485000,'2023-03-3','2023-04-3','1', '7', current_timestamp);
+
 --Insert Booking.order_detail
 --1
 INSERT INTO booking.booking_order_detail
