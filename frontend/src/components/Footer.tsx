@@ -34,7 +34,7 @@ const Footer = ({service} : {service:any}) =>{
         }
     ]
     return(
-        <Layout className="bg-slate-100 px-5">
+        <Layout className="bg-[#f2f1fa] px-5">
             <div className="w-5/6 m-auto py-8">
                 <Row gutter={{ xs: 8, sm: 16, md: 24, lg: 32 }} justify='space-between'>
                     <Col span={5}>
@@ -76,7 +76,7 @@ const Footer = ({service} : {service:any}) =>{
                 </Row>
             </div>
             <div className="text-center py-3">
-                <p className="text-sm text-gray-500">Copyright by Team 2 Code X academy Batch 1</p>
+                <p className="text-sm text-gray-500">Copyright by Team 2 Code X Academy Batch 1</p>
             </div>
         </Layout>
     )
