@@ -22,10 +22,7 @@ export class BookingOrderDetailExtraController {
 
     @Post('createArray')
     createExtraMultiple(@Body() body){
-        const result =  this.BookingOrderDetailExtraService.createExtraMultiple(body)
-        if(result){
-            return "WOW"
-        }
+        return this.BookingOrderDetailExtraService.createExtraMultiple(body)
     }
 
     @Put('edit/:id')

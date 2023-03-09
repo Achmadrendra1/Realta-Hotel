@@ -220,12 +220,12 @@ export default Auth ( function Register(): any {
                           <Col className="ml-6">
                             <Avatar
                               size={45}
-                              src="/img/loginpict/aryadi.jpeg"
+                              src="/img/loginpict/hola.jpg"
                             />
                           </Col>
                           <Col className="ml-3">
                             <h1 className="font-semibold text-sm text-[#000000] ">
-                              Aryasa Miftah Mubaraq Siagian
+                              Abraham Winchester
                             </h1>
                             <p className="font-normal text-xs text-[#000000]">
                               Quality Assurance

@@ -5,6 +5,7 @@ import {
   Carousel,
   Col,
   DatePicker,
+  Divider,
   Form,
   Input,
   InputNumber,
@@ -185,12 +186,12 @@ export default function bookingRoom() {
     },
     {
       key: "action",
-      render: (text: any, record: any, index: any) => (
+      render: ( record: any) => (
         <div className="flex justify-end">
           <button onClick={() => handleValueExtra(record.pritId)}>Add</button>
         </div>
       ),
-    },
+    }
   ];
 
   //Table untuk Booking Extra
@@ -213,7 +214,7 @@ export default function bookingRoom() {
     },
     {
       title: (
-        <div className="float-right">
+        <div>
           <button onClick={() => setAddExtra(true)}>Add</button>
         </div>
       ),
@@ -221,7 +222,7 @@ export default function bookingRoom() {
       render: (text: any, record: any, index: any) => (
         <button onClick={() => handleDelete(index)}>Delete</button>
       ),
-    },
+    }
   ];
 
   //Looping Map untuk menampilkan data booking extra
@@ -297,7 +298,7 @@ export default function bookingRoom() {
   const { RangePicker } = DatePicker;
 
   //Configure Date untuk Booking
-  const dateFormat = "DD MM YYYY";
+  const dateFormat = "YYYY-MM-DD";
   const disabledDate = (current: any, checkInDate: any) => {
     if (checkInDate) {
       return (
@@ -339,6 +340,8 @@ export default function bookingRoom() {
       setNumDays(null);
     }
   };
+
+  console.log(new Date());
 
   const [dataBooking, setDataBooking] = useState({
     boor_user_id: 0,
@@ -594,10 +597,10 @@ export default function bookingRoom() {
     }
   };
 
-  const handleAddExtra = () => {
-    dispacth(insertBookingExtra(dataExtra));
-    console.log(dataExtra);
-  };
+  // const handleAddExtra = () => {
+  //   dispacth(insertBookingExtra(dataExtra));
+  //   console.log(dataExtra);
+  // };
 
   const handleAdultsValue = (value: any) => {
     setDataBooking({ ...dataBooking, borde_adults: value });
@@ -849,7 +852,7 @@ export default function bookingRoom() {
                         <div className="flex">
                           {/* <Rate allowHalf disabled defaultValue={hotel.hotel_rating_star} /> */}
                           <div>
-                            <div className="flex border-2 rounded items-center justify-center w-20 h-10 text-2xl">
+                            <div className="flex border-0 rounded items-center justify-center w-20 h-10 text-2xl">
                               <h2>{rating}</h2>
                               <div className="flex justify-center">
                                 <img
@@ -864,7 +867,7 @@ export default function bookingRoom() {
                                   ({allReview} Ratings)
                                 </h2>
                               </div>
-                              <div className="flex justify-center ml-3">
+                              <div className="flex justify-center ml-3 font-semibold italic">
                                 <h2>{ratingClass}</h2>
                               </div>
                             </div>
@@ -872,7 +875,7 @@ export default function bookingRoom() {
                         </div>
                       </div>
                       <div className="text-l mt-2">
-                        <p>
+                        <p className="italic">
                           {hotel.length > 0 && (
                             <Link href={`${maps}${hotel[0].place}`}>
                               {hotel[0].place}
@@ -891,35 +894,35 @@ export default function bookingRoom() {
                         <p>Amenities</p>
                       </div>
                       <div className="flex">
-                        <div className="flex items-center mr-2">
-                          <HiUserGroup /> Meeting Room
+                        <div className="flex items-center mr-5">
+                          <HiUserGroup className="mr-2" /> Meeting Room
                         </div>
-                        <div className="flex items-center mr-2">
-                          <IoRestaurantSharp /> Restaurant
+                        <div className="flex items-center mr-5">
+                          <IoRestaurantSharp className="mr-2" /> Restaurant
                         </div>
-                        <div className="flex items-center mr-2">
-                          <BiSwim /> Swimming Pool
-                        </div>
-                        <div
-                          className={`${
-                            more ? "block flex items-center mr-2" : "hidden"
-                          }`}
-                        >
-                          <HiUserGroup /> Ballroom
+                        <div className="flex items-center mr-5">
+                          <BiSwim className="mr-2" /> Swimming Pool
                         </div>
                         <div
                           className={`${
-                            more ? "block flex items-center mr-2" : "hidden"
+                            more ? "block flex items-center mr-5" : "hidden"
                           }`}
                         >
-                          <CgGym /> Gym
+                          <HiUserGroup className="mr-2" /> Ballroom
                         </div>
                         <div
                           className={`${
-                            more ? "block flex items-center mr-2" : "hidden"
+                            more ? "block flex items-center mr-5" : "hidden"
                           }`}
                         >
-                          <HiUserGroup /> Aula
+                          <CgGym className="mr-2" /> Gym
+                        </div>
+                        <div
+                          className={`${
+                            more ? "block flex items-center mr-5" : "hidden"
+                          }`}
+                        >
+                          <HiUserGroup className="mr-2" /> Aula
                         </div>
                         <div className="flex items-center">
                           <button
@@ -948,13 +951,15 @@ export default function bookingRoom() {
                   let arrPict = pict.split(",");
                   return (
                     <div>
-                      <Card>
+                      <Card className="mb-3 shadow-lg">
                         <Row>
                           <Col span={16}>
-                            <div className="text-xl">{room.faci_name}</div>
+                            <div className="text-xl font-semibold">
+                              {room.faci_name}
+                            </div>
                             <div>Max Vacant : {room.faci_max_number}</div>
                             <div className="flex">
-                              <div className="flex text-xl items-center mr-3">
+                              <div className="flex text-xl items-center mr-3 text-red-500 font-semibold">
                                 {room.faci_rate_price}
                               </div>
                               <div className="flex text-l text-decoration-line: line-through items-center">
@@ -971,7 +976,7 @@ export default function bookingRoom() {
                                   className="w-3/4 rounded border-2"
                                 />
                               </div>
-                              <div className="flex justify-center">
+                              <div className="flex justify-center mt-5">
                                 <Buttons
                                   funcs={() => handleButtonSelected(index)}
                                 >
@@ -992,7 +997,7 @@ export default function bookingRoom() {
                 <Row>
                   <Col span={10} className="flex justify-center">
                     <div>
-                      <div className="flex border-2 rounded items-center justify-center w-20 h-10 text-2xl">
+                      <div className="flex border-0 rounded items-center justify-center w-20 h-10 text-2xl">
                         <h2>{rating}</h2>
                         <div className="flex justify-center">
                           <img
@@ -1001,7 +1006,7 @@ export default function bookingRoom() {
                           />
                         </div>
                       </div>
-                      <div className="flex justify-center">
+                      <div className="flex justify-center font-semibold italic">
                         <h2>{ratingClass}</h2>
                       </div>
                       <div className="flex justify-center">
@@ -1137,7 +1142,7 @@ export default function bookingRoom() {
               {oneReview &&
                 oneReview.map((hotelReview: any) => {
                   return (
-                    <div>
+                    <div className="mb-2">
                       <div className="flex items-center">
                         <div className="text-xl mr-5 font-semibold">
                           {hotelReview.user_full_name}
@@ -1150,33 +1155,38 @@ export default function bookingRoom() {
                           </p>
                         </div>
                       </div>
-                      <div>{hotelReview.hore_user_review}</div>
+                      <p className="italic">{hotelReview.hore_user_review}</p>
                     </div>
                   );
                 })}
             </div>
+            <Divider />
             <div>
               <p className="text-2xl font-semibold my-2">Hotel Policies</p>
             </div>
-            <div className="flex">
-              <div className="mr-14 text-l">Checkin</div>
-              <div className="text-l">Checkout</div>
+            <div className="my-2">
+              <div className="flex">
+                <div className="mr-14 text-l">Checkin</div>
+                <div className="text-l">Checkout</div>
+              </div>
+              <div className="flex mb-1">
+                <div className="mr-4 text-xl font-semibold">02:00 PM</div>
+                <div className="text-xl font-semibold">12:00 PM</div>
+              </div>
             </div>
-            <div className="flex mb-1">
-              <div className="mr-4 text-xl font-semibold">02:00 PM</div>
-              <div className="text-xl font-semibold">12:00 PM</div>
-            </div>
-            <div>
-              <CaretRightFilled /> Cancellation policy, Notify 24 hours prior to
-              arrival for full refund.
-            </div>
-            <div>
-              <CaretRightFilled /> Insurance policy, Guests responsible for lost
-              or stolen items.
-            </div>
-            <div>
-              <CaretRightFilled /> Hospitality, Providing excellent service to
-              exceed guest expectations.
+            <div className="my-2">
+              <div>
+                <CaretRightFilled /> Cancellation policy, Notify 24 hours prior
+                to arrival for full refund.
+              </div>
+              <div>
+                <CaretRightFilled /> Insurance policy, Guests responsible for
+                lost or stolen items.
+              </div>
+              <div>
+                <CaretRightFilled /> Hospitality, Providing excellent service to
+                exceed guest expectations.
+              </div>
             </div>
           </Col>
 
@@ -1186,7 +1196,7 @@ export default function bookingRoom() {
                 setDetail(!detail), setPayment(!payment);
               }}
             >
-              <div className="flex">
+              <div className="flex my-2">
                 <div className="flex text-xl items-center mr-3">
                   <LeftOutlined />
                 </div>
@@ -1195,7 +1205,7 @@ export default function bookingRoom() {
                 </div>
               </div>
             </button>
-            <div className="font-bold text-2xl">
+            <div className="font-bold text-2xl mt-2">
               <p>1. Enter Your Details</p>
             </div>
             <div className="text-xl items-center my-3">
@@ -1211,7 +1221,7 @@ export default function bookingRoom() {
                     <Input
                       value={getUser[0] ? getUser[0].user_full_name : "None"}
                       className="w-3/4"
-                      disabled
+                      readOnly
                     ></Input>
                   </div>
                 </div>
@@ -1224,7 +1234,7 @@ export default function bookingRoom() {
                   <div>
                     <Input
                       value={getUser[0] ? getUser[0].user_email : "None"}
-                      disabled
+                      readOnly
                       className="w-3/4"
                     />
                   </div>
@@ -1240,14 +1250,14 @@ export default function bookingRoom() {
                   <div className="mb-5">
                     <Input
                       value={getUser[0] ? getUser[0].user_phone_number : "None"}
-                      disabled
+                      readOnly
                       className="w-3/4"
                     />
                   </div>
                 </div>
               </Col>
             </Row>
-            <div className="font-bold text-2xl">
+            <div className="font-bold text-2xl my-3">
               <p>2. Complete your booking</p>
             </div>
             <div className="text-xl items-center my-3">
@@ -1269,18 +1279,8 @@ export default function bookingRoom() {
                 </div>
               </Modal>
               <Table columns={columnsExtra} dataSource={dataExtra} />
-              <button onClick={handleAddExtra}>Finish</button>
             </div>
             <div className="flex justify-between">
-              {/* <div className='flex justify-between'>
-                                Total Booking Extra
-                            </div>
-                            <div className='flex justify-between'>
-                                {extraTotal.extraSubTotal}
-                            </div>
-                            <div className='flex justify-between'>
-                                <button>Simpan</button>
-                            </div> */}
             </div>
             <div className={`${payment ? "block" : "hidden"}`}>
               <div className="font-bold text-2xl">
@@ -1530,25 +1530,24 @@ export default function bookingRoom() {
               </div>
             </div>
           </Col>
-          <Col span={10}>
-            <div className="sticky top-0 border-4 shadow-lg p-3 rounded-lg">
-              <div className="flex justify-center font-extrabold text-3xl">
+          <Col span={10} >
+            <div className="sticky top-0 border-4 shadow-lg p-5 rounded-lg bg-white">
+              <div className="flex justify-center font-bold text-3xl">
                 Booking Order Details
               </div>
-              <div>
                 <h1 className="font-bold text-lg mt-4">
                   {dataBooking.boor_order_number}
                 </h1>
-              </div>
+              <Divider/>
               <div className="flex text-center mt-3 items-center">
-                <div className="flex text-2xl font-bold text-center">
+                <div className="flex text-2xl font-bold text-center text-red-500">
                   <p>{priceRoom.faci_rate_price}</p>
                 </div>
                 <div className="flex ml-2 text-m line-through text-center">
                   <p>{priceRoom.faci_high_price}</p>
                 </div>
               </div>
-              <p className="my-3">Include Tax</p>
+              <p className="my-3 italic">Include Tax</p>
               <Row gutter={10}>
                 <Col span={12}>
                   <p>Please input date :</p>
@@ -1621,7 +1620,7 @@ export default function bookingRoom() {
                       typeSpof.map((spof: any, index: any) => {
                         return (
                           <div>
-                            <Card>
+                            <Card className="mb-3">
                               <Row>
                                 <Col span={16}>
                                   <div className="flex items-center mb-3">
@@ -1656,7 +1655,7 @@ export default function bookingRoom() {
                   </Modal>
                   <Buttons funcs={() => setSpofOpen(true)}>Get Coupons</Buttons>
                 </div>
-                <div className="text-xl font-semibold">
+                <div className="text-xl font-semibold italic">
                   {spofPrice.spofName}
                 </div>
                 {/* <div>
@@ -1685,10 +1684,6 @@ export default function bookingRoom() {
                 <div className="flex text-l items-center">Total Price</div>
                 <div className="flex text-xl items-center">
                   <p>
-                    {/* {totalPrice.toLocaleString("id-ID", {
-                      style: "currency",
-                      currency: "IDR",
-                    })} */}
                     {dataBooking.boor_total_amount.toLocaleString("id-ID", {
                       style: "currency",
                       currency: "IDR",
@@ -1696,21 +1691,24 @@ export default function bookingRoom() {
                   </p>
                 </div>
               </div>
-              <div className="text-m">(Include Tax)</div>
+              <div className="text-m italic">Include Tax</div>
               <div className="flex justify-center mt-3">
                 <Button
                   onClick={handleReservation}
-                  className={`${detail ? "hidden" : "block"}`}
+                  className={`text-white bg-[#754CFF] ${detail ? "hidden" : "block"}`}
                 >
                   Reservation Booking
                 </Button>
                 <Button
                   // onClick={handleBookingCode}
                   onClick={() => {
-                    setPayment(!payment), console.log(dataBooking, dataPayment);
+                    setPayment(!payment), 
+                    dispacth(insertBookingExtra(dataExtra)), 
+                    console.log(dataBooking, dataPayment)
                   }}
-                  className={`${!detail || payment ? "hidden" : "block"}`}
+                  className={`text-white bg-[#754CFF] ${!detail || payment ? "hidden" : "block"}`}
                 >
+                  {/* text-white bg-[#754CFF] */}
                   Continue to Booking Order
                 </Button>
               </div>
