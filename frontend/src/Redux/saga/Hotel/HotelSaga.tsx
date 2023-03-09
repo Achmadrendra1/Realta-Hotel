@@ -44,7 +44,7 @@ import { API, FORMAPI } from "@/Redux/Configs/consumeApi";
 import axios from "axios";
 import { call, put } from "redux-saga/effects";
 
-function* handleLanding(action:any): any {
+function* handleLanding(): any {
   try {
     const result = yield axios(API("Get",`/landing`))
     yield put(getLandingSuccess(result.data))
