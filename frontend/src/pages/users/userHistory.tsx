@@ -1,9 +1,15 @@
 import withAuth from "@/PrivateRoute/WithAuth";
 import { getSpInvoice } from "@/Redux/Action/Booking/BookingAction";
-import { Card, Empty, List } from "antd";
+import { RightOutlined } from "@ant-design/icons";
+import { Card, Empty, List, Space, Tooltip } from "antd";
+import {
+  PaginationAlign,
+  PaginationPosition,
+} from "antd/es/pagination/Pagination";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { CgLayoutGrid } from "react-icons/cg";
+import { IoListOutline } from "react-icons/io5";
 import { useDispatch, useSelector } from "react-redux";
 
 export default withAuth(function UserHistory() {
@@ -25,7 +31,7 @@ export default withAuth(function UserHistory() {
 
   const date = new Date();
 
-  const format = {
+  const format:any = {
     day: "2-digit",
     month: "short",
     year: "numeric",
@@ -34,13 +40,62 @@ export default withAuth(function UserHistory() {
   const dateFormatter = new Intl.DateTimeFormat("id-ID", format);
   const currentDate = dateFormatter.format(date);
 
+  const [position, setPosition] = useState<PaginationPosition>("bottom");
+  const [align, setAlign] = useState<PaginationAlign>("end");
+  const router = useRouter();
+
   return (
     <div>
       <Card>
-        <h1 className="font-bold text-align-center">My History Booking</h1>
+        <h1 className="font-bold text-md">My History Booking</h1>
       </Card>
-      <List className="pb-4">
-        {Invoice.length != 0 ? (
+      <List
+        className="pb-4"
+        dataSource={Invoice}
+        pagination={{ position, align, pageSize: 5 }}
+        renderItem={(item: any) => (
+          <Card
+            title={item.boor_order_number}
+            className="mb-1 mt-2 w-full"
+            extra={
+              <Space>
+                <p>{item.boor_order_date.split("T")[0]}</p>
+                <Tooltip title="See Invoice">
+                  <p>
+                    <RightOutlined
+                      className="hover:cursor-pointer"
+                      onClick={() => router.push({
+                        pathname:"/booking/room/invoice",
+                        query:{id : item.boor_order_number}
+                      })}
+                    />
+                  </p>
+                </Tooltip>
+              </Space>
+            }
+          >
+            <div>
+              <div className="flex justify-between">
+                <p className=" text-lg font-bold">{item.hotel_name} </p>
+                <p className=" text-md font-semibold">{item.boor_status}</p>
+              </div>
+              <div className="flex justify-between">
+                <p className="text-md font-semibold">{`${item.check_in_date} - ${item.check_out_date}`}</p>
+                <p className="text-lg font-bold">{item.boor_total_amount}</p>
+              </div>
+              <div className="flex justify-between">
+                <p className="text-md font-semibold">{`${item.total_guest} Tamu, ${item.boor_total_room} Kamar`}</p>
+                {item.check_in_date == currentDate && (
+                  <p className="text-sm font-medium text-red-600 hover:cursor-pointer hover:underline">
+                    Cancel Booking
+                  </p>
+                )}
+              </div>
+            </div>
+          </Card>
+        )}
+      >
+        {/* {Invoice.length != 0 ? (
           Invoice.map((item: any) => (
             <Card
               title={item.boor_order_number}
@@ -75,7 +130,7 @@ export default withAuth(function UserHistory() {
           ))
         ) : (
           <Empty className="mt-10 font-bold text-xl" />
-        )}
+        )} */}
       </List>
     </div>
   );

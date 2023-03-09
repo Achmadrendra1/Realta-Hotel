@@ -19,7 +19,7 @@ export default function index() {
     (state: any) => state.BoorInvoiceReducer.invoice
   );
 
-  console.log(invoiceView);
+  // console.log(invoiceView);
 
   useEffect(() => {
     dispatch(getSpInvoice());
@@ -29,11 +29,13 @@ export default function index() {
     (item: any) => item.boor_order_number === id
   );
 
+  // console.log(Invoice[0]?.payment_Type)
+
   const boor_order_number =
     Invoice?.length > 0 ? Invoice[0].boor_order_number : "";
   const boor_order_date = Invoice?.length > 0 ? Invoice[0].boor_order_date : "";
   const boor_is_paid = Invoice?.length > 0 ? Invoice[0]?.boor_paid : "";
-  const boor_pay_type = Invoice?.length > 0 ? Invoice[0].payment_type : "";
+  const boor_pay_type = Invoice?.length > 0 ? Invoice[0]?.payment_Type : "" ;
   const user_full_name = Invoice?.length > 0 ? Invoice[0].user_full_name : "";
   const user_phone_number =
     Invoice?.length > 0 ? Invoice[0].user_phone_number : "";

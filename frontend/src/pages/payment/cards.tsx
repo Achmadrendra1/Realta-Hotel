@@ -27,6 +27,7 @@ import {
   doUsacRequest,
 } from "@/Redux/Action/Payment/paymentDashAction";
 import { doGetAllBank, doGetHistory } from "@/Redux/Action/Payment/paymentUserAction";
+import { PaginationAlign, PaginationPosition } from "antd/es/pagination/Pagination";
 
 export default function Cards() {
   const dispatch = useDispatch();
@@ -112,6 +113,9 @@ export default function Cards() {
   const handleClose = (data: boolean) => {
     setOpenAdd(data)
   }
+
+  const [position, setPosition] = useState<PaginationPosition>('bottom');
+  const [align, setAlign] = useState<PaginationAlign>('end');
   return (
     <>
       <Head>
@@ -236,17 +240,13 @@ export default function Cards() {
             </div>
             <List
               className="pb-4"
-              pagination={{
-                current: currentPage,
-                total: total,
-                pageSize: 10,
-              }}
-            >
-              {dataHistory.length != 0 ? dataHistory.map((item: any) => (
+              dataSource={dataHistory}
+              pagination={{ position, align,pageSize:5 }}
+              renderItem={(item:any) => (
                 <Card
                   title={item.transactionNumber}
                   extra={item.trxDate?.split("T")[0]}
-                  className="m-4"
+                  className="mb-1 mt-2 w-full"
                 >
                   <div>
                     <div className="flex justify-between">
@@ -285,9 +285,9 @@ export default function Cards() {
                     </div>
                   </div>
                 </Card>
-              )) : (
-                <Empty className="mt-10 font-bold text-xl"/>
               )}
+
+            >
             </List>
           </div>
         </Layouts>

@@ -85,30 +85,30 @@ export default function index() {
           <Col span={6}>
             <Card style={{ width: 300 }}>
               <div className="flex justify-between items-center">
-                  <div className='text-2xl font-semibold'>
+                  <div className='text-xl font-semibold'>
                       <p>Filters</p>
                   </div>
                   <div>
-                    <button className='text-decoration-line: underline font-semibold' onClick={handleClear}>Clear All</button>
+                    <button className='text-sm font-semibold text-red-600' onClick={handleClear}>Clear All</button>
                   </div>
               </div>
               <div>
-                  <p className="text-xl py-3 font-semibold">Price Range</p>
+                  <p className="text-lg py-3 font-semibold">Price Range</p>
                   <div className="flex justift-between items-center">
                     <Col span={10}>
-                      <Input type="number" name="lowest" value={filter.lowest} onChange={handleChangePrice}/>
+                      <Input type="number" prefix="Rp." name="lowest" value={filter.lowest} onChange={handleChangePrice}/>
                     </Col>
-                      <p className="px-1">Sampai</p>
+                      <p className="px-1">-</p>
                     <Col span={10}>
-                      <Input type="number" name="highest" value={filter.highest} onChange={handleChangePrice}/>
+                      <Input type="number" name="highest" prefix="Rp." value={filter.highest} onChange={handleChangePrice}/>
                     </Col>
                   </div>
               </div>
               <div>
-                  <p className="text-xl py-3 font-semibold ">Hotel Facilities</p>
+                  <p className="text-lg py-3 font-semibold ">Hotel Facilities</p>
                   <div>
                     <Checkbox.Group style={{ width: '100%' }} onChange={onChange}>
-                        <Row>
+                        <Row gutter={16}>
                           <Col span={24}>
                             <Checkbox value="Meeting Room">Meeting Room</Checkbox>
                           </Col>
@@ -131,18 +131,18 @@ export default function index() {
                       </Checkbox.Group>
                   </div>
                 <div className="py-1 font-bold">
-                  <button onClick={()=> setMore(!more)} className={`${more ? "hidden" : "block"}`}>+ View More</button>
-                  <button onClick={()=> setMore(!more)} className={`${!more ? "hidden" : "block"}`}>- Less More</button>
+                  <button onClick={()=> setMore(!more)} className={`${more ? "hidden" : "block"} font-semibold`}>+ View More</button>
+                  <button onClick={()=> setMore(!more)} className={`${!more ? "hidden" : "block"} font-semibold`}>- Less More</button>
                 </div>
-                <div className="text-center">
-                  <Button onClick={handleFilter} className="">Filter</Button>
+                <div className="mt-4 text-center">
+                  <Buttons funcs={handleFilter}>Filter</Buttons>
                 </div>
               </div>
             </Card>
           </Col>
           <Col span={18}>
             <div>
-              <div className="mb-3">
+              {/* <div className="mb-3">
               <Breadcrumb separator=">">
                   <Breadcrumb.Item href="http://localhost:3000/">
                   Home
@@ -151,7 +151,7 @@ export default function index() {
                   Hotel
                   </Breadcrumb.Item>
               </Breadcrumb>
-              </div>
+              </div> */}
               <div>
                 {
                   mapHotel &&
@@ -165,7 +165,7 @@ export default function index() {
                     let pict = hotel?.url
                     let arrPict = pict?.split(",")
                     return (
-                      <Card key={index}>
+                      <Card key={index} className="mb-2 rounded-xl">
                         <Row>
                           <Col span={6} className="flex items-center">
                               <Row gutter={10}>
@@ -184,7 +184,7 @@ export default function index() {
                               </Row>
                           </Col>
                           <Col span={18}>
-                            <Card>
+                            <Card className="border-0">
                               <div>
                                   <p className="text-2xl">{
                                     hotel.hotel_name

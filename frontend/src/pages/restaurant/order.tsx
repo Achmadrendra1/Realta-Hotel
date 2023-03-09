@@ -642,7 +642,7 @@ function Order({orderNumberUser}:any) {
                       Complete Your Request
                     </div>
                   </a> */}
-                  <div className="flex-col">
+                  {/* <div className="flex-col">
                     <p>{finalForm.amount + " Amount"} </p>
                     <p>{finalForm.sourceNumber + " Source"} </p>
                     <p>{finalForm.targetNumber + " Target"} </p>
@@ -650,7 +650,7 @@ function Order({orderNumberUser}:any) {
                     <p>{finalForm.orderNumber + " order number"} </p>
                     <p>{finalForm.trxType + " trxtype"} </p>
                     <p>{finalForm.userId + " userID"}</p>
-                  </div>
+                  </div> */}
                 </div>
               </div>
             </div>

@@ -206,7 +206,7 @@ export default function TopUp(props: any) {
     <>
       {contextHolder}
       <Modal
-        title="Top Up H-Pay"
+        title={<span className="text-lg">Top Up H-Pay</span>}
         open={props.show}
         onOk={props.clickOk}
         confirmLoading={confirmLoading}
@@ -216,13 +216,13 @@ export default function TopUp(props: any) {
       >
         <Spin spinning={isLoading} size="large">
           <div className="">
-            <p>Select Nominal</p>
+            <p className="mb-2 font-semibold">Select Nominal</p>
             <Row gutter={16}>
               <Col span={8}>
                 <Button
                   onClick={() => selectBtn(10000)}
                   className={
-                    "border-2 w-32 h-10 focus:bg-blue-600 focus:text-white"
+                    "border-2 w-32 h-10 focus:bg-[#754cff]  hover:border-[#754cff] focus:text-white"
                   }
                 >
                   Rp. 10.000
@@ -232,7 +232,7 @@ export default function TopUp(props: any) {
                 <Button
                   onClick={() => selectBtn(20000)}
                   className={
-                    "border-2 w-32 h-10 focus:bg-blue-600 focus:text-white"
+                    "border-2 w-32 h-10 focus:bg-[#754cff]  hover:border-[#754cff] focus:text-white"
                   }
                 >
                   Rp. 20.000
@@ -242,7 +242,7 @@ export default function TopUp(props: any) {
                 <Button
                   onClick={() => selectBtn(50000)}
                   className={
-                    "border-2 w-32 h-10 focus:bg-blue-600 focus:text-white"
+                    "border-2 w-32 h-10 focus:bg-[#754cff]  hover:border-[#754cff] focus:text-white"
                   }
                 >
                   Rp. 50.000
@@ -254,7 +254,7 @@ export default function TopUp(props: any) {
                 <Button
                   onClick={() => selectBtn(100000)}
                   className={
-                    "border-2 w-32 h-10 focus:bg-blue-600 focus:text-white"
+                    "border-2 w-32 h-10 focus:bg-[#754cff]  hover:border-[#754cff] focus:text-white"
                   }
                 >
                   Rp. 100.000
@@ -264,7 +264,7 @@ export default function TopUp(props: any) {
                 <Button
                   onClick={() => selectBtn(150000)}
                   className={
-                    "border-2 w-32 h-10 focus:bg-blue-600 focus:text-white"
+                    "border-2 w-32 h-10 focus:bg-[#754cff]  hover:border-[#754cff] focus:text-white"
                   }
                 >
                   Rp. 150.000
@@ -274,7 +274,7 @@ export default function TopUp(props: any) {
                 <Button
                   onClick={() => selectBtn(200000)}
                   className={
-                    "border-2 w-32 h-10 focus:bg-blue-600 focus:text-white"
+                    "border-2 w-32 h-10 focus:bg-[#754cff]  hover:border-[#754cff] focus:text-white"
                   }
                 >
                   Rp. 200.000
@@ -282,33 +282,33 @@ export default function TopUp(props: any) {
               </Col>
             </Row>
             <div className="mt-4">
-              <label>Or Input Nominal</label>
+              <label className="font-semibold">Or Input Nominal</label>
               <Input
                 prefix="Rp."
                 placeholder="Input Nomimal Top Up"
                 type="number"
-                className="mr-4"
+                className="mr-4 mt-2"
                 value={value}
                 onChange={eventHandler}
               />
             </div>
             <div className="mt-4">
-              <label>Account Number</label>
-              <Input value={props.phone} readOnly className="mr-4" />
+              <label className="font-semibold">Account Number</label>
+              <Input value={props.phone} readOnly className="mr-4 mt-2  hover:border-[#754cff]" />
             </div>
             <div className="mt-4">
-              <p>Select Payment</p>
+              <p className="mb-2 font-semibold">Select Payment</p>
               <Select
                 placeholder="Select Card"
-                className="w-full"
+                className="w-full hover:border-[#754cff] focus:border-[#754cff]"
                 allowClear
                 options={optionsCard}
                 onChange={handleSelectChange}
               />
               {showSaldo ? (
                 <div className="mt-4">
-                  <label>Current Balance</label>
-                  <Input value={selectedOption.usacSaldo} prefix="Rp." />
+                  <label className="font-semibold">Current Balance</label>
+                  <Input value={selectedOption.usacSaldo} prefix="Rp." className="mt-2 hover:border-[#754cff] focus:border-[#754cff]"/>
                 </div>
               ) : null}
               <p className="text-center text-red-600 mt-2">{msg}</p>
@@ -316,7 +316,7 @@ export default function TopUp(props: any) {
 
             <div className="text-center">
               <Button
-                className="mt-4 flex m-auto bg-blue-600 text-white"
+                className="mt-4 flex m-auto bg-[#754cff] text-white"
                 onClick={showDrawer}
                 disabled={disBtn}
               >
@@ -345,7 +345,7 @@ export default function TopUp(props: any) {
                   value={value}
                   onChange={(event) => handleChangePin(index, event)}
                   onKeyDown={(event) => handleBackspace(index, event)}
-                  className="h-[45px] mx-4 focus:border-sky-500 w-[45px] text-center"
+                  className="h-[45px] mx-4 focus:border-[#754cff] w-[45px] text-center"
                 />
               ))}
             </div>
