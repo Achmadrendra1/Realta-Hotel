@@ -55,10 +55,10 @@ function* handleLanding(): any {
 }
 
 function* handleHotel(action:any): any {
-  
+  const { payload} = action
   try {
-    const pageQueryParam = action.payload?.page ? `page=${action.payload.page}` : '';
-    const keywordsQueryParam = action.payload?.keyword ? `&keyword=${action.payload.keyword}` : '';
+    const pageQueryParam = payload?.page ? `page=${payload.page}` : '';
+    const keywordsQueryParam = payload?.keyword ? `&keyword=${payload.keyword}` : '';
     const result = yield axios(API("Get", `/hotels?${pageQueryParam}${keywordsQueryParam}`));
     yield put(getHotelSuccess(result.data));
     return result.data;
