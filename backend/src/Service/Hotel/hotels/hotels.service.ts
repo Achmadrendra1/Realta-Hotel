@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Hotels } from 'src/entities/Hotels';
-import { Like, Repository } from 'typeorm';
+import { ILike, Like, Repository } from 'typeorm';
 
 @Injectable()
 export class HotelsService {
@@ -14,7 +14,7 @@ export class HotelsService {
     const take = query?.take || 10;
     const page = query?.page || 1;
     const skip = (page - 1) * take;
-    const keywords = query?.keywords || '';
+    const keyword = query?.keyword || '';
     const [data, total] = await this.hotelRepository.findAndCount({
       order: {
         hotelName: 'ASC',
@@ -28,7 +28,7 @@ export class HotelsService {
         hotelReviews: true,
         hotelAddr: true,
       },
-      where: { hotelName: Like(`%${keywords}%`) },
+      where: { hotelName: ILike(`%${keyword}%`) },
       skip,
       take,
     });

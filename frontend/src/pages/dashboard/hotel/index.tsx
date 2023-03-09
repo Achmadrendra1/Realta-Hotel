@@ -167,9 +167,9 @@ export default withAuth(function index() {
     dispatch(getHotel({ page: pagination }));
   };
 
-  const handleSearch = (e: any) => {
-    e
-      ? dispatch(getHotel({ page: 1, keyword: e.target.value }))
+  const handleSearch = (event: any) => {
+    event
+      ? dispatch(getHotel({ page: 1, keyword: event.target.value }))
       : dispatch(getHotel());
   };
 

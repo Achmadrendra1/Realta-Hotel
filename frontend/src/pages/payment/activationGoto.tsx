@@ -15,11 +15,9 @@ export default function ActivationGoto(props: any) {
 
   const pagaId = dataPaga?.filter((obj: any) => obj.pagaName === "GOTO")[0]
     ?.pagaEntityId;
-  console.log(pagaId);
-  const accNumber = dataUser[0]?.user_phone_number;
 
   const [formValues, setFormValues] = useState({
-    usacAccountNumber: accNumber,
+    usacAccountNumber: props.phone,
     usacEntityId: pagaId,
     usacType: "Payment",
     usacExpmonth: 0,
@@ -67,6 +65,7 @@ export default function ActivationGoto(props: any) {
     setError("");
     handleCancell(false);
     dispatch(doCreateAccount(formValues));
+    // console.log(formValues)
   };
   return (
     <>

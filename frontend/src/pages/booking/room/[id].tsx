@@ -310,7 +310,7 @@ export default function bookingRoom() {
   const currentDate = dateFormatter.format(date);
 
   //Configure Date untuk Booking
-  const dateFormat = "DD MM YYYY";
+  const dateFormat = "YYYY-MM-DD";
   const disabledDate = (current: any, checkInDate: any) => {
     if (checkInDate) {
       return (
@@ -646,7 +646,7 @@ export default function bookingRoom() {
     (state: any) => state.payUserAccReducer
   );
   const accNumberDompet = `131${user[0]?.user_phone_number}`;
-  const accNumberGoto = user[0]?.user_phone_number;
+  const accNumberGoto = user[0]?.user_phone_number.slice(1);
 
   useEffect(() => {
     setDataBooking({
@@ -833,7 +833,7 @@ export default function bookingRoom() {
           clickOk={handleOk}
           clickCancel={handleCancel}
           handleCancell={handleClose}
-          phone={user[0]?.user_phone_number}
+          phone={accNumberGoto}
           dataUser={user}
           dataPaga={payPaga}
         />
@@ -1304,7 +1304,9 @@ export default function bookingRoom() {
                   <Col span={8}>
                     <Card
                       size="small"
-                      className="m-4 font-bold text-[14px]"
+                      className={`m-4 font-bold text-[14px] ${
+                        isCash ? "bg-[#754cff] text-white" : ""
+                      }`}
                       hoverable
                       onClick={() => {
                         setIsCash(true),
@@ -1323,7 +1325,9 @@ export default function bookingRoom() {
                     </Card>
                     <Card
                       size="small"
-                      className="m-4 font-bold text-[14px]"
+                      className={`m-4 font-bold text-[14px] ${
+                        !isCash ? "bg-[#754cff] text-white" : ""
+                      }`}
                       hoverable
                       onClick={() => {
                         setIsCash(false),
@@ -1358,7 +1362,7 @@ export default function bookingRoom() {
                         </div>
                         <Button
                           onClick={onCompleteCash}
-                          className="mt-6 bg-blue-600 text-white w-full h-10"
+                          className="mt-6 bg-[#754cff] text-white w-full h-10"
                         >
                           Complete Order
                         </Button>
@@ -1372,7 +1376,7 @@ export default function bookingRoom() {
                             className={`mb-2 ${
                               selectCard.accNumber ===
                                 accDompet?.usacAccountNumber &&
-                              "bg-slate-500 text-white"
+                              "bg-[#754cff] text-white"
                             }`}
                             hoverable
                             onClick={() => {
@@ -1402,7 +1406,7 @@ export default function bookingRoom() {
                             </div>
                           </Card>
                         ) : (
-                          <Card size={"small"}>
+                          <Card size={"small"} className="mb-2">
                             <div className="flex justify-between items-center px-6">
                               <p className="text-[16px] font-semibold">
                                 Dompet Realta
@@ -1413,7 +1417,7 @@ export default function bookingRoom() {
                                   accDompet?.usacAccountNumber
                                     ? "text-white"
                                     : "text-blue-700"
-                                }`}
+                                } hover:cursor-pointer`}
                                 onClick={() => setShowActivation(true)}
                               >
                                 Activate
@@ -1422,44 +1426,57 @@ export default function bookingRoom() {
                           </Card>
                         )}
 
-                        <Card
-                          size={"small"}
-                          className={`mb-2 ${
-                            selectCard.accNumber ===
-                              accGoto?.usacAccountNumber &&
-                            "bg-slate-500 text-white"
-                          }`}
-                          hoverable
-                          onClick={() =>
-                            isLinked
-                              ? setSelectCard({
-                                  accNumber: accGoto?.usacAccountNumber,
-                                  balance: accGoto?.usacSaldo,
-                                })
-                              : ""
-                          }
-                        >
-                          <div className="flex justify-between px-6">
-                            <p className="text-[16px] font-semibold">GOTO</p>
-                            {isLinked ? (
+                        {isLinked ? (
+                          <Card
+                            size={"small"}
+                            className={`mb-2 ${
+                              selectCard.accNumber ===
+                                accGoto?.usacAccountNumber &&
+                              "bg-[#754cff] text-white"
+                            }`}
+                            hoverable
+                            onClick={() => {
+                              setSelectCard({
+                                accNumber: accGoto?.usacAccountNumber,
+                                balance: accGoto?.usacSaldo,
+                              });
+                              setDataPayment({
+                                ...dataPayment,
+                                sourceNumber: accGoto?.usacAccountNumber,
+                                targetNumber: "13198989898",
+                              });
+                              setDataBooking({
+                                ...dataBooking,
+                                boor_pay_type: "PG",
+                                boor_cardnumber: accGoto?.usacAccountNumber,
+                              });
+                            }}
+                          >
+                            <div className="flex justify-between px-6">
+                              <p className="text-[16px] font-semibold">GOTO</p>
                               <p className="text-[16px] font-semibold">
                                 {saldoGoto}
                               </p>
-                            ) : (
+                            </div>
+                          </Card>
+                        ) : (
+                          <Card size={"small"} className="mb-2">
+                            <div className="flex justify-between px-6">
+                              <p className="text-[16px] font-semibold">GOTO</p>
                               <p
                                 className={`${
                                   selectCard.accNumber ===
                                   accGoto?.usacAccountNumber
                                     ? "text-white"
                                     : "text-blue-700"
-                                }`}
+                                } hover:cursor-pointer`}
                                 onClick={() => setShowLinked(true)}
                               >
                                 Link Account
                               </p>
-                            )}
-                          </div>
-                        </Card>
+                            </div>
+                          </Card>
+                        )}
 
                         <p className="m-4">Debet/Credit Card</p>
                         {bankAcc.map((item: any) => (
@@ -1467,7 +1484,7 @@ export default function bookingRoom() {
                             size={"small"}
                             className={`mb-2 ${
                               selectCard.accNumber === item.usacAccountNumber &&
-                              "bg-slate-500 text-white"
+                              "bg-[#754cff] text-white"
                             }`}
                             hoverable
                             onClick={() => {
@@ -1514,7 +1531,7 @@ export default function bookingRoom() {
                         <Button
                           disabled={disabled}
                           onClick={onComplete}
-                          className="mt-6 bg-blue-600 text-white w-full h-12"
+                          className="mt-6 bg-[#754cff] text-white w-full h-12"
                         >
                           Complete Order
                         </Button>
