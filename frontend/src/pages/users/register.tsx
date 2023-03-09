@@ -40,7 +40,7 @@ export default Auth ( function Register(): any {
   const [dotPosition, setDotPosition] = useState<DotPosition>("bottom");
 
   return (
-    <Layouts>
+    <>
     <motion.div
         initial={{ opacity: 0, scale: 0.5 }}
         animate={{ opacity: 1, scale: 1 }}
@@ -51,7 +51,8 @@ export default Auth ( function Register(): any {
         }}
       
     >
-    <Card className="m-12 mx-52 drop-shadow-md  bg-[#754CFF] ">
+    <div className="bg-[#f2f1fa] pt-12">
+    <Card className=" mx-52 drop-shadow-md  bg-[#754CFF] ">
       <Row>
       
         {/* Form */}
@@ -290,8 +291,9 @@ export default Auth ( function Register(): any {
         </Col>
       </Row>
     </Card>
+    </div>
   </motion.div>
-  </Layouts>
+  </>
   );
 })
 // primary /ungu: #754CFF

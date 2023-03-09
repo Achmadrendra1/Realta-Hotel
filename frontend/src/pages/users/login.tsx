@@ -20,6 +20,7 @@ import { useDispatch, useSelector } from "react-redux";
 import Layouts from "@/layouts/layout";
 import withAuth from "@/PrivateRoute/WithAuth";
 import Auth from "@/PrivateRoute/Auth";
+import Register from "./register";
 
 export default Auth( function Login() {
   const { Content } = Layout;
@@ -55,7 +56,7 @@ export default Auth( function Login() {
 
   //Pas click submit dispatch langsung, kalo formnya masih kosong validasi muncul
   const onFinish = (values: any) => {
-    // console.log("Success:", values);
+    console.log("Success:", values);
     dispatch(doLogin(values));
   };
 
@@ -71,10 +72,10 @@ export default Auth( function Login() {
 
   const { Meta } = Card;
   return (
-    
-    <Layouts>
+    <>
       {contextHolder}
-      <Card className="m-12 mx-52 drop-shadow-md  bg-[#8662FF] ">
+      <div className="bg-[#f2f1fa] h-screen p-28">
+      <Card className=" mx-52 drop-shadow-md bg-[#8662FF] rounded-3xl">
         <Row>
           <Col span={14}>
             <Card className={`p-2 mr-3  ${loginStyle.cardLogin} no-border`}>
@@ -253,6 +254,7 @@ export default Auth( function Login() {
           </Col>
         </Row>
       </Card>
-    </Layouts>
+      </div>
+    </>
   );
 })

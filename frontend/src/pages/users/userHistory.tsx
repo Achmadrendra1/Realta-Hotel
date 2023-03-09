@@ -34,8 +34,6 @@ export default withAuth(function UserHistory() {
   const dateFormatter = new Intl.DateTimeFormat("id-ID", format);
   const currentDate = dateFormatter.format(date);
 
-  console.log(Invoice[0]);
-
   return (
     <div>
       <Card>

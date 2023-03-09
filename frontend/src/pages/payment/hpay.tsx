@@ -71,7 +71,8 @@ export default function hpay() {
     (obj: any) =>
       obj.userId === user[0]?.user_id &&
       obj.sourcePaymentName !== null &&
-      obj.sourcePaymentName == "H-Pay"
+      obj.sourceNumber == accNumber ||
+      obj.targetNumber == accNumber
   );
 
   //Filter Account Number untuk mencari account number Dompet Realta
@@ -111,6 +112,12 @@ export default function hpay() {
   };
 
   const { RangePicker } = DatePicker;
+  const handleDateChange = (value:any, dateString:any) => {
+    // console.log("Selected Time: ", value);
+    // console.log("Formatted Selected Time: ", dateString);
+    dispacth(doGetHistory({startDate: dateString[0], endDate: dateString[1]}))
+    // setDateRange(dateString);
+  };
 
   return (
     <>
@@ -153,7 +160,7 @@ export default function hpay() {
               <p className="text-lg font-semibold text-[#252525]">
                 History Transaction
               </p>
-              <RangePicker />
+              <RangePicker onChange={handleDateChange}/>
             </div>
             <List
               className="pb-4"

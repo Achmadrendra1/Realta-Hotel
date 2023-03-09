@@ -99,6 +99,12 @@ export default function Cards() {
 
 
   const { RangePicker } = DatePicker;
+  const handleDateChange = (value:any, dateString:any) => {
+    // console.log("Selected Time: ", value);
+    // console.log("Formatted Selected Time: ", dateString);
+    dispatch(doGetHistory({startDate: dateString[0], endDate: dateString[1]}))
+    // setDateRange(dateString);
+  };
 
   const handleActive = (data: boolean) => {
     setOpenAdd(data)
@@ -226,7 +232,7 @@ export default function Cards() {
               <p className="text-lg font-semibold text-[#252525]">
                 History Transaction
               </p>
-              <RangePicker />
+              <RangePicker onChange={handleDateChange}/>
             </div>
             <List
               className="pb-4"

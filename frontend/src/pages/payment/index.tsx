@@ -16,12 +16,12 @@ import {
   doTransactionRequest,
   doUsacRequest,
 } from "@/Redux/Action/Payment/paymentDashAction";
-import { doGetHistory } from "@/Redux/Action/Payment/paymentUserAction";
+import { doGetAllBank, doGetHistory } from "@/Redux/Action/Payment/paymentUserAction";
 import withAuth from "@/PrivateRoute/WithAuth";
 import Buttons from "@/components/Button";
 
 export default withAuth(function index() {
-  const dispacth = useDispatch();
+  const dispatch = useDispatch();
   const [isActive, setIsActive] = useState(false);
   const [isOpenAct, setOpenAct] = useState(false);
   const [isEmpty, setEmpty] = useState(false);
@@ -39,9 +39,9 @@ export default withAuth(function index() {
   const accNumberGoto = user[0]?.user_phone_number;
 
   useEffect(() => {
-    dispacth(doBankRequest());
-    dispacth(doPagaRequest());
-    dispacth(doGetHistory());
+    dispatch(doGetAllBank());
+    dispatch(doPagaRequest());
+    dispatch(doGetHistory());
   }, []);
 
   // Filter History By User
@@ -97,6 +97,13 @@ export default withAuth(function index() {
   };
   // console.log(dataTrx);
   const { RangePicker } = DatePicker;
+ 
+  const handleDateChange = (value:any, dateString:any) => {
+    // console.log("Selected Time: ", value);
+    // console.log("Formatted Selected Time: ", dateString);
+    dispatch(doGetHistory({startDate: dateString[0], endDate: dateString[1]}))
+    // setDateRange(dateString);
+  };
   return (
     <>
       <Head>
@@ -216,7 +223,7 @@ export default withAuth(function index() {
               <p className="text-lg font-semibold text-[#252525]">
                 History Transaction
               </p>
-              <RangePicker />
+              <RangePicker onChange={handleDateChange}/>
             </div>
             <List
               className="pb-4"
