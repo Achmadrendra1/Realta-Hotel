@@ -24,7 +24,7 @@ export default function AddCategory(props: any) {
     dispatch(doAddCategoryGroup(dataUp));
     console.log(dataUp)
     handleClose(false);
-    window.location.reload();
+    window.location.reload()
   };
 
   const onFinishFailed = (errorInfo: any) => {

@@ -116,3 +116,31 @@ export const updateEmpPhoto = (payload:any) => {
         payload: payload
     }
 }
+
+export const addWorkOrder = (payload:any) => {
+    return{
+        type: workType.ADD_WORK,
+        payload: payload
+    }
+}
+
+export const addWorkDetail = (payload:any) => {
+    return{
+        type: workType.ADD_WORK_DETAIL,
+        payload: payload
+    }
+}
+
+export const deleteWorkDetail = (payload:number) => {
+    return{
+        type: workType.DELETE_WORK_DETAIL,
+        payload: payload
+    }
+}
+
+export const updateWorkDetail = (payload:any) => {
+    return{
+        type: workType.UPDATE_WORK_DETAIL,
+        payload: payload
+    }
+}
