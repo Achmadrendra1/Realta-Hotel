@@ -17,7 +17,7 @@ function* handleGetPhoto():any{
 }
 
 function* handleAddMenuPhoto(action:any):any{
-    debugger;
+    // debugger;
     console.warn('ini di photo process: ', action.payload);
     
     try{

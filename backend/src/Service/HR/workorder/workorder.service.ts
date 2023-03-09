@@ -98,13 +98,13 @@ export class WorkorderService {
         wodeEmpId: datas.empId,
         wodeTaskName: datas.task,
         wodeNotes: datas.notes,
-        wodeSeta: datas.setaId,
+        wodeSeta: datas.seta,
       })
-      .where({ wodeId: datas.id })
+      .where({ wodeId: parseInt(datas.wodeId) })
       .execute();
     return await this.workorderdetail.findOne({
-      where: { wodeId: datas.id },
-      relations: { wodeEmp: true },
+      where: { wodeId: datas.wodeId },
+      relations: { wodeEmp: { empUser: true } },
     });
   }
 }

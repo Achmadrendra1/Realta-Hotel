@@ -404,7 +404,6 @@ export class GlobalModule implements NestModule {
         VeproController,
         PoheController,
         PodeController,
-        EmployeeController,
         DepartmentController,
         JobRoleController,
         WorkorderController,
@@ -418,13 +417,8 @@ export class GlobalModule implements NestModule {
         HotelReviewsController,
         UserAccountController,
         PaymentTransactionController,
-        RestoMenusController,
-        RestoMenuPhotosController,
-        OrderMenusController,
         UsersPasswordController,
-        UsersController,
         OrderMenusController,
-        RestoMenusController,
       );
   }
 }
