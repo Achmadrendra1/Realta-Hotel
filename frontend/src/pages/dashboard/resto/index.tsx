@@ -3,7 +3,7 @@ import React, { useEffect, useRef, useState } from 'react'
 import { Button, Dropdown, Form, Input, Menu, MenuProps, Modal, Pagination, Select, Space, Switch, Tabs, Upload } from 'antd';
 import { Table } from 'antd'
 import { CloseOutlined, DeleteOutlined, DownOutlined, EditOutlined, InboxOutlined, MoreOutlined, PictureOutlined, PlusOutlined, UploadOutlined, WarningOutlined } from '@ant-design/icons';
-import { useDispatch, useSelector } from 'react-redux';
+import {  useDispatch, useSelector } from 'react-redux';
 import { doAddMenu, doDeleteMenu, doMenuRequest, doUpdateMenu } from '@/Redux/Action/Resto/restoMenuAction';
 import axios from 'axios';
 import { API } from '@/Redux/Configs/consumeApi';
@@ -21,7 +21,7 @@ import withAuth from '@/PrivateRoute/WithAuth';
 export default withAuth( function restoMenu() {
   const dispatch = useDispatch();
 
-  // let photos = useSelector((state: any) => state.menuPhotoReducer.menuPhoto);
+  let photos = useSelector((state: any) => state.menuPhotoReducer.menuPhoto);
   let menus = useSelector((state: any) => state.restoMenuReducer.restoMenus);
   let restaurant = useSelector((state: any) => state.restoReducer.resto);
   let user = useSelector((state: any) => state.GetUserReducer.getUser);
@@ -30,7 +30,6 @@ export default withAuth( function restoMenu() {
   let [search, setSearch] = useState('');
   let list_restaurant = restaurant.data;
 
-  console.log(list_restaurant);
   
   // ------------------------ PAGINATION
   const [currentpage, setCurrentPage] = useState(1);
@@ -384,7 +383,8 @@ export default withAuth( function restoMenu() {
     setisThumbnail(true);
     const result = await axios(API('Get', `/resto-menu-photos/${reme.reme_id}`, null));
     let photos = result.data;
-
+    console.log('masuk reme',reme);
+    
     // isi semua data yang bukan primary
     let migratePhoto: any = [];
     photos.map((photo: any) => {
@@ -408,7 +408,7 @@ export default withAuth( function restoMenu() {
           rempprimary: '1',
           rempreme: photo.rempreme,
           rempthumbnailfilename: photo.rempthumbnailfilename,
-          rempurl: `${configuration.BASE_URL}/${photo.rempurl}`
+          rempurl: `${configuration.BASE_URL}/${photo?.rempurl}`
         })
       }
     })
@@ -873,8 +873,8 @@ export default withAuth( function restoMenu() {
           </div>
           <div className='flex flex-wrap justify-center'>
             {
-              viewThumbnailPhoto.map((photo: any, i:number) => (
-                <div className='w-48 border rounded-lg m-2 transition hover:bg-slate-200 hover:text-black-500 hover:font-bold'>
+              viewThumbnailPhoto?.map((photo: any, i:number) => (
+                <div key={i} className='w-48 border rounded-lg m-2 transition hover:bg-slate-200 hover:text-black-500 hover:font-bold'>
                   <button onClick={()=>setPrimary(photo)}>
                     <div  className=' p-2'>
                       <img src={photo.rempurl} alt={photo.rempthumbnailfilename} className='h-32 w-48 object-cover' />

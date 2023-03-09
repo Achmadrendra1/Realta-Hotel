@@ -46,9 +46,10 @@ import { call, put } from "redux-saga/effects";
 
 function* handleLanding(): any {
   try {
-    const result = yield axios(API("Get",`/landing`))
+    const result = yield axios(API("Get",`/landing`,null))
     yield put(getLandingSuccess(result.data))
-    return result.data;
+    console.log(result.data)
+    return result.data
   } catch (error: any) {
     yield put(getLandingFailed(error))
   }

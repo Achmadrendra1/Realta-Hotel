@@ -30,8 +30,8 @@ function* handleUpdateMenu(action:any):any{
 
 function* handleAddMenu(action:any):any{
     try{
-        console.log(action.payload,'di process add');
-        debugger;
+        // console.log(action.payload,'di process add');
+        // debugger;
         const result = yield axios(API('Post',`/resto-menus`,action.payload))
         yield put(doAddMenuSucceed(result.data))
         return result.data

@@ -1,8 +1,8 @@
-import { getServiceWork, getWorkDetail } from "@/Redux/Action/HR"
+import { addWorkDetail, deleteWorkDetail, getServiceWork, getWorkDetail, updateWorkDetail } from "@/Redux/Action/HR"
 import Buttons from "@/components/Button"
 import Dashboard from "@/layouts/dashboard"
 import { ArrowLeftOutlined, DeleteOutlined, EditOutlined, EyeOutlined, SearchOutlined } from "@ant-design/icons"
-import { Col, Row, Card, Input, Space, Button, Table, Modal, Form, AutoComplete } from "antd"
+import { Col, Row, Card, Input, Space, Button, Table, Modal, Form, AutoComplete, Select } from "antd"
 import Link from "next/link"
 import { useRouter } from "next/router"
 import { useState, useEffect } from "react"
@@ -19,11 +19,14 @@ const WorkDetail = () => {
     const [open, setOpen] = useState(false)
     const [ids, setId] = useState(0)
     const [titles, setTitle] = useState('Add')
+    const [del, setDel] = useState(false)
     const { workorders, date, status } = router.query
     const [form, setForm] = useState({
-        empId: '',
-        service: '',
+        wodeId: 0,
+        empId: 1,
+        task: '',
         notes: '',
+        seta: 1
     })
 
     useEffect(() => {
@@ -31,31 +34,50 @@ const WorkDetail = () => {
         dispatch(getServiceWork())
     }, [workorders])
 
-    const addItems = () => {
+    const onClose = () => {
         setOpen(false)
+        setForm({
+            empId: 1,
+            task: '',
+            notes: '',
+            wodeId: ids,
+            seta: 1
+        })
+        setId(0)
+        setDel(false)
+    }
+
+    const addItems = () => {
+        dispatch(addWorkDetail(form))
+        onClose()
     }
     
     const updateItems = () => {
-        setOpen(false)
+        dispatch(updateWorkDetail(form))
+        onClose()
     }
     const onOpens = (item?:any) => {
         setOpen(true)
         item && setId(item.wodeId)
-        setForm({
-            empId: item ? item.wodeEmp.empId : '',
-            service: item ? item.wodeTaskName : '',
+        const taskName = tasks.find((item:any) => item.value == form.seta)
+        setForm({ ...form, 
+            task: taskName.label,
             notes: item ? item.wodeNotes : '',
+            wodeId: item ? item.wodeId : 0,
+            empId: item ? item.wodeEmp?.empId : 1
         })
         setTitle(item ? 'Edit' : 'Add')
     }
-    const onClose = () => {
-        setOpen(false)
-        setForm({
-            empId: '',
-            service: '',
-            notes: '',
-        })
+
+    const modalDel = (id:any) => {
+        setDel(true)
+        setId(id)
+    }
+
+    const onDel = () => {
+        dispatch(deleteWorkDetail(ids))
         setId(0)
+        setDel(false)
     }
 
     const columns = [
@@ -91,13 +113,21 @@ const WorkDetail = () => {
             render: (_:any, record:any) => (
                 <Space size={10}>
                     <Button className="border-none text-blue-400" onClick={() => onOpens(record)}><EditOutlined /></Button>
-                    <Button className="border-none text-red-400" onClick={() => console.log(record.wodeId)}><DeleteOutlined /></Button>
+                    <Button className="border-none text-red-400" onClick={() => modalDel(record.wodeId)}><DeleteOutlined /></Button>
                 </Space>
             )
         }
     ];
     return(
         <Dashboard>
+            <Modal title={'Warning'} open={del} closable={false}footer={
+                <div className="w-full flex gap-5 justify-end">
+                    <Buttons funcs={onClose} type='danger'>Cancel</Buttons>
+                    <Buttons funcs={onDel}>Save</Buttons>
+                </div>
+            }>
+                <p>Are you sure for delete item&apos;s {ids}?</p>
+            </Modal>
             <Modal title={titles + ' Work Order'} open={open} closable={false} footer={
                 <div className="w-full flex gap-5 justify-end">
                     <Buttons funcs={onClose} type='danger'>Cancel</Buttons>
@@ -109,11 +139,11 @@ const WorkDetail = () => {
                 wrapperCol={{ span: 18 }}
                 >
                     <Form.Item label='Task Name'>
-                        <AutoComplete options={tasks} value={form.service} placeholder='Search Task'
-                        onChange={value => setForm({ ...form, service: value})}/>
+                        <Select options={tasks} value={form.seta} placeholder='Search Task'
+                        onChange={value => setForm({ ...form, seta: value})}/>
                     </Form.Item>
                     <Form.Item label='Employee Name'>
-                        <AutoComplete options={employee} value={form.empId} placeholder='Employee' 
+                        <Select options={employee} value={form.empId} placeholder='Employee' 
                         onChange={value => setForm({ ...form, empId: value})}/>
                     </Form.Item>
                     <Form.Item label='Note'>
@@ -124,13 +154,17 @@ const WorkDetail = () => {
             <Link href={'/dashboard/hr'}><ArrowLeftOutlined /> Back</Link>
             <Row gutter={32} className="my-5">
                 <Col span={6}>
-                    <Card hoverable className="bg-[#F2F1FA]">
-                        <Meta title="Work Order Date" description={date} />
+                    <Card hoverable className="bg-[#252525]">
+                        <Meta 
+                        title={<h1 className="text-[#F2F1FA]">Work Order Date</h1>} 
+                        description={<p className="text-[#F2F1FA]">{date}</p>} />
                     </Card>
                 </Col>
                 <Col span={6}>
-                    <Card hoverable className="bg-[#F2F1FA]">
-                        <Meta title="Status" description={status} />
+                    <Card hoverable className="bg-[#252525]">
+                        <Meta 
+                        title={<h1 className="text-[#F2F1FA]">Status</h1>} 
+                        description={<p className="text-[#F2F1FA]">{status}</p>} />
                     </Card>
                 </Col>
             </Row>

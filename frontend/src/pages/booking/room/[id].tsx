@@ -1201,7 +1201,6 @@ export default function bookingRoom() {
               </div>
             </div>
           </Col>
-
           <Col span={14} className={`${detail ? "block" : "hidden"}`}>
             <button
               onClick={() => {

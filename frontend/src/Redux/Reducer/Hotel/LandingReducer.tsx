@@ -4,7 +4,7 @@ const initialState = {
   landing: [],
 };
 
-export const LandingReducer = (state = initialState, action: any) => {
+function LandingReducer (state = initialState, action: any) {
   switch (action.type) {
     case LandingConstant.GET_LANDING:
       return { ...state };
@@ -12,5 +12,9 @@ export const LandingReducer = (state = initialState, action: any) => {
       return { ...state, landing: action.payload };
     case LandingConstant.GET_LANDING_FAILED:
       return { ...state };
+    default :
+      return {...state}
   }
-};
+}
+
+export default LandingReducer;

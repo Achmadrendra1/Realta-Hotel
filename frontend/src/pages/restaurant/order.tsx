@@ -30,8 +30,9 @@ function Order({orderNumberUser}:any) {
   let router = useRouter();
   const userLoggedIn = useSelector((state: any) => state.GetUserReducer.getUser);
   const orderFromUser = useSelector((state:any)=> state.userOrderReducer.userOrder); 
-  // console.log('orderFromUser',orderFromUser);
+  console.log('orderFromUser',orderFromUser);
   const orme = orderNumberUser.orderNumber;
+  
 
   let [cart, setCart] = useState([]);
   let [result, setResult] = useState({
@@ -41,7 +42,6 @@ function Order({orderNumberUser}:any) {
     total: 0,
   });
 
-  // console.log('orderFromUser',orderNumberUser.orderNumber);
   
   useEffect(() => {
     // get order number fom local storage
@@ -264,7 +264,7 @@ function Order({orderNumberUser}:any) {
               handleAct={handleActive}
               handleCancell={handleClose}
               dataUser={user}
-              dataBank={payBank}
+              dataBank={allBank}
             />
           ) : null}
           {showActivation ? (

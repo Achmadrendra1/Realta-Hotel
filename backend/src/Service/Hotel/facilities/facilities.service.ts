@@ -27,12 +27,14 @@ export class FacilitiesService {
   async landing(): Promise<any> {
     return await this.faciRepository.find({
       relations: {
-        faciHotel: true,
+        faciHotel:{
+          hotelAddr: true,
+        },
         facilityPhotos: true,
-        facilityPriceHistories: true,
+        // facilityPriceHistories: true,
         faciCagro: true,
       },
-      where: { faciCagro: { cagroName: In(['Room', 'Restaurant ']) } },
+      where: { faciCagro: { cagroName: 'Room' } },
     });
   }
 

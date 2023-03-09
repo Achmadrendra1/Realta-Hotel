@@ -19,8 +19,6 @@ export default function index() {
     (state: any) => state.BoorInvoiceReducer.invoice
   );
 
-  // console.log(invoiceView);
-
   useEffect(() => {
     dispatch(getSpInvoice());
   }, []);
@@ -29,7 +27,6 @@ export default function index() {
     (item: any) => item.boor_order_number === id
   );
 
-  // console.log(Invoice[0]?.payment_Type)
 
   const boor_order_number =
     Invoice?.length > 0 ? Invoice[0].boor_order_number : "";
@@ -39,6 +36,7 @@ export default function index() {
   const user_full_name = Invoice?.length > 0 ? Invoice[0].user_full_name : "";
   const user_phone_number =
     Invoice?.length > 0 ? Invoice[0].user_phone_number : "";
+  const user_email = Invoice?.length > 0 ? Invoice[0].user_email : "";
   const usme_memb_name = Invoice?.length > 0 ? Invoice[0].usme_memb_name : "";
   const usme_promote_date =
     Invoice?.length > 0 ? Invoice[0].usme_promote_date : "";
@@ -101,11 +99,13 @@ export default function index() {
 
   // console.log(getInvoice);
 
-  // const email = "aryasamiftah@gmail.com"
+  const email = user_email
+  const body = `Berikut adalah Kode Booking Anda : http://localhost:3000/${root.asPath}`
+  const componentRef = React.useRef(null);
 
-  // const handleEmailClick = () => {
-  //   window.location.href = `mailto:${email}`;
-  // };
+  const handleEmailClick = () => {
+    window.location.href = `mailto:${email}?body=${(body)}`;
+  };
 
   //Array Object untuk title and field
   const invoice1 = [
@@ -158,9 +158,6 @@ export default function index() {
     },
   ];
 
-  const componentRef = React.useRef(null);
-  
-
   return (
     <>
       <div className="px-6 pt-4 flex justify-between">
@@ -177,7 +174,7 @@ export default function index() {
             content={() => componentRef.current}
           />
           <div>
-            <Buttons funcs={""}>Send To Email</Buttons>
+            <Buttons funcs={handleEmailClick}>Send To Email</Buttons>
           </div>
         </div>
       </div>
