@@ -39,14 +39,26 @@ import {
   updateHotelFailed,
   updateHotelSucceed,
 } from "@/Redux/Action/Hotel/HotelAction";
+import { getLandingFailed, getLandingSuccess } from "@/Redux/Action/Hotel/LandingAction";
 import { API, FORMAPI } from "@/Redux/Configs/consumeApi";
 import axios from "axios";
 import { call, put } from "redux-saga/effects";
 
+function* handleLanding(action:any): any {
+  try {
+    const result = yield axios(API("Get",`/landing`))
+    yield put(getLandingSuccess(result.data))
+    return result.data;
+  } catch (error: any) {
+    yield put(getLandingFailed(error))
+  }
+}
+
 function* handleHotel(action:any): any {
+  
   try {
     const pageQueryParam = action.payload?.page ? `page=${action.payload.page}` : '';
-    const keywordsQueryParam = action.payload?.keywords ? `keywords=${action.payload.keywords}` : '';
+    const keywordsQueryParam = action.payload?.keyword ? `&keyword=${action.payload.keyword}` : '';
     const result = yield axios(API("Get", `/hotels?${pageQueryParam}${keywordsQueryParam}`));
     yield put(getHotelSuccess(result.data));
     return result.data;
@@ -264,6 +276,7 @@ function* handleDeleteFaph(action: any): any {
 }
 
 export {
+  handleLanding,
   handleHotel,
   handleHotelID,
   handleAddHotel,
