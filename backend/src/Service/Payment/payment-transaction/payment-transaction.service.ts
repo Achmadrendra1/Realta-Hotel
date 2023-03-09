@@ -14,10 +14,30 @@ export class PaymentTransactionService {
     private usacService: UserAccountService,
   ) {}
 
-  async getAll() {
-    return this.payRepository.query(
-      'select * from payment.user_transactions'
-    );
+  async getAll(query) {
+    const startDate = query.startDate || '';
+    const endDate = query.endDate || '';
+
+    let data;
+
+    if(startDate && endDate){
+      data = await this.payRepository.query(
+        `SELECT * FROM payment.user_transactions
+        WHERE "trxDate" BETWEEN $1 AND $2`,
+        [startDate, endDate]
+      );
+    } else {
+      data = await this.payRepository.query(
+        'select * from payment.user_transactions'
+      );
+    }
+
+    const total = data.length;
+
+    return {
+      data,
+      count: total,
+    };
   }
 
   async getPagination(query) {

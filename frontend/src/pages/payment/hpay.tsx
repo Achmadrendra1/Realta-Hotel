@@ -1,6 +1,6 @@
 import Layouts from "@/layouts/layout";
 import { LeftOutlined, RightOutlined } from "@ant-design/icons";
-import { Button, Card, DatePicker, List } from "antd";
+import { Button, Card, DatePicker, Empty, List } from "antd";
 import Head from "next/head";
 import Link from "next/link";
 import { use, useEffect, useState } from "react";
@@ -8,6 +8,7 @@ import TopUp from "./topup";
 import DetailTransHpay from "./detailTransHpay";
 import { useDispatch, useSelector } from "react-redux";
 import { doTransactionRequest } from "@/Redux/Action/Payment/paymentDashAction";
+import { doGetHistory } from "@/Redux/Action/Payment/paymentUserAction";
 
 export default function hpay() {
   const addIcon = (
@@ -45,7 +46,7 @@ export default function hpay() {
       </g>
     </svg>
   );
-  
+
   const dispacth = useDispatch();
   const [isOpenTP, setOpenTP] = useState(false);
   const [isOpenDetail, setOpenDetail] = useState(false);
@@ -56,15 +57,22 @@ export default function hpay() {
     (state: any) => state.payUserAccReducer
   );
 
-  const { payDashTrx, total, currentPage } = useSelector(
+  const { payDashTrx, total, currentPage, payHistoryTrx } = useSelector(
     (state: any) => state.payTrxHistoryReducer
   );
 
-  useEffect(()=>{
-    dispacth(doTransactionRequest());
-  }, [])
+  useEffect(() => {
+    dispacth(doGetHistory());
+  }, []);
   const user = useSelector((state: any) => state.GetUserReducer.getUser);
   const accNumber = `131${user[0]?.user_phone_number}`;
+
+  const dataHistory = payHistoryTrx?.filter(
+    (obj: any) =>
+      obj.userId === user[0]?.user_id &&
+      obj.sourcePaymentName !== null &&
+      obj.sourcePaymentName == "H-Pay"
+  );
 
   //Filter Account Number untuk mencari account number Dompet Realta
   const bankAcc = account?.filter(
@@ -99,8 +107,8 @@ export default function hpay() {
   };
 
   const handleClose = (data: boolean) => {
-    setOpenTP(data)
-  }
+    setOpenTP(data);
+  };
 
   const { RangePicker } = DatePicker;
 
@@ -142,14 +150,20 @@ export default function hpay() {
 
           <div className="mt-16 mb-6 drop-shadow-lg m-auto border-b-md rounded-md ">
             <div className="flex justify-between p-6 bg-white rounded-lg">
-              <p className="text-lg font-semibold text-[#252525]">History Transaction</p>
-              <RangePicker  />
+              <p className="text-lg font-semibold text-[#252525]">
+                History Transaction
+              </p>
+              <RangePicker />
             </div>
-            <List className="pb-4" pagination={{
-                    current: currentPage,
-                    total: total,
-                    pageSize: 10,}}>
-              {payDashTrx.map((item: any) => (
+            <List
+              className="pb-4"
+              pagination={{
+                current: currentPage,
+                total: total,
+                pageSize: 10,
+              }}
+            >
+              {dataHistory.length ? dataHistory.map((item: any) => (
                 <Card
                   title={item.transactionNumber}
                   extra={item.trxDate?.split("T")[0]}
@@ -181,7 +195,9 @@ export default function hpay() {
                       )}
                     </div>
                     <div className="flex justify-between">
-                      <p className="text-md">{item.orderNumber ? item.orderNumber : 'Dompet Realta'}</p>
+                      <p className="text-md">
+                        {item.orderNumber ? item.orderNumber : "Dompet Realta"}
+                      </p>
                       <p className="text-md font-semibold">
                         {item.sourcePaymentName == null
                           ? "Cash"
@@ -190,7 +206,9 @@ export default function hpay() {
                     </div>
                   </div>
                 </Card>
-              ))}
+              )): (
+                <Empty className="mt-10 font-bold text-xl"/>
+              )}
               {/* <Card
                   type="inner"
                   title="TRB#20230123-0001"
@@ -226,7 +244,7 @@ export default function hpay() {
               clickCancel={handleCancel}
               dataUser={user}
               phone={accNumber}
-              card = {bankAcc}
+              card={bankAcc}
               handleCancell={handleClose}
             />
           ) : null}
