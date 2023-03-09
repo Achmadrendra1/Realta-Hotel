@@ -49,6 +49,8 @@ import orderReducer from './Resto/orderReducer';
 import numberOrderReducer from './Resto/numberOrderReducer';
 import userOrderReducer from './Resto/userOrderReducer';
 import userMenuReducer from './Resto/userMenuReducer';
+import LandingReducer from './Hotel/LandingReducer';
+
 
 export default combineReducers({
   DeptReducer,
@@ -81,6 +83,7 @@ export default combineReducers({
 
   //Hotel
   HotelReducer,
+  LandingReducer,
 
   //Booking,
   BoorReducer,

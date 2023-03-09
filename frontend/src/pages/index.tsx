@@ -1,4 +1,5 @@
 import { getSpHotel } from "@/Redux/Action/Booking/BookingAction";
+import { getLanding } from "@/Redux/Action/Hotel/LandingAction";
 import Buttons from "@/components/Button";
 import Hero from "@/components/Hero";
 import Layouts from "@/layouts/layout";
@@ -63,9 +64,10 @@ export default function Home() {
   const { Meta } = Card;
   const dispatch = useDispatch();
   useEffect(() => {
-    dispatch(getSpHotel())
+    dispatch(getLanding())
   }, []);
-  let hotel = useSelector((state : any) => state.HotelBoorReducer.hotel.slice(0,4))
+  let {landing} = useSelector((state : any) => state.LandingReducer)
+  console.log(landing.slice(2))
 
   return (
     <Layouts>
@@ -106,20 +108,20 @@ export default function Home() {
             <Buttons funcs={""}>View More</Buttons>
           </div>
         </div>
-        <div className="flex gap-8 mt-8 justify-center">
-          {dummy.map((item: any, index:number) => (
+        <div className="flex gap-6 mt-8 justify-center flex-wrap">
+          {landing.slice(7).map((item: any, index:number) => (
             <Card
               key={index}
               style={{ width: 300 }}
               cover={<img alt="example" src="../assets/dummy.png" />}
             >
-              <p className="font-bold">{item.hotel}</p>
-              <p className="text-[#adaeb8]">{item.location}</p>
+              <p className="font-bold">{item.faciHotel?.hotelName}</p>
+              <p className="text-[#adaeb8]">{item.faciHotel?.hotelAddr?.addrLine2}</p>
               <div className="flex justify-between items-center mt-4">
                 <Space>
                   <StarOutlined className="text-[#F7C934]"/>
                   <span className="font-semibold">
-                    {item.rating}
+                    {item.faciHotel?.hotelRatingStar}
                   </span>
                 </Space>
                 <div>
@@ -130,7 +132,7 @@ export default function Home() {
           ))}
         </div>
       </div>
-      <div className="container mt-14">
+      {/* <div className="container mt-14">
         <div className="flex justify-between items-center">
           <p className="font-semibold text-[24px] w-[450px]">
             Discover Your Destination Restaurants From Our Hotel&apos;s Best
@@ -163,7 +165,7 @@ export default function Home() {
             </Card>
           ))}
         </div>
-      </div>
+      </div> */}
       <div className="py-40 relative w-full bg-[url('/assets/bg-email.svg')] bg-center bg-contain bg-no-repeat h-[600px]">
        <div className="bg-[#F7C934] h-[180px] w-11/12 mx-auto py-8 px-8 rounded-xl border-white border-4">
           <div className="flex justify-between h-28 items-center">
