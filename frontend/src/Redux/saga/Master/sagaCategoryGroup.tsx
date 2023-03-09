@@ -34,7 +34,7 @@ function* handlerCategoryGroup(): any {
 
 function* handlerAddCategoryGroup(action: any): any {
   try {
-    const res = yield axios(API('POST', '/category/insert', action.payload));
+    const res = yield axios(API('POST', '/category/upload', action.payload));
     yield put(doAddCategoryGroupSucceed(res.data.result));
     return res.data.result;
   } catch (error: any) {

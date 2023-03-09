@@ -134,7 +134,7 @@ import {
 } from "./Hotel/HotelSaga";
 import BookingConstant from "../Constant/Booking/BookingConstant";
 import { workType } from "../Constant/HR/workType";
-import { handleServicesList, handleWorkDetail, handleWorkorder } from "./HR/workorder";
+import { handleAddDetailWork, handleAddWork, handleDeleteWork, handleServicesList, handleUpdateWork, handleWorkDetail, handleWorkorder } from "./HR/workorder";
 import { handleBoorCreateFinal, handleBoorExtra, handleBoorLast, handleSpBoorInvoice, handleSpFacilities, handleSpHotel, handleSpHotelReviews, handleSpof } from "./Booking/BookingSaga";
 
 // Purchasing
@@ -277,6 +277,10 @@ export default function* rootSaga() {
     takeEvery(empType.ADD_MUTATION, handleDeptHist),
     takeEvery(empType.ADD_PAYHIST, handleAddPayhist),
     takeEvery(empType.UPDATE_PHOTO, handleUpdatePhotoEmp),
+    takeEvery(workType.ADD_WORK, handleAddWork),
+    takeEvery(workType.ADD_WORK_DETAIL, handleAddDetailWork),
+    takeEvery(workType.DELETE_WORK_DETAIL, handleDeleteWork),
+    takeEvery(workType.UPDATE_WORK_DETAIL, handleUpdateWork),
 
     //Hotel
     takeEvery(HotelConstant.GET_HOTEL, handleHotel),
@@ -367,6 +371,5 @@ export default function* rootSaga() {
     takeEvery(userMenuConstant.GET_MENU_USER, handleUserMenu),
 
   ]);
-  console.log('masuk saga index');
   
 }

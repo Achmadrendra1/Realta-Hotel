@@ -38,7 +38,7 @@ export class WorkorderController {
     return this.workorder.addWorkDetail(body);
   }
 
-  @Put('update')
+  @Put('')
   updateDetails(@Body() body): Promise<any> {
     return this.workorder.updateWorkDetail(body);
   }

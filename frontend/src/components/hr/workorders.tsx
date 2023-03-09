@@ -3,7 +3,7 @@ import { Row, Col, Space, DatePicker, Segmented, Input, Table, Button, Modal, Fo
 import Buttons from "../Button"
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getWorkOrder } from "@/Redux/Action/HR";
+import { addWorkOrder, getWorkOrder } from "@/Redux/Action/HR";
 import { useRouter } from "next/router";
 
 const WorkOrders = () => {
@@ -14,6 +14,7 @@ const WorkOrders = () => {
     const [form, setForm] = useState('')
     const dispatch = useDispatch()
     const { data } = useSelector((state:any) => state.workorderReducer)
+    const { getUser } = useSelector((state:any) => state.GetUserReducer)
     const router = useRouter()
     const filterBy = data.filter((item:any) => item.woroStatus == filter )
 
@@ -70,12 +71,23 @@ const WorkOrders = () => {
         }
     ];
 
+    const createWork = () => {
+        const data = {
+            userId: getUser[0].user_id,
+            startDate: form,
+            status: filter
+        }
+        dispatch(addWorkOrder(data))
+        setForm('')
+        setOpen(false)
+    }
+
     return(
         <div>
             <Modal title={'Add Work Order'} open={open} closable={false} footer={
                 <div className="w-full flex gap-5 justify-end">
                     <Buttons funcs={() => setOpen(false)} type='danger'>Cancel</Buttons>
-                    <Buttons funcs={() => console.log('id')}>Save</Buttons>
+                    <Buttons funcs={() => createWork()}>Save</Buttons>
                 </div>
             }>
                 <Form.Item label='Work Order Date'>

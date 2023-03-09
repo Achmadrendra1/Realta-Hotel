@@ -30,8 +30,9 @@ function Order({orderNumberUser}:any) {
   let router = useRouter();
   const userLoggedIn = useSelector((state: any) => state.GetUserReducer.getUser);
   const orderFromUser = useSelector((state:any)=> state.userOrderReducer.userOrder); 
-  // console.log('orderFromUser',orderFromUser);
+  console.log('orderFromUser',orderFromUser);
   const orme = orderNumberUser.orderNumber;
+  
 
   let [cart, setCart] = useState([]);
   let [result, setResult] = useState({
@@ -41,24 +42,11 @@ function Order({orderNumberUser}:any) {
     total: 0,
   });
 
-  // console.log('orderFromUser',orderNumberUser.orderNumber);
   
   useEffect(() => {
     // get order number fom local storage
-    const orderFromlocalstorage = localStorage.getItem("result");
-    const parsedOrderNumber = orderFromlocalstorage !== null ? JSON.parse(orderFromlocalstorage) : []; 
-    const notParsedCart = localStorage.getItem("cart");
-    const parsedCart = notParsedCart ? JSON.parse(notParsedCart) : [];
-
-    const userid = userLoggedIn[0]?.user_id; 
-    setResult(parsedOrderNumber); 
-    
-    let data = {
-      orderNumber: parsedOrderNumber.ormeNumber, 
-    };
-
-    dispatch(doGetUserOrder(orme));
-  }, [orderFromUser]); 
+    dispatch(doGetUserOrder(orme))
+  }, [orme]); 
 
   // BACK TO PREVIOUS PAGE
   function back() {
