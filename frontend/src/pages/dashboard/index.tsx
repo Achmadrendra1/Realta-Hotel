@@ -1213,7 +1213,9 @@ export default function menuMaster() {
         <Image
           src={record?.cagroIconUrl}
           alt={record?.cagroIconUrl}
-          className="w-1/4"
+          className="w-4/4"
+          width={50}
+          height={50}
         />
       ),
       fixed: 'left',
@@ -1589,7 +1591,6 @@ export default function menuMaster() {
           clickCancel={handleCancel}
           handleClose={handleClose}
           dataPolicy={dataPolicy}
-
         />
       ) : null}
       {isOpenAddPrice ? (
