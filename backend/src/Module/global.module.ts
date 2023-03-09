@@ -423,7 +423,6 @@ export class GlobalModule implements NestModule {
         OrderMenusController,
         UsersPasswordController,
         UsersController,
-        // AuthController,
         OrderMenusController,
         RestoMenusController,
       );

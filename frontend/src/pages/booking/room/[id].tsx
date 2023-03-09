@@ -5,6 +5,7 @@ import {
   Carousel,
   Col,
   DatePicker,
+  Divider,
   Form,
   Input,
   InputNumber,
@@ -31,7 +32,11 @@ import {
   insertBookingExtra,
 } from "@/Redux/Action/Booking/BookingAction";
 import { useRouter } from "next/router";
-import { CaretRightFilled, DeleteOutlined, LeftOutlined } from "@ant-design/icons";
+import {
+  CaretRightFilled,
+  DeleteOutlined,
+  LeftOutlined,
+} from "@ant-design/icons";
 import dayjs from "dayjs";
 import {
   getSpof,
@@ -50,7 +55,10 @@ import AddCard from "@/pages/payment/addCard";
 import ActivationHpay from "@/pages/payment/activationHpay";
 import ActivationGoto from "@/pages/payment/activationGoto";
 import CheckSecure from "@/pages/payment/checkSecure";
-import { doCreateTransaction, doGetAllBank } from "@/Redux/Action/Payment/paymentUserAction";
+import {
+  doCreateTransaction,
+  doGetAllBank,
+} from "@/Redux/Action/Payment/paymentUserAction";
 import Link from "next/link";
 
 export default function bookingRoom() {
@@ -82,23 +90,29 @@ export default function bookingRoom() {
   const oneReview = hotelReview?.filter(
     (item: any) => item.hore_hotel_id == id
   );
-  
+
   //useSelector Get User
   let getUser = useSelector((state: any) => state.GetUserReducer.getUser);
 
   //useSelector Get Special Offers
   let spof = useSelector((state: any) => state.SpofReducer.spof);
-  const typeSpof = spof?.filter((item : any) => {
+  const typeSpof = spof?.filter((item: any) => {
     if (getUser[0]?.user_type === "C" && item.spofType === "Corporate") {
       return true;
-    } else if (getUser[0]?.user_type === "I" && item.spofType === "Individual") {
+    } else if (
+      getUser[0]?.user_type === "I" &&
+      item.spofType === "Individual"
+    ) {
       return true;
-    } else if (getUser[0]?.user_type === "T" && item.spofType === "Travel Agent") {
+    } else if (
+      getUser[0]?.user_type === "T" &&
+      item.spofType === "Travel Agent"
+    ) {
       return true;
     }
     return false;
   });
-  
+
   //useSelector Get Price Items for Booking Extra
   let extra = useSelector((state: any) => state.priceItemsReducer.priceItems);
 
@@ -107,7 +121,7 @@ export default function bookingRoom() {
 
   //State untuk View More Amanities
   const [more, setMore] = useState(false);
-  
+
   //State untuk modal Special Offers
   const [spofOpen, setSpofOpen] = useState(false);
 
@@ -121,9 +135,9 @@ export default function bookingRoom() {
   const [addExtra, setAddExtra] = useState(false);
 
   //State untuk Checkin-Checkout Date
-  const [inDate, setInDate] = useState(null)
-  const [outDate, setOutDate] = useState(null)
-  const [numDays, setNumDays] = useState(null)
+  const [inDate, setInDate] = useState(null);
+  const [outDate, setOutDate] = useState(null);
+  const [numDays, setNumDays] = useState(null);
 
   //State untuk Price Room
   const [priceRoom, setPriceRoom] = useState({
@@ -143,12 +157,12 @@ export default function bookingRoom() {
 
   //State untuk table Booking Extra
   const [valueExtra, setValueExtra] = useState({
-    pritId: [] as any [],
+    pritId: [] as any[],
     pritName: [] as any[],
     pritPrice: [] as any[],
-    pritQty : [] as any [],
-    pritTotal : [] as any [],
-    pritMeasure : [] as any []
+    pritQty: [] as any[],
+    pritTotal: [] as any[],
+    pritMeasure: [] as any[],
   });
 
   //State untuk extraTotal
@@ -167,17 +181,17 @@ export default function bookingRoom() {
       dataIndex: "pritPrice",
     },
     {
-      title : "Description",
-      dataIndex : "Description"
+      title: "Description",
+      dataIndex: "Description",
     },
     {
       key: "action",
-      render: (text: any, record: any, index: any) => (
+      render: ( record: any) => (
         <div className="flex justify-end">
           <button onClick={() => handleValueExtra(record.pritId)}>Add</button>
         </div>
       ),
-    },
+    }
   ];
 
   //Table untuk Booking Extra
@@ -200,7 +214,7 @@ export default function bookingRoom() {
     },
     {
       title: (
-        <div className="float-right">
+        <div>
           <button onClick={() => setAddExtra(true)}>Add</button>
         </div>
       ),
@@ -208,19 +222,19 @@ export default function bookingRoom() {
       render: (text: any, record: any, index: any) => (
         <button onClick={() => handleDelete(index)}>Delete</button>
       ),
-    },
+    }
   ];
 
   //Looping Map untuk menampilkan data booking extra
   const dataExtra = valueExtra.pritName.map((name: any, index: any) => {
     return {
       // key: index,
-      pritId : valueExtra.pritId[index],
+      pritId: valueExtra.pritId[index],
       pritName: valueExtra.pritName[index],
       boexPrice: valueExtra.pritPrice[index],
-      boexQty : valueExtra.pritQty[index],
-      boexSubtotal : valueExtra.pritTotal[index],
-      boexMeasure : valueExtra.pritMeasure[index]
+      boexQty: valueExtra.pritQty[index],
+      boexSubtotal: valueExtra.pritTotal[index],
+      boexMeasure: valueExtra.pritMeasure[index],
     };
   });
 
@@ -235,13 +249,15 @@ export default function bookingRoom() {
   );
 
   //Google Maps
-  let maps = 'https://www.google.com/maps/search/?api=1&query='
+  let maps = "https://www.google.com/maps/search/?api=1&query=";
 
   //Variable untuk Get Room into Booking Detail
   const faci_id = faciRoom?.length > 0 ? faciRoom[0].faci_id : null;
   const faci_name = faciRoom?.length > 0 ? faciRoom[0].faci_name : "";
-  const faci_rate_price = faciRoom?.length > 0 ? faciRoom[0].faci_rate_price : "";
-  const faci_high_price = faciRoom?.length > 0 ? faciRoom[0].faci_high_price : "";
+  const faci_rate_price =
+    faciRoom?.length > 0 ? faciRoom[0].faci_rate_price : "";
+  const faci_high_price =
+    faciRoom?.length > 0 ? faciRoom[0].faci_high_price : "";
   const faci_tax_rate = faciRoom?.length > 0 ? faciRoom[0].faci_tax_price : "";
 
   //Variable Count and Filter Rating
@@ -279,10 +295,10 @@ export default function bookingRoom() {
   }
 
   //Rangepicker ANTD
-  const {RangePicker} = DatePicker
+  const { RangePicker } = DatePicker;
 
   //Configure Date untuk Booking
-  const dateFormat = "DD MM YYYY";
+  const dateFormat = "YYYY-MM-DD";
   const disabledDate = (current: any, checkInDate: any) => {
     if (checkInDate) {
       return (
@@ -292,38 +308,40 @@ export default function bookingRoom() {
     return current < dayjs().startOf("day");
   };
 
-  const handleDateRangeChange = (date : any, dateString : any) => {
-    if(date !== null){
+  const handleDateRangeChange = (date: any, dateString: any) => {
+    if (date !== null) {
       setDataBooking({
         ...dataBooking,
-        borde_checkin : dateString[0].replace(/ /g, '-'),
-        boor_arrival_date : dateString[0].replace(/ /g, '-'),
-        borde_checkout : dateString[1].replace(/ /g, '-')
-      })
-      setInDate(date[0])
-      setOutDate(date[1])
-      calculateNumDays(date[0], date[1])
+        borde_checkin: dateString[0].replace(/ /g, "-"),
+        boor_arrival_date: dateString[0].replace(/ /g, "-"),
+        borde_checkout: dateString[1].replace(/ /g, "-"),
+      });
+      setInDate(date[0]);
+      setOutDate(date[1]);
+      calculateNumDays(date[0], date[1]);
     } else {
       setDataBooking({
         ...dataBooking,
-        borde_checkin : '',
-        boor_arrival_date : '',
-        borde_checkout : ''
-      })
-      setInDate(null)
-      setOutDate(null)
-      calculateNumDays('', '')
+        borde_checkin: "",
+        boor_arrival_date: "",
+        borde_checkout: "",
+      });
+      setInDate(null);
+      setOutDate(null);
+      calculateNumDays("", "");
     }
-  }
+  };
 
-  const calculateNumDays = (start : any, end : any) => {
+  const calculateNumDays = (start: any, end: any) => {
     if (start && end) {
-      const numDays = ((end.diff(start, 'days') + 1)-1);
+      const numDays = end.diff(start, "days") + 1 - 1;
       setNumDays(numDays);
     } else {
       setNumDays(null);
     }
   };
+
+  console.log(new Date());
 
   const [dataBooking, setDataBooking] = useState({
     boor_user_id: 0,
@@ -356,7 +374,6 @@ export default function bookingRoom() {
     boor_cardnumber: "",
   });
 
-
   const [dataPayment, setDataPayment] = useState({
     userId: 0,
     amount: 0,
@@ -368,14 +385,15 @@ export default function bookingRoom() {
   });
 
   useEffect(() => {
-    const totalGuest = parseInt(dataBooking?.borde_adults) + parseInt(dataBooking?.borde_kids)
+    const totalGuest =
+      parseInt(dataBooking?.borde_adults) + parseInt(dataBooking?.borde_kids);
     setDataBooking({
       ...dataBooking,
       borde_price: ratePriceInt,
       borde_discount: spofDiscInt,
-      boor_discount : spofDiscInt,
+      boor_discount: spofDiscInt,
       // boor_total_room : 1,
-      boor_total_guest : totalGuest,
+      boor_total_guest: totalGuest,
       borde_tax: taxRateInt,
       boor_total_tax: taxRateInt,
       borde_faci_id: priceRoom.faci_id,
@@ -400,7 +418,11 @@ export default function bookingRoom() {
       faci_rate_price: selected.faci_rate_price,
       faci_tax_rate: selected.faci_tax_rate,
     });
-    setDataBooking({...dataBooking, borde_faci_id : selected.faci_id, borde_price : ratePriceInt })
+    setDataBooking({
+      ...dataBooking,
+      borde_faci_id: selected.faci_id,
+      borde_price: ratePriceInt,
+    });
   };
 
   //Handle button add Special Offers
@@ -416,79 +438,107 @@ export default function bookingRoom() {
 
   // Handle untuk Booking Extra di dalam Modal
   const handleValueExtra = (id: any) => {
-    const selected = extra.find((items:any) => items.pritId == id)
+    const selected = extra.find((items: any) => items.pritId == id);
     const index = valueExtra.pritName.indexOf(selected.pritName);
-    if(index >= 0){
-      const newQuantity = [...valueExtra.pritQty]
-      newQuantity[index] += 1
-      const newPrice = [...valueExtra.pritTotal]
-      newPrice[index] += parseInt(selected.pritPrice.split(",")[0].replace(/[^0-9]/g, ""));
+    if (index >= 0) {
+      const newQuantity = [...valueExtra.pritQty];
+      newQuantity[index] += 1;
+      const newPrice = [...valueExtra.pritTotal];
+      newPrice[index] += parseInt(
+        selected.pritPrice.split(",")[0].replace(/[^0-9]/g, "")
+      );
       setValueExtra({
         ...valueExtra,
-        pritQty : newQuantity,
-        pritTotal : newPrice
-      })
-    }else {
-      let measureUnit = '';
-      if(selected.pritType === "SNACK") {
-        measureUnit = "Unit"
-      }else if(selected.pritType === "FACILITY"){
-        measureUnit = "People"
-      }else if(selected.pritType === "SOFTDRINK"){
-        measureUnit = "Unit"
-      }else if(selected.pritType === "FOOD"){
-        measureUnit = "Unit"
-      }else if(selected.pritType === "SERVICE"){
-        measureUnit = "People"
+        pritQty: newQuantity,
+        pritTotal: newPrice,
+      });
+    } else {
+      let measureUnit = "";
+      if (selected.pritType === "SNACK") {
+        measureUnit = "Unit";
+      } else if (selected.pritType === "FACILITY") {
+        measureUnit = "People";
+      } else if (selected.pritType === "SOFTDRINK") {
+        measureUnit = "Unit";
+      } else if (selected.pritType === "FOOD") {
+        measureUnit = "Unit";
+      } else if (selected.pritType === "SERVICE") {
+        measureUnit = "People";
       }
       setValueExtra({
-        pritId:[...valueExtra.pritId, selected.pritId],
-        pritName:[...valueExtra.pritName,selected.pritName],
-        pritPrice : [...valueExtra.pritPrice, parseInt(selected.pritPrice.split(",")[0].replace(/[^0-9]/g, ""))],
-        pritQty : [...valueExtra.pritQty, 1],
-        pritTotal : [...valueExtra.pritTotal, parseInt(selected.pritPrice.split(",")[0].replace(/[^0-9]/g, ""))],
-        pritMeasure : [...valueExtra.pritMeasure, measureUnit]
-
-      })
+        pritId: [...valueExtra.pritId, selected.pritId],
+        pritName: [...valueExtra.pritName, selected.pritName],
+        pritPrice: [
+          ...valueExtra.pritPrice,
+          parseInt(selected.pritPrice.split(",")[0].replace(/[^0-9]/g, "")),
+        ],
+        pritQty: [...valueExtra.pritQty, 1],
+        pritTotal: [
+          ...valueExtra.pritTotal,
+          parseInt(selected.pritPrice.split(",")[0].replace(/[^0-9]/g, "")),
+        ],
+        pritMeasure: [...valueExtra.pritMeasure, measureUnit],
+      });
     }
-    setAddExtra(false)
+    setAddExtra(false);
   };
 
   //UseEffect untuk change auto totalPrice di booking
   useEffect(() => {
-    const rate = dataBooking.borde_price
-    const room = dataBooking.boor_total_room || 1
-    const days = numDays || 1
-    const disc = dataBooking.borde_discount || 0
-    const extra = extraTotal.extraSubTotal
-    const total = ((((rate*days)*room)-disc)+extra)
+    const rate = dataBooking.borde_price;
+    const room = dataBooking.boor_total_room || 1;
+    const days = numDays || 1;
+    const disc = dataBooking.borde_discount || 0;
+    const extra = extraTotal.extraSubTotal;
+    const total = rate * days * room - disc + extra;
     const subTotal = () => {
-          setDataBooking({...dataBooking, boor_total_amount : total, borde_subtotal : total, borde_extra : extra})
-          setDataPayment({...dataPayment, amount : total})
-        };
-        if(dataBooking.borde_price !== 0 || dataBooking.borde_discount !== 0){
-          subTotal()
-        }
-  }, [dataBooking.borde_price, dataBooking.boor_total_room, dataBooking.borde_checkin, dataBooking.borde_checkout, dataBooking.borde_discount, extraTotal.extraSubTotal]);
+      setDataBooking({
+        ...dataBooking,
+        boor_total_amount: total,
+        borde_subtotal: total,
+        borde_extra: extra,
+      });
+      setDataPayment({ ...dataPayment, amount: total });
+    };
+    if (dataBooking.borde_price !== 0 || dataBooking.borde_discount !== 0) {
+      subTotal();
+    }
+  }, [
+    dataBooking.borde_price,
+    dataBooking.boor_total_room,
+    dataBooking.borde_checkin,
+    dataBooking.borde_checkout,
+    dataBooking.borde_discount,
+    extraTotal.extraSubTotal,
+  ]);
 
   //useEffect untuk auto munculin perhitungan extra
   useEffect(() => {
     const totalExtra = () => {
-    const sumExtra = valueExtra.pritTotal.reduce((a,b)=> a + b, 0)
-    setExtraTotal({...extraTotal, extraSubTotal : sumExtra})
+      const sumExtra = valueExtra.pritTotal.reduce((a, b) => a + b, 0);
+      setExtraTotal({ ...extraTotal, extraSubTotal: sumExtra });
     };
     totalExtra();
   }, [valueExtra.pritTotal]);
 
   // Handle delete untuk tabel extra
   const handleDelete = (index: any) => {
-    const delPritId = valueExtra.pritId.filter((name, i) => i !== index)
-    const delPritName = valueExtra.pritName.filter((name, i) => i !== index)
-    const delPritPrice = valueExtra.pritPrice.filter((price, i) => i !== index)
-    const delPritQty = valueExtra.pritQty.filter((qty, i) => i !== index)
-    const delPritTotal = valueExtra.pritTotal.filter((total, i) => i !== index)
-    const delPritMeasure = valueExtra.pritMeasure.filter((measure, i) => i !== index)
-    setValueExtra({ pritName: delPritName, pritPrice: delPritPrice, pritId : delPritId, pritMeasure : delPritMeasure, pritQty : delPritQty, pritTotal : delPritTotal })
+    const delPritId = valueExtra.pritId.filter((name, i) => i !== index);
+    const delPritName = valueExtra.pritName.filter((name, i) => i !== index);
+    const delPritPrice = valueExtra.pritPrice.filter((price, i) => i !== index);
+    const delPritQty = valueExtra.pritQty.filter((qty, i) => i !== index);
+    const delPritTotal = valueExtra.pritTotal.filter((total, i) => i !== index);
+    const delPritMeasure = valueExtra.pritMeasure.filter(
+      (measure, i) => i !== index
+    );
+    setValueExtra({
+      pritName: delPritName,
+      pritPrice: delPritPrice,
+      pritId: delPritId,
+      pritMeasure: delPritMeasure,
+      pritQty: delPritQty,
+      pritTotal: delPritTotal,
+    });
   };
 
   //Handle untuk generate booking code otomatis
@@ -503,7 +553,6 @@ export default function bookingRoom() {
   };
 
   const handleReservation = () => {
-
     if (boorNumber !== null) {
       const lastOrderNumber =
         boorNumber?.length > 0 ? boorNumber[0].boor_order_number : null;
@@ -537,32 +586,32 @@ export default function bookingRoom() {
         // } else {
         // newOrderNumber = `BO#${currentDateString}-0001`;
         // }
-          // const token = localStorage.getItem("token");
-          // //   console.log(token)
-          //   if (!token) {
-          //     window.location.href = "/users/login";
-          //   }else {
-            //   }
-                setDetail(!detail);
+        // const token = localStorage.getItem("token");
+        // //   console.log(token)
+        //   if (!token) {
+        //     window.location.href = "/users/login";
+        //   }else {
+        //   }
+        setDetail(!detail);
       }
     }
   };
 
-  const handleAddExtra = () => {
-    dispacth(insertBookingExtra(dataExtra))
-    console.log(dataExtra)
-  }
+  // const handleAddExtra = () => {
+  //   dispacth(insertBookingExtra(dataExtra));
+  //   console.log(dataExtra);
+  // };
 
   const handleAdultsValue = (value: any) => {
-    setDataBooking({...dataBooking, borde_adults : value})
+    setDataBooking({ ...dataBooking, borde_adults: value });
   };
 
   const handleKidsValue = (value: any) => {
-    setDataBooking ({...dataBooking, borde_kids : value})
+    setDataBooking({ ...dataBooking, borde_kids: value });
   };
 
   const handleRoomValue = (value: any) => {
-    setDataBooking({...dataBooking, boor_total_room : value})
+    setDataBooking({ ...dataBooking, boor_total_room: value });
   };
 
   // const handleDeleteSpof = () => {
@@ -585,7 +634,7 @@ export default function bookingRoom() {
     (state: any) => state.payUserAccReducer
   );
   const accNumberDompet = `131${user[0]?.user_phone_number}`;
-  const accNumberGoto = user[0]?.user_phone_number;
+  const accNumberGoto = user[0]?.user_phone_number.slice(1);
 
   useEffect(() => {
     setDataBooking({
@@ -602,19 +651,21 @@ export default function bookingRoom() {
     setShowCheck(true);
   };
 
-  const router = useRouter()
+  const router = useRouter();
   const onCompleteCash = () => {
     const boor_id = boorNumber?.length > 0 ? boorNumber[0].boor_id : null;
     const id = boor_id + 1;
     dispatch(insertBooking(dataBooking));
     dispacth(doCreateTransaction(dataPayment));
 
-    setTimeout(() =>
-      router.push({
-        pathname: `/booking/room/invoice`,
-        query: {id : dataBooking.boor_order_number},
-      })
-    , 1000);
+    setTimeout(
+      () =>
+        router.push({
+          pathname: `/booking/room/invoice`,
+          query: { id: dataBooking.boor_order_number },
+        }),
+      1000
+    );
   };
 
   //   useEffect(() => {
@@ -770,7 +821,7 @@ export default function bookingRoom() {
           clickOk={handleOk}
           clickCancel={handleCancel}
           handleCancell={handleClose}
-          phone={user[0]?.user_phone_number}
+          phone={accNumberGoto}
           dataUser={user}
           dataPaga={payPaga}
         />
@@ -801,7 +852,7 @@ export default function bookingRoom() {
                         <div className="flex">
                           {/* <Rate allowHalf disabled defaultValue={hotel.hotel_rating_star} /> */}
                           <div>
-                            <div className="flex border-2 rounded items-center justify-center w-20 h-10 text-2xl">
+                            <div className="flex border-0 rounded items-center justify-center w-20 h-10 text-2xl">
                               <h2>{rating}</h2>
                               <div className="flex justify-center">
                                 <img
@@ -816,7 +867,7 @@ export default function bookingRoom() {
                                   ({allReview} Ratings)
                                 </h2>
                               </div>
-                              <div className="flex justify-center ml-3">
+                              <div className="flex justify-center ml-3 font-semibold italic">
                                 <h2>{ratingClass}</h2>
                               </div>
                             </div>
@@ -824,10 +875,14 @@ export default function bookingRoom() {
                         </div>
                       </div>
                       <div className="text-l mt-2">
-                        <p>{hotel.length > 0 &&(
-                          <Link href = {`${maps}${hotel[0].place}`}>{hotel[0].place}</Link>
-                        )}
-                          {hotel.place}</p>
+                        <p className="italic">
+                          {hotel.length > 0 && (
+                            <Link href={`${maps}${hotel[0].place}`}>
+                              {hotel[0].place}
+                            </Link>
+                          )}
+                          {hotel.place}
+                        </p>
                       </div>
                       <div className="text-xl mt-2 font-semibold">
                         <p>Description</p>
@@ -839,35 +894,35 @@ export default function bookingRoom() {
                         <p>Amenities</p>
                       </div>
                       <div className="flex">
-                        <div className="flex items-center mr-2">
-                          <HiUserGroup /> Meeting Room
+                        <div className="flex items-center mr-5">
+                          <HiUserGroup className="mr-2" /> Meeting Room
                         </div>
-                        <div className="flex items-center mr-2">
-                          <IoRestaurantSharp /> Restaurant
+                        <div className="flex items-center mr-5">
+                          <IoRestaurantSharp className="mr-2" /> Restaurant
                         </div>
-                        <div className="flex items-center mr-2">
-                          <BiSwim /> Swimming Pool
-                        </div>
-                        <div
-                          className={`${
-                            more ? "block flex items-center mr-2" : "hidden"
-                          }`}
-                        >
-                          <HiUserGroup /> Ballroom
+                        <div className="flex items-center mr-5">
+                          <BiSwim className="mr-2" /> Swimming Pool
                         </div>
                         <div
                           className={`${
-                            more ? "block flex items-center mr-2" : "hidden"
+                            more ? "block flex items-center mr-5" : "hidden"
                           }`}
                         >
-                          <CgGym /> Gym
+                          <HiUserGroup className="mr-2" /> Ballroom
                         </div>
                         <div
                           className={`${
-                            more ? "block flex items-center mr-2" : "hidden"
+                            more ? "block flex items-center mr-5" : "hidden"
                           }`}
                         >
-                          <HiUserGroup /> Aula
+                          <CgGym className="mr-2" /> Gym
+                        </div>
+                        <div
+                          className={`${
+                            more ? "block flex items-center mr-5" : "hidden"
+                          }`}
+                        >
+                          <HiUserGroup className="mr-2" /> Aula
                         </div>
                         <div className="flex items-center">
                           <button
@@ -896,13 +951,15 @@ export default function bookingRoom() {
                   let arrPict = pict.split(",");
                   return (
                     <div>
-                      <Card>
+                      <Card className="mb-3 shadow-lg">
                         <Row>
                           <Col span={16}>
-                            <div className="text-xl">{room.faci_name}</div>
+                            <div className="text-xl font-semibold">
+                              {room.faci_name}
+                            </div>
                             <div>Max Vacant : {room.faci_max_number}</div>
                             <div className="flex">
-                              <div className="flex text-xl items-center mr-3">
+                              <div className="flex text-xl items-center mr-3 text-red-500 font-semibold">
                                 {room.faci_rate_price}
                               </div>
                               <div className="flex text-l text-decoration-line: line-through items-center">
@@ -913,9 +970,13 @@ export default function bookingRoom() {
                           <Col span={8}>
                             <div className="float-right">
                               <div className="flex justify-center">
-                                <img src={`../.${arrPict[0]}`} alt="" className='w-3/4 rounded border-2' />
+                                <img
+                                  src={`../.${arrPict[0]}`}
+                                  alt=""
+                                  className="w-3/4 rounded border-2"
+                                />
                               </div>
-                              <div className="flex justify-center">
+                              <div className="flex justify-center mt-5">
                                 <Buttons
                                   funcs={() => handleButtonSelected(index)}
                                 >
@@ -936,7 +997,7 @@ export default function bookingRoom() {
                 <Row>
                   <Col span={10} className="flex justify-center">
                     <div>
-                      <div className="flex border-2 rounded items-center justify-center w-20 h-10 text-2xl">
+                      <div className="flex border-0 rounded items-center justify-center w-20 h-10 text-2xl">
                         <h2>{rating}</h2>
                         <div className="flex justify-center">
                           <img
@@ -945,7 +1006,7 @@ export default function bookingRoom() {
                           />
                         </div>
                       </div>
-                      <div className="flex justify-center">
+                      <div className="flex justify-center font-semibold italic">
                         <h2>{ratingClass}</h2>
                       </div>
                       <div className="flex justify-center">
@@ -1081,7 +1142,7 @@ export default function bookingRoom() {
               {oneReview &&
                 oneReview.map((hotelReview: any) => {
                   return (
-                    <div>
+                    <div className="mb-2">
                       <div className="flex items-center">
                         <div className="text-xl mr-5 font-semibold">
                           {hotelReview.user_full_name}
@@ -1094,33 +1155,38 @@ export default function bookingRoom() {
                           </p>
                         </div>
                       </div>
-                      <div>{hotelReview.hore_user_review}</div>
+                      <p className="italic">{hotelReview.hore_user_review}</p>
                     </div>
                   );
                 })}
             </div>
+            <Divider />
             <div>
               <p className="text-2xl font-semibold my-2">Hotel Policies</p>
             </div>
-            <div className="flex">
-              <div className="mr-14 text-l">Checkin</div>
-              <div className="text-l">Checkout</div>
+            <div className="my-2">
+              <div className="flex">
+                <div className="mr-14 text-l">Checkin</div>
+                <div className="text-l">Checkout</div>
+              </div>
+              <div className="flex mb-1">
+                <div className="mr-4 text-xl font-semibold">02:00 PM</div>
+                <div className="text-xl font-semibold">12:00 PM</div>
+              </div>
             </div>
-            <div className="flex mb-1">
-              <div className="mr-4 text-xl font-semibold">02:00 PM</div>
-              <div className="text-xl font-semibold">12:00 PM</div>
-            </div>
-            <div>
-              <CaretRightFilled /> Cancellation policy, Notify 24 hours prior to
-              arrival for full refund.
-            </div>
-            <div>
-              <CaretRightFilled /> Insurance policy, Guests responsible for lost
-              or stolen items.
-            </div>
-            <div>
-              <CaretRightFilled /> Hospitality, Providing excellent service to
-              exceed guest expectations.
+            <div className="my-2">
+              <div>
+                <CaretRightFilled /> Cancellation policy, Notify 24 hours prior
+                to arrival for full refund.
+              </div>
+              <div>
+                <CaretRightFilled /> Insurance policy, Guests responsible for
+                lost or stolen items.
+              </div>
+              <div>
+                <CaretRightFilled /> Hospitality, Providing excellent service to
+                exceed guest expectations.
+              </div>
             </div>
           </Col>
 
@@ -1130,7 +1196,7 @@ export default function bookingRoom() {
                 setDetail(!detail), setPayment(!payment);
               }}
             >
-              <div className="flex">
+              <div className="flex my-2">
                 <div className="flex text-xl items-center mr-3">
                   <LeftOutlined />
                 </div>
@@ -1139,7 +1205,7 @@ export default function bookingRoom() {
                 </div>
               </div>
             </button>
-            <div className="font-bold text-2xl">
+            <div className="font-bold text-2xl mt-2">
               <p>1. Enter Your Details</p>
             </div>
             <div className="text-xl items-center my-3">
@@ -1155,7 +1221,7 @@ export default function bookingRoom() {
                     <Input
                       value={getUser[0] ? getUser[0].user_full_name : "None"}
                       className="w-3/4"
-                      disabled
+                      readOnly
                     ></Input>
                   </div>
                 </div>
@@ -1168,7 +1234,7 @@ export default function bookingRoom() {
                   <div>
                     <Input
                       value={getUser[0] ? getUser[0].user_email : "None"}
-                      disabled
+                      readOnly
                       className="w-3/4"
                     />
                   </div>
@@ -1184,14 +1250,14 @@ export default function bookingRoom() {
                   <div className="mb-5">
                     <Input
                       value={getUser[0] ? getUser[0].user_phone_number : "None"}
-                      disabled
+                      readOnly
                       className="w-3/4"
                     />
                   </div>
                 </div>
               </Col>
             </Row>
-            <div className="font-bold text-2xl">
+            <div className="font-bold text-2xl my-3">
               <p>2. Complete your booking</p>
             </div>
             <div className="text-xl items-center my-3">
@@ -1213,18 +1279,8 @@ export default function bookingRoom() {
                 </div>
               </Modal>
               <Table columns={columnsExtra} dataSource={dataExtra} />
-              <button onClick={handleAddExtra}>Finish</button>
             </div>
             <div className="flex justify-between">
-              {/* <div className='flex justify-between'>
-                                Total Booking Extra
-                            </div>
-                            <div className='flex justify-between'>
-                                {extraTotal.extraSubTotal}
-                            </div>
-                            <div className='flex justify-between'>
-                                <button>Simpan</button>
-                            </div> */}
             </div>
             <div className={`${payment ? "block" : "hidden"}`}>
               <div className="font-bold text-2xl">
@@ -1236,7 +1292,9 @@ export default function bookingRoom() {
                   <Col span={8}>
                     <Card
                       size="small"
-                      className="m-4 font-bold text-[14px]"
+                      className={`m-4 font-bold text-[14px] ${
+                        isCash ? "bg-[#754cff] text-white" : ""
+                      }`}
                       hoverable
                       onClick={() => {
                         setIsCash(true),
@@ -1255,7 +1313,9 @@ export default function bookingRoom() {
                     </Card>
                     <Card
                       size="small"
-                      className="m-4 font-bold text-[14px]"
+                      className={`m-4 font-bold text-[14px] ${
+                        !isCash ? "bg-[#754cff] text-white" : ""
+                      }`}
                       hoverable
                       onClick={() => {
                         setIsCash(false),
@@ -1290,7 +1350,7 @@ export default function bookingRoom() {
                         </div>
                         <Button
                           onClick={onCompleteCash}
-                          className="mt-6 bg-blue-600 text-white w-full h-10"
+                          className="mt-6 bg-[#754cff] text-white w-full h-10"
                         >
                           Complete Order
                         </Button>
@@ -1304,7 +1364,7 @@ export default function bookingRoom() {
                             className={`mb-2 ${
                               selectCard.accNumber ===
                                 accDompet?.usacAccountNumber &&
-                              "bg-slate-500 text-white"
+                              "bg-[#754cff] text-white"
                             }`}
                             hoverable
                             onClick={() => {
@@ -1334,7 +1394,7 @@ export default function bookingRoom() {
                             </div>
                           </Card>
                         ) : (
-                          <Card size={"small"}>
+                          <Card size={"small"} className="mb-2">
                             <div className="flex justify-between items-center px-6">
                               <p className="text-[16px] font-semibold">
                                 Dompet Realta
@@ -1345,7 +1405,7 @@ export default function bookingRoom() {
                                   accDompet?.usacAccountNumber
                                     ? "text-white"
                                     : "text-blue-700"
-                                }`}
+                                } hover:cursor-pointer`}
                                 onClick={() => setShowActivation(true)}
                               >
                                 Activate
@@ -1354,44 +1414,57 @@ export default function bookingRoom() {
                           </Card>
                         )}
 
-                        <Card
-                          size={"small"}
-                          className={`mb-2 ${
-                            selectCard.accNumber ===
-                              accGoto?.usacAccountNumber &&
-                            "bg-slate-500 text-white"
-                          }`}
-                          hoverable
-                          onClick={() =>
-                            isLinked
-                              ? setSelectCard({
-                                  accNumber: accGoto?.usacAccountNumber,
-                                  balance: accGoto?.usacSaldo,
-                                })
-                              : ""
-                          }
-                        >
-                          <div className="flex justify-between px-6">
-                            <p className="text-[16px] font-semibold">GOTO</p>
-                            {isLinked ? (
+                        {isLinked ? (
+                          <Card
+                            size={"small"}
+                            className={`mb-2 ${
+                              selectCard.accNumber ===
+                                accGoto?.usacAccountNumber &&
+                              "bg-[#754cff] text-white"
+                            }`}
+                            hoverable
+                            onClick={() => {
+                              setSelectCard({
+                                accNumber: accGoto?.usacAccountNumber,
+                                balance: accGoto?.usacSaldo,
+                              });
+                              setDataPayment({
+                                ...dataPayment,
+                                sourceNumber: accGoto?.usacAccountNumber,
+                                targetNumber: "13198989898",
+                              });
+                              setDataBooking({
+                                ...dataBooking,
+                                boor_pay_type: "PG",
+                                boor_cardnumber: accGoto?.usacAccountNumber,
+                              });
+                            }}
+                          >
+                            <div className="flex justify-between px-6">
+                              <p className="text-[16px] font-semibold">GOTO</p>
                               <p className="text-[16px] font-semibold">
                                 {saldoGoto}
                               </p>
-                            ) : (
+                            </div>
+                          </Card>
+                        ) : (
+                          <Card size={"small"} className="mb-2">
+                            <div className="flex justify-between px-6">
+                              <p className="text-[16px] font-semibold">GOTO</p>
                               <p
                                 className={`${
                                   selectCard.accNumber ===
                                   accGoto?.usacAccountNumber
                                     ? "text-white"
                                     : "text-blue-700"
-                                }`}
+                                } hover:cursor-pointer`}
                                 onClick={() => setShowLinked(true)}
                               >
                                 Link Account
                               </p>
-                            )}
-                          </div>
-                        </Card>
+                            </div>
+                          </Card>
+                        )}
 
                         <p className="m-4">Debet/Credit Card</p>
                         {bankAcc.map((item: any) => (
@@ -1399,7 +1472,7 @@ export default function bookingRoom() {
                             size={"small"}
                             className={`mb-2 ${
                               selectCard.accNumber === item.usacAccountNumber &&
-                              "bg-slate-500 text-white"
+                              "bg-[#754cff] text-white"
                             }`}
                             hoverable
                             onClick={() => {
@@ -1446,7 +1519,7 @@ export default function bookingRoom() {
                         <Button
                           disabled={disabled}
                           onClick={onComplete}
-                          className="mt-6 bg-blue-600 text-white w-full h-12"
+                          className="mt-6 bg-[#754cff] text-white w-full h-12"
                         >
                           Complete Order
                         </Button>
@@ -1457,60 +1530,80 @@ export default function bookingRoom() {
               </div>
             </div>
           </Col>
-          <Col span={10}>
-            <div className="sticky top-0 border-4 shadow-lg p-3 rounded-lg">
-              <div className="flex justify-center font-extrabold text-3xl">
+          <Col span={10} >
+            <div className="sticky top-0 border-4 shadow-lg p-5 rounded-lg bg-white">
+              <div className="flex justify-center font-bold text-3xl">
                 Booking Order Details
               </div>
-              <div>
                 <h1 className="font-bold text-lg mt-4">
                   {dataBooking.boor_order_number}
                 </h1>
-              </div>
+              <Divider/>
               <div className="flex text-center mt-3 items-center">
-                <div className="flex text-2xl font-bold text-center">
+                <div className="flex text-2xl font-bold text-center text-red-500">
                   <p>{priceRoom.faci_rate_price}</p>
                 </div>
                 <div className="flex ml-2 text-m line-through text-center">
                   <p>{priceRoom.faci_high_price}</p>
                 </div>
               </div>
-              <p className="my-3">Include Tax</p>
+              <p className="my-3 italic">Include Tax</p>
               <Row gutter={10}>
-                  <Col span={12}>
-                    <p>Please input date :</p>
-                  </Col>
-                  <Col span={12} className="flex">
-                    <Col span={8}>
+                <Col span={12}>
+                  <p>Please input date :</p>
+                </Col>
+                <Col span={12} className="flex">
+                  <Col span={8}>
                     <p>Room : </p>
-                    </Col>
-                    <Col span={8}>
-                    <p>Adults : </p>
-                    </Col>
-                    <Col span={8}>
-                    <p>Kids : </p>
-                    </Col>
                   </Col>
+                  <Col span={8}>
+                    <p>Adults : </p>
+                  </Col>
+                  <Col span={8}>
+                    <p>Kids : </p>
+                  </Col>
+                </Col>
               </Row>
               <Row gutter={10}>
-                  <Col span={12}>
+                <Col span={12}>
                   <RangePicker
-                  onChange={handleDateRangeChange}
-                  format={dateFormat}
-                  disabledDate={(current) => disabledDate(current, dayjs())}
+                    onChange={handleDateRangeChange}
+                    format={dateFormat}
+                    disabledDate={(current) => disabledDate(current, dayjs())}
                   />
+                </Col>
+                <Col span={12} className="flex gap-5">
+                  <Col span={6}>
+                    <InputNumber
+                      type="number"
+                      className="w-14"
+                      min={1}
+                      max={3}
+                      value={dataBooking.boor_total_room}
+                      onChange={handleRoomValue}
+                    />
                   </Col>
-                  <Col span={12} className="flex gap-5">
-                    <Col span={6}>
-                    <InputNumber type="number" className="w-14" min={1} max={3}  value={dataBooking.boor_total_room} onChange={handleRoomValue}/>
-                    </Col>
-                    <Col span={6}>
-                    <InputNumber type="number" className="w-14" min={1} max={4}  value={dataBooking.borde_adults} onChange={handleAdultsValue}/>
-                    </Col>
-                    <Col span={6}>
-                    <InputNumber type="number" className="w-14" min={0} max={2}  value={dataBooking.borde_kids} onChange={handleKidsValue}/>
-                    </Col>
+                  <Col span={6}>
+                    <InputNumber
+                      type="number"
+                      className="w-14"
+                      min={1}
+                      max={4}
+                      value={dataBooking.borde_adults}
+                      onChange={handleAdultsValue}
+                    />
                   </Col>
+                  <Col span={6}>
+                    <InputNumber
+                      type="number"
+                      className="w-14"
+                      min={0}
+                      max={2}
+                      value={dataBooking.borde_kids}
+                      onChange={handleKidsValue}
+                    />
+                  </Col>
+                </Col>
               </Row>
               <div className="flex justify-between items-center mt-2 mb-3">
                 <div className=" flex my-1 items-center">
@@ -1527,7 +1620,7 @@ export default function bookingRoom() {
                       typeSpof.map((spof: any, index: any) => {
                         return (
                           <div>
-                            <Card>
+                            <Card className="mb-3">
                               <Row>
                                 <Col span={16}>
                                   <div className="flex items-center mb-3">
@@ -1562,7 +1655,7 @@ export default function bookingRoom() {
                   </Modal>
                   <Buttons funcs={() => setSpofOpen(true)}>Get Coupons</Buttons>
                 </div>
-                <div className="text-xl font-semibold">
+                <div className="text-xl font-semibold italic">
                   {spofPrice.spofName}
                 </div>
                 {/* <div>
@@ -1576,9 +1669,9 @@ export default function bookingRoom() {
                 <div className="flex text-l items-center">Additional Extra</div>
                 <div className="flex text-xl items-center">
                   {extraTotal.extraSubTotal.toLocaleString("id-ID", {
-                      style: "currency",
-                      currency: "IDR",
-                    })}
+                    style: "currency",
+                    currency: "IDR",
+                  })}
                 </div>
               </div>
               <div className="flex items-center justify-between mb-3">
@@ -1591,10 +1684,6 @@ export default function bookingRoom() {
                 <div className="flex text-l items-center">Total Price</div>
                 <div className="flex text-xl items-center">
                   <p>
-                    {/* {totalPrice.toLocaleString("id-ID", {
-                      style: "currency",
-                      currency: "IDR",
-                    })} */}
                     {dataBooking.boor_total_amount.toLocaleString("id-ID", {
                       style: "currency",
                       currency: "IDR",
@@ -1602,21 +1691,24 @@ export default function bookingRoom() {
                   </p>
                 </div>
               </div>
-              <div className="text-m">(Include Tax)</div>
+              <div className="text-m italic">Include Tax</div>
               <div className="flex justify-center mt-3">
                 <Button
                   onClick={handleReservation}
-                  className={`${detail ? "hidden" : "block"}`}
+                  className={`text-white bg-[#754CFF] ${detail ? "hidden" : "block"}`}
                 >
                   Reservation Booking
                 </Button>
                 <Button
                   // onClick={handleBookingCode}
                   onClick={() => {
-                    setPayment(!payment), console.log(dataBooking, dataPayment);
+                    setPayment(!payment), 
+                    dispacth(insertBookingExtra(dataExtra)), 
+                    console.log(dataBooking, dataPayment)
                   }}
-                  className={`${!detail || payment ? "hidden" : "block"}`}
+                  className={`text-white bg-[#754CFF] ${!detail || payment ? "hidden" : "block"}`}
                 >
+                  {/* text-white bg-[#754CFF] */}
                   Continue to Booking Order
                 </Button>
               </div>
@@ -1626,4 +1718,4 @@ export default function bookingRoom() {
       </div>
     </Layouts>
   );
-};
+}

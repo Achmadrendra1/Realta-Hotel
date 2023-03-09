@@ -1,13 +1,13 @@
 import Layouts from "@/layouts/layout";
 import { Breadcrumb, Button, Card, Carousel, Checkbox, Col, Input, Rate, Row } from "antd";
 import { CheckboxValueType } from "antd/es/checkbox/Group";
-import React, {useEffect, useState} from 'react';
-import {HiUserGroup} from 'react-icons/hi'
-import {IoRestaurantSharp} from 'react-icons/io5'
-import {BiSwim} from 'react-icons/bi'
+import React, { useEffect, useState } from 'react';
+import { HiUserGroup } from 'react-icons/hi'
+import { IoRestaurantSharp } from 'react-icons/io5'
+import { BiSwim } from 'react-icons/bi'
 import Buttons from "@/components/Button";
-import { useDispatch, useSelector} from "react-redux";
-import { getSpHotel } from "@/Redux/Action/Booking/BookingAction"; 
+import { useDispatch, useSelector } from "react-redux";
+import { getSpHotel } from "@/Redux/Action/Booking/BookingAction";
 import { useRouter } from "next/router";
 
 //OnChange checkbox
@@ -16,7 +16,7 @@ const onChange = (checkedValues: CheckboxValueType[]) => {
 };
 
 export default function index() {
-  
+
   const root = useRouter()
   const dispatch = useDispatch();
   const { location, date } = root.query
@@ -24,54 +24,54 @@ export default function index() {
   useEffect(() => {
     dispatch(getSpHotel())
   }, []);
-  
+
   //View detail hotel by id
-  const viewDetailId = (id : any) => {
+  const viewDetailId = (id: any) => {
     root.push({
-      pathname : ('/booking/room/' + id)
+      pathname: ('/booking/room/' + id)
     })
   }
 
   //Get data Hotel
-  let hotel = useSelector((state : any) => state.HotelBoorReducer.hotel)
-  const locationHotel = hotel.filter((item:any) => {
-    if (!location) {
-      return item;
-    } else {
-      return item?.city.toLowerCase().includes(location.toLowerCase());
-    }
-  })
+  let hotel = useSelector((state: any) => state.HotelBoorReducer.hotel)
+  // const locationHotel = hotel.filter((item:any) => {
+  //   if (!location) {
+  //     return item;
+  //   } else {
+  //     return item?.city.toLowerCase().includes(location.toLowerCase());
+  //   }
+  // })
 
   //Hook untuk View More
   const [more, setMore] = useState(false)
-  
+
   //Hook untuk Filter
   const [filter, setFilter] = useState({
-    lowest : 0,
-    highest : 0
+    lowest: 0,
+    highest: 0
   })
 
   //Hook untuk map
   const [mapHotel, setMapHotel] = useState()
 
-  useEffect(()=>{
-    setMapHotel(locationHotel)
+  useEffect(() => {
+    setMapHotel(hotel)
   }, [hotel])
 
-  const filterHotel = locationHotel?.filter((items : any) => 
-  parseInt((items.faci_rateprice).substring(3).replace(".","")) >= filter.lowest
-  &&
-  parseInt((items.faci_rateprice).substring(3).replace(".","")) <= filter.highest
+  const filterHotel = hotel?.filter((items: any) =>
+    parseInt((items.faci_rateprice).substring(3).replace(".", "")) >= filter.lowest
+    &&
+    parseInt((items.faci_rateprice).substring(3).replace(".", "")) <= filter.highest
   )
 
-  const handleChangePrice = (event : any) => {
+  const handleChangePrice = (event: any) => {
     const { name, value } = event.target;
-    setFilter(items => ({...items, [name] : value})) 
+    setFilter(items => ({ ...items, [name]: value }))
   }
 
   const handleClear = () => {
-    setFilter({...filter, highest : 0, lowest : 0})
-    setMapHotel(locationHotel)
+    setFilter({ ...filter, highest: 0, lowest: 0 })
+    setMapHotel(hotel)
   }
 
   const handleFilter = () => {
@@ -85,30 +85,30 @@ export default function index() {
           <Col span={6}>
             <Card style={{ width: 300 }}>
               <div className="flex justify-between items-center">
-                  <div className='text-2xl font-semibold'>
+                  <div className='text-xl font-semibold'>
                       <p>Filters</p>
                   </div>
                   <div>
-                    <button className='text-decoration-line: underline font-semibold' onClick={handleClear}>Clear All</button>
+                    <button className='text-sm font-semibold text-red-600' onClick={handleClear}>Clear All</button>
                   </div>
               </div>
               <div>
-                  <p className="text-xl py-3 font-semibold">Price Range</p>
+                  <p className="text-lg py-3 font-semibold">Price Range</p>
                   <div className="flex justift-between items-center">
                     <Col span={10}>
-                      <Input type="number" name="lowest" value={filter.lowest} onChange={handleChangePrice}/>
+                      <Input type="number" prefix="Rp." name="lowest" value={filter.lowest} onChange={handleChangePrice}/>
                     </Col>
-                      <p className="px-1">Sampai</p>
+                      <p className="px-1">-</p>
                     <Col span={10}>
-                      <Input type="number" name="highest" value={filter.highest} onChange={handleChangePrice}/>
+                      <Input type="number" name="highest" prefix="Rp." value={filter.highest} onChange={handleChangePrice}/>
                     </Col>
                   </div>
               </div>
               <div>
-                  <p className="text-xl py-3 font-semibold ">Hotel Facilities</p>
+                  <p className="text-lg py-3 font-semibold ">Hotel Facilities</p>
                   <div>
                     <Checkbox.Group style={{ width: '100%' }} onChange={onChange}>
-                        <Row>
+                        <Row gutter={16}>
                           <Col span={24}>
                             <Checkbox value="Meeting Room">Meeting Room</Checkbox>
                           </Col>
@@ -131,31 +131,21 @@ export default function index() {
                       </Checkbox.Group>
                   </div>
                 <div className="py-1 font-bold">
-                  <button onClick={()=> setMore(!more)} className={`${more ? "hidden" : "block"}`}>+ View More</button>
-                  <button onClick={()=> setMore(!more)} className={`${!more ? "hidden" : "block"}`}>- Less More</button>
+                  <button onClick={()=> setMore(!more)} className={`${more ? "hidden" : "block"} font-semibold`}>+ View More</button>
+                  <button onClick={()=> setMore(!more)} className={`${!more ? "hidden" : "block"} font-semibold`}>- Less More</button>
                 </div>
-                <div className="text-center">
-                  <Button onClick={handleFilter} className="">Filter</Button>
+                <div className="mt-4 text-center">
+                  <Buttons funcs={handleFilter}>Filter</Buttons>
                 </div>
               </div>
             </Card>
           </Col>
           <Col span={18}>
             <div>
-              <div className="mb-3">
-              <Breadcrumb separator=">">
-                  <Breadcrumb.Item href="http://localhost:3000/">
-                  Home
-                  </Breadcrumb.Item>
-                  <Breadcrumb.Item href="http://localhost:3000/booking/">
-                  Hotel
-                  </Breadcrumb.Item>
-              </Breadcrumb>
-              </div>
               <div>
                 {
                   mapHotel &&
-                  mapHotel.map((hotel : any, index:number)=>{
+                  mapHotel.map((hotel: any, index: number) => {
                     let room = hotel.faci_hotelall;
                     let arrRoom = room.split(',');
                     let ratePrice = hotel.faci_rateprice;
@@ -165,31 +155,31 @@ export default function index() {
                     let pict = hotel?.url
                     let arrPict = pict?.split(",")
                     return (
-                      <Card key={index}>
+                      <Card key={index} className="mb-2">
                         <Row>
                           <Col span={6} className="flex items-center">
-                              <Row gutter={10}>
-                                <Col span={18}>
-                                      <Carousel autoplay autoplaySpeed={5000}>
-                                        {arrPict?.map((each : any) => (
-                                            <img className="w-full" src={each.slice(1)} alt="hotels"/>
-                                        ))}
-                                      </Carousel>
-                                </Col>
-                                <Col span={6}>
-                                    {arrPict?.map((image : any, index : any)=> (
-                                      <img key={index} src={image} className="w-16 py-1"/>
-                                    ))}
-                                </Col>
-                              </Row>
+                            <Row gutter={10}>
+                              <Col span={18}>
+                                <Carousel autoplay autoplaySpeed={5000}>
+                                  {arrPict?.map((each: any) => (
+                                    <img className="w-full" src={each.slice(1)} alt="hotels" />
+                                  ))}
+                                </Carousel>
+                              </Col>
+                              <Col span={6}>
+                                {arrPict?.map((image: any, index: any) => (
+                                  <img key={index} src={image} className="w-16 py-1" />
+                                ))}
+                              </Col>
+                            </Row>
                           </Col>
                           <Col span={18}>
-                            <Card>
+                            <Card className="border-0">
                               <div>
-                                  <p className="text-2xl">{
-                                    hotel.hotel_name
-                                  }
-                                  </p>
+                                <p className="text-2xl font-semibold">{
+                                  hotel.hotel_name
+                                }
+                                </p>
                               </div>
                               <div>
                                 <p className="text-m">{
@@ -197,31 +187,28 @@ export default function index() {
                                 }
                                 </p>
                               </div>
-                              <div>
+                              <div className="my-2">
                                 <Rate allowHalf disabled defaultValue={hotel.hotel_rating_star} />
                               </div>
                               <div className="flex">
                                 <div className="flex items-center mr-2">
-                                  <HiUserGroup/> Meeting Room
+                                  <HiUserGroup className="mr-2" /> Meeting Room
                                 </div>
                                 <div className="flex items-center mr-2">
-                                  <IoRestaurantSharp/> Restaurant
+                                  <IoRestaurantSharp className="mr-2" /> Restaurant
                                 </div>
                                 <div className="flex items-center mr-5">
-                                  <BiSwim/> Swimming Pool
-                                </div>
-                                <div className="flex items-center">
-                                  <button>+View More</button>
+                                  <BiSwim className="mr-2" /> Swimming Pool
                                 </div>
                               </div>
                               <div>
-                                  <p className="text-l">{
-                                    arrRoom[3]
-                                  }
-                                  </p>
+                                <p className="text-l italic mt-2">{
+                                  arrRoom[3]
+                                }
+                                </p>
                               </div>
                               <div className="flex">
-                                <div className="flex text-xl items-center mr-3">
+                                <div className="flex text-xl items-center mr-3 text-red-500 font-semibold">
                                   {arrRatePrice[2]}
                                 </div>
                                 <div className="flex text-l text-decoration-line: line-through items-center">
@@ -233,8 +220,8 @@ export default function index() {
                                   per room per night
                                 </div>
                                 <div className="flex space-x-1">
-                                  <Buttons funcs={()=> viewDetailId(hotel.hotel_id)}>View Details</Buttons>
-                                  <Buttons funcs={''}>Book Now</Buttons>
+                                  <Buttons funcs={() => viewDetailId(hotel.hotel_id)}>View Details</Buttons>
+                                  <Buttons>Book Now</Buttons>
                                 </div>
                               </div>
                             </Card>
@@ -242,10 +229,10 @@ export default function index() {
                         </Row>
                       </Card>
                     )
-                    })
+                  })
                 }
               </div>
-              </div>
+            </div>
           </Col>
         </Row>
       </div>

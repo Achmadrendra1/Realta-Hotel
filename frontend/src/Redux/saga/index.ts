@@ -369,7 +369,5 @@ export default function* rootSaga() {
     takeEvery(userOrderConstant.GET_ORDER_COMPLETE, handleUserOrder),
     takeEvery(userMenuConstant.GET_MENU_USER, handleUserMenu),
 
-  ]);
-  console.log('masuk saga index');
-  
+  ]); 
 }

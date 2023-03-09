@@ -174,7 +174,7 @@ boor.boor_status,
 boor.boor_total_room,
 boor.boor_total_amount,
 TO_CHAR(borde.borde_checkin, 'DD Mon YYYY') "check_in_date",
-TO_CHAR(borde.borde_checkout, 'DD Mon YYYY') "check_in_date",
+TO_CHAR(borde.borde_checkout, 'DD Mon YYYY') "check_out_date",
 (borde.borde_adults + borde.borde_kids) "total_guest",
 borde.borde_adults,
 borde.borde_kids,
@@ -213,6 +213,7 @@ JOIN hotel.hotels hotels
 ON boor.boor_hotel_id = hotels.hotel_id
 JOIN payment.payment_transaction patr
 ON boor.boor_order_number = patr.patr_order_number
+ORDER BY boor.boor_order_date desc
 
 SELECT * FROM booking.getBookingInvoice
 
