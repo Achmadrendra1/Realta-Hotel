@@ -10,8 +10,9 @@ import {
   CameraOutlined,
   DeleteOutlined,
   EditOutlined,
+  ExclamationCircleFilled,
 } from "@ant-design/icons";
-import { Breadcrumb, Col, Rate, Row, Space, Table, Typography } from "antd";
+import { Breadcrumb, Col, Modal, Rate, Row, Space, Table, Typography } from "antd";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -35,6 +36,8 @@ export default withAuth(function HotelDetails() {
   const { hotelId } = router.query;
   const { Title, Text } = Typography;
   const rating = hotelById.hotelRatingStar;
+  const { confirm } = Modal;
+
 
   useEffect(() => {
     dispatch(getHotelID(hotelId));
@@ -68,7 +71,19 @@ export default withAuth(function HotelDetails() {
   };
 
   const onDelete = (faciId: any) => {
-    dispatch(deleteFacility(faciId));
+    confirm({
+      title: "Are you sure you want to delete this Facilities?",
+      icon: <ExclamationCircleFilled />,
+      okText: "Yes",
+      okType: "danger",
+      cancelText: "No",
+      onOk() {
+        dispatch(deleteFacility(faciId));
+      },
+      onCancel() {
+        console.log("Cancel");
+      },
+    });
   };
 
   const onUpload = (id: any) => {
@@ -170,7 +185,7 @@ export default withAuth(function HotelDetails() {
             <a>
               {" "}
               <DeleteOutlined
-                style={{ color: 'red' }}
+                style={{ color: "red" }}
                 onClick={() => onDelete(index)}
               />
             </a>{" "}
@@ -243,10 +258,7 @@ export default withAuth(function HotelDetails() {
         </Col>
         <Col span={8}>
           <Space direction="vertical">
-            <Rate
-              defaultValue={rating}
-              disabled
-            />
+            <Rate defaultValue={rating} disabled />
             <Text>{hotelById?.hotelPhonenumber}</Text>
           </Space>
         </Col>
