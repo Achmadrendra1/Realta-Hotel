@@ -10,6 +10,7 @@ import loginStyle from "@/styles/login.module.css";
 import { motion } from "framer-motion";
 import Link from "next/link";
 import { useRouter } from "next/router";
+import { CloseOutlined } from "@ant-design/icons";
 
 export default Auth ( function Register(): any {
   const [password, setPassword] = useState("");
@@ -52,6 +53,7 @@ export default Auth ( function Register(): any {
       
     >
     <div className="bg-[#f2f1fa] pt-12">
+      
     <Card className=" mx-52 drop-shadow-md  bg-[#754CFF] ">
       <Row>
       
@@ -187,6 +189,8 @@ export default Auth ( function Register(): any {
        
         </Col>
         <Col span={14} >
+        <p className="mt-4 mr-2 font-bold text-end text-lg text-white hover:cursor-pointer"><CloseOutlined onClick={() => {router.push('/')}}/></p>
+
           <Card className={`p-2 ml-5 mr-3 mt-6 ${loginStyle.cardLogin} no-border`}>
             <div className="container mt-3 ">
               <img src="/assets/icons.png" alt="" style={{ width: 60 }} />
