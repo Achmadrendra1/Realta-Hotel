@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Facilities } from 'src/entities/Facilities';
 import { FacilityPriceHistory } from 'src/entities/FacilityPriceHistory';
-import { Repository } from 'typeorm';
+import { In, Repository } from 'typeorm';
 
 @Injectable()
 export class FacilitiesService {
@@ -21,6 +21,30 @@ export class FacilitiesService {
         facilityPriceHistories: true,
         faciCagro: true,
       },
+    });
+  }
+
+  async landing(): Promise<any> {
+    return await this.faciRepository.find({
+      relations: {
+        faciHotel: true,
+        facilityPhotos: true,
+        facilityPriceHistories: true,
+        faciCagro: true,
+      },
+      where: { faciCagro: { cagroName: In(['Room', 'Restaurant ']) } },
+    });
+  }
+
+  async landingById(faciId: number): Promise<any> {
+    return await this.faciRepository.find({
+      relations: {
+        faciHotel: true,
+        facilityPhotos: true,
+        facilityPriceHistories: true,
+        faciCagro: true,
+      },
+      where: { faciId, faciCagro: { cagroName: In(['Room', 'Restaurant ']) } },
     });
   }
 

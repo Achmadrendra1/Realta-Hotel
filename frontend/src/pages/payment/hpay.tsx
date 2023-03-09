@@ -9,6 +9,7 @@ import DetailTransHpay from "./detailTransHpay";
 import { useDispatch, useSelector } from "react-redux";
 import { doTransactionRequest } from "@/Redux/Action/Payment/paymentDashAction";
 import { doGetHistory } from "@/Redux/Action/Payment/paymentUserAction";
+import { PaginationAlign, PaginationPosition } from "antd/es/pagination/Pagination";
 
 export default function hpay() {
   const addIcon = (
@@ -71,7 +72,8 @@ export default function hpay() {
     (obj: any) =>
       obj.userId === user[0]?.user_id &&
       obj.sourcePaymentName !== null &&
-      obj.sourcePaymentName == "H-Pay"
+      obj.sourceNumber == accNumber ||
+      obj.targetNumber == accNumber
   );
 
   //Filter Account Number untuk mencari account number Dompet Realta
@@ -111,6 +113,16 @@ export default function hpay() {
   };
 
   const { RangePicker } = DatePicker;
+  const handleDateChange = (value:any, dateString:any) => {
+    // console.log("Selected Time: ", value);
+    // console.log("Formatted Selected Time: ", dateString);
+    dispacth(doGetHistory({startDate: dateString[0], endDate: dateString[1]}))
+    // setDateRange(dateString);
+  };
+
+  const [position, setPosition] = useState<PaginationPosition>('bottom');
+  const [align, setAlign] = useState<PaginationAlign>('end');
+
 
   return (
     <>
@@ -153,21 +165,17 @@ export default function hpay() {
               <p className="text-lg font-semibold text-[#252525]">
                 History Transaction
               </p>
-              <RangePicker />
+              <RangePicker onChange={handleDateChange}/>
             </div>
             <List
               className="pb-4"
-              pagination={{
-                current: currentPage,
-                total: total,
-                pageSize: 10,
-              }}
-            >
-              {dataHistory.length ? dataHistory.map((item: any) => (
+              dataSource={dataHistory}
+              pagination={{ position, align,pageSize:5 }}
+              renderItem={(item:any) => (
                 <Card
                   title={item.transactionNumber}
                   extra={item.trxDate?.split("T")[0]}
-                  className="m-4"
+                  className="mb-1 mt-2 w-full"
                 >
                   <div>
                     <div className="flex justify-between">
@@ -206,35 +214,8 @@ export default function hpay() {
                     </div>
                   </div>
                 </Card>
-              )): (
-                <Empty className="mt-10 font-bold text-xl"/>
-              )}
-              {/* <Card
-                  type="inner"
-                  title="TRB#20230123-0001"
-                  extra={'23-01-2023'}
-                  className="mb-4"
-                >
-                  <div>
-                  <p className="font-bold text-lg">Booking</p>
-                  <p className="text-md">Hotel ABC</p>
-                  <p className="text-right text-md">Rp. 500.000</p>
-                  <p className="text-right text-md text-green-600 font-semibold">Credit Card</p>
-                  </div>
-                </Card>
-                <Card
-                  type="inner"
-                  title="RF#20230123-0001"
-                  extra={'23-01-2023'}
-                  className="mb-4"
-                >
-                  <div>
-                  <p className="font-bold text-lg">Refund</p>
-                  <p className="text-md">For Transaction BO#20230123-0002</p>
-                  <p className="text-right text-md">Rp. 500.000</p>
-                  <p className="text-right text-md text-green-600 font-semibold">Debet Card</p>
-                  </div>
-                </Card> */}
+              )}   
+            >
             </List>
           </div>
           {isOpenTP ? (

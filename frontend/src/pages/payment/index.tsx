@@ -16,12 +16,13 @@ import {
   doTransactionRequest,
   doUsacRequest,
 } from "@/Redux/Action/Payment/paymentDashAction";
-import { doGetHistory } from "@/Redux/Action/Payment/paymentUserAction";
+import { doGetAllBank, doGetHistory } from "@/Redux/Action/Payment/paymentUserAction";
 import withAuth from "@/PrivateRoute/WithAuth";
 import Buttons from "@/components/Button";
+import { PaginationAlign, PaginationPosition } from "antd/es/pagination/Pagination";
 
 export default withAuth(function index() {
-  const dispacth = useDispatch();
+  const dispatch = useDispatch();
   const [isActive, setIsActive] = useState(false);
   const [isOpenAct, setOpenAct] = useState(false);
   const [isEmpty, setEmpty] = useState(false);
@@ -39,9 +40,9 @@ export default withAuth(function index() {
   const accNumberGoto = user[0]?.user_phone_number;
 
   useEffect(() => {
-    dispacth(doBankRequest());
-    dispacth(doPagaRequest());
-    dispacth(doGetHistory());
+    dispatch(doGetAllBank());
+    dispatch(doPagaRequest());
+    dispatch(doGetHistory());
   }, []);
 
   // Filter History By User
@@ -97,6 +98,18 @@ export default withAuth(function index() {
   };
   // console.log(dataTrx);
   const { RangePicker } = DatePicker;
+ 
+  const handleDateChange = (value:any, dateString:any) => {
+    // console.log("Selected Time: ", value);
+    // console.log("Formatted Selected Time: ", dateString);
+    dispatch(doGetHistory({startDate: dateString[0], endDate: dateString[1]}))
+    // setDateRange(dateString);
+  };
+
+  const [position, setPosition] = useState<PaginationPosition>('bottom');
+  const [align, setAlign] = useState<PaginationAlign>('end');
+  
+
   return (
     <>
       <Head>
@@ -216,31 +229,26 @@ export default withAuth(function index() {
               <p className="text-lg font-semibold text-[#252525]">
                 History Transaction
               </p>
-              <RangePicker />
+              <RangePicker onChange={handleDateChange}/>
             </div>
             <List
               className="pb-4"
-              pagination={{
-                total: total,
-                pageSize: 10,
-                
-              }}
-            >
-              {dataTrx.length != 0 ? (
-                dataTrx.map((item: any) => (
+              dataSource={dataTrx}
+              pagination={{ position, align, pageSize:5 }}
+              renderItem={(items : any, index) => (
                   <Card
-                    title={item.transactionNumber}
-                    extra={item.trxDate?.split("T")[0]}
-                    className="m-4"
+                    title={items.transactionNumber}
+                    extra={items.trxDate?.split("T")[0]}
+                    className="mb-1 mt-2 w-full"
                   >
                     <div>
                       <div className="flex justify-between">
                         <p className="font-bold text-lg">
-                          {item.transactionNote}
+                          {items.transactionNote}
                         </p>
-                        {item.debit != 0 ? (
+                        {items.debit != 0 ? (
                           <p className="text-md text-green-600 font-semibold">
-                            {parseInt(item.debit).toLocaleString("id-ID", {
+                            {parseInt(items.debit).toLocaleString("id-ID", {
                               style: "currency",
                               currency: "IDR",
                               minimumFractionDigits: 0,
@@ -249,7 +257,7 @@ export default withAuth(function index() {
                           </p>
                         ) : (
                           <p className="text-md text-red-600 font-semibold">
-                            {parseInt(item.credit).toLocaleString("id-ID", {
+                            {parseInt(items.credit).toLocaleString("id-ID", {
                               style: "currency",
                               currency: "IDR",
                               minimumFractionDigits: 0,
@@ -260,22 +268,21 @@ export default withAuth(function index() {
                       </div>
                       <div className="flex justify-between">
                         <p className="text-md">
-                          {item.orderNumber
-                            ? item.orderNumber
+                          {items.orderNumber
+                            ? items.orderNumber
                             : "Dompet Realta"}
                         </p>
                         <p className="text-md font-semibold">
-                          {item.sourcePaymentName == null
+                          {items.sourcePaymentName == null
                             ? "Cash"
-                            : item.sourcePaymentName}
+                            : items.sourcePaymentName}
                         </p>
                       </div>
                     </div>
                   </Card>
-                ))
-              ) : (
-                <Empty className="mt-10 font-bold text-xl"/>
+              
               )}
+            >
             </List>
           </div>
         </Layouts>

@@ -1,3 +1,6 @@
+SELECT setval('payment."entitys_entity_id_seq"', (SELECT MAX(entity_id) FROM payment.entitys));
+SELECT setval('payment."payment_transaction_patr_id_seq"', (SELECT MAX(patr_id) FROM payment.payment_transaction));
+
 ------Function Get New Entity Id------
 CREATE OR REPLACE FUNCTION payment.getEntityId()
 RETURNS int
@@ -56,34 +59,49 @@ END; $$
 LANGUAGE plpgsql;
 ----------------------------------------------
 
-------Function Get History Transaction------
-CREATE OR REPLACE FUNCTION payment.getTransactionList()
-RETURNS table(
-	patr_id integer,
-	patr_trx_id varchar(55),
-	patr_order_number varchar(55),
-	total_amount money,
-	patr_trx_number_ref varchar(55),
-	user_full_name varchar(55)
-)
-AS $$
-BEGIN
-	RETURN QUERY
+------------INSERT ONE PAYMENT TRX---------------
 
---Booking--
-SELECT ptr.patr_id, ptr.patr_trx_id, ptr.patr_order_number, boor.boor_total_amount, ptr.patr_trx_number_ref, u.user_full_name
-FROM payment.payment_transaction ptr 
-JOIN booking.booking_orders boor ON boor.boor_order_number = ptr.patr_order_number
-JOIN users.users u ON u.user_id = ptr.patr_user_id
-UNION
---RESTO--
-SELECT ptr.patr_id, ptr.patr_trx_id, ptr.patr_order_number, rest.orme_total_amount, ptr.patr_trx_number_ref, u.user_full_name
-FROM payment.payment_transaction ptr 
-JOIN resto.order_menus rest ON rest.orme_order_number = ptr.patr_order_number
-JOIN users.users u ON u.user_id = ptr.patr_user_id;
+CREATE OR REPLACE PROCEDURE payment.insertOneTrx(
+	patr_trx_id			varchar,
+	patr_debet			int,
+	patr_credit			int,
+	patr_type			varchar,
+	patr_note			varchar,
+	patr_order_number	varchar,
+	patr_source_id		numeric,
+	patr_target_id		numeric,
+	patr_user_id		int
+) AS $$
+BEGIN
+	INSERT INTO payment.payment_transaction (
+		patr_trx_id,
+		patr_debet,
+		patr_credit,
+		patr_type,
+		patr_note,
+		patr_order_number,
+		patr_source_id,
+		patr_target_id,
+		patr_trx_number_ref,
+		patr_user_id,
+		patr_modified_date
+	) VALUES (
+		patr_trx_id,
+		patr_debet,
+		patr_credit,
+		patr_type,
+		patr_note,
+		patr_order_number,
+		patr_source_id,
+		patr_target_id,
+		FLOOR(RANDOM() * POWER(CAST(10 as BIGINT), 15))::text,
+		patr_user_id,
+		now()
+	);
 END;$$
 LANGUAGE plpgsql;
-----------------------------------------------
+----------------------------------------------------------------------
+
 
 --------Store Procedur Insert Payment Transaction------
 CREATE OR REPLACE PROCEDURE  payment.insertPaymentTrx(
@@ -172,7 +190,19 @@ BEGIN
 				newCode := CONCAT(trxType, '#', TO_CHAR(currentDate::date, 'YYYYMMDD'), '-', newCount);
 				note := 'Refund';
 				debetAmount := amount;
+				call payment.insertOneTrx(
+					newLastCode,
+					debetAmount,
+					creditAmount,
+					trxType,
+					note,
+					OrderNumber,
+					sourceNumber::numeric,
+					targetNumber::numeric,
+					userId
+				);
 				UPDATE payment.user_accounts SET usac_saldo = usac_saldo + amount WHERE usac_account_number = targetNumber;
+				UPDATE payment.user_accounts SET usac_saldo = usac_saldo - amount WHERE usac_account_number = sourceNumber;
 				
 			WHEN trxType = 'RPY'
 				THEN 
@@ -187,6 +217,17 @@ BEGIN
 				newCode := CONCAT(trxType, '#', TO_CHAR(currentDate::date, 'YYYYMMDD'), '-', newCount);
 				note := 'Repayment';
 				creditAmount := amount;
+				call payment.insertOneTrx(
+					newLastCode,
+					debetAmount,
+					creditAmount,
+					trxType,
+					note,
+					OrderNumber,
+					sourceNumber::numeric,
+					targetNumber::numeric,
+					userId
+				);
 				
 				UPDATE payment.user_accounts SET usac_saldo = usac_saldo + amount WHERE usac_account_number = targetNumber;
 				UPDATE payment.user_accounts SET usac_saldo = usac_saldo - amount WHERE usac_account_number = sourceNumber;	
@@ -240,48 +281,8 @@ BEGIN
 END; $$ 
 LANGUAGE plpgsql;
 
-CREATE OR REPLACE PROCEDURE payment.insertOneTrx(
-	patr_trx_id			varchar,
-	patr_debet			int,
-	patr_credit			int,
-	patr_type			varchar,
-	patr_note			varchar,
-	patr_order_number	varchar,
-	patr_source_id		numeric,
-	patr_target_id		numeric,
-	patr_user_id		int
-) AS $$
-BEGIN
-	INSERT INTO payment.payment_transaction (
-		patr_trx_id,
-		patr_debet,
-		patr_credit,
-		patr_type,
-		patr_note,
-		patr_order_number,
-		patr_source_id,
-		patr_target_id,
-		patr_trx_number_ref,
-		patr_user_id,
-		patr_modified_date
-	) VALUES (
-		patr_trx_id,
-		patr_debet,
-		patr_credit,
-		patr_type,
-		patr_note,
-		patr_order_number,
-		patr_source_id,
-		patr_target_id,
-		FLOOR(RANDOM() * POWER(CAST(10 as BIGINT), 15))::text,
-		patr_user_id,
-		now()
-	);
-END;$$
-LANGUAGE plpgsql;
-----------------------------------------------------------------------
 
-
+------------------------VIEW PAY METHODS------------------------------
 CREATE VIEW payment.user_payment_methods
 AS (
 	SELECT
@@ -307,8 +308,7 @@ AS (
 	LEFT JOIN users.users u on acc.usac_user_id = u.user_id
 )
 
--------------------------------------------------------------------------------------------
-
+--------------------VIEW HISTORY----------------------------------------
 CREATE OR REPLACE VIEW payment.user_transactions AS (
 	SELECT 
 		p.patr_id 				"transactionId",
@@ -380,22 +380,56 @@ CREATE OR REPLACE VIEW payment.user_transactions AS (
 	order by "trxTime" desc
 )
 
-CREATE OR REPLACE VIEW payments_order as 
-(SELECT ptr.patr_trx_id, ptr.patr_order_number, boor.boor_total_amount, 
-ptr.patr_trx_number_ref, ptr.patr_modified_date::date, u.user_full_name
-FROM payment.payment_transaction ptr 
-JOIN booking.booking_orders boor ON boor.boor_order_number = ptr.patr_order_number
-JOIN users.users u ON u.user_id = ptr.patr_user_id
-WHERE boor.boor_is_paid = 'P' AND boor.boor_pay_type != 'C'
-UNION
---RESTO--
-SELECT ptr.patr_trx_id, ptr.patr_order_number, rest.orme_total_amount, 
-ptr.patr_trx_number_ref, ptr.patr_modified_date::date, u.user_full_name
-FROM payment.payment_transaction ptr 
-JOIN resto.order_menus rest ON rest.orme_order_number = ptr.patr_order_number
-JOIN users.users u ON u.user_id = ptr.patr_user_id
-WHERE rest.orme_is_paid = 'P' AND rest.orme_pay_type != 'C')
+-------------------------------------------------------------------------------------------
 
-select
-(select sum(orme_total_amount) from resto.order_menus where orme_is_paid = 'P') as total_resto,
-(select sum(boor.boor_total_amount) from booking.booking_orders boor where boor_is_paid = 'P') as total_booking
+
+
+-- CREATE OR REPLACE VIEW payments_order as 
+-- (SELECT ptr.patr_trx_id, ptr.patr_order_number, boor.boor_total_amount, 
+-- ptr.patr_trx_number_ref, ptr.patr_modified_date::date, u.user_full_name
+-- FROM payment.payment_transaction ptr 
+-- JOIN booking.booking_orders boor ON boor.boor_order_number = ptr.patr_order_number
+-- JOIN users.users u ON u.user_id = ptr.patr_user_id
+-- WHERE boor.boor_is_paid = 'P' AND boor.boor_pay_type != 'C'
+-- UNION
+-- --RESTO--
+-- SELECT ptr.patr_trx_id, ptr.patr_order_number, rest.orme_total_amount, 
+-- ptr.patr_trx_number_ref, ptr.patr_modified_date::date, u.user_full_name
+-- FROM payment.payment_transaction ptr 
+-- JOIN resto.order_menus rest ON rest.orme_order_number = ptr.patr_order_number
+-- JOIN users.users u ON u.user_id = ptr.patr_user_id
+-- WHERE rest.orme_is_paid = 'P' AND rest.orme_pay_type != 'C')
+
+-- select
+-- (select sum(orme_total_amount) from resto.order_menus where orme_is_paid = 'P') as total_resto,
+-- (select sum(boor.boor_total_amount) from booking.booking_orders boor where boor_is_paid = 'P') as total_booking
+
+
+-- ------Function Get History Transaction------
+-- CREATE OR REPLACE FUNCTION payment.getTransactionList()
+-- RETURNS table(
+-- 	patr_id integer,
+-- 	patr_trx_id varchar(55),
+-- 	patr_order_number varchar(55),
+-- 	total_amount money,
+-- 	patr_trx_number_ref varchar(55),
+-- 	user_full_name varchar(55)
+-- )
+-- AS $$
+-- BEGIN
+-- 	RETURN QUERY
+
+-- --Booking--
+-- SELECT ptr.patr_id, ptr.patr_trx_id, ptr.patr_order_number, boor.boor_total_amount, ptr.patr_trx_number_ref, u.user_full_name
+-- FROM payment.payment_transaction ptr 
+-- JOIN booking.booking_orders boor ON boor.boor_order_number = ptr.patr_order_number
+-- JOIN users.users u ON u.user_id = ptr.patr_user_id
+-- UNION
+-- --RESTO--
+-- SELECT ptr.patr_id, ptr.patr_trx_id, ptr.patr_order_number, rest.orme_total_amount, ptr.patr_trx_number_ref, u.user_full_name
+-- FROM payment.payment_transaction ptr 
+-- JOIN resto.order_menus rest ON rest.orme_order_number = ptr.patr_order_number
+-- JOIN users.users u ON u.user_id = ptr.patr_user_id;
+-- END;$$
+-- LANGUAGE plpgsql;
+-- ----------------------------------------------

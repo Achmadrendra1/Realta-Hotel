@@ -57,7 +57,7 @@ export default function MyAccount() {
     (state: any) => state.payUserAccReducer
   );
   const accNumberDompet = `131${user[0]?.user_phone_number}`;
-  const accNumberGoto = user[0]?.user_phone_number;
+  const accNumberGoto = user[0]?.user_phone_number.slice(1);
 
   useEffect(() => {
     dispacth(doGetAllBank());
@@ -185,7 +185,7 @@ export default function MyAccount() {
           clickOk={handleOk}
           clickCancel={handleCancel}
           handleCancell={handleClose}
-          phone={user[0]?.user_phone_number}
+          phone={accNumberGoto}
           dataUser={user}
           dataPaga={payPaga}
         />

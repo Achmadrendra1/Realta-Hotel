@@ -1,3 +1,4 @@
+import { getSpHotel } from "@/Redux/Action/Booking/BookingAction";
 import Buttons from "@/components/Button";
 import Hero from "@/components/Hero";
 import Layouts from "@/layouts/layout";
@@ -6,6 +7,8 @@ import {
 } from "@ant-design/icons";
 import { Inter } from "@next/font/google";
 import { Card, Input, Space } from "antd";
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 const inter = Inter({ subsets: ["latin"] });
 
 export default function Home() {
@@ -58,6 +61,11 @@ export default function Home() {
   ];
 
   const { Meta } = Card;
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(getSpHotel())
+  }, []);
+  let hotel = useSelector((state : any) => state.HotelBoorReducer.hotel.slice(0,4))
 
   return (
     <Layouts>

@@ -72,11 +72,7 @@ export default withAuth(  function Index() {
               <Card style={{ background: "white" }}>
                 <Menu
                   mode="inline"
-                  // defaultSelectedKeys={["0"]}
-                  // defaultOpenKeys={["0"]}
-                  // // items={items}
                   style={{ border: 0 }}
-                  // onClick={onClick}
                   className={`bg-white text-[#754cff]`}
                 >
                   {items.map((item: any, index: any) => (
