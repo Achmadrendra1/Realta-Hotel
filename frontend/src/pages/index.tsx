@@ -4,9 +4,7 @@ import { getLanding } from "@/Redux/Action/Hotel/LandingAction";
 import Buttons from "@/components/Button";
 import Hero from "@/components/Hero";
 import Layouts from "@/layouts/layout";
-import {
-  StarOutlined
-} from "@ant-design/icons";
+import { StarOutlined } from "@ant-design/icons";
 import { Inter } from "@next/font/google";
 import { Card, Input, Space } from "antd";
 import { useEffect } from "react";
@@ -15,8 +13,8 @@ import { useRouter } from "next/router";
 const inter = Inter({ subsets: ["latin"] });
 
 export default function Home() {
-  const { resto } = useSelector((state:any) => state.restoReducer)
-  const dispatch = useDispatch()
+  const { resto } = useSelector((state: any) => state.restoReducer);
+  const dispatch = useDispatch();
   const services = [
     {
       title: "Best Room and Facilities",
@@ -66,15 +64,23 @@ export default function Home() {
   ];
 
   useEffect(() => {
-    dispatch(doRestoRequest(1))
-  }, [])
+    dispatch(doRestoRequest(1));
+  }, []);
 
   const { Meta } = Card;
   useEffect(() => {
-    dispatch(getLanding())
+    dispatch(getLanding());
   }, []);
-  let {landing} = useSelector((state : any) => state.LandingReducer)
-const router = useRouter()
+  let { landing } = useSelector((state: any) => state.LandingReducer);
+  console.log(
+    landing.map((item: any) =>
+      item.facilityPhotos
+        .filter((items: any) => items.faphoPrimary === true)
+        .map((file: any) => file.faphoPhotoFilename)
+    )
+  );
+
+  const router = useRouter();
 
   return (
     <Layouts>
@@ -87,9 +93,7 @@ const router = useRouter()
           Facilities That Provide An Experience During Your Stay At Our Hotel
         </p>
         <div className="flex justify-center mt-10 gap-8">
-          {services.map((item: any, index:number) => (
-        
-                   
+          {services.map((item: any, index: number) => (
             <Card
               key={index}
               className="justify-start w-[300px]"
@@ -101,8 +105,6 @@ const router = useRouter()
               <p className="mt-4 h-24">{item.desc}</p>
               <p className="mt-4 text-[14px] text-[#754cff]">Find Now</p>
             </Card>
-           
-
           ))}
         </div>
       </div>
@@ -112,21 +114,23 @@ const router = useRouter()
             Find The Best Room For Your Destination
           </p>
           <div className="">
-            <Buttons funcs={()=>router.push('/booking')}>View More</Buttons>
+            <Buttons funcs={() => router.push("/booking")}>View More</Buttons>
           </div>
         </div>
         <div className="flex gap-6 mt-8 justify-center flex-wrap">
-          {landing.slice(7).map((item: any, index:number) => (
+          {landing.slice(7).map((item: any, index: number) => (
             <Card
               key={index}
               style={{ width: 300 }}
               cover={<img alt="example" src="../assets/dummy.png" />}
             >
               <p className="font-bold">{item.faciHotel?.hotelName}</p>
-              <p className="text-[#adaeb8]">{item.faciHotel?.hotelAddr?.addrLine2}</p>
+              <p className="text-[#adaeb8]">
+                {item.faciHotel?.hotelAddr?.addrLine2}
+              </p>
               <div className="flex justify-between items-center mt-4">
                 <Space>
-                  <StarOutlined className="text-[#F7C934]"/>
+                  <StarOutlined className="text-[#F7C934]" />
                   <span className="font-semibold">
                     {item.faciHotel?.hotelRatingStar}
                   </span>
@@ -169,7 +173,7 @@ const router = useRouter()
         </div>
       </div> */}
       <div className="py-40 relative w-full bg-[url('/assets/bg-email.svg')] bg-center bg-contain bg-no-repeat h-[600px]">
-       <div className="bg-[#F7C934] h-[180px] w-11/12 mx-auto py-8 px-8 rounded-xl border-white border-4">
+        <div className="bg-[#F7C934] h-[180px] w-11/12 mx-auto py-8 px-8 rounded-xl border-white border-4">
           <div className="flex justify-between h-28 items-center">
             <div>
               <p className="text-2xl font-semibold">
@@ -184,7 +188,7 @@ const router = useRouter()
               <div className="w-full flex items-center">
                 <Input
                   placeholder="Type Your Email Here"
-                  style={{height: 40, border: 0}}
+                  style={{ height: 40, border: 0 }}
                   className="rounded-lg w-3/4 mr-2"
                 />
                 <div className="h-[60]">
@@ -194,7 +198,7 @@ const router = useRouter()
             </div>
           </div>
         </div>
-       </div>
+      </div>
 
       {/* <div className='mt-5'>
           <h1 className='text-2xl text-center'>Services</h1>
