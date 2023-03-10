@@ -6,9 +6,7 @@ export const doGetPhoto = () => {
     }
 }
 
-export const doGetPhotoSucceed = (payload:any) => {
-    // console.warn('dia action success ', payload);
-    
+export const doGetPhotoSucceed = (payload:any) => { 
     return {
         type: photoConstant.GET_PHOTO_SUCCEED,
         payload
@@ -22,9 +20,7 @@ export const doGetPhotoFailed = (payload:any) => {
     }
 }
 
-export const doAddPhoto = (payload:any) => {
-    console.log('masuk action');
-    
+export const doAddPhoto = (payload:any) => { 
     return{
         type: photoConstant.ADD_PHOTO,
         payload
@@ -45,9 +41,7 @@ export const doAddPhotoFailed = (payload:any) => {
     }
 }
 
-export const doDeletePhoto = (payload:any) => {
-    console.warn('masuk sini');
-    
+export const doDeletePhoto = (payload:any) => { 
     return {
         type: photoConstant.DELETE_PHOTO,
         payload

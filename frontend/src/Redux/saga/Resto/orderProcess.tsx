@@ -18,9 +18,7 @@ function* handleAddOrder(action:any):any{
         // debugger;
         console.warn(action.payload, 'order process');
         
-        const result = yield axios(API('Post','/order-menus/add',action.payload));
-        console.log(result, 'isi result di addorder process');
-        
+        const result = yield axios(API('Post','/order-menus/add',action.payload)); 
         yield put(doAddOrderSucceed(result.data));
         return result.data;
     }catch(err:any){
