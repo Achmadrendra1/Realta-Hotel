@@ -158,7 +158,7 @@ function* handleAddFacilities(action: any): any {
   try {
     const result = yield axios(API("Post", `/facilities/`, payload));
     yield put(addFacilitySuccess(result.data));
-    return payload;
+    return result.data;
   } catch (error) {
     yield put(addFacilityFailed(error));
   }
@@ -189,7 +189,7 @@ function* handleDeleteFacility(action: any): any {
 
 function* handleFapho(): any {
   try {
-    const result = yield axios(API("Get", `/facility-photos/`, null));
+    const result = yield axios(API("Get", `/facility-photos/src`, null));
     yield put(getFaphoSuccess(result.data));
     return result.data;
   } catch (e: any) {
@@ -200,7 +200,7 @@ function* handleFapho(): any {
 function* handleAddFapho(action: any): any {
   const { payload } = action;
   try {
-   const result = yield axios(FORMAPI("Post", `/facility-photos/`, payload));
+   const result = yield axios(FORMAPI("Post", `/facility-photos`, payload));
     yield put(addFaphoSuccess(result.data));
     return result.data;
   } catch (error) {

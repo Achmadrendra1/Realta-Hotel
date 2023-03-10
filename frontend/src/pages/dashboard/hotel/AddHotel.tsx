@@ -18,8 +18,6 @@ export default withAuth(function AddHotelRealta(props: any) {
   const { Title, Text } = Typography;
   const { handleClose } = props;
 
-  console.log(addrs);
-
   useEffect(() => {
     dispatch(getAddress());
     dispatch(getProvince());
@@ -48,7 +46,7 @@ export default withAuth(function AddHotelRealta(props: any) {
       dispatch(addHotel(payload));
       window.alert("Data Successfully Added");
       handleClose(false);
-      // window.location.reload();
+      window.location.reload();
     },
   });
 
