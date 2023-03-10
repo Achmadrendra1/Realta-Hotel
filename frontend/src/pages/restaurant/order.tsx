@@ -252,7 +252,7 @@ function Order({orderNumberUser}:any) {
               handleAct={handleActive}
               handleCancell={handleClose}
               dataUser={user}
-              dataBank={payBank}
+              dataBank={allBank}
             />
           ) : null}
           {showActivation ? (
