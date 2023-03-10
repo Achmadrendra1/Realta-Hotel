@@ -1,4 +1,6 @@
+import { doRestoRequest } from "@/Redux/Action/Resto/restoAction";
 import { getSpHotel } from "@/Redux/Action/Booking/BookingAction";
+import { getLanding } from "@/Redux/Action/Hotel/LandingAction";
 import Buttons from "@/components/Button";
 import Hero from "@/components/Hero";
 import Layouts from "@/layouts/layout";
@@ -9,9 +11,12 @@ import { Inter } from "@next/font/google";
 import { Card, Input, Space } from "antd";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useRouter } from "next/router";
 const inter = Inter({ subsets: ["latin"] });
 
 export default function Home() {
+  const { resto } = useSelector((state:any) => state.restoReducer)
+  const dispatch = useDispatch()
   const services = [
     {
       title: "Best Room and Facilities",
@@ -60,12 +65,17 @@ export default function Home() {
     },
   ];
 
-  const { Meta } = Card;
-  const dispatch = useDispatch();
   useEffect(() => {
-    dispatch(getSpHotel())
+    dispatch(doRestoRequest(1))
+  }, [])
+
+  const { Meta } = Card;
+  useEffect(() => {
+    dispatch(getLanding())
   }, []);
-  let hotel = useSelector((state : any) => state.HotelBoorReducer.hotel.slice(0,4))
+  let {landing} = useSelector((state : any) => state.LandingReducer)
+const router = useRouter()
+console.log(resto.data)
 
   return (
     <Layouts>
@@ -103,23 +113,23 @@ export default function Home() {
             Find The Best Room For Your Destination
           </p>
           <div className="">
-            <Buttons funcs={""}>View More</Buttons>
+            <Buttons funcs={()=>router.push('/booking')}>View More</Buttons>
           </div>
         </div>
-        <div className="flex gap-8 mt-8 justify-center">
-          {dummy.map((item: any, index:number) => (
+        <div className="flex gap-5 mt-8 justify-start flex-wrap">
+          {landing.map((item: any, index:number) => (
             <Card
               key={index}
-              style={{ width: 300 }}
+              style={{ width: 400 }}
               cover={<img alt="example" src="../assets/dummy.png" />}
             >
-              <p className="font-bold">{item.hotel}</p>
-              <p className="text-[#adaeb8]">{item.location}</p>
+              <p className="font-bold">{item.faciHotel?.hotelName}</p>
+              <p className="text-[#adaeb8]">{item.faciHotel?.hotelAddr?.addrLine2}</p>
               <div className="flex justify-between items-center mt-4">
                 <Space>
                   <StarOutlined className="text-[#F7C934]"/>
                   <span className="font-semibold">
-                    {item.rating}
+                    {item.faciHotel?.hotelRatingStar}
                   </span>
                 </Space>
                 <div>
@@ -137,27 +147,22 @@ export default function Home() {
             Restaurants
           </p>
           <div className="">
-            <Buttons funcs={""}>View More</Buttons>
+            <Buttons funcs={() => router.push('restaurant')}>View More</Buttons>
           </div>
         </div>
-        <div className="flex gap-8 mt-8 justify-center">
-          {dummy.map((item: any, index:number) => (
+        <div className="flex gap-5 mt-8 justify-start flex-wrap">
+          {resto.data?.map((item: any, index:number) => (
             <Card
               key={index}
-              style={{ width: 300 }}
-              cover={<img alt="example" src="../assets/dummy.png" />}
+              style={{ width: 400 }}
+              cover={<img alt="example" src={`/assets/resto/${index+1}.jpg`} className="h-[300px]"/>}
             >
-              <p className="font-bold">{item.hotel}</p>
-              <p className="text-[#adaeb8]">{item.location}</p>
+              <p className="font-bold text-[#754CFF]">{item.hotel_name}</p>
+              <p className="text-black font-semibold mb-3">{item.faci_name}</p>
+              <p className="text-[#adaeb8]">{item.faci_description}</p>
               <div className="flex justify-between items-center mt-4">
-                <Space>
-                  <StarOutlined className="text-[#F7C934]"/>
-                  <span className="font-semibold">
-                    {item.rating}
-                  </span>
-                </Space>
                 <div>
-                  <Buttons funcs={""}>Book Now</Buttons>
+                  <Buttons funcs={""}>Order Now</Buttons>
                 </div>
               </div>
             </Card>

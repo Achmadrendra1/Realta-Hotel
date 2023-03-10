@@ -397,7 +397,6 @@ export default function bookingRoom() {
     boor_cardnumber: "",
   });
 
-  console.log(dataBooking.boor_order_date)
 
   const [dataPayment, setDataPayment] = useState({
     userId: 0,
@@ -578,15 +577,15 @@ export default function bookingRoom() {
   };
 
   const handleReservation = () => {
-    if (boorNumber !== null) {
+    const currentDate = new Date();
+    const year = currentDate.getFullYear().toString();
+    const month = (currentDate.getMonth() + 1).toString().padStart(2, "0");
+    const day = currentDate.getDate().toString().padStart(2, "0");
+    const currentDateString = `${year}${month}${day}`;
+    let newOrderNumber;
+    if (boorNumber.length > 0) {
       const lastOrderNumber =
         boorNumber?.length > 0 ? boorNumber[0].boor_order_number : null;
-      const currentDate = new Date();
-      const year = currentDate.getFullYear().toString();
-      const month = (currentDate.getMonth() + 1).toString().padStart(2, "0");
-      const day = currentDate.getDate().toString().padStart(2, "0");
-      const currentDateString = `${year}${month}${day}`;
-      let newOrderNumber;
       if (lastOrderNumber) {
         const lastOrderDate = lastOrderNumber
           .slice(3, 11)
@@ -608,17 +607,13 @@ export default function bookingRoom() {
           setDataBooking({ ...dataBooking, boor_order_number: newOrderNumber });
           setDataPayment({ ...dataPayment, orderNumber: newOrderNumber });
         }
-        // } else {
-        // newOrderNumber = `BO#${currentDateString}-0001`;
-        // }
-        // const token = localStorage.getItem("token");
-        // //   console.log(token)
-        //   if (!token) {
-        //     window.location.href = "/users/login";
-        //   }else {
-        //   }
         setDetail(!detail);
       }
+    } else {
+      newOrderNumber = `BO#${currentDateString}-0001`;
+      setDataBooking({ ...dataBooking, boor_order_number: newOrderNumber });
+      setDataPayment({ ...dataPayment, orderNumber: newOrderNumber });
+      setDetail(!detail);
     }
   };
 
@@ -996,8 +991,6 @@ export default function bookingRoom() {
             <div>
               {faciRoom &&
                 faciRoom.map((room: any, index: any) => {
-                  let pict = room.fapho_url;
-                  let arrPict = pict.split(",");
                   return (
                     <div>
                       <Card className="mb-3 shadow-lg">
@@ -1019,11 +1012,11 @@ export default function bookingRoom() {
                           <Col span={8}>
                             <div className="float-right">
                               <div className="flex justify-center">
-                                <img
+                                {/* <img
                                   src={`../.${arrPict[0]}`}
                                   alt=""
                                   className="w-3/4 rounded border-2"
-                                />
+                                /> */}
                               </div>
                               <div className="flex justify-center mt-5">
                                 <Buttons
@@ -1752,7 +1745,6 @@ export default function bookingRoom() {
                   onClick={() => {
                     setPayment(!payment), 
                     dispacth(insertBookingExtra(dataExtra)) 
-                    // console.log(dataBooking, dataPayment)
                   }}
                   className={`text-white bg-[#754CFF] ${!detail || payment ? "hidden" : "block"}`}
                 >

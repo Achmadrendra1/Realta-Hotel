@@ -81,7 +81,9 @@ const Headers = ({
   //Cek Role User & Dispatch User Account
   useEffect(() => {
     user[0]?.role_name != "Guest" ? setIsAdmin(true) : setIsAdmin(false);
-    dispatch(doUsacRequest(user[0]?.user_id));
+    if(user.length > 0){
+      dispatch(doUsacRequest(user[0]?.user_id));
+    }
   }, [user]);
 
   // Cek apakah token JWT masih valid

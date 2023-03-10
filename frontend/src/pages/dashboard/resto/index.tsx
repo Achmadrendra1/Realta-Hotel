@@ -3,7 +3,7 @@ import React, { useEffect, useRef, useState } from 'react'
 import { Button, Dropdown, Form, Input, Menu, MenuProps, Modal, Pagination, Select, Space, Switch, Tabs, Upload } from 'antd';
 import { Table } from 'antd'
 import { CloseOutlined, DeleteOutlined, DownOutlined, EditOutlined, InboxOutlined, MoreOutlined, PictureOutlined, PlusOutlined, UploadOutlined, WarningOutlined } from '@ant-design/icons';
-import { useDispatch, useSelector } from 'react-redux';
+import {  useDispatch, useSelector } from 'react-redux';
 import { doAddMenu, doDeleteMenu, doMenuRequest, doUpdateMenu } from '@/Redux/Action/Resto/restoMenuAction';
 import axios from 'axios';
 import { API } from '@/Redux/Configs/consumeApi';
@@ -21,7 +21,7 @@ import withAuth from '@/PrivateRoute/WithAuth';
 export default withAuth( function restoMenu() {
   const dispatch = useDispatch();
 
-  // let photos = useSelector((state: any) => state.menuPhotoReducer.menuPhoto);
+  let photos = useSelector((state: any) => state.menuPhotoReducer.menuPhoto);
   let menus = useSelector((state: any) => state.restoMenuReducer.restoMenus);
   let restaurant = useSelector((state: any) => state.restoReducer.resto);
   let user = useSelector((state: any) => state.GetUserReducer.getUser);
@@ -30,6 +30,7 @@ export default withAuth( function restoMenu() {
   let [search, setSearch] = useState('');
   let list_restaurant = restaurant.data;
 
+  
   // ------------------------ PAGINATION
   const [currentpage, setCurrentPage] = useState(1);
   const handlePagination = (page: any) => { 
@@ -70,7 +71,7 @@ export default withAuth( function restoMenu() {
 
   const onFinish = (e: any) => { 
     e.preventDefault() 
-    console.log(e.target.rempurl);
+    // console.log(e.target.rempurl);
 
   } 
 
@@ -90,7 +91,7 @@ export default withAuth( function restoMenu() {
     // debugger; 
     const menu:any = await axios(API('Get', `/resto-menus/${id}`, null))
       .then((res: any) => {
-        console.log('res',res.data[0]);
+        // console.log('res',res.data[0]);
         let getmenu = res.data[0];
         
         let data = {
@@ -320,7 +321,7 @@ export default withAuth( function restoMenu() {
     formData.append('rempUrl', imageInput);
     formData.append('remeId', insertPhoto.remeId.toString());
 
-    console.log(formData,'isi form');
+    // console.log(formData,'isi form');
     
     axios.post('http://localhost:3501/resto-menu-photos', formData, {
       headers: {
@@ -381,8 +382,8 @@ export default withAuth( function restoMenu() {
   const thumbnailMenu = async (reme: any) => {
     setisThumbnail(true);
     const result = await axios(API('Get', `/resto-menu-photos/${reme.reme_id}`, null));
-    let photos = result.data;
-
+    let photos = result.data; 
+    
     // isi semua data yang bukan primary
     let migratePhoto: any = [];
     photos.map((photo: any) => {
@@ -406,7 +407,7 @@ export default withAuth( function restoMenu() {
           rempprimary: '1',
           rempreme: photo.rempreme,
           rempthumbnailfilename: photo.rempthumbnailfilename,
-          rempurl: `${configuration.BASE_URL}/${photo.rempurl}`
+          rempurl: `${configuration.BASE_URL}/${photo?.rempurl}`
         })
       }
     })
@@ -681,7 +682,7 @@ export default withAuth( function restoMenu() {
 
             {/* -------------------------------------------- MODAL ADD MENU */}
             <Modal
-              title="Add Menu"
+              title="Add Menu Restaurant"
               open={isModalAddMenu}
               onOk={handleAddMenu}
               onCancel={handleCancelAddMenu}
@@ -712,7 +713,7 @@ export default withAuth( function restoMenu() {
                     <Select placeholder={'Select restaurant'} onChange={(e) => handleSelection(e, 'remeFaci')} >
                       {
                         list_restaurant && list_restaurant.map((resto: any) => (
-                          <Select.Option value={resto.faci_id}>{resto.faci_name} - {resto.hotel_name}</Select.Option>
+                          <Select.Option value={resto.faci_id} key={resto.faci_id}>{resto.faci_name} - {resto.hotel_name}</Select.Option>
                         ))
                       }
                     </Select>
@@ -871,8 +872,8 @@ export default withAuth( function restoMenu() {
           </div>
           <div className='flex flex-wrap justify-center'>
             {
-              viewThumbnailPhoto.map((photo: any, i:number) => (
-                <div className='w-48 border rounded-lg m-2 transition hover:bg-slate-200 hover:text-black-500 hover:font-bold'>
+              viewThumbnailPhoto?.map((photo: any, i:number) => (
+                <div key={i} className='w-48 border rounded-lg m-2 transition hover:bg-slate-200 hover:text-black-500 hover:font-bold'>
                   <button onClick={()=>setPrimary(photo)}>
                     <div  className=' p-2'>
                       <img src={photo.rempurl} alt={photo.rempthumbnailfilename} className='h-32 w-48 object-cover' />

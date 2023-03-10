@@ -1,6 +1,7 @@
 import Layouts from "@/layouts/layout";
 import WithAuth from "@/PrivateRoute/WithAuth";
 import { doGetUserOrder } from "@/Redux/Action/Resto/userOrderAction";
+import { LeftOutlined } from "@ant-design/icons";
 import { Breadcrumb, Divider, QRCode } from "antd";
 import Head from "next/head";
 import { useRouter } from "next/router";
@@ -36,8 +37,7 @@ function Bill() {
  
   const total = parseInt(orderFromUser[0]?.orme_total_amount.split(',')[0].replace(/[^0-9]/g, ''))
   const tax = total-subtotal
-  
-  console.log(orderFromUser)
+   
   return (
     <>
       <Head>
@@ -48,18 +48,9 @@ function Bill() {
       </Head>
       <main>
         <Layouts>
-          {/* <Breadcrumb className="pb-5">
-            <Breadcrumb.Item>
-              <a href="/restaurant">Restaurant</a>
-            </Breadcrumb.Item>
-            <Breadcrumb.Item>
-              <a onClick={back2}>Menu</a>
-            </Breadcrumb.Item>
-            <Breadcrumb.Item>
-              <a onClick={back}>Order</a>
-            </Breadcrumb.Item>
-            <Breadcrumb.Item>Bill</Breadcrumb.Item>
-          </Breadcrumb> */}
+          <a href='/'>
+            <LeftOutlined /> Back to homepage
+          </a>
           <div className="w-96 mt-4 mb-6 bg-white border rounded-2xl shadow-lg p-4 mx-auto">
             <p className="text-xl text-center font-bold uppercase">
               Item Ordered

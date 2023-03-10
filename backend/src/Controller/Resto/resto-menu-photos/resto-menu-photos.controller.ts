@@ -48,7 +48,7 @@ export class RestoMenuPhotosController {
         
     }
  
- 
+  
     @Put('/primary')
     editPrimary(@Body() body){
         // return body;

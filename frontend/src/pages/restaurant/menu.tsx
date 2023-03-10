@@ -130,8 +130,7 @@ export default function menu({ restaurant }:any) {
   };
  
   const removeFromCart = (productToRemove: any) => { 
-    setCart(cart.filter((product: any) => product !== productToRemove));
-    console.log(getCartTotal(),'cart');
+    setCart(cart.filter((product: any) => product !== productToRemove)); 
     
     if(cart.length === 1){
       localStorage.setItem("cart", JSON.stringify([]));
@@ -391,8 +390,8 @@ export default function menu({ restaurant }:any) {
 
             <hr className="my-5 border-t-2" />
 
-            <div className="mt-3 lg:flex  my-20">
-              <div className="lg:w-3/5 sm:full sm:mb-4 border rounded-xl shadow p-3 lg:mr-2 bg-white">
+            <div className="mt-3 lg:flex">
+              <div className="lg:w-3/5 sm:full sm:mb-4 lg:mb-0 border rounded-xl shadow p-3 lg:mr-2 bg-white">
                 <div className="text-xl font-bold text-center">
                   Menus
                 </div>
@@ -500,7 +499,7 @@ export default function menu({ restaurant }:any) {
                    </Affix>
                  
                  : (
-                  <div className="bg-white rounded-lg shadow p-3 sticky top-0 h-1/2 lg:w-2/5 sm:w-full">
+                  <div className="bg-white rounded-lg shadow p-3 sticky top-0 lg:w-2/5 sm:w-full h-2/5">
                     <div className="text-xl font-bold text-center">
                       Checkout
                     </div>
@@ -508,8 +507,8 @@ export default function menu({ restaurant }:any) {
                       Total Order : {getCartTotal()}
                     </div>
                     {cart &&
-                      cart.map((order: any) => (
-                        <div className="border rounded-lg p-4 shadow-md gap-y-2 my-5 flex">
+                      cart.map((order: any, index:number) => (
+                        <div className="border rounded-lg p-4 shadow-md gap-y-2 my-5 flex" key={index}>
                           <img
                             src={`${configuration.BASE_URL}/${order.rempurl}`}
                             alt={order.remename}
@@ -625,7 +624,7 @@ export default function menu({ restaurant }:any) {
             ]}
           >
             <div>
-              <img src={selected.rempurl} alt="menu" />
+              <img src={selected.rempurl} alt='menu' className="h-80 w-full object-cover"/>
             </div>
             {/* <Carousel autoplay> */}
             <div className="flex">
