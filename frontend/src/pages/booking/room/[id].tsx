@@ -306,8 +306,21 @@ export default function bookingRoom() {
     year: "numeric",
   };
 
-  const dateFormatter = new Intl.DateTimeFormat("id-ID", format);
-  const currentDate = dateFormatter.format(date);
+  const dateFormatter = new Intl.DateTimeFormat("id-ID", format)
+  const currentDate = dateFormatter.format(date)
+  
+  let link1 = faciRoom?.length > 0 ? faciRoom[0].fapho_url : ''
+  let link2 = faciRoom?.length > 0 ? faciRoom[1].fapho_url : ''
+  let link3 = faciRoom?.length > 0 ? faciRoom[2].fapho_url : ''
+  const [pict, setPict] = useState({
+    pict1 : '',
+    pict2 : '',
+    pict3 : ''
+  })
+
+  useEffect(()=> {
+    setPict({...pict, pict1 : link1, pict2 : link2, pict3 : link3})
+  },[link1,link2,link3])
 
   //Configure Date untuk Booking
   const dateFormat = "YYYY-MM-DD";
@@ -803,6 +816,10 @@ export default function bookingRoom() {
     }
   }, [selectCard, dataBooking.boor_total_amount]);
 
+  let pict1 = pict.pict1.split(',')
+  let pict2 = pict.pict2.split(',')
+  let pict3 = pict.pict3.split(',')
+
   return (
     <Layouts>
       {openAdd ? (
@@ -850,6 +867,26 @@ export default function bookingRoom() {
       ) : null}
       <div className="mb-3 rounded"></div>
       <div>
+            <Carousel slidesToShow={3}>
+              <div className="w-1/8 border-2">
+                <img src={`../.${pict1[0]}`} alt="pict1"/>
+              </div>
+              <div className="w-1/8 border-2">
+                <img src={`../.${pict1[1]}`} alt="pict1"/>
+              </div>
+              <div className="w-1/8 border-2">
+                <img src={`../.${pict2[0]}`} alt="pict2"/>
+              </div>
+              <div className="w-1/8 border-2">
+                <img src={`../.${pict2[1]}`} alt="pict2"/>
+              </div>
+              <div className="w-1/8 border-2">
+                <img src={`../.${pict3[0]}`} alt="pict3"/>
+              </div>
+              <div className="w-1/8 border-2">
+                <img src={`../.${pict3[1]}`} alt="pict3"/>
+              </div>
+            </Carousel>
         <Row gutter={16}>
           <Col span={14} className={`${!detail ? "block" : "hidden"}`}>
             <div className="mb-3">
