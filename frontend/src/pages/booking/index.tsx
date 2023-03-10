@@ -42,6 +42,8 @@ export default function index() {
   //   }
   // })
 
+  console.log(hotel)
+
   //Hook untuk View More
   const [more, setMore] = useState(false)
 
@@ -148,12 +150,12 @@ export default function index() {
                   mapHotel.map((hotel: any, index: number) => {
                     let room = hotel.faci_hotelall;
                     let arrRoom = room.split(',');
-                    let ratePrice = hotel.faci_rateprice;
-                    let arrRatePrice = ratePrice?.split('-');
-                    let highPrice = hotel.faci_highprice;
-                    let arrHighPrice = highPrice.split('-')
-                    let pict = hotel?.url
-                    let arrPict = pict?.split(",")
+                    // let ratePrice = hotel.faci_rateprice;
+                    // let arrRatePrice = ratePrice?.split('-');
+                    // let highPrice = hotel.faci_highprice;
+                    // let arrHighPrice = highPrice.split('-')
+                    // let pict = hotel?.url
+                    // let arrPict = pict?.split(",")
                     return (
                       <Card key={index} className="mb-2">
                         <Row>
@@ -161,15 +163,15 @@ export default function index() {
                             <Row gutter={10}>
                               <Col span={18}>
                                 <Carousel autoplay autoplaySpeed={5000}>
-                                  {arrPict?.map((each: any) => (
+                                  {/* {arrPict?.map((each: any) => (
                                     <img className="w-full" src={each.slice(1)} alt="hotels" />
-                                  ))}
+                                  ))} */}
                                 </Carousel>
                               </Col>
                               <Col span={6}>
-                                {arrPict?.map((image: any, index: any) => (
+                                {/* {arrPict?.map((image: any, index: any) => (
                                   <img key={index} src={image} className="w-16 py-1" />
-                                ))}
+                                ))} */}
                               </Col>
                             </Row>
                           </Col>
@@ -202,17 +204,17 @@ export default function index() {
                                 </div>
                               </div>
                               <div>
-                                <p className="text-l italic mt-2">{
-                                  arrRoom[3]
-                                }
+                                <p className="text-l italic mt-2">
+                                  {arrRoom[0]}
+                                
                                 </p>
                               </div>
                               <div className="flex">
                                 <div className="flex text-xl items-center mr-3 text-red-500 font-semibold">
-                                  {arrRatePrice[2]}
+                                  {hotel.faci_rateprice}
                                 </div>
                                 <div className="flex text-l text-decoration-line: line-through items-center">
-                                  {arrHighPrice[0]}
+                                  {hotel.faci_highprice}
                                 </div>
                               </div>
                               <div className="flex justify-between text-m">

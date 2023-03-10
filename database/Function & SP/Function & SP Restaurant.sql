@@ -645,3 +645,49 @@ BEGIN
 END;
 $$ 
 LANGUAGE PLPGSQL;
+
+
+CREATE OR REPLACE FUNCTION resto.orders(
+		ormeOrderNumber text,
+		ormeDate date,
+		ormeTotalItem int,
+		ormeTotalDiscount int,
+		ormeTotalAmount int,
+		orme_pay_type varchar(2),
+		ormeIsPaid text,
+		ormeUserId int
+	) 
+	RETURNS int 
+	AS 
+	$$
+	DECLARE 
+		id_orme int;
+		
+	BEGIN
+		INSERT INTO resto.order_menus(
+				orme_order_number,
+				orme_order_date,
+				orme_total_item,
+				orme_total_discount,
+				orme_total_amount,
+				orme_pay_type,
+				orme_is_paid,
+				orme_modified_date,
+				orme_user_id
+			)
+		VALUES (
+				ormeOrderNumber,
+				now(),
+				ormeTotalItem,
+				ormeTotalDiscount,
+				ormeTotalAmount,
+				orme_pay_type,
+				ormeIsPaid,
+				now(),
+				ormeUserId
+			)
+		RETURNING resto.order_menus.orme_id INTO id_orme;
+	RETURN id_orme;
+END;
+$$ 
+LANGUAGE PLPGSQL;
