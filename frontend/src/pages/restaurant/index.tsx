@@ -15,8 +15,7 @@ export default function index() {
   let dispatch = useDispatch();
   let restaurant = useSelector((state:any) => state.restoReducer.resto); 
   let router = useRouter()
-  
-  console.log(restaurant);
+   
   
   // PAGINATION
   

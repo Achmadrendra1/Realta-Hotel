@@ -75,6 +75,7 @@ export default function Home() {
   }, []);
   let {landing} = useSelector((state : any) => state.LandingReducer)
 const router = useRouter()
+console.log(resto.data)
 
   return (
     <Layouts>
@@ -115,11 +116,11 @@ const router = useRouter()
             <Buttons funcs={()=>router.push('/booking')}>View More</Buttons>
           </div>
         </div>
-        <div className="flex gap-6 mt-8 justify-center flex-wrap">
-          {landing.slice(7).map((item: any, index:number) => (
+        <div className="flex gap-5 mt-8 justify-start flex-wrap">
+          {landing.map((item: any, index:number) => (
             <Card
               key={index}
-              style={{ width: 300 }}
+              style={{ width: 400 }}
               cover={<img alt="example" src="../assets/dummy.png" />}
             >
               <p className="font-bold">{item.faciHotel?.hotelName}</p>
@@ -139,35 +140,35 @@ const router = useRouter()
           ))}
         </div>
       </div>
-      {/* <div className="container mt-14">
+      <div className="container mt-14">
         <div className="flex justify-between items-center">
           <p className="font-semibold text-[24px] w-[450px]">
             Discover Your Destination Restaurants From Our Hotel&apos;s Best
             Restaurants
           </p>
           <div className="">
-            <Buttons funcs={""}>View More</Buttons>
+            <Buttons funcs={() => router.push('restaurant')}>View More</Buttons>
           </div>
         </div>
-        <div className="flex gap-8 mt-8 justify-start">
+        <div className="flex gap-5 mt-8 justify-start flex-wrap">
           {resto.data?.map((item: any, index:number) => (
             <Card
               key={index}
-              style={{ width: 300 }}
-              cover={<img alt="example" src="../assets/dummy.png" />}
+              style={{ width: 400 }}
+              cover={<img alt="example" src={`/assets/resto/${index+1}.jpg`} className="h-[300px]"/>}
             >
               <p className="font-bold text-[#754CFF]">{item.hotel_name}</p>
               <p className="text-black font-semibold mb-3">{item.faci_name}</p>
               <p className="text-[#adaeb8]">{item.faci_description}</p>
               <div className="flex justify-between items-center mt-4">
                 <div>
-                  <Buttons funcs={""}>Book Now</Buttons>
+                  <Buttons funcs={""}>Order Now</Buttons>
                 </div>
               </div>
             </Card>
           ))}
         </div>
-      </div> */}
+      </div>
       <div className="py-40 relative w-full bg-[url('/assets/bg-email.svg')] bg-center bg-contain bg-no-repeat h-[600px]">
        <div className="bg-[#F7C934] h-[180px] w-11/12 mx-auto py-8 px-8 rounded-xl border-white border-4">
           <div className="flex justify-between h-28 items-center">
