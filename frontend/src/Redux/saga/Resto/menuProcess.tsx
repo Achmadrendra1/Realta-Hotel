@@ -5,10 +5,8 @@ import { call, put } from "redux-saga/effects";
 
 
 function* handleMenu(action:any):any{
-    try{
-        // console.log('masuk menu saga');
-        const result = yield axios(API('Post',`/resto-menus/menu-dashboard`,action.payload))
-        // console.log(result.data)
+    try{ 
+        const result = yield axios(API('Post',`/resto-menus/menu-dashboard`,action.payload)) 
         yield put(doMenuRequestSucceed(result.data))
         return result.data;
     }catch(e:any){
@@ -17,8 +15,7 @@ function* handleMenu(action:any):any{
 }
 
 function* handleUpdateMenu(action:any):any{
-    try{
-        // console.log(action.payload.remeId, 'ini isi handle update menu');
+    try{ 
         // debugger;
         const result = yield axios(API('Put',`/resto-menus/${action.payload.remeId}`,action.payload))
         yield put(doUpdateMenuSucceed(result.data))
@@ -29,8 +26,7 @@ function* handleUpdateMenu(action:any):any{
 }
 
 function* handleAddMenu(action:any):any{
-    try{
-        // console.log(action.payload,'di process add');
+    try{ 
         // debugger;
         const result = yield axios(API('Post',`/resto-menus`,action.payload))
         yield put(doAddMenuSucceed(result.data))
@@ -40,18 +36,13 @@ function* handleAddMenu(action:any):any{
     }
 }
 
-function* handleDeleteMenu(action:any):any{
-    // action.payload cuma nerima idnya aja ok
+function* handleDeleteMenu(action:any):any{ 
     // debugger;
     const id = Number(action.payload)
-
-    // ada masalah disini
-    try{
-        // console.log('di process ',action.payload)
-        yield axios(API('delete','/resto-menus/'+id,action.payload))
-        // console.log('ini result: ', result);
-        yield put(doDeleteMenuSucceed(action.payload))
-        // return action.payload;
+ 
+    try{ 
+        yield axios(API('delete','/resto-menus/'+id,action.payload)) 
+        yield put(doDeleteMenuSucceed(action.payload)) 
     }catch(err:any){
         yield put(doDeleteMenuFailed(err))
     }

@@ -29,8 +29,7 @@ function Order({orderNumberUser}:any) {
   let dispatch = useDispatch();
   let router = useRouter();
   const userLoggedIn = useSelector((state: any) => state.GetUserReducer.getUser);
-  const orderFromUser = useSelector((state:any)=> state.userOrderReducer.userOrder); 
-  console.log('orderFromUser',orderFromUser);
+  const orderFromUser = useSelector((state:any)=> state.userOrderReducer.userOrder);  
   const orme = orderNumberUser.orderNumber;
   
 
@@ -115,12 +114,12 @@ function Order({orderNumberUser}:any) {
 
 
   const onComplete = () => {
-    console.log(finalForm);
+    // console.log(finalForm);
     setShowCheck(true);
   };
 
   const onCompleteCash = () => {
-    console.log(finalForm);
+    // console.log(finalForm);
     // alert(finalForm)
     dispatch(doCreateTransaction(finalForm));
     setTimeout(()=> router.push({
@@ -252,7 +251,7 @@ function Order({orderNumberUser}:any) {
               handleAct={handleActive}
               handleCancell={handleClose}
               dataUser={user}
-              dataBank={payBank}
+              dataBank={allBank}
             />
           ) : null}
           {showActivation ? (
