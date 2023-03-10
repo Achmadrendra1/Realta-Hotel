@@ -48,7 +48,6 @@ function* handleLanding(): any {
   try {
     const result = yield axios(API("Get",`/landing`,null))
     yield put(getLandingSuccess(result.data))
-    console.log(result.data)
     return result.data
   } catch (error: any) {
     yield put(getLandingFailed(error))

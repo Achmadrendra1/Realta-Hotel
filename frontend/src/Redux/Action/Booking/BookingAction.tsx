@@ -40,6 +40,26 @@ export const getBoorFailed = (payload : any) => {
     }
 }
 
+export const getBorde = () => {
+    return {
+        type : BookingConstant.GET_BORDE
+    }
+}
+
+export const getBordeSuccess = (payload : any) => {
+    return {
+        type : BookingConstant.GET_BORDE_SUCCESS,
+        payload
+    }
+}
+
+export const getBordeFailed = (payload : any) => {
+    return {
+        type : BookingConstant.GET_BORDE_FAILED,
+        payload
+    }
+}
+
 export const insertBooking = (payload : any) => {
     return {
         type : BookingConstant.INSERT_BOOKING_ORDER,

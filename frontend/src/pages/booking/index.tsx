@@ -42,8 +42,6 @@ export default function index() {
   //   }
   // })
 
-  console.log(hotel)
-
   //Hook untuk View More
   const [more, setMore] = useState(false)
 
@@ -150,10 +148,10 @@ export default function index() {
                   mapHotel.map((hotel: any, index: number) => {
                     let room = hotel.faci_hotelall;
                     let arrRoom = room.split(',');
-                    // let ratePrice = hotel.faci_rateprice;
-                    // let arrRatePrice = ratePrice?.split('-');
-                    // let highPrice = hotel.faci_highprice;
-                    // let arrHighPrice = highPrice.split('-')
+                    let ratePrice = hotel.faci_rateprice;
+                    let arrRatePrice = ratePrice?.split('-');
+                    let highPrice = hotel.faci_highprice;
+                    let arrHighPrice = highPrice.split('-')
                     // let pict = hotel?.url
                     // let arrPict = pict?.split(",")
                     return (
@@ -211,10 +209,10 @@ export default function index() {
                               </div>
                               <div className="flex">
                                 <div className="flex text-xl items-center mr-3 text-red-500 font-semibold">
-                                  {hotel.faci_rateprice}
+                                  {arrRatePrice[0]}
                                 </div>
                                 <div className="flex text-l text-decoration-line: line-through items-center">
-                                  {hotel.faci_highprice}
+                                  {arrHighPrice[0]}
                                 </div>
                               </div>
                               <div className="flex justify-between text-m">

@@ -173,6 +173,7 @@ boor.boor_pay_type,
 boor.boor_status,
 boor.boor_total_room,
 boor.boor_total_amount,
+borde.borde_id
 TO_CHAR(borde.borde_checkin, 'DD Mon YYYY') "check_in_date",
 TO_CHAR(borde.borde_checkout, 'DD Mon YYYY') "check_out_date",
 (borde.borde_adults + borde.borde_kids) "total_guest",
@@ -181,6 +182,10 @@ borde.borde_kids,
 borde.borde_price,
 borde.borde_discount,
 borde.borde_subtotal,
+prit.prit_name,
+boex.boex_price,
+boex.boex_qty,
+boex.boex_subtotal,
 hotels.hotel_name,
 faci.faci_name,
 patr.patr_trx_id,
@@ -207,6 +212,10 @@ JOIN booking.booking_orders boor
 ON users.user_id = boor.boor_user_id
 JOIN booking.booking_order_detail borde
 ON boor.boor_id = borde.border_boor_id
+JOIN booking.booking_order_detail_extra boex 
+ON borde.borde_id = boex.boex_borde_id
+JOIN master.price_items prit 
+ON boex.boex_prit_id = prit.prit_id
 JOIN hotel.facilities faci
 ON borde.borde_faci_id = faci.faci_id
 JOIN hotel.hotels hotels
@@ -216,7 +225,6 @@ ON boor.boor_order_number = patr.patr_order_number
 ORDER BY boor.boor_order_date desc
 
 SELECT * FROM booking.getBookingInvoice
-
 
 --Get Hotel
 CREATE VIEW hotel.viewHotel AS 
@@ -259,7 +267,7 @@ group by faci_hotel_id
 )faci_room_group
 on h.hotel_id = faci_room_group.faci_hotel_id
 join
-(select (a.addr_id)hotel_addr_id, concat(a.addr_line1,' ',p.prov_name,' ',c.country_name,' ',r.region_name)place 
+(select (a.addr_id)hotel_addr_id, concat(a.addr_line1, ', ', a.addr_line2, ', ', p.prov_name, ', ', c.country_name, ', ', r.region_name)place 
 from master.address a
 join master.proviences p on a.addr_prov_id = p.prov_id
 join master.country c on p.prov_country_id = c.country_id

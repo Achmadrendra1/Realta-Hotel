@@ -75,7 +75,6 @@ export default function Home() {
   }, []);
   let {landing} = useSelector((state : any) => state.LandingReducer)
 const router = useRouter()
-console.log(resto.data)
 
   return (
     <Layouts>

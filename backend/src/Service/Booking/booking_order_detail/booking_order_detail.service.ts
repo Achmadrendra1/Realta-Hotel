@@ -9,6 +9,7 @@ export class BookingOrderDetailService {
     @InjectRepository(BookingOrderDetail)
     private bookingOrderDetail: Repository<BookingOrderDetail>,
   ) {}
+
   async findAll(): Promise<any> {
     return await this.bookingOrderDetail.find();
   }
@@ -19,6 +20,12 @@ export class BookingOrderDetailService {
         bordeId: id,
       },
     });
+  }
+
+  async findLastBookingDetail(): Promise<any> {
+    return await this.bookingOrderDetail.query(
+      'SELECT * FROM booking.booking_order_detail ORDER BY borde_id DESC LIMIT 1',
+    );
   }
 
   async createBookingOrderDetail(field: BookingOrderDetail): Promise<any> {
