@@ -41,7 +41,7 @@ export default withAuth(function HotelDetails() {
 
   useEffect(() => {
     dispatch(getHotelID(hotelId));
-    dispatch(getFacility());
+    // dispatch(getFacility());
     setRefresh(false);
   }, [hotelId]);
 

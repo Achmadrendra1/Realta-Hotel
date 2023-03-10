@@ -15,16 +15,17 @@ export default withAuth( function AddPhoto(props: any) {
   const [form] = Form.useForm();
   const { handleClose } = props;
   
+console.log(props.id);
 
   const formik = useFormik({
     initialValues: {
-      faphoFaciId: props.id,
+      faphoFaci: props.id,
       faphoPrimary: undefined,
       faphoUrl: undefined,
     },
     onSubmit: async (values: any) => {
       const formData = new FormData();
-      formData.append("faphoFaciId", values.faphoFaciId);
+      formData.append("faphoFaci", values.faphoFaci);
       formData.append("faphoPrimary", values.faphoPrimary);
 
       for (let i = 0; i < values.faphoUrl.length; i++) {

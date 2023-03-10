@@ -8,7 +8,4 @@ export class UploadConfig {
     const filename = `${customName}${ext}`;
     callback(null, filename);
   }
-  static storage(req, file, callback) {
-    callback(null, './src/Service/Hotel/Uploads');
-  }
 }
