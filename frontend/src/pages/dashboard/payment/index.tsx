@@ -106,10 +106,10 @@ export default withAuth( function index() {
       title: "Transaction Number",
       dataIndex: "transactionNumber",
       width: 170,
-      sorter: {
-        compare: (a, b) => (a.transactionNumber < b.transactionNumber ? -1 : 1),
-        multiple: 1,
-      },
+      // sorter: {
+      //   compare: (a, b) => (a.transactionNumber < b.transactionNumber ? -1 : 1),
+      //   multiple: 1,
+      // },
     },
     {
       title: "Trx Date",
@@ -259,7 +259,7 @@ export default withAuth( function index() {
             {/* <Row gutter={16}>
               <Col span={18}> */}
                 <div className="mb-4 flex justify-between">
-                  <RangePicker onChange={handleDateChange} />
+                  <RangePicker format={'DD MMM YYYY'} onChange={handleDateChange} />
                   <div>
                     <Search
                       placeholder="Search"

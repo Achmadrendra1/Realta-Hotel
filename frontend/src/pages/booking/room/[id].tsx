@@ -1306,6 +1306,7 @@ export default function bookingRoom() {
                             ...dataPayment,
                             sourceNumber: "0",
                             targetNumber: "0",
+                            trxType: "TRB",
                           }),
                           setDataBooking({
                             ...dataBooking,

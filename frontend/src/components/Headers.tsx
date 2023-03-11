@@ -162,7 +162,11 @@ const Headers = ({
         <Link href="/users#history">History</Link>
       </Menu.Item>
       <Menu.Item key="2">
-        <Link href="/dashboard">Dashboard</Link>
+        {
+          router.asPath.includes('/dashboard') ? 
+          <Link href="/">Home</Link> :
+          <Link href="/dashboard">Dashboard</Link> 
+        }
       </Menu.Item>
       <Menu.Item key="3">
         <Link href={""} onClick={logout}>

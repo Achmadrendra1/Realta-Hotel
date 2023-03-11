@@ -236,7 +236,7 @@ export default function Cards() {
               <p className="text-lg font-semibold text-[#252525]">
                 History Transaction
               </p>
-              <RangePicker onChange={handleDateChange}/>
+              <RangePicker format={'DD MMM YYYY'} onChange={handleDateChange}/>
             </div>
             <List
               className="pb-4"

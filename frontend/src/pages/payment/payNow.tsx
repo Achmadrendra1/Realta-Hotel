@@ -84,7 +84,7 @@ export default function pay() {
 
   useEffect(() => {
     dispacth(doBankRequest());
-    dispacth(doUsacRequest());
+    // dispacth(doUsacRequest());
     dispacth(doPagaRequest());
   }, []);
 

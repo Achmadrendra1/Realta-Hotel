@@ -16,10 +16,16 @@ import {
   doTransactionRequest,
   doUsacRequest,
 } from "@/Redux/Action/Payment/paymentDashAction";
-import { doGetAllBank, doGetHistory } from "@/Redux/Action/Payment/paymentUserAction";
+import {
+  doGetAllBank,
+  doGetHistory,
+} from "@/Redux/Action/Payment/paymentUserAction";
 import withAuth from "@/PrivateRoute/WithAuth";
 import Buttons from "@/components/Button";
-import { PaginationAlign, PaginationPosition } from "antd/es/pagination/Pagination";
+import {
+  PaginationAlign,
+  PaginationPosition,
+} from "antd/es/pagination/Pagination";
 
 export default withAuth(function index() {
   const dispatch = useDispatch();
@@ -49,7 +55,6 @@ export default withAuth(function index() {
   const dataTrx = payHistoryTrx?.filter(
     (obj: any) => obj.userId === user[0]?.user_id
   );
- 
 
   //Get User Account By User Id yang login
   // const userAcc = account?.filter(
@@ -98,17 +103,18 @@ export default withAuth(function index() {
   };
   // console.log(dataTrx);
   const { RangePicker } = DatePicker;
- 
-  const handleDateChange = (value:any, dateString:any) => {
+
+  const handleDateChange = (value: any, dateString: any) => {
     // console.log("Selected Time: ", value);
     // console.log("Formatted Selected Time: ", dateString);
-    dispatch(doGetHistory({startDate: dateString[0], endDate: dateString[1]}))
+    dispatch(
+      doGetHistory({ startDate: dateString[0], endDate: dateString[1] })
+    );
     // setDateRange(dateString);
   };
 
-  const [position, setPosition] = useState<PaginationPosition>('bottom');
-  const [align, setAlign] = useState<PaginationAlign>('end');
-  
+  const [position, setPosition] = useState<PaginationPosition>("bottom");
+  const [align, setAlign] = useState<PaginationAlign>("end");
 
   return (
     <>
@@ -133,26 +139,24 @@ export default withAuth(function index() {
             />
           ) : null}
           <div className="relative w-full h-60 justify-center p-4 bg-[#4728ae] text-[#F2F1FA] m-auto rounded-xl bg-center bg-cover bg-no-repeat flex mb-6">
-            <div className="p-4 flex justify-center w-full pl-28 pr-28">
-              <Row gutter={16} className="w-full ">
-                <Col span={12} className="pt-4 ml-28">
+            <div className="flex w-full justify-center ">
+              <Row gutter={28} className="justify-center items-center">
+                <Col>
+                  <img src="/assets/payment.png" className="h-auto w-40" />
+                </Col>
+                <Col span={12} className="">
                   <p className="text-white text-2xl font-bold">
                     Easy Your Transactions with H-Pay
                   </p>
                   <p className="text-white text-sm flex-wrap">
-                    Get started with H-Pay for Hotels today and experience the
-                    future of travel payments. Book your next stay with ease and
-                    enjoy a stress-free travel experience.
+                  Experience the future of travel payments with H-Pay for Hotels. Book with ease and travel stress-free today.
                   </p>
-                  <Button className="text-white mt-4 hover:text-white hover:border-[#F7C934]">
+                  <Button className="mt-2 border-[#F7C934] text-[#252525] font-semibold bg-[#F7C934]">
                     Learn More
                   </Button>
                 </Col>
-                <Col>
-                  <img src="/assets/payment.png" className="h-auto w-40" />
-                </Col>
               </Row>
-              <div className="absolute w-3/4 bg-white rounded-lg drop-shadow-lg py-6 px-8 m-auto mt-44">
+              <div className="absolute w-3/4 bg-white rounded-lg drop-shadow-lg py-6 px-8 m-auto mt-48">
                 <Row gutter={16} className="flex justify-around items-center">
                   <Col
                     span={12}
@@ -229,61 +233,59 @@ export default withAuth(function index() {
               <p className="text-lg font-semibold text-[#252525]">
                 History Transaction
               </p>
-              <RangePicker onChange={handleDateChange}/>
+              <RangePicker format={'DD MMM YYYY'} onChange={handleDateChange} />
             </div>
             <List
               className="pb-4"
               dataSource={dataTrx}
-              pagination={{ position, align, pageSize:5 }}
-              renderItem={(items : any, index) => (
-                  <Card
-                    title={items.transactionNumber}
-                    extra={items.trxDate?.split("T")[0]}
-                    className="mb-1 mt-2 w-full"
-                  >
-                    <div>
-                      <div className="flex justify-between">
-                        <p className="font-bold text-lg">
-                          {items.transactionNote}
+              pagination={{ position, align, pageSize: 5 }}
+              renderItem={(items: any, index) => (
+                <Card
+                  title={items.transactionNumber}
+                  extra={items.trxDate?.split("T")[0]}
+                  className="mb-1 mt-2 w-full"
+                >
+                  <div>
+                    <div className="flex justify-between">
+                      <p className="font-bold text-lg">
+                        {items.transactionNote}
+                      </p>
+                      {items.debit != 0 ? (
+                        <p className="text-md text-green-600 font-semibold">
+                          {parseInt(items.debit).toLocaleString("id-ID", {
+                            style: "currency",
+                            currency: "IDR",
+                            minimumFractionDigits: 0,
+                            maximumFractionDigits: 0,
+                          })}
                         </p>
-                        {items.debit != 0 ? (
-                          <p className="text-md text-green-600 font-semibold">
-                            {parseInt(items.debit).toLocaleString("id-ID", {
-                              style: "currency",
-                              currency: "IDR",
-                              minimumFractionDigits: 0,
-                              maximumFractionDigits: 0,
-                            })}
-                          </p>
-                        ) : (
-                          <p className="text-md text-red-600 font-semibold">
-                            {parseInt(items.credit).toLocaleString("id-ID", {
-                              style: "currency",
-                              currency: "IDR",
-                              minimumFractionDigits: 0,
-                              maximumFractionDigits: 0,
-                            })}
-                          </p>
-                        )}
-                      </div>
-                      <div className="flex justify-between">
-                        <p className="text-md">
-                          {items.orderNumber
-                            ? items.orderNumber
-                            : "Dompet Realta"}
+                      ) : (
+                        <p className="text-md text-red-600 font-semibold">
+                          {parseInt(items.credit).toLocaleString("id-ID", {
+                            style: "currency",
+                            currency: "IDR",
+                            minimumFractionDigits: 0,
+                            maximumFractionDigits: 0,
+                          })}
                         </p>
-                        <p className="text-md font-semibold">
-                          {items.sourcePaymentName == null
-                            ? "Cash"
-                            : items.sourcePaymentName}
-                        </p>
-                      </div>
+                      )}
                     </div>
-                  </Card>
-              
+                    <div className="flex justify-between">
+                      <p className="text-md">
+                        {items.orderNumber
+                          ? items.orderNumber
+                          : "Dompet Realta"}
+                      </p>
+                      <p className="text-md font-semibold">
+                        {items.sourcePaymentName == null
+                          ? "Cash"
+                          : items.sourcePaymentName}
+                      </p>
+                    </div>
+                  </div>
+                </Card>
               )}
-            >
-            </List>
+            ></List>
           </div>
         </Layouts>
       </main>
