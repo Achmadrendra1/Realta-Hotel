@@ -25,6 +25,7 @@ import { CgGym } from "react-icons/cg";
 import Buttons from "@/components/Button";
 import { useDispatch, useSelector } from "react-redux";
 import {
+  getBorde,
   getSpFacilities,
   getSpHotel,
   getSpInvoice,
@@ -119,6 +120,10 @@ export default function bookingRoom() {
   //useSelector Get Last Booking Order
   let boorNumber = useSelector((state: any) => state.BoorReducer.boor);
 
+  //useSelector Get Last Booking Order Detail
+  let bordeNumber = useSelector((state: any)=> state.BoorDetailReducer.borde);
+  console.log(bordeNumber)
+
   //State untuk View More Amanities
   const [more, setMore] = useState(false);
 
@@ -163,6 +168,7 @@ export default function bookingRoom() {
     pritQty: [] as any[],
     pritTotal: [] as any[],
     pritMeasure: [] as any[],
+    bordeId : [] as any[]
   });
 
   //State untuk extraTotal
@@ -235,8 +241,11 @@ export default function bookingRoom() {
       boexQty: valueExtra.pritQty[index],
       boexSubtotal: valueExtra.pritTotal[index],
       boexMeasure: valueExtra.pritMeasure[index],
+      bordeId : valueExtra.bordeId[index]
     };
   });
+
+  console.log(valueExtra)
 
   let spofDiscInt = parseInt(
     spofPrice.spofDiscount.split(",")[0].replace(/[^0-9]/g, "")
@@ -306,8 +315,21 @@ export default function bookingRoom() {
     year: "numeric",
   };
 
-  const dateFormatter = new Intl.DateTimeFormat("id-ID", format);
-  const currentDate = dateFormatter.format(date);
+  const dateFormatter = new Intl.DateTimeFormat("id-ID", format)
+  const currentDate = dateFormatter.format(date)
+  
+  let link1 = faciRoom?.length > 0 ? faciRoom[0].fapho_url : ''
+  let link2 = faciRoom?.length > 0 ? faciRoom[1].fapho_url : ''
+  let link3 = faciRoom?.length > 0 ? faciRoom[2].fapho_url : ''
+  const [pict, setPict] = useState({
+    pict1 : '',
+    pict2 : '',
+    pict3 : ''
+  })
+
+  useEffect(()=> {
+    setPict({...pict, pict1 : link1, pict2 : link2, pict3 : link3})
+  },[link1,link2,link3])
 
   //Configure Date untuk Booking
   const dateFormat = "YYYY-MM-DD";
@@ -477,6 +499,7 @@ export default function bookingRoom() {
         measureUnit = "People";
       }
       setValueExtra({
+        ...valueExtra,
         pritId: [...valueExtra.pritId, selected.pritId],
         pritName: [...valueExtra.pritName, selected.pritName],
         pritPrice: [
@@ -494,6 +517,17 @@ export default function bookingRoom() {
     setAddExtra(false);
   };
 
+  useEffect(()=>{
+    const borde_id = bordeNumber?.length > 0 ? bordeNumber[0].borde_id : null;
+    const id = borde_id + 1;
+    for (let i = 0; i < valueExtra.pritName.length; i++){
+      valueExtra.bordeId[i] = id
+    }
+    setValueExtra({...valueExtra, bordeId : valueExtra.bordeId})
+  }, [dataBooking.borde_extra])
+
+  console.log(valueExtra)
+
   //UseEffect untuk change auto totalPrice di booking
   useEffect(() => {
     const rate = dataBooking.borde_price;
@@ -501,12 +535,13 @@ export default function bookingRoom() {
     const days = numDays || 1;
     const disc = dataBooking.borde_discount || 0;
     const extra = extraTotal.extraSubTotal;
+    const rateTotal = rate * room * days - disc
     const total = rate * days * room - disc + extra;
     const subTotal = () => {
       setDataBooking({
         ...dataBooking,
         boor_total_amount: total,
-        borde_subtotal: total,
+        borde_subtotal: rateTotal,
         borde_extra: extra,
       });
       setDataPayment({ ...dataPayment, amount: total });
@@ -539,6 +574,7 @@ export default function bookingRoom() {
     const delPritPrice = valueExtra.pritPrice.filter((price, i) => i !== index);
     const delPritQty = valueExtra.pritQty.filter((qty, i) => i !== index);
     const delPritTotal = valueExtra.pritTotal.filter((total, i) => i !== index);
+    const delBorde = valueExtra.bordeId.filter((borde, i) => i !== index)
     const delPritMeasure = valueExtra.pritMeasure.filter(
       (measure, i) => i !== index
     );
@@ -549,6 +585,7 @@ export default function bookingRoom() {
       pritMeasure: delPritMeasure,
       pritQty: delPritQty,
       pritTotal: delPritTotal,
+      bordeId : delBorde
     });
   };
 
@@ -564,6 +601,7 @@ export default function bookingRoom() {
   };
 
   const handleReservation = () => {
+    dispacth(getBorde())
     const currentDate = new Date();
     const year = currentDate.getFullYear().toString();
     const month = (currentDate.getMonth() + 1).toString().padStart(2, "0");
@@ -659,11 +697,12 @@ export default function bookingRoom() {
   };
 
   const router = useRouter();
-  const onCompleteCash = () => {
+  const onCompleteCash = async ()  => {
     const boor_id = boorNumber?.length > 0 ? boorNumber[0].boor_id : null;
     const id = boor_id + 1;
-    dispatch(insertBooking(dataBooking));
-    dispacth(doCreateTransaction(dataPayment));
+    await dispatch(insertBooking(dataBooking));
+    await dispacth(doCreateTransaction(dataPayment));
+    await dispacth(insertBookingExtra(dataExtra)) 
 
     setTimeout(
       () =>
@@ -798,6 +837,10 @@ export default function bookingRoom() {
     }
   }, [selectCard, dataBooking.boor_total_amount]);
 
+  let pict1 = pict.pict1.split(',')
+  let pict2 = pict.pict2.split(',')
+  let pict3 = pict.pict3.split(',')
+
   return (
     <Layouts>
       {openAdd ? (
@@ -845,6 +888,26 @@ export default function bookingRoom() {
       ) : null}
       <div className="mb-3 rounded"></div>
       <div>
+            <Carousel slidesToShow={3}>
+              <div className="w-1/8 border-2">
+                <img src={`../.${pict1[0]}`} alt="pict1"/>
+              </div>
+              <div className="w-1/8 border-2">
+                <img src={`../.${pict1[1]}`} alt="pict1"/>
+              </div>
+              <div className="w-1/8 border-2">
+                <img src={`../.${pict2[0]}`} alt="pict2"/>
+              </div>
+              <div className="w-1/8 border-2">
+                <img src={`../.${pict2[1]}`} alt="pict2"/>
+              </div>
+              <div className="w-1/8 border-2">
+                <img src={`../.${pict3[0]}`} alt="pict3"/>
+              </div>
+              <div className="w-1/8 border-2">
+                <img src={`../.${pict3[1]}`} alt="pict3"/>
+              </div>
+            </Carousel>
         <Row gutter={16}>
           <Col span={14} className={`${!detail ? "block" : "hidden"}`}>
             <div className="mb-3">
@@ -883,12 +946,13 @@ export default function bookingRoom() {
                       </div>
                       <div className="text-l mt-2">
                         <p className="italic">
-                          {hotel.length > 0 && (
-                            <Link href={`${maps}${hotel[0].place}`}>
-                              {hotel[0].place}
-                            </Link>
-                          )}
-                          {hotel.place}
+                        {hotel.length > 0 ? (
+                          <Link href={`${maps}${hotel[0].place}`}>
+                            {hotel[0].place}
+                          </Link>
+                        ) : (
+                          hotel.place
+                        )}
                         </p>
                       </div>
                       <div className="text-xl mt-2 font-semibold">
@@ -1543,8 +1607,8 @@ export default function bookingRoom() {
                 <h1 className="font-bold text-lg mt-4">
                   {dataBooking.boor_order_number}
                 </h1>
-              <Divider/>
-              <div className="flex text-center mt-3 items-center">
+              <Divider className="border-2"/>
+              <div className="flex text-center my-5 items-center">
                 <div className="flex text-2xl font-bold text-center text-red-500">
                   <p>{priceRoom.faci_rate_price}</p>
                 </div>
@@ -1552,7 +1616,6 @@ export default function bookingRoom() {
                   <p>{priceRoom.faci_high_price}</p>
                 </div>
               </div>
-              <p className="my-3 italic">Include Tax</p>
               <Row gutter={10}>
                 <Col span={12}>
                   <p>Please input date :</p>
@@ -1679,7 +1742,7 @@ export default function bookingRoom() {
                   })}
                 </div>
               </div>
-              <div className="flex items-center justify-between mb-3">
+              <div className="flex items-center justify-between mb-8">
                 <div className="flex text-l items-center">Your Saving</div>
                 <div className="flex text-xl items-center">
                   - {spofPrice.spofDiscount}
@@ -1707,8 +1770,7 @@ export default function bookingRoom() {
                 <Button
                   // onClick={handleBookingCode}
                   onClick={() => {
-                    setPayment(!payment), 
-                    dispacth(insertBookingExtra(dataExtra)) 
+                    setPayment(!payment)
                   }}
                   className={`text-white bg-[#754CFF] ${!detail || payment ? "hidden" : "block"}`}
                 >
