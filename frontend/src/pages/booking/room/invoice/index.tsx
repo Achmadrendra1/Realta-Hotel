@@ -281,11 +281,11 @@ export default function index() {
                     </div>
                   </Col>
                   <Col span={4} className="flex">
+                  </Col>
+                  <Col span={4} className="flex">
                     <div>
                       <h3 className="text-md">{items.boex_qty}</h3>
                     </div>
-                  </Col>
-                  <Col span={4} className="flex">
                   </Col>
                   <Col span={4} className="flex">
                     <div>

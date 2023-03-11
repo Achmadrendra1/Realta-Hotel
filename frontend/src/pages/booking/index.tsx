@@ -58,6 +58,8 @@ export default function index() {
     setMapHotel(hotel)
   }, [hotel])
 
+  console.log(hotel)
+
   const filterHotel = hotel?.filter((items: any) =>
     parseInt((items.faci_rateprice).substring(3).replace(".", "")) >= filter.lowest
     &&
@@ -152,8 +154,8 @@ export default function index() {
                     let arrRatePrice = ratePrice?.split('-');
                     let highPrice = hotel.faci_highprice;
                     let arrHighPrice = highPrice.split('-')
-                    // let pict = hotel?.url
-                    // let arrPict = pict?.split(",")
+                    let pict = hotel?.url
+                    let arrPict = pict?.split(",")
                     return (
                       <Card key={index} className="mb-2">
                         <Row>
@@ -161,15 +163,15 @@ export default function index() {
                             <Row gutter={10}>
                               <Col span={18}>
                                 <Carousel autoplay autoplaySpeed={5000}>
-                                  {/* {arrPict?.map((each: any) => (
+                                  {arrPict?.map((each: any) => (
                                     <img className="w-full" src={each.slice(1)} alt="hotels" />
-                                  ))} */}
+                                  ))}
                                 </Carousel>
                               </Col>
                               <Col span={6}>
-                                {/* {arrPict?.map((image: any, index: any) => (
+                                {arrPict?.map((image: any, index: any) => (
                                   <img key={index} src={image} className="w-16 py-1" />
-                                ))} */}
+                                ))}
                               </Col>
                             </Row>
                           </Col>
