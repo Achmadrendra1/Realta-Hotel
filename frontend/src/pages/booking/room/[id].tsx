@@ -64,7 +64,7 @@ import Link from "next/link";
 
 export default function bookingRoom() {
   const root = useRouter();
-  const { id } = root.query;
+  const { id, name } = root.query;
   const dispatch = useDispatch();
 
   //useEffect Reducer
@@ -122,7 +122,6 @@ export default function bookingRoom() {
 
   //useSelector Get Last Booking Order Detail
   let bordeNumber = useSelector((state: any)=> state.BoorDetailReducer.borde);
-  console.log(bordeNumber)
 
   //State untuk View More Amanities
   const [more, setMore] = useState(false);
@@ -138,6 +137,9 @@ export default function bookingRoom() {
 
   //State untuk button modal booking extra
   const [addExtra, setAddExtra] = useState(false);
+
+  //State untuk button trash
+  const [showTrash, setShowTrash] = useState(false)
 
   //State untuk Checkin-Checkout Date
   const [inDate, setInDate] = useState(null);
@@ -245,29 +247,25 @@ export default function bookingRoom() {
     };
   });
 
-  console.log(valueExtra)
+  //Variable untuk Get Room into Booking Detail
+  const faci_id = faciRoom?.length > 0 ? faciRoom[0]?.faci_id : null;
+  const faci_name = faciRoom?.length > 0 ? faciRoom[0]?.faci_name : "";
+  const faci_rate_price = faciRoom?.length > 0 ? faciRoom[0]?.faci_rate_price : "";
+  const faci_high_price = faciRoom?.length > 0 ? faciRoom[0]?.faci_high_price : "";
+  const faci_tax_rate = faciRoom?.length > 0 ? faciRoom[0]?.faci_tax_rate  : "";
 
   let spofDiscInt = parseInt(
-    spofPrice.spofDiscount.split(",")[0].replace(/[^0-9]/g, "")
+    spofPrice.spofDiscount?.split(",")[0].replace(/[^0-9]/g, "")
   );
   let ratePriceInt = parseInt(
-    priceRoom.faci_rate_price.split(",")[0].replace(/[^0-9]/g, "")
+    priceRoom.faci_rate_price?.split(",")[0].replace(/[^0-9]/g, "")
   );
   let taxRateInt = parseInt(
-    priceRoom.faci_tax_rate.split(",")[0].replace(/[^0-9]/g, "")
+    priceRoom.faci_tax_rate?.split(",")[0].replace(/[^0-9]/g, "")
   );
 
   //Google Maps
   let maps = "https://www.google.com/maps/search/?api=1&query=";
-
-  //Variable untuk Get Room into Booking Detail
-  const faci_id = faciRoom?.length > 0 ? faciRoom[0].faci_id : null;
-  const faci_name = faciRoom?.length > 0 ? faciRoom[0].faci_name : "";
-  const faci_rate_price =
-    faciRoom?.length > 0 ? faciRoom[0].faci_rate_price : "";
-  const faci_high_price =
-    faciRoom?.length > 0 ? faciRoom[0].faci_high_price : "";
-  const faci_tax_rate = faciRoom?.length > 0 ? faciRoom[0].faci_tax_price : "";
 
   //Variable Count and Filter Rating
   let rating1 = oneReview?.filter((item: any) => item.hore_rating == 1).length;
@@ -332,7 +330,7 @@ export default function bookingRoom() {
   },[link1,link2,link3])
 
   //Configure Date untuk Booking
-  const dateFormat = "YYYY-MM-DD";
+  const dateFormat = "DD MM YYYY";
   const disabledDate = (current: any, checkInDate: any) => {
     if (checkInDate) {
       return (
@@ -346,6 +344,9 @@ export default function bookingRoom() {
     if (date !== null) {
       setDataBooking({
         ...dataBooking,
+        // borde_checkin: dayjs(dateString[0]).format('YYYY MM DD'),
+        // boor_arrival_date: dayjs(dateString[0]).format('YYYY MM DD'),
+        // borde_checkout: dayjs(dateString[1]).format('YYYY MM DD'),
         borde_checkin: dateString[0].replace(/ /g, "-"),
         boor_arrival_date: dateString[0].replace(/ /g, "-"),
         borde_checkout: dateString[1].replace(/ /g, "-"),
@@ -384,7 +385,7 @@ export default function bookingRoom() {
     boor_total_room: 0,
     boor_total_guest: 0,
     boor_discount: 0,
-    boor_total_tax: 0,
+    boor_total_tax: taxRateInt,
     boor_total_amount: 0,
     boor_down_payment: 0,
     boor_pay_type: "C",
@@ -399,10 +400,10 @@ export default function bookingRoom() {
     borde_price: ratePriceInt,
     borde_extra: 0,
     borde_discount: 0,
-    borde_tax: 0,
+    borde_tax: taxRateInt,
     borde_subtotal: 0,
-    borde_faci_id: priceRoom.faci_id,
-    soco_spof_id: spofPrice.spofId,
+    borde_faci_id: 0,
+    soco_spof_id: 0,
     boor_cardnumber: "",
   });
 
@@ -434,12 +435,30 @@ export default function bookingRoom() {
     });
   }, [ratePriceInt, spofDiscInt, taxRateInt, priceRoom.faci_id]);
 
-  // useEffect list hotel into Booking Detail
-  // useEffect(()=> {
-  //     setPriceRoom({
-  //         faci_id, faci_name, faci_rate_price, faci_high_price, faci_tax_rate
-  //     })
-  // }, [faci_name])
+  // useEffect book now into Booking Detail
+  useEffect(()=> {
+      if(name !== undefined){
+        setDetail(true)
+        setPriceRoom({
+          faci_id: faci_id,
+          faci_name: faci_name,
+          faci_high_price: faci_high_price,
+          faci_rate_price: faci_rate_price,
+          faci_tax_rate: faci_tax_rate,
+        });
+        setDataBooking({
+          ...dataBooking,
+          boor_hotel_id : id,
+          borde_faci_id: faci_id,
+          borde_price: ratePriceInt,
+          borde_tax : taxRateInt,
+          boor_total_tax : taxRateInt,
+          boor_total_amount : ratePriceInt
+        });
+      }
+  }, [name, faci_id])
+
+  console.log(dataBooking)
 
   //Handle button selected room into booking
   const handleButtonSelected = (index: any) => {
@@ -467,6 +486,7 @@ export default function bookingRoom() {
       spofDiscount: selected.spofDiscount,
     });
     setSpofOpen(false);
+    setShowTrash(true)
   };
 
   // Handle untuk Booking Extra di dalam Modal
@@ -526,11 +546,9 @@ export default function bookingRoom() {
     setValueExtra({...valueExtra, bordeId : valueExtra.bordeId})
   }, [dataBooking.borde_extra])
 
-  console.log(valueExtra)
-
   //UseEffect untuk change auto totalPrice di booking
   useEffect(() => {
-    const rate = dataBooking.borde_price;
+    const rate = dataBooking.borde_price || 0;
     const room = dataBooking.boor_total_room || 1;
     const days = numDays || 1;
     const disc = dataBooking.borde_discount || 0;
@@ -546,9 +564,9 @@ export default function bookingRoom() {
       });
       setDataPayment({ ...dataPayment, amount: total });
     };
-    if (dataBooking.borde_price !== 0 || dataBooking.borde_discount !== 0) {
-      subTotal();
-    }
+    subTotal();
+    // if (dataBooking.borde_price !== 0 || dataBooking.borde_discount !== 0) {
+    // }
   }, [
     dataBooking.borde_price,
     dataBooking.boor_total_room,
@@ -575,8 +593,7 @@ export default function bookingRoom() {
     const delPritQty = valueExtra.pritQty.filter((qty, i) => i !== index);
     const delPritTotal = valueExtra.pritTotal.filter((total, i) => i !== index);
     const delBorde = valueExtra.bordeId.filter((borde, i) => i !== index)
-    const delPritMeasure = valueExtra.pritMeasure.filter(
-      (measure, i) => i !== index
+    const delPritMeasure = valueExtra.pritMeasure.filter((measure, i) => i !== index
     );
     setValueExtra({
       pritName: delPritName,
@@ -589,18 +606,11 @@ export default function bookingRoom() {
     });
   };
 
-  //Handle untuk generate booking code otomatis
-  const handleBookingCode = () => {
-    const boor_id = boorNumber?.length > 0 ? boorNumber[0].boor_id : null;
-    const id = boor_id + 1;
-    dispatch(insertBooking(dataBooking));
-    root.push({
-      pathname: `/booking/room/invoice`,
-      search: `${dataBooking.boor_order_number}`,
-    });
+  const handleReservation = () => {
+      setDetail(!detail);
   };
 
-  const handleReservation = () => {
+  const handleBookingCode = () => {
     dispacth(getBorde())
     const currentDate = new Date();
     const year = currentDate.getFullYear().toString();
@@ -632,20 +642,14 @@ export default function bookingRoom() {
           setDataBooking({ ...dataBooking, boor_order_number: newOrderNumber });
           setDataPayment({ ...dataPayment, orderNumber: newOrderNumber });
         }
-        setDetail(!detail);
+        setPayment(!payment);
       }
     } else {
       newOrderNumber = `BO#${currentDateString}-0001`;
       setDataBooking({ ...dataBooking, boor_order_number: newOrderNumber });
       setDataPayment({ ...dataPayment, orderNumber: newOrderNumber });
-      setDetail(!detail);
-    }
-  };
-
-  // const handleAddExtra = () => {
-  //   dispacth(insertBookingExtra(dataExtra));
-  //   console.log(dataExtra);
-  // };
+  }
+}
 
   const handleAdultsValue = (value: any) => {
     setDataBooking({ ...dataBooking, borde_adults: value });
@@ -659,9 +663,10 @@ export default function bookingRoom() {
     setDataBooking({ ...dataBooking, boor_total_room: value });
   };
 
-  // const handleDeleteSpof = () => {
-  //   setSpofPrice({...spofPrice, spofId : 0, spofDiscount : '', spofName : ''})
-  // }
+  const handleDeleteSpof = () => {
+    setSpofPrice({...spofPrice, spofId : 0, spofDiscount : '', spofName : ''})
+    setShowTrash(false)
+  }
 
   const [isActive, setIsActive] = useState(false);
   const [isLinked, setIsLinked] = useState(false);
@@ -1598,7 +1603,7 @@ export default function bookingRoom() {
               </div>
             </div>
           </Col>
-          <Col span={10} >
+          <Col span={10}>
             <div className="sticky top-0 border-4 shadow-lg p-5 rounded-lg bg-white">
               <div className="flex justify-center font-bold text-3xl">
                 Booking Order Details
@@ -1725,9 +1730,9 @@ export default function bookingRoom() {
                 <div className="text-xl font-semibold italic">
                   {spofPrice.spofName}
                 </div>
-                {/* <div>
-                  <button onClick={handleDeleteSpof}><DeleteOutlined /></button>
-                </div> */}
+                <div>
+                  <button onClick={handleDeleteSpof} className={`${showTrash ? "block" : "hidden"}`}><DeleteOutlined className="text-red-500" /></button>
+                </div>
                 <div className="flex text-xl my-1 items-center">
                   - {spofPrice.spofDiscount}
                 </div>
@@ -1767,10 +1772,7 @@ export default function bookingRoom() {
                   Reservation Booking
                 </Button>
                 <Button
-                  // onClick={handleBookingCode}
-                  onClick={() => {
-                    setPayment(!payment)
-                  }}
+                  onClick={handleBookingCode}
                   className={`text-white bg-[#754CFF] ${!detail || payment ? "hidden" : "block"}`}
                 >
                   {/* text-white bg-[#754CFF] */}

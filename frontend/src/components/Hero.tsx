@@ -30,7 +30,7 @@ const Hero = () => {
               location: location,
               date: date,
           }
-      }, 'booking/'
+      }
     )
   }
   return (
