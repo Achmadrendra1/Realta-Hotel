@@ -177,6 +177,12 @@ export default withAuth( function restoMenu() {
     e.preventDefault();
     // disini tambahin id menunya, diambil dari db
     dispatch(doAddMenu(addMenu))
+    
+    messageApi.open({
+      type: 'success',
+      content: 'Menu added successfully!',
+      duration: 5,
+    });
     // reset form
     form.resetFields()
     setIsModalAddMenu(false)
@@ -713,6 +719,7 @@ export default withAuth( function restoMenu() {
               footer={[
                 <>
                   <Button key="back" onClick={handleCancelAddMenu}>Cancel</Button>
+                    {contextHolder}
                   <Button key="submit" onClick={handleAddMenu} className='bg-sky-500 text-white' onMouseEnter={(e:any) => { e.target.style.color = '#fff'; }}>Add Menu</Button>
                 </>
               ]}
