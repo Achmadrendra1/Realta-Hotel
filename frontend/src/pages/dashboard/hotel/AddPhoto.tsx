@@ -18,13 +18,13 @@ export default withAuth( function AddPhoto(props: any) {
 
   const formik = useFormik({
     initialValues: {
-      faphoFaciId: props.id,
+      faphoFaci: props.id,
       faphoPrimary: undefined,
       faphoUrl: undefined,
     },
     onSubmit: async (values: any) => {
       const formData = new FormData();
-      formData.append("faphoFaciId", values.faphoFaciId);
+      formData.append("faphoFaci", values.faphoFaci);
       formData.append("faphoPrimary", values.faphoPrimary);
 
       for (let i = 0; i < values.faphoUrl.length; i++) {
@@ -103,7 +103,7 @@ export default withAuth( function AddPhoto(props: any) {
       </Form.Item>
 
       <Form.Item>
-        <Upload {...upld}>
+        <Upload {...upld} multiple={true}>
           <Button icon={<UploadOutlined />}>Select File</Button>
         </Upload>
       </Form.Item>

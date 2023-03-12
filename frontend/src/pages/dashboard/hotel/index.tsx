@@ -6,6 +6,7 @@ import {
   EditOutlined,
   ExclamationCircleFilled,
   EyeOutlined,
+  HomeOutlined,
   SearchOutlined,
   UserAddOutlined,
 } from "@ant-design/icons";
@@ -102,8 +103,9 @@ export default withAuth(function index() {
       dataIndex: "hotelName",
       key: "1",
       width: "15%",
-      sorter: (a: any, b: any) => a.hotelName?.localeCompare(b.hotelName),
-      sortDirections: ["descend", "ascending"],
+      sorter:{
+        compare: (a:any,b:any)=> (a.hotelName < b.hotelName ? -1 : 1)
+      }
     },
     {
       title: "Hotel Address",
@@ -116,6 +118,9 @@ export default withAuth(function index() {
       dataIndex: ["hotelAddr", "addrLine2"],
       key: "3",
       width: "10%",
+      sorter:{
+        compare: (a:any,b:any)=> (a.hotelAddr.addrLine2 < b.hotelAddr.addrLine2 ? -1 : 1)
+      }
     },
     {
       title: "Hotel Description",
@@ -175,14 +180,7 @@ export default withAuth(function index() {
 
   return (
     <Dashboard>
-      <Breadcrumb>
-        <Breadcrumb.Item>
-          <Link href="/dashboard/">Dashboard</Link>
-        </Breadcrumb.Item>
-        <Breadcrumb.Item>
-          <Link href="/dashboard/hotel">Hotel</Link>
-        </Breadcrumb.Item>
-      </Breadcrumb>
+      <Link href={'/dashboard'}><HomeOutlined /></Link>
 
       {OpenAdd ? (
         <AddHotelsRealta

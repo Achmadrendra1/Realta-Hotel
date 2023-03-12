@@ -30,7 +30,7 @@ export class FacilityPhotosController {
   @Get(`src/:filename`)
   getPhoto(@Param('filename') filename: string, @Res() res) {
     return res.sendFile(filename, {
-      root: join('src', 'Service', 'Hotel', 'Uploads'),
+      root: join('public', 'FacilityPhotos'),
     });
   }
   @Get(':id')
@@ -47,7 +47,7 @@ export class FacilityPhotosController {
   @UseInterceptors(
     FilesInterceptor('faphoUrl', 10, {
       storage: diskStorage({
-        destination: UploadConfig.storage,
+        destination: './public/FacilityPhotos',
         filename: UploadConfig.PhotoFilename,
       }),
     }),

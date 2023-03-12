@@ -52,7 +52,7 @@ export default withAuth( function AddFacilities(props: any) {
       dispatch(addFacility(payload));
       window.alert("Data Successfully Added");
       handleClose(false);
-      // window.location.reload();
+      window.location.reload();
     },
   });
 

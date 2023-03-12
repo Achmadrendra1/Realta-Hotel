@@ -7,6 +7,7 @@ import {
 import Buttons from "@/components/Button";
 import Dashboard from "@/layouts/dashboard";
 import {
+  ArrowLeftOutlined,
   CameraOutlined,
   DeleteOutlined,
   EditOutlined,
@@ -41,7 +42,6 @@ export default withAuth(function HotelDetails() {
 
   useEffect(() => {
     dispatch(getHotelID(hotelId));
-    dispatch(getFacility());
     setRefresh(false);
   }, [hotelId]);
 
@@ -97,19 +97,24 @@ export default withAuth(function HotelDetails() {
       dataIndex: "faciId",
       key: "1",
       width: "5%",
-      sorter: (a: any, b: any) => a.faciId - b.faciId,
     },
     {
       title: "Facility Name",
       dataIndex: "faciName",
       key: "1",
       width: "15%",
+      sorter:{
+        compare: (a:any,b:any)=> (a.faciName < b.faciName ? -1 : 1)
+      }
     },
     {
       title: "Room Number",
       dataIndex: "faciRoomNumber",
       key: "1",
       width: "10%",
+      sorter:{
+        compare: (a:any,b:any)=> (a.faciRoomNumber < b.faciRoomNumber ? -1 : 1)
+      }
     },
     {
       title: "Max Vacant",
@@ -233,14 +238,7 @@ export default withAuth(function HotelDetails() {
           htlname={hotelById.hotelName}
         />
       ) : null}
-      <Breadcrumb>
-        <Breadcrumb.Item>
-          <Link href="/dashboard/hotel"> Hotel</Link>
-        </Breadcrumb.Item>
-        <Breadcrumb.Item>
-          <Link href={`/dashboard/hotel/${hotelId}`}> Facilities</Link>
-        </Breadcrumb.Item>
-      </Breadcrumb>
+      <Link href={'/dashboard/hotel'}><ArrowLeftOutlined /> Back</Link>
 
       <Row>
         {/* <Col span={5}>
