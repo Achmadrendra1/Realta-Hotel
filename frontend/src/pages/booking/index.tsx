@@ -19,7 +19,7 @@ export default function index() {
 
   const root = useRouter()
   const dispatch = useDispatch();
-  const { location, date } = root.query
+  const { location, date} = root.query
 
   useEffect(() => {
     dispatch(getSpHotel())
@@ -32,15 +32,17 @@ export default function index() {
     })
   }
 
+
   //Get data Hotel
   let hotel = useSelector((state: any) => state.HotelBoorReducer.hotel)
-  // const locationHotel = hotel.filter((item:any) => {
-  //   if (!location) {
-  //     return item;
-  //   } else {
-  //     return item?.city.toLowerCase().includes(location.toLowerCase());
-  //   }
-  // })
+  console.log(hotel)
+  const locationHotel = hotel.filter((item:any) => {
+    if (!location) {
+      return item;
+    } else {
+      return item?.city.toLowerCase().includes(location.toLowerCase());
+    }
+  })
 
   //Hook untuk View More
   const [more, setMore] = useState(false)
@@ -52,11 +54,11 @@ export default function index() {
   })
 
   //Hook untuk map
-  const [mapHotel, setMapHotel] = useState()
+  const [mapHotel, setMapHotel] = useState([])
 
   useEffect(() => {
-    setMapHotel(hotel)
-  }, [hotel])
+    setMapHotel(locationHotel)
+  }, [])
 
   const filterHotel = hotel?.filter((items: any) =>
     parseInt((items.faci_rateprice).substring(3).replace(".", "")) >= filter.lowest
@@ -144,16 +146,22 @@ export default function index() {
             <div>
               <div>
                 {
-                  mapHotel &&
-                  mapHotel.map((hotel: any, index: number) => {
+                  locationHotel &&
+                  locationHotel.map((hotel: any, index: number) => {
                     let room = hotel.faci_hotelall;
                     let arrRoom = room.split(',');
                     let ratePrice = hotel.faci_rateprice;
-                    let arrRatePrice = ratePrice?.split('-');
+                    let arrRatePrice = ratePrice.split('-');
                     let highPrice = hotel.faci_highprice;
                     let arrHighPrice = highPrice.split('-')
-                    // let pict = hotel?.url
-                    // let arrPict = pict?.split(",")
+                    let pict = hotel?.url
+                    let arrPict = pict?.split(",")
+                    const bookNow = (id : any) => {
+                      root.push({
+                        pathname: ('/booking/room/' + id),
+                        query : (`name=${arrRoom[0]}`)
+                      })
+                    } 
                     return (
                       <Card key={index} className="mb-2">
                         <Row>
@@ -161,15 +169,15 @@ export default function index() {
                             <Row gutter={10}>
                               <Col span={18}>
                                 <Carousel autoplay autoplaySpeed={5000}>
-                                  {/* {arrPict?.map((each: any) => (
+                                  {arrPict?.map((each: any) => (
                                     <img className="w-full" src={each.slice(1)} alt="hotels" />
-                                  ))} */}
+                                  ))}
                                 </Carousel>
                               </Col>
                               <Col span={6}>
-                                {/* {arrPict?.map((image: any, index: any) => (
+                                {arrPict?.map((image: any, index: any) => (
                                   <img key={index} src={image} className="w-16 py-1" />
-                                ))} */}
+                                ))}
                               </Col>
                             </Row>
                           </Col>
@@ -221,7 +229,7 @@ export default function index() {
                                 </div>
                                 <div className="flex space-x-1">
                                   <Buttons funcs={() => viewDetailId(hotel.hotel_id)}>View Details</Buttons>
-                                  <Buttons>Book Now</Buttons>
+                                  <Buttons funcs={() => bookNow(hotel.hotel_id)}>Book Now</Buttons>
                                 </div>
                               </div>
                             </Card>
