@@ -67,8 +67,8 @@ console.log(props.id);
   };
 
   const stat = [
-    { value: true, label: "Primary" },
-    { value: false, label: "Not Primary" },
+    { value: 1, label: "Primary" },
+    { value: 0, label: "Not Primary" },
   ];
 
   return (

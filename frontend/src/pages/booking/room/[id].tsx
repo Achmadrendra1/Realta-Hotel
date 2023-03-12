@@ -330,7 +330,7 @@ export default function bookingRoom() {
   },[link1,link2,link3])
 
   //Configure Date untuk Booking
-  const dateFormat = "DD MM YYYY";
+  const dateFormat = "YYYY-MM-DD";
   const disabledDate = (current: any, checkInDate: any) => {
     if (checkInDate) {
       return (
@@ -403,9 +403,11 @@ export default function bookingRoom() {
     borde_tax: taxRateInt,
     borde_subtotal: 0,
     borde_faci_id: 0,
-    soco_spof_id: 0,
+    soco_spof_id: null,
     boor_cardnumber: "",
   });
+
+  console.log(dataBooking)
 
 
   const [dataPayment, setDataPayment] = useState({
@@ -431,7 +433,7 @@ export default function bookingRoom() {
       borde_tax: taxRateInt,
       boor_total_tax: taxRateInt,
       borde_faci_id: priceRoom.faci_id,
-      soco_spof_id: spofPrice.spofId,
+      soco_spof_id: spofPrice.spofId || null,
     });
   }, [ratePriceInt, spofDiscInt, taxRateInt, priceRoom.faci_id]);
 
@@ -748,7 +750,7 @@ export default function bookingRoom() {
   );
   const fintechAcc = userAcc?.filter((obj: any) => obj.usacType === "Payment");
 
-  //Check Status Account Dompet Realta
+  //Check Status Account H-Pay
   const accDompet = fintechAcc?.find(
     (item: any) => item.usacAccountNumber == accNumberDompet
   );
@@ -757,7 +759,7 @@ export default function bookingRoom() {
     accDompet ? setIsActive(true) : setIsActive(false);
   }, [accDompet]);
 
-  //Get Saldo Dompet Realta
+  //Get Saldo H-Pay
   const saldoDompet = parseInt(accDompet?.usacSaldo).toLocaleString("id-ID", {
     style: "currency",
     currency: "IDR",
@@ -773,7 +775,7 @@ export default function bookingRoom() {
     accGoto ? setIsLinked(true) : setIsLinked(false);
   }, [accGoto]);
 
-  //Get Saldo Dompet Realta
+  //Get Saldo H-Pay
   const saldoGoto = parseInt(accGoto?.usacSaldo).toLocaleString("id-ID", {
     style: "currency",
     currency: "IDR",
@@ -1375,6 +1377,7 @@ export default function bookingRoom() {
                             ...dataPayment,
                             sourceNumber: "0",
                             targetNumber: "0",
+                            trxType: "TRB",
                           }),
                           setDataBooking({
                             ...dataBooking,
@@ -1459,7 +1462,7 @@ export default function bookingRoom() {
                           >
                             <div className="flex justify-between items-center px-6">
                               <p className="text-[16px] font-semibold">
-                                Dompet Realta
+                                H-Pay
                               </p>
                               <p className="text-[16px] font-semibold">
                                 {saldoDompet}
@@ -1470,7 +1473,7 @@ export default function bookingRoom() {
                           <Card size={"small"} className="mb-2">
                             <div className="flex justify-between items-center px-6">
                               <p className="text-[16px] font-semibold">
-                                Dompet Realta
+                                H-Pay
                               </p>
                               <p
                                 className={`${

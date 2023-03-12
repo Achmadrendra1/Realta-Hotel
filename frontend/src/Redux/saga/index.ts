@@ -31,6 +31,7 @@ import {
   handleGetHistoryTrx,
   handleCreateTransaction,
   handleBankAllRequest,
+  handleUpdatePin,
 } from "./Payment/paymentSagas";
 
 //Master
@@ -197,6 +198,7 @@ export default function* rootSaga() {
     takeEvery(PaymentConst.DELETE_ACCOUNT, handleUsacDelete),
     takeEvery(PaymentConst.TOP_UP_WALLET, handleTopUp),
     takeEvery(PaymentConst.CHECK_SECURE_CODE, handleCheckSecure),
+    takeEvery(PaymentConst.UPDATE_SECURE_CODE, handleUpdatePin),
     takeEvery(PaymentConst.GET_HISTORY_PAYMENT, handleGetHistoryTrx),
     takeEvery(PaymentConst.CREATE_TRANSACTION, handleCreateTransaction),
 

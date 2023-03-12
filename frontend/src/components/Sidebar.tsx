@@ -12,8 +12,8 @@ const Sidebar = ({nav, collapsed, logo, locations} : {nav:any, collapsed:any, lo
             style={{ height: '100%', width: collapsed ? 80 : 250 }}>
                 <div className={`w-full ${collapsed ? 'p-0' : 'justify-center'} flex mb-6`}>
                     {/* <img src={logo} alt='logo' className='w-auto h-12'/> */}
-                    {collapsed ? <p className='text-3xl font-bold shadow-xl text-[#F2F1FA]'>RH</p>:
-                    <p className='text-3xl font-bold text-[#F2F1FA]'>Realta Hotel</p>}
+                    {collapsed ? <p className='text-3xl font-bold text-[#F2F1FA]'>HA</p>:
+                    <p className='text-3xl font-bold text-[#F2F1FA]'>Hotel App</p>}
                 </div>
                 {nav.map((item:any, index:any) =>
                     <Menu.Item key={index} className={`${locations == item.href ? 'bg-[#F2F1FA] text-[#252525]' : 'text-white'} `}>

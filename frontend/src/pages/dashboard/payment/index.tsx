@@ -38,6 +38,7 @@ import {
 import Bank from "./bank";
 import Fintech from "./fintech";
 import withAuth from "@/PrivateRoute/WithAuth";
+import Finance from "./finance";
 
 interface DataType {
   key: React.Key;
@@ -49,18 +50,18 @@ interface DataType {
   transactionNote: any;
   orderNumber: any;
   userFullName: any;
-  sourceNumber:any;
-  targetNumber:any;
-  transactionRef:any;
+  sourceNumber: any;
+  targetNumber: any;
+  transactionRef: any;
   transactionType: any;
 }
 
-
-export default withAuth( function index() {  
+export default withAuth(function index() {
   const [filteredData, setFilteredData] = useState([]);
-  const {payDashTrx, total, currentPage} = useSelector(
+  const { payDashTrx, total, currentPage } = useSelector(
     (state: any) => state.payTrxHistoryReducer
   );
+  const user = useSelector((state: any) => state.GetUserReducer.getUser);
 
   const dispatch = useDispatch();
   useEffect(() => {
@@ -116,8 +117,7 @@ export default withAuth( function index() {
       dataIndex: "trxDate",
       width: 110,
       sorter: {
-        compare: (a, b) =>
-          a.trxDate < b.trxDate ? -1 : 1,
+        compare: (a, b) => (a.trxDate < b.trxDate ? -1 : 1),
         multiple: 5,
       },
     },
@@ -126,8 +126,7 @@ export default withAuth( function index() {
       dataIndex: "debit",
       width: 110,
       sorter: {
-        compare: (a, b) =>
-          a.debit < b.debit ? -1 : 1,
+        compare: (a, b) => (a.debit < b.debit ? -1 : 1),
         multiple: 5,
       },
     },
@@ -136,8 +135,7 @@ export default withAuth( function index() {
       dataIndex: "credit",
       width: 110,
       sorter: {
-        compare: (a, b) =>
-          a.credit < b.credit ? -1 : 1,
+        compare: (a, b) => (a.credit < b.credit ? -1 : 1),
         multiple: 5,
       },
     },
@@ -146,8 +144,7 @@ export default withAuth( function index() {
       dataIndex: "transactionNote",
       width: 110,
       sorter: {
-        compare: (a, b) =>
-          a.transactionNote < b.transactionNote ? -1 : 1,
+        compare: (a, b) => (a.transactionNote < b.transactionNote ? -1 : 1),
         multiple: 5,
       },
     },
@@ -180,8 +177,7 @@ export default withAuth( function index() {
       title: "Trx Ref Number",
       dataIndex: "transactionRef",
       sorter: {
-        compare: (a, b) =>
-          a.transactionRef < b.transactionRef ? -1 : 1,
+        compare: (a, b) => (a.transactionRef < b.transactionRef ? -1 : 1),
         multiple: 4,
       },
     },
@@ -189,8 +185,7 @@ export default withAuth( function index() {
       title: "Type",
       dataIndex: "transactionType",
       sorter: {
-        compare: (a, b) =>
-          a.transactionType < b.transactionType ? -1 : 1,
+        compare: (a, b) => (a.transactionType < b.transactionType ? -1 : 1),
         multiple: 4,
       },
     },
@@ -216,7 +211,6 @@ export default withAuth( function index() {
   const { Search } = Input;
   const { RangePicker } = DatePicker;
 
-
   // const onSearch = (value: string) => {
   //   const filteredData = dataTrx.filter((item: any) => {
   //     const values = Object.values(item).map((x: any) =>
@@ -227,11 +221,12 @@ export default withAuth( function index() {
   //   setFilteredData(filteredData);
   // };
 
-
-  const handleDateChange = (value:any, dateString:any) => {
+  const handleDateChange = (value: any, dateString: any) => {
     console.log("Selected Time: ", value);
     console.log("Formatted Selected Time: ", dateString);
-    dispatch(doTransactionRequest({startDate: dateString[0], endDate: dateString[1]}))
+    dispatch(
+      doTransactionRequest({ startDate: dateString[0], endDate: dateString[1] })
+    );
     // setDateRange(dateString);
   };
 
@@ -245,9 +240,9 @@ export default withAuth( function index() {
       : dispatch(doTransactionRequest());
   };
 
-    const handleChange = (value: string) => {
+  const handleChange = (value: string) => {
     console.log(`selected ${value}`);
-    dispatch(doTransactionRequest({keyword : value}))
+    dispatch(doTransactionRequest({ keyword: value }));
   };
 
   return (
@@ -258,44 +253,44 @@ export default withAuth( function index() {
           <div className="flex-col">
             {/* <Row gutter={16}>
               <Col span={18}> */}
-                <div className="mb-4 flex justify-between">
-                  <RangePicker onChange={handleDateChange} />
-                  <div>
-                    <Search
-                      placeholder="Search"
-                      onChange={handleSearch}
-                      style={{ width: 200 }}
-                      className="mr-2"
-                    />
-                    <Select
-                      placeholder="Filter"
-                      style={{ width: 150 }}
-                      onChange={handleChange}
-                      allowClear
-                      options={[
-                        // { value: "TP", label: "Top Up" },
-                        { value: "TRB", label: "Transfer Booking" },
-                        // { value: "RPY", label: "Repayment" },
-                        // { value: "RF", label: "Refund" },
-                        { value: "ORM", label: "Order Menu" },
-                      ]}
-                    />
-                  </div>
-                </div>
-                <Table
-                  columns={columnsTrans}
-                  dataSource={payDashTrx}
-                  pagination={{
-                    current: currentPage,
-                    total: total,
-                    pageSize: 10,
-                    showQuickJumper: true,
-                    showTotal: (total) => `${total} items`,
-                    onChange: handleTableChange,
-                  }}
+            <div className="mb-4 flex justify-between">
+              <RangePicker format={"DD MMM YYYY"} onChange={handleDateChange} />
+              <div>
+                <Search
+                  placeholder="Search"
+                  onChange={handleSearch}
+                  style={{ width: 200 }}
+                  className="mr-2"
                 />
-              {/* </Col> */}
-              {/* <Col span={6}>
+                <Select
+                  placeholder="Filter"
+                  style={{ width: 150 }}
+                  onChange={handleChange}
+                  allowClear
+                  options={[
+                    // { value: "TP", label: "Top Up" },
+                    { value: "TRB", label: "Transfer Booking" },
+                    // { value: "RPY", label: "Repayment" },
+                    // { value: "RF", label: "Refund" },
+                    { value: "ORM", label: "Order Menu" },
+                  ]}
+                />
+              </div>
+            </div>
+            <Table
+              columns={columnsTrans}
+              dataSource={payDashTrx}
+              pagination={{
+                current: currentPage,
+                total: total,
+                pageSize: 10,
+                showQuickJumper: true,
+                showTotal: (total) => `${total} items`,
+                onChange: handleTableChange,
+              }}
+            />
+            {/* </Col> */}
+            {/* <Col span={6}>
                 <Space direction="vertical">
                   <p className="mb-4 text-lg">Data Transaction</p>
                   <Card bordered={false} hoverable>
@@ -335,7 +330,12 @@ export default withAuth( function index() {
         <Tabs.TabPane tab="Fintech" key={"fintech"}>
           <Fintech />
         </Tabs.TabPane>
+        {user[0]?.role_name == "Finance" && (
+          <Tabs.TabPane tab="Account" key={"account"}>
+            <Finance />
+          </Tabs.TabPane>
+        )}
       </Tabs>
     </Dashboard>
   );
-})
+});

@@ -36,36 +36,43 @@ export default function index() {
   //Get data Hotel
   let hotel = useSelector((state: any) => state.HotelBoorReducer.hotel)
   console.log(hotel)
+
+  
   const locationHotel = hotel.filter((item:any) => {
-    if (!location) {
-      return item;
-    } else {
-      return item?.city.toLowerCase().includes(location.toLowerCase());
+      if (!location) {
+          return item;
+        } else {
+            return item?.city.toLowerCase().includes(location.toLowerCase());
     }
   })
 
+
   //Hook untuk View More
   const [more, setMore] = useState(false)
-
+  
   //Hook untuk Filter
   const [filter, setFilter] = useState({
     lowest: 0,
     highest: 0
   })
-
+  
   //Hook untuk map
   const [mapHotel, setMapHotel] = useState([])
-
+  
   useEffect(() => {
-    setMapHotel(locationHotel)
-  }, [])
-
-  const filterHotel = hotel?.filter((items: any) =>
-    parseInt((items.faci_rateprice).substring(3).replace(".", "")) >= filter.lowest
+    if(!locationHotel){
+      setMapHotel(hotel)
+    } else {
+      setMapHotel(locationHotel)
+    }
+  }, [hotel])
+  
+  const filterHotel = mapHotel?.filter((items: any) =>
+    parseInt((items.faci_rateprice).substring(3).replace(".", "")) >= filter?.lowest
     &&
-    parseInt((items.faci_rateprice).substring(3).replace(".", "")) <= filter.highest
+    parseInt((items.faci_rateprice).substring(3).replace(".", "")) <= filter?.highest
   )
-
+  
   const handleChangePrice = (event: any) => {
     const { name, value } = event.target;
     setFilter(items => ({ ...items, [name]: value }))
@@ -75,6 +82,8 @@ export default function index() {
     setFilter({ ...filter, highest: 0, lowest: 0 })
     setMapHotel(hotel)
   }
+
+  console.log(handleClear)
 
   const handleFilter = () => {
     setMapHotel(filterHotel)
@@ -146,8 +155,8 @@ export default function index() {
             <div>
               <div>
                 {
-                  locationHotel &&
-                  locationHotel.map((hotel: any, index: number) => {
+                  mapHotel &&
+                  mapHotel.map((hotel: any, index: number) => {
                     let room = hotel.faci_hotelall;
                     let arrRoom = room.split(',');
                     let ratePrice = hotel.faci_rateprice;
@@ -170,13 +179,13 @@ export default function index() {
                               <Col span={18}>
                                 <Carousel autoplay autoplaySpeed={5000}>
                                   {arrPict?.map((each: any) => (
-                                    <img className="w-full" src={each.slice(1)} alt="hotels" />
+                                    <img className="w-full" src={`http://localhost:3600/facility-photos/${each}`} alt="hotels" />
                                   ))}
                                 </Carousel>
                               </Col>
                               <Col span={6}>
-                                {arrPict?.map((image: any, index: any) => (
-                                  <img key={index} src={image} className="w-16 py-1" />
+                                {arrPict?.slice(0,4).map((image: any, index: any) => (
+                                  <img key={index} src={`http://localhost:3600/facility-photos/${image}`} className="w-16 py-1" />
                                 ))}
                               </Col>
                             </Row>

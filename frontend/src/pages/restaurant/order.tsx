@@ -161,7 +161,7 @@ function Order({orderNumberUser}:any) {
   );
   const fintechAcc = account?.filter((obj: any) => obj.usacType === "Payment");
 
-  //Check Status Account Dompet Realta
+  //Check Status Account H-Pay
   const accDompet = fintechAcc?.find(
     (item: any) => item.usacAccountNumber == accNumberDompet
   );
@@ -170,7 +170,7 @@ function Order({orderNumberUser}:any) {
     accDompet ? setIsActive(true) : setIsActive(false);
   }, [accDompet]);
 
-  //Get Saldo Dompet Realta
+  //Get Saldo H-Pay
   const saldoDompet = parseInt(accDompet?.usacSaldo).toLocaleString("id-ID", {
     style: "currency",
     currency: "IDR",
@@ -186,7 +186,7 @@ function Order({orderNumberUser}:any) {
     accGoto ? setIsLinked(true) : setIsLinked(false);
   }, [accGoto]);
 
-  //Get Saldo Dompet Realta
+  //Get Saldo H-Pay
   const saldoGoto = parseInt(accGoto?.usacSaldo).toLocaleString("id-ID", {
     style: "currency",
     currency: "IDR",
@@ -428,7 +428,7 @@ function Order({orderNumberUser}:any) {
                             >
                               <div className="flex justify-between items-center px-6">
                                 <p className="text-[16px] font-semibold">
-                                  Dompet Realta
+                                  H-Pay
                                 </p>
                                 <p className="text-[16px] font-semibold">
                                   {saldoDompet}
@@ -439,7 +439,7 @@ function Order({orderNumberUser}:any) {
                             <Card size={"small"} className="mb-2">
                               <div className="flex justify-between items-center px-6">
                                 <p className="text-[16px] font-semibold">
-                                  Dompet Realta
+                                  H-Pay
                                 </p>
                                 <p
                                   className={`${

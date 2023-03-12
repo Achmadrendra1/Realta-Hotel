@@ -60,7 +60,6 @@ export default withAuth( function EditFacilityHotel(props: any) {
       payload.append("faciHotel", values.faciHotel);
 
       dispatch(updateFacility(payload));
-      window.alert("Data Successfully Added");
       handleClose(false)
       props.onRefresh();
       // window.location.reload();
