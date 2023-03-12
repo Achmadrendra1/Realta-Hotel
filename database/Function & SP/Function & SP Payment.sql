@@ -254,7 +254,7 @@ BEGIN
 			creditAmount := amount;
 			
 			UPDATE payment.user_accounts SET usac_saldo = usac_saldo - amount WHERE usac_account_number = sourceNumber;	
-			UPDATE payment.user_accounts SET usac_saldo = usac_saldo + amount WHERE usac_account_number = '13198989898';	
+			UPDATE payment.user_accounts SET usac_saldo = usac_saldo + amount WHERE usac_account_number = targetNumber;	
 		ELSE
 			trxType := 'ORM';
 			lastOrderNumber := (SELECT COALESCE(MAX(patr_trx_id)) from payment.payment_transaction where patr_type = trxType);
@@ -269,7 +269,7 @@ BEGIN
 			note := 'Food Order';
 			creditAmount := amount;
 			UPDATE payment.user_accounts SET usac_saldo = usac_saldo - amount WHERE usac_account_number = sourceNumber;	
-			UPDATE payment.user_accounts SET usac_saldo = usac_saldo + amount WHERE usac_account_number = '13198989898';
+			UPDATE payment.user_accounts SET usac_saldo = usac_saldo + amount WHERE usac_account_number = targetNumber;
 			UPDATE resto.order_menus SET orme_pay_type = payType, orme_cardnumber = sourceNumber, orme_is_paid = 'P' where orme_order_number = orderNumber;
 		END IF;
 		call payment.insertOneTrx(

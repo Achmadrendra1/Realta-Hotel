@@ -69,8 +69,11 @@ function* handleGetHistoryTrx(action: any): any {
     const dateQueryParam = action.payload?.startDate
       ? `&startDate=${action.payload.startDate}&endDate=${action.payload.endDate}`
       : "";
+      const keywordQueryParam = action.payload?.keyword
+      ? `&keyword=${action.payload.keyword}`
+      : "";
     const res = yield axios(
-      API("GET", `/payment-transaction/all?${dateQueryParam}`)
+      API("GET", `/payment-transaction/all?${dateQueryParam}${keywordQueryParam}`)
     );
     yield put(doGetHistorySuccess(res.data));
   } catch (error: any) {
@@ -304,7 +307,7 @@ function* handleCreateTransaction(action: any): any {
   const delay = (time: any) =>
     new Promise((resolve) => setTimeout(resolve, time));
   yield axios(API("POST", "/payment-transaction", action.payload));
-  yield put(doCreateTransactionSuccess({ message: "Transaksi Berhasil", status: null }));
+  yield put(doCreateTransactionSuccess({ status: null }));
   yield call(delay, 3000);
   yield put(doCreateTransactionSuccess({ message: null }));
 }

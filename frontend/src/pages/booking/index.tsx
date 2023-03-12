@@ -19,7 +19,7 @@ export default function index() {
 
   const root = useRouter()
   const dispatch = useDispatch();
-  const { location, date } = root.query
+  const { location, date} = root.query
 
   useEffect(() => {
     dispatch(getSpHotel())
@@ -32,38 +32,47 @@ export default function index() {
     })
   }
 
+
   //Get data Hotel
   let hotel = useSelector((state: any) => state.HotelBoorReducer.hotel)
-  // const locationHotel = hotel.filter((item:any) => {
-  //   if (!location) {
-  //     return item;
-  //   } else {
-  //     return item?.city.toLowerCase().includes(location.toLowerCase());
-  //   }
-  // })
+  console.log(hotel)
+
+  
+  const locationHotel = hotel.filter((item:any) => {
+      if (!location) {
+          return item;
+        } else {
+            return item?.city.toLowerCase().includes(location.toLowerCase());
+    }
+  })
+
 
   //Hook untuk View More
   const [more, setMore] = useState(false)
-
+  
   //Hook untuk Filter
   const [filter, setFilter] = useState({
     lowest: 0,
     highest: 0
   })
-
+  
   //Hook untuk map
-  const [mapHotel, setMapHotel] = useState()
-
+  const [mapHotel, setMapHotel] = useState([])
+  
   useEffect(() => {
-    setMapHotel(hotel)
+    if(!locationHotel){
+      setMapHotel(hotel)
+    } else {
+      setMapHotel(locationHotel)
+    }
   }, [hotel])
-
-  const filterHotel = hotel?.filter((items: any) =>
-    parseInt((items.faci_rateprice).substring(3).replace(".", "")) >= filter.lowest
+  
+  const filterHotel = mapHotel?.filter((items: any) =>
+    parseInt((items.faci_rateprice).substring(3).replace(".", "")) >= filter?.lowest
     &&
-    parseInt((items.faci_rateprice).substring(3).replace(".", "")) <= filter.highest
+    parseInt((items.faci_rateprice).substring(3).replace(".", "")) <= filter?.highest
   )
-
+  
   const handleChangePrice = (event: any) => {
     const { name, value } = event.target;
     setFilter(items => ({ ...items, [name]: value }))
@@ -73,6 +82,8 @@ export default function index() {
     setFilter({ ...filter, highest: 0, lowest: 0 })
     setMapHotel(hotel)
   }
+
+  console.log(handleClear)
 
   const handleFilter = () => {
     setMapHotel(filterHotel)
@@ -149,11 +160,17 @@ export default function index() {
                     let room = hotel.faci_hotelall;
                     let arrRoom = room.split(',');
                     let ratePrice = hotel.faci_rateprice;
-                    let arrRatePrice = ratePrice?.split('-');
+                    let arrRatePrice = ratePrice.split('-');
                     let highPrice = hotel.faci_highprice;
                     let arrHighPrice = highPrice.split('-')
                     let pict = hotel?.url
                     let arrPict = pict?.split(",")
+                    const bookNow = (id : any) => {
+                      root.push({
+                        pathname: ('/booking/room/' + id),
+                        query : (`name=${arrRoom[0]}`)
+                      })
+                    } 
                     return (
                       <Card key={index} className="mb-2">
                         <Row>
@@ -167,9 +184,9 @@ export default function index() {
                                 </Carousel>
                               </Col>
                               <Col span={6}>
-                                {/* {arrPict?.map((image: any, index: any) => (
-                                  <img key={index} src={image} className="w-16 py-1" />
-                                ))} */}
+                                {arrPict?.slice(0,4).map((image: any, index: any) => (
+                                  <img key={index} src={`http://localhost:3600/facility-photos/${image}`} className="w-16 py-1" />
+                                ))}
                               </Col>
                             </Row>
                           </Col>
@@ -221,7 +238,7 @@ export default function index() {
                                 </div>
                                 <div className="flex space-x-1">
                                   <Buttons funcs={() => viewDetailId(hotel.hotel_id)}>View Details</Buttons>
-                                  <Buttons>Book Now</Buttons>
+                                  <Buttons funcs={() => bookNow(hotel.hotel_id)}>Book Now</Buttons>
                                 </div>
                               </div>
                             </Card>

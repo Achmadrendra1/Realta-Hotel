@@ -39,7 +39,7 @@ export default function Finance() {
     dispatch(doUsacRequest(user[0]?.user_id));
   }, [user]);
 
-  console.log(account);
+  console.log(data)
 
   const columnsTrans: ColumnsType<DataType> = [
     {
@@ -147,6 +147,11 @@ export default function Finance() {
     // setDateRange(dateString);
   };
 
+  const handleChange = (value: string) => {
+    console.log(`selected ${value}`);
+    dispatch(doGetHistory({ keyword: value }));
+  };
+
   return (
     <div>
       <Row gutter={24} className="m-4 items-end">
@@ -182,7 +187,7 @@ export default function Finance() {
           <Select
             placeholder="Filter By Type"
             style={{ width: 150 }}
-            // onChange={handleChange}
+            onChange={handleChange}
             allowClear
             options={[
               // { value: "TP", label: "Top Up" },

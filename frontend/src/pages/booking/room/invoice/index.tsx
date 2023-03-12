@@ -25,8 +25,6 @@ export default function index() {
     (item: any) => item.boor_order_number === id
   );
 
-  console.log(Invoice)
-
   const boor_order_number = Invoice?.length > 0 ? Invoice[0].boor_order_number : "";
   const boor_order_date = Invoice?.length > 0 ? Invoice[0].boor_order_date : "";
   const boor_is_paid = Invoice?.length > 0 ? Invoice[0]?.boor_paid : "";
@@ -281,11 +279,11 @@ export default function index() {
                     </div>
                   </Col>
                   <Col span={4} className="flex">
+                  </Col>
+                  <Col span={4} className="flex">
                     <div>
                       <h3 className="text-md">{items.boex_qty}</h3>
                     </div>
-                  </Col>
-                  <Col span={4} className="flex">
                   </Col>
                   <Col span={4} className="flex">
                     <div>

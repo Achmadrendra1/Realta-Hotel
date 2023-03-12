@@ -17,18 +17,22 @@ export class PaymentTransactionService {
   async getAll(query) {
     const startDate = query.startDate || '';
     const endDate = query.endDate || '';
+    const keyword = query.keyword || '';
 
     let data;
 
     if(startDate && endDate){
       data = await this.payRepository.query(
         `SELECT * FROM payment.user_transactions
-        WHERE "trxDate" BETWEEN $1 AND $2`,
-        [startDate, endDate]
+        WHERE (LOWER("transactionType") LIKE LOWER($3))
+        AND "trxDate" BETWEEN $1 AND $2`,
+        [startDate, endDate, `%${keyword}%`]
       );
     } else {
       data = await this.payRepository.query(
-        `select * from payment.user_transactions`
+        `select * from payment.user_transactions
+        WHERE LOWER("transactionType") LIKE LOWER($1)`,
+        [`%${keyword}%`]
       );
     }
 

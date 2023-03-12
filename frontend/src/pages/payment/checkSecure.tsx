@@ -36,8 +36,8 @@ export default function CheckSecure(props: any) {
     if (messages != null) {
       setLoading(true);
       if (validate == true) {
-        setMsgValidate(messages);
         setLoading(true);
+        setMsgValidate(messages);
         // setTimeout(() => props.handleCancell(false), 5000);
         if(dataPayment.trxType == 'ORM'){
           dispatch(doCreateTransaction(dataPayment));
@@ -185,7 +185,7 @@ export default function CheckSecure(props: any) {
                 ))
               }
           </div>
-          {msgValidate == "Your PIN is correct! Please Wait" ? (
+          {msgValidate == "Your PIN is correct! Please Wait"? (
             <p className="text-center mt-4 text-green-500">{msgValidate}</p>
           ) : (
             <p className="text-center mt-4 text-red-500">{msgValidate}</p>

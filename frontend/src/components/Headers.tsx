@@ -132,7 +132,7 @@ const Headers = ({
                 location: location,
                 date: date,
             }
-        }, 'booking/'
+        }
     )
     setOpen(false)
   }
