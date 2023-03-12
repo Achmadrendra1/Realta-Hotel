@@ -111,7 +111,10 @@ function Bill() {
                   <tr className="">
                     <td className="w-full">Sub total</td>
                     <td className="text-right">
-                      {orderFromUser[0]?.orme_subtotal}
+                      {subtotal.toLocaleString("id-ID", {
+                        style: "currency",
+                        currency: "IDR",
+                      })}
                     </td>
                   </tr>
                   <tr className="">
