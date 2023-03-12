@@ -66,7 +66,7 @@ export default withAuth(function index() {
   );
   const fintechAcc = account?.filter((obj: any) => obj.usacType === "Payment");
 
-  //Check Status Account Dompet Realta
+  //Check Status Account H-Pay
   const accDompet = fintechAcc?.find(
     (item: any) => item.usacAccountNumber == accNumberDompet
   );
@@ -75,7 +75,7 @@ export default withAuth(function index() {
     accDompet ? setIsActive(true) : setIsActive(false);
   }, [accDompet]);
 
-  //Get Saldo Dompet Realta
+  //Get Saldo H-Pay
   const saldoDompet = parseInt(accDompet?.usacSaldo).toLocaleString("id-ID", {
     style: "currency",
     currency: "IDR",
@@ -274,7 +274,7 @@ export default withAuth(function index() {
                       <p className="text-md">
                         {items.orderNumber
                           ? items.orderNumber
-                          : "Dompet Realta"}
+                          : "H-Pay"}
                       </p>
                       <p className="text-md font-semibold">
                         {items.sourcePaymentName == null

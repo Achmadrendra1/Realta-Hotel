@@ -60,8 +60,6 @@ export default function Cards() {
     (obj: any) => obj.userId === user[0]?.user_id && obj.sourcePaymentName !== null && obj.sourcePaymentName !== 'H-Pay'
   )
 
-  console.log(dataHistory)
-
   const bankAcc = account?.filter(
     (obj: any) => obj.usacType === "Credit Card" || obj.usacType === "Debet"
   );
@@ -275,7 +273,7 @@ export default function Cards() {
                     </div>
                     <div className="flex justify-between">
                       <p className="text-md">
-                        {item.orderNumber ? item.orderNumber : "Dompet Realta"}
+                        {item.orderNumber ? item.orderNumber : "H-Pay"}
                       </p>
                       <p className="text-md font-semibold">
                         {item.sourcePaymentName == null

@@ -87,7 +87,7 @@ export default function hpay() {
       obj.targetNumber == accNumber
   );
 
-  //Filter Account Number untuk mencari account number Dompet Realta
+  //Filter Account Number untuk mencari account number H-Pay
   const bankAcc = account?.filter(
     (obj: any) => obj.usacType === "Credit Card" || obj.usacType === "Debet"
   );
@@ -96,7 +96,7 @@ export default function hpay() {
     (item: any) => item.usacAccountNumber == accNumber
   );
 
-  //Variabel Saldo Dompet Realta
+  //Variabel Saldo H-Pay
   const saldo = parseInt(acc?.usacSaldo).toLocaleString("id-ID", {
     style: "currency",
     currency: "IDR",
@@ -123,6 +123,7 @@ export default function hpay() {
 
   const handleClose = (data: boolean) => {
     setOpenTP(data);
+    setChangePin(data)
   };
 
   const { RangePicker } = DatePicker;
@@ -226,7 +227,7 @@ export default function hpay() {
                     </div>
                     <div className="flex justify-between">
                       <p className="text-md">
-                        {item.orderNumber ? item.orderNumber : "Dompet Realta"}
+                        {item.orderNumber ? item.orderNumber : "H-Pay"}
                       </p>
                       <p className="text-md font-semibold">
                         {item.sourcePaymentName == null
@@ -263,6 +264,7 @@ export default function hpay() {
               clickOk={handleOk}
               clickCancel={handleCancel}
               dataUser={user}
+              handleCancell={handleClose}
             />
           )}
         </Layouts>

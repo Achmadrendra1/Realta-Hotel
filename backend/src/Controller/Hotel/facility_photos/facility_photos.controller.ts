@@ -27,10 +27,10 @@ export class FacilityPhotosController {
   getFapho() {
     return this.FaphoService.findAllFapho();
   }
-  @Get(`src/:filename`)
+  @Get(`:filename`)
   getPhoto(@Param('filename') filename: string, @Res() res) {
     return res.sendFile(filename, {
-      root: join('src', 'Service', 'Hotel', 'Uploads'),
+      root: join('public', 'FacilitiesPhotos'),
     });
   }
   @Get(':id')

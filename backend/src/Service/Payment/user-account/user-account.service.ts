@@ -18,7 +18,7 @@ export class UserAccountService {
 
   async getAccount(id) {
     return await this.uacRepository.find({
-      where: { usacUserId: id},
+      where: { usacUserId: id },
     });
   }
 
@@ -111,6 +111,26 @@ export class UserAccountService {
     });
 
     return 'User Account Deleted';
+  }
+
+  async updateSecureCode(items: any) {
+    const salt = await bcrypt.genSalt()
+    const newCode = await bcrypt.hash(items.secureCode, salt)
+    return await this.uacRepository.update(
+      {
+        usacAccountNumber: items.sourceNumber,
+      },
+      {
+        usacSecureCode: newCode,
+      },
+    ).then(() => 
+      {
+        return {message : 'Your PIN is Updated !'}
+      }
+    ).catch((err) => {
+      return {error : err}
+    });
+    
   }
 
   async checkSecureCode(items: any) {

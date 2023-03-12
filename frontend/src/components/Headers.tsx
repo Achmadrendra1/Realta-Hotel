@@ -56,16 +56,16 @@ const Headers = ({
   const user = useSelector((state: any) => state.GetUserReducer.getUser);
   const { account } = useSelector((state: any) => state.payUserAccReducer);
 
-  //Variabel Account Number Dompet Realta
+  //Variabel Account Number H-Pay
   const accNumber = `131${user[0]?.user_phone_number}`;
 
-  //Filter Account Number untuk mencari account number Dompet Realta
+  //Filter Account Number untuk mencari account number H-Pay
   const fintechAcc = account?.filter((obj: any) => obj.usacType === "Payment");
   const acc = fintechAcc?.find(
     (item: any) => item.usacAccountNumber == accNumber
   );
 
-  //Variabel Saldo Dompet Realta
+  //Variabel Saldo H-Pay
   const saldo = parseInt(acc?.usacSaldo).toLocaleString("id-ID", {
     style: "currency",
     currency: "IDR",
@@ -73,7 +73,7 @@ const Headers = ({
     maximumFractionDigits: 0,
   });
 
-  //Cek Dompet Realta Sudah Active Atau Belum
+  //Cek H-Pay Sudah Active Atau Belum
   useEffect(() => {
     acc ? setIsActive(true) : setIsActive(false);
   }, [acc]);

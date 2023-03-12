@@ -1,5 +1,9 @@
 SELECT setval('payment."entitys_entity_id_seq"', (SELECT MAX(entity_id) FROM payment.entitys));
 SELECT setval('payment."payment_transaction_patr_id_seq"', (SELECT MAX(patr_id) FROM payment.payment_transaction));
+INSERT INTO payment.user_accounts(
+	usac_entity_id, usac_user_id, usac_account_number, usac_saldo, usac_type, usac_expmonth, usac_expyear, usac_secure_code, usac_modified_date)
+	VALUES (16, 44, 13198989898, 0, 'Payment', 0, 0, '$2a$12$YNYmILJ0IJzttR75PUlTjuWTVj2Cgk/dGEyzs4YPOQBLkvc1vJmGO', now());
+
 
 ------Function Get New Entity Id------
 CREATE OR REPLACE FUNCTION payment.getEntityId()
@@ -250,6 +254,7 @@ BEGIN
 			creditAmount := amount;
 			
 			UPDATE payment.user_accounts SET usac_saldo = usac_saldo - amount WHERE usac_account_number = sourceNumber;	
+			UPDATE payment.user_accounts SET usac_saldo = usac_saldo + amount WHERE usac_account_number = '13198989898';	
 		ELSE
 			trxType := 'ORM';
 			lastOrderNumber := (SELECT COALESCE(MAX(patr_trx_id)) from payment.payment_transaction where patr_type = trxType);
@@ -264,6 +269,7 @@ BEGIN
 			note := 'Food Order';
 			creditAmount := amount;
 			UPDATE payment.user_accounts SET usac_saldo = usac_saldo - amount WHERE usac_account_number = sourceNumber;	
+			UPDATE payment.user_accounts SET usac_saldo = usac_saldo + amount WHERE usac_account_number = '13198989898';
 			UPDATE resto.order_menus SET orme_pay_type = payType, orme_cardnumber = sourceNumber, orme_is_paid = 'P' where orme_order_number = orderNumber;
 		END IF;
 		call payment.insertOneTrx(

@@ -152,8 +152,8 @@ export default function index() {
                     let arrRatePrice = ratePrice?.split('-');
                     let highPrice = hotel.faci_highprice;
                     let arrHighPrice = highPrice.split('-')
-                    // let pict = hotel?.url
-                    // let arrPict = pict?.split(",")
+                    let pict = hotel?.url
+                    let arrPict = pict?.split(",")
                     return (
                       <Card key={index} className="mb-2">
                         <Row>
@@ -161,9 +161,9 @@ export default function index() {
                             <Row gutter={10}>
                               <Col span={18}>
                                 <Carousel autoplay autoplaySpeed={5000}>
-                                  {/* {arrPict?.map((each: any) => (
-                                    <img className="w-full" src={each.slice(1)} alt="hotels" />
-                                  ))} */}
+                                  {arrPict?.map((each: any) => (
+                                    <img className="w-full" src={`http://localhost:3600/facility-photos/${each}`} alt="hotels" />
+                                  ))}
                                 </Carousel>
                               </Col>
                               <Col span={6}>

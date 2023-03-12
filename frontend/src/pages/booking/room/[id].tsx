@@ -743,7 +743,7 @@ export default function bookingRoom() {
   );
   const fintechAcc = userAcc?.filter((obj: any) => obj.usacType === "Payment");
 
-  //Check Status Account Dompet Realta
+  //Check Status Account H-Pay
   const accDompet = fintechAcc?.find(
     (item: any) => item.usacAccountNumber == accNumberDompet
   );
@@ -752,7 +752,7 @@ export default function bookingRoom() {
     accDompet ? setIsActive(true) : setIsActive(false);
   }, [accDompet]);
 
-  //Get Saldo Dompet Realta
+  //Get Saldo H-Pay
   const saldoDompet = parseInt(accDompet?.usacSaldo).toLocaleString("id-ID", {
     style: "currency",
     currency: "IDR",
@@ -768,7 +768,7 @@ export default function bookingRoom() {
     accGoto ? setIsLinked(true) : setIsLinked(false);
   }, [accGoto]);
 
-  //Get Saldo Dompet Realta
+  //Get Saldo H-Pay
   const saldoGoto = parseInt(accGoto?.usacSaldo).toLocaleString("id-ID", {
     style: "currency",
     currency: "IDR",
@@ -1455,7 +1455,7 @@ export default function bookingRoom() {
                           >
                             <div className="flex justify-between items-center px-6">
                               <p className="text-[16px] font-semibold">
-                                Dompet Realta
+                                H-Pay
                               </p>
                               <p className="text-[16px] font-semibold">
                                 {saldoDompet}
@@ -1466,7 +1466,7 @@ export default function bookingRoom() {
                           <Card size={"small"} className="mb-2">
                             <div className="flex justify-between items-center px-6">
                               <p className="text-[16px] font-semibold">
-                                Dompet Realta
+                                H-Pay
                               </p>
                               <p
                                 className={`${

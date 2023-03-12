@@ -32,18 +32,31 @@ import {
   doGetHistorySuccess,
   doTopUpFailed,
   doTopUpSuccess,
+  doUpdatePinFailed,
+  doUpdatePinSuccess,
 } from "@/Redux/Action/Payment/paymentUserAction";
 import { API } from "@/Redux/Configs/consumeApi";
 import axios from "axios";
 import { call, put } from "redux-saga/effects";
 
 //List Transaction
-function* handleTrxDashRequest(action : any): any {
+function* handleTrxDashRequest(action: any): any {
   try {
-    const pageQueryParam = action.payload?.page ? `page=${action.payload.page}` : '';
-    const keywordQueryParam = action.payload?.keyword ? `&keyword=${action.payload.keyword}` : '';
-    const dateQueryParam = action.payload?.startDate ? `&startDate=${action.payload.startDate}&endDate=${action.payload.endDate}` : '';
-    const result = yield axios(API("GET", `/payment-transaction?${pageQueryParam}${keywordQueryParam}${dateQueryParam}`));
+    const pageQueryParam = action.payload?.page
+      ? `page=${action.payload.page}`
+      : "";
+    const keywordQueryParam = action.payload?.keyword
+      ? `&keyword=${action.payload.keyword}`
+      : "";
+    const dateQueryParam = action.payload?.startDate
+      ? `&startDate=${action.payload.startDate}&endDate=${action.payload.endDate}`
+      : "";
+    const result = yield axios(
+      API(
+        "GET",
+        `/payment-transaction?${pageQueryParam}${keywordQueryParam}${dateQueryParam}`
+      )
+    );
     yield put(doTransactionRequestSuccess(result.data));
     return result.data;
   } catch (e: any) {
@@ -51,37 +64,46 @@ function* handleTrxDashRequest(action : any): any {
   }
 }
 
-function* handleGetHistoryTrx(action:any):any{
+function* handleGetHistoryTrx(action: any): any {
   try {
-    const dateQueryParam = action.payload?.startDate ? `&startDate=${action.payload.startDate}&endDate=${action.payload.endDate}` : '';
-    const res = yield axios(API('GET', `/payment-transaction/all?${dateQueryParam}`))
-    yield put(doGetHistorySuccess(res.data))
-  } catch (error:any) {
-    yield put(doGetHistoryFailed(error))
+    const dateQueryParam = action.payload?.startDate
+      ? `&startDate=${action.payload.startDate}&endDate=${action.payload.endDate}`
+      : "";
+    const res = yield axios(
+      API("GET", `/payment-transaction/all?${dateQueryParam}`)
+    );
+    yield put(doGetHistorySuccess(res.data));
+  } catch (error: any) {
+    yield put(doGetHistoryFailed(error));
   }
 }
-
 
 //Bank
 function* handleBankRequest(action: any): any {
   try {
-    const pageQueryParam = action.payload?.page ? `page=${action.payload.page}` : '';
-    const keywordQueryParam = action.payload?.keyword ? `&keyword=${action.payload.keyword}` : '';
-    const result = yield axios(API("GET", `/bank?${pageQueryParam}${keywordQueryParam}`));
+    const pageQueryParam = action.payload?.page
+      ? `page=${action.payload.page}`
+      : "";
+    const keywordQueryParam = action.payload?.keyword
+      ? `&keyword=${action.payload.keyword}`
+      : "";
+    const result = yield axios(
+      API("GET", `/bank?${pageQueryParam}${keywordQueryParam}`)
+    );
     yield put(doBankRequestSuccess(result.data));
     return result.data;
   } catch (error) {
-    console.log(error)
+    console.log(error);
     yield put(doBankRequestFailed(error));
   }
 }
 
-function* handleBankAllRequest(): any{
+function* handleBankAllRequest(): any {
   try {
-    const res = yield axios(API("GET", "/bank/all"))
-    yield put(doGetAllBankSuccess(res.data))
+    const res = yield axios(API("GET", "/bank/all"));
+    yield put(doGetAllBankSuccess(res.data));
   } catch (error) {
-    yield put(doGetAllBankFailed(error))
+    yield put(doGetAllBankFailed(error));
   }
 }
 
@@ -126,9 +148,15 @@ function* handleDeleteBank(action: any): any {
 //Payment Gateway
 function* handlePagaRequest(action: any): any {
   try {
-    const pageQueryParam = action.payload?.page ? `page=${action.payload.page}` : '';
-    const keywordQueryParam = action.payload?.keyword ? `&keyword=${action.payload.keyword}` : '';
-    const res = yield axios(API("GET", `/payment-gateway?${pageQueryParam}${keywordQueryParam}`));
+    const pageQueryParam = action.payload?.page
+      ? `page=${action.payload.page}`
+      : "";
+    const keywordQueryParam = action.payload?.keyword
+      ? `&keyword=${action.payload.keyword}`
+      : "";
+    const res = yield axios(
+      API("GET", `/payment-gateway?${pageQueryParam}${keywordQueryParam}`)
+    );
     yield put(doPagaRequestSuccess(res.data));
     return res.data;
   } catch (error) {
@@ -186,7 +214,7 @@ function* handleUsacRequest(action: any): any {
     const res = yield axios(API("GET", `/user-account/${action.payload}`));
     yield put(doUsacRequestSuccess(res.data));
   } catch (error) {
-    yield put(doUsacRequestFailed(error))
+    yield put(doUsacRequestFailed(error));
   }
 }
 
@@ -233,30 +261,53 @@ function* handleCheckSecure(action: any): any {
   }
 }
 
+function* handleUpdatePin(action: any): any {
+  const delay = (time: any) =>
+    new Promise((resolve) => setTimeout(resolve, time));
+  try {
+    const res = yield axios(API('PUT', '/user-account', action.payload))
+    yield put(doUpdatePinSuccess({
+      message : res.data.message,
+      status : true
+    }))
+    yield call(delay, 2000)
+    yield put(doUpdatePinSuccess({
+      message : null,
+      status : null
+    }))
+    // console.log(res.data)
+    // yield put(doUpdatePinSuccess(res.data))
+  } catch (error: any) {}
+}
+
 function* handleTopUp(action: any): any {
   const delay = (time: any) =>
     new Promise((resolve) => setTimeout(resolve, time));
-    
-    const result = yield axios(
-      API("POST", "/payment-transaction", action.payload)
-    );
-    // console.log(action.payload)
-    yield call(delay, 2000)
-    yield put(doTopUpSuccess({ message: "Top Up Success", status:null, data: result.data }));
-    yield call(delay, 2000)
-    yield put(doTopUpSuccess({ message: null, status:null, data: result.data }))
+
+  const result = yield axios(
+    API("POST", "/payment-transaction", action.payload)
+  );
+  // console.log(action.payload)
+  yield call(delay, 2000);
+  yield put(
+    doTopUpSuccess({
+      message: "Top Up Success",
+      status: null,
+      data: result.data,
+    })
+  );
+  yield call(delay, 2000);
+  yield put(doTopUpSuccess({ message: null, status: null, data: result.data }));
 }
 
-function* handleCreateTransaction(action:any):any {
-  console.log(action.payload)
+function* handleCreateTransaction(action: any): any {
   const delay = (time: any) =>
-  new Promise((resolve) => setTimeout(resolve, time));
-  yield axios(API('POST', '/payment-transaction', action.payload))
-  yield put(doCreateTransactionSuccess({message : 'Transaksi Berhasil'}))
-  yield call(delay, 3000)
-  yield put(doCreateTransactionSuccess({message : null}))
+    new Promise((resolve) => setTimeout(resolve, time));
+  yield axios(API("POST", "/payment-transaction", action.payload));
+  yield put(doCreateTransactionSuccess({ message: "Transaksi Berhasil", status: null }));
+  yield call(delay, 3000);
+  yield put(doCreateTransactionSuccess({ message: null }));
 }
-
 
 export {
   handleTrxDashRequest,
@@ -275,5 +326,6 @@ export {
   handleCheckSecure,
   handleGetHistoryTrx,
   handleCreateTransaction,
-  handleBankAllRequest
+  handleBankAllRequest,
+  handleUpdatePin
 };
