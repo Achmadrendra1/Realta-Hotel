@@ -44,7 +44,19 @@ function Order({orderNumberUser}:any) {
   
   useEffect(() => {
     // get order number fom local storage
-    dispatch(doGetUserOrder(orme))
+    const orderFromlocalstorage = localStorage.getItem("result");
+    const parsedOrderNumber = orderFromlocalstorage !== null ? JSON.parse(orderFromlocalstorage) : []; 
+    const notParsedCart = localStorage.getItem("cart");
+    const parsedCart = notParsedCart ? JSON.parse(notParsedCart) : [];
+
+    const userid = userLoggedIn[0]?.user_id; 
+    setResult(parsedOrderNumber); 
+    
+    let data = {
+      orderNumber: parsedOrderNumber.ormeNumber, 
+    };
+
+    dispatch(doGetUserOrder(orme));
   }, [orme]); 
 
   // BACK TO PREVIOUS PAGE
