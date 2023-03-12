@@ -110,13 +110,8 @@ console.log(resto.data)
             <Buttons funcs={() => router.push("/booking")}>View More</Buttons>
           </div>
         </div>
-<<<<<<< HEAD
-        <div className="flex gap-6 mt-8 justify-center flex-wrap">
-          {landing.slice(7).map((item: any, index: number) => (
-=======
         <div className="flex gap-5 mt-8 justify-start flex-wrap">
           {landing.map((item: any, index:number) => (
->>>>>>> 08ff0de8b4bb274cf5c4783ec583da1edee93a8d
             <Card
               key={index}
               style={{ width: 400 }}

@@ -39,7 +39,7 @@ export class CountryController {
 
   //update
   @Put('edit/:id')
-  update(@Param() params, @Body() body: any): Promise<any> {
+  async update(@Param() params, @Body() body: any): Promise<any> {
     return this.CountryService.updateCountry(params.id, body);
   }
 

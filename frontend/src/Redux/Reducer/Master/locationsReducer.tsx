@@ -33,6 +33,15 @@ function locationsReducer(state = initialState, action: any) {
       return { ...state, locations: [...state.locations, action.payload] };
 
     //-----------------------------------------------------------------------------------------------------------------------------------------
+    // UPDATE
+    case ActionTypes.UPDATE_LOCATIONS:
+      return { ...state };
+    case ActionTypes.UPDATE_LOCATIONS_SUCCEED:
+      return { ...state, locations: [...state.locations, action.payload] };
+    case ActionTypes.UPDATE_LOCATIONS_FAILED:
+      return { ...state, locations: [...state.locations, action.payload] };
+
+    //-----------------------------------------------------------------------------------------------------------------------------------------
     // DEL
     case ActionTypes.DEL_LOCATIONS:
       return { ...state };

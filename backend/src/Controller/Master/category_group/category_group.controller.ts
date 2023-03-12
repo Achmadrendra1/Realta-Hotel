@@ -52,18 +52,12 @@ export class CategoryGroupController {
     }
   }
 
-  // upload
-  @Get('public/:fileName')
-  getPhoto(@Param('fileName') fileName: string, @Res() res) {
-    return res.sendFile(fileName, { root: join('public/upload') });
-  }
-
   @Post('upload')
   @UseInterceptors(
     FileInterceptor('file', {
       dest: 'public/upload',
       storage: diskStorage({
-        destination: './public/upload',
+        destination: 'public/upload',
         filename(req, file, cb) {
           return cb(null, file.originalname);
         },
@@ -71,7 +65,7 @@ export class CategoryGroupController {
     }),
   )
   async uploadFile(@UploadedFile() file: any, @Body() body) {
-    console.log(file)
+    console.log(file);
     const result = await this.CategoryGroupService.storeFileInfo(file, body);
     if (!result) {
       return 'gagal upload';
@@ -81,6 +75,11 @@ export class CategoryGroupController {
         result: result.result,
       };
     }
+  }
+  // upload
+  @Get('public/upload/:fileName')
+  getPhoto(@Param('fileName') fileName: string, @Res() res) {
+    return res.sendFile(fileName, { root: join('public/upload') });
   }
 
   // upload end

@@ -19,7 +19,6 @@ export default function EditPolicy(props: any) {
   const onFinish = () => {
     dispatch(doUpdatePolicy(formValues));
     handleClose(false);
-    window.location.reload();
   };
 
   const onFinishFailed = (errorInfo: any) => {

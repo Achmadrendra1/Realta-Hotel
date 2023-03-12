@@ -33,6 +33,15 @@ function locationsRCPReducer(state = initialState, action: any) {
       return { ...state, locationsRCP: [...state.locationsRCP, action.payload] };
 
     //-----------------------------------------------------------------------------------------------------------------------------------------
+    // UPDATE
+    case ActionTypes.UPDATE_LOCATIONSRCP:
+      return { ...state };
+    case ActionTypes.UPDATE_LOCATIONSRCP_SUCCEED:
+      return { ...state, locationsRCP: [...state.locationsRCP, action.payload] };
+    case ActionTypes.UPDATE_LOCATIONSRCP_FAILED:
+      return { ...state, locationsRCP: [...state.locationsRCP, action.payload] };
+
+    //-----------------------------------------------------------------------------------------------------------------------------------------
     // DEL
     case ActionTypes.DEL_LOCATIONSRCP:
       return { ...state };

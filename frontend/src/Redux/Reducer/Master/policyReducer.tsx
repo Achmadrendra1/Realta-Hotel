@@ -33,6 +33,15 @@ function policyReducer(state = initialState, action: any) {
       return { ...state, policy: [...state.policy, action.payload] };
 
     //-----------------------------------------------------------------------------------------------------------------------------------------
+    // UPDATE
+    case ActionTypes.UPDATE_POLICY:
+      return { ...state };
+    case ActionTypes.UPDATE_POLICY_SUCCEED:
+      return { ...state, policy: [...state.policy, action.payload] };
+    case ActionTypes.UPDATE_POLICY_FAILED:
+      return { ...state, policy: [...state.policy, action.payload] };
+
+    //-----------------------------------------------------------------------------------------------------------------------------------------
     // DEL
     case ActionTypes.DEL_POLICY:
       return { ...state };

@@ -33,6 +33,15 @@ function provincesReducer(state = initialState, action: any) {
       return { ...state, provinces: [...state.provinces, action.payload] };
 
     //-----------------------------------------------------------------------------------------------------------------------------------------
+    // UPDATE
+    case ActionTypes.UPDATE_PROVINCES:
+      return { ...state };
+    case ActionTypes.UPDATE_PROVINCES_SUCCEED:
+      return { ...state, provinces: [...state.provinces, action.payload] };
+    case ActionTypes.UPDATE_PROVINCES_FAILED:
+      return { ...state, provinces: [...state.provinces, action.payload] };
+
+    //-----------------------------------------------------------------------------------------------------------------------------------------
     // DEL
     case ActionTypes.DEL_PROVINCES:
       return { ...state };
