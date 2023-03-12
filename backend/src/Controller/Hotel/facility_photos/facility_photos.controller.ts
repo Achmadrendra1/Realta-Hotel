@@ -27,10 +27,10 @@ export class FacilityPhotosController {
   getFapho() {
     return this.FaphoService.findAllFapho();
   }
-  @Get(`src/:filename`)
+  @Get(`:filename`)
   getPhoto(@Param('filename') filename: string, @Res() res) {
     return res.sendFile(filename, {
-      root: join('public', 'FacilityPhotos'),
+      root: join('public', 'FacilitiesPhotos'),
     });
   }
   @Get(':id')
@@ -47,14 +47,14 @@ export class FacilityPhotosController {
   @UseInterceptors(
     FilesInterceptor('faphoUrl', 10, {
       storage: diskStorage({
-        destination: './public/FacilityPhotos',
+        destination: './public/FacilitiesPhotos',
         filename: UploadConfig.PhotoFilename,
       }),
     }),
   )
   addFapho(@UploadedFiles() file: Express.Multer.File, @Body() body: any) {
     return this.FaphoService.addNewFapho(file, body);
-  }
+  } 
 
   @Delete()
   DeleteFapho(@Param('id') params) {

@@ -84,7 +84,7 @@ export default function pay() {
 
   useEffect(() => {
     dispacth(doBankRequest());
-    dispacth(doUsacRequest());
+    // dispacth(doUsacRequest());
     dispacth(doPagaRequest());
   }, []);
 
@@ -98,7 +98,7 @@ export default function pay() {
   );
   const fintechAcc = userAcc?.filter((obj: any) => obj.usacType === "Payment");
 
-  //Check Status Account Dompet Realta
+  //Check Status Account H-Pay
   const accDompet = fintechAcc?.find(
     (item: any) => item.usacAccountNumber == accNumberDompet
   );
@@ -107,7 +107,7 @@ export default function pay() {
     accDompet ? setIsActive(true) : setIsActive(false);
   }, [accDompet]);
 
-  //Get Saldo Dompet Realta
+  //Get Saldo H-Pay
   const saldoDompet = parseInt(accDompet?.usacSaldo).toLocaleString("id-ID", {
     style: "currency",
     currency: "IDR",
@@ -123,7 +123,7 @@ export default function pay() {
     accGoto ? setIsLinked(true) : setIsLinked(false);
   }, [accGoto]);
 
-  //Get Saldo Dompet Realta
+  //Get Saldo H-Pay
   const saldoGoto = parseInt(accGoto?.usacSaldo).toLocaleString("id-ID", {
     style: "currency",
     currency: "IDR",
@@ -312,7 +312,7 @@ export default function pay() {
                       >
                         <div className="flex justify-between items-center px-6">
                           <p className="text-[16px] font-semibold">
-                            Dompet Realta
+                            H-Pay
                           </p>
                           <p className="text-[16px] font-semibold">
                             {saldoDompet}
@@ -323,7 +323,7 @@ export default function pay() {
                       <Card size={"small"}>
                         <div className="flex justify-between items-center px-6">
                           <p className="text-[16px] font-semibold">
-                            Dompet Realta
+                            H-Pay
                           </p>
                           <p
                             className={`${

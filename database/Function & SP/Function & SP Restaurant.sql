@@ -180,13 +180,14 @@ LANGUAGE PLPGSQL;
 
 
 ------------------------------------------- 5--------------------------------------------
-
+drop function resto.listMenuUser
 CREATE OR REPLACE FUNCTION resto.listMenuUser(faciid int, search_menu varchar(50), currentpage int, sort varchar(10)) 
 	RETURNS TABLE (
 		remeId int,
 		remeName text,
 		remeDescription text,
 		remePrice money,
+		-- remeDiscount money,
 		-- remeDiscount money,
 		remeStatus text,
 		rempThumbnailFilename text,
@@ -205,6 +206,7 @@ DECLARE
 			resto.resto_menus.reme_name,
 			resto.resto_menus.reme_description,
 			resto.resto_menus.reme_price,
+			-- resto.resto_menus.reme_discount,
 			-- resto.resto_menus.reme_discount,
 			resto.resto_menus.reme_status,
 			resto.resto_menu_photos.remp_thumbnail_filename,
@@ -238,7 +240,7 @@ BEGIN
 				remeName,
 				remeDescription,
 				remePrice,
-				-- remeDiscount,
+				-- -- remeDiscount,
 				remeStatus,
 				rempThumbnailFilename,
 				rempPhotoFilename,
@@ -319,7 +321,7 @@ LANGUAGE PLPGSQL;
 -- 		remeName text,
 -- 		remeDescription text,
 -- 		remePrice money,
--- 		-- remeDiscount money,
+-- 		-- -- remeDiscount money,
 -- 		remeStatus text,
 -- 		rempThumbnailFilename text,
 -- 		rempPhotoFilename text,
@@ -337,7 +339,7 @@ LANGUAGE PLPGSQL;
 -- 			resto.resto_menus.reme_name,
 -- 			resto.resto_menus.reme_description,
 -- 			resto.resto_menus.reme_price,
--- 			resto.resto_menus.reme_discount,
+-- 			-- resto.resto_menus.reme_discount,
 -- 			resto.resto_menus.reme_status,
 -- 			resto.resto_menu_photos.remp_thumbnail_filename,
 -- 			resto.resto_menu_photos.remp_photo_filename,
@@ -370,7 +372,7 @@ LANGUAGE PLPGSQL;
 -- 				remeName,
 -- 				remeDescription,
 -- 				remePrice,
--- 				remeDiscount,
+-- 				-- remeDiscount,
 -- 				remeStatus,
 -- 				rempThumbnailFilename,
 -- 				rempPhotoFilename,
@@ -605,7 +607,7 @@ END;
 $$ 
 LANGUAGE PLPGSQL;
 
-------------------------------------------- 13 ------------------------------------------
+------------------------------------------- TERBARUUUUUU ------------------------------------------
 CREATE OR REPLACE FUNCTION resto.getPhotoMenu(remeId int) 
 	RETURNS TABLE (
 		rempId int,
@@ -631,7 +633,8 @@ DECLARE dataPhoto CURSOR FOR(
 BEGIN 
 	OPEN dataPhoto;
 		LOOP FETCH NEXT
-			FROM dataPhoto INTO rempId,
+			FROM dataPhoto INTO 
+				rempId,
 				rempThumbnailFilename,
 				rempPhotoFilename,
 				rempPrimary,

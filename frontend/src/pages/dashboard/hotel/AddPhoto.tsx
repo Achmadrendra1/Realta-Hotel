@@ -15,6 +15,7 @@ export default withAuth( function AddPhoto(props: any) {
   const [form] = Form.useForm();
   const { handleClose } = props;
   
+console.log(props.id);
 
   const formik = useFormik({
     initialValues: {
@@ -66,8 +67,8 @@ export default withAuth( function AddPhoto(props: any) {
   };
 
   const stat = [
-    { value: true, label: "Primary" },
-    { value: false, label: "Not Primary" },
+    { value: 1, label: "Primary" },
+    { value: 0, label: "Not Primary" },
   ];
 
   return (

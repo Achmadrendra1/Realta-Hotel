@@ -1,5 +1,7 @@
+import Auth from "@/PrivateRoute/Auth";
 import { doLogin } from "@/Redux/Action/User/auth";
 import loginStyle from "@/styles/login.module.css";
+import { CloseOutlined } from "@ant-design/icons";
 import {
   Avatar,
   Card,
@@ -12,16 +14,11 @@ import {
   message
 } from "antd";
 import { DotPosition } from "antd/es/carousel";
-import Link from "next/link";
-import  {useRouter}  from "next/router";
-import { useEffect, useState } from "react";
 import { motion } from 'framer-motion';
+import Link from "next/link";
+import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import Layouts from "@/layouts/layout";
-import withAuth from "@/PrivateRoute/WithAuth";
-import Auth from "@/PrivateRoute/Auth";
-import Register from "./register";
-import { CloseCircleOutlined, CloseOutlined } from "@ant-design/icons";
 
 export default Auth( function Login() {
   const { Content } = Layout;
@@ -77,12 +74,12 @@ export default Auth( function Login() {
   return (
     <>
       {contextHolder}
-      <div className="bg-[#f2f1fa] h-screen p-28">
+      <div className="bg-[#f2f1fa] h-screen p-3">
       <Card className=" mx-52 drop-shadow-md bg-[#8662FF] rounded-3xl">
       <p className="mt-4 mr-2 font-bold text-end text-lg text-white hover:cursor-pointer"><CloseOutlined onClick={() => {router.push('/')}}/></p>
-        <Row>
+        <Row gutter={16}>
           <Col span={14}>
-            <Card className={`p-2 mr-3  ${loginStyle.cardLogin} no-border`}>
+            <Card className={`p-2 mr-3]  ${loginStyle.cardLogin} no-border`}>
               <div className="container mt-3 ">
                 <img src="/assets/icons.png" alt="" style={{ width: 60 }} />
 

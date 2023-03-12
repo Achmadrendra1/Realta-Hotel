@@ -13,7 +13,7 @@ import {
   EditOutlined,
   ExclamationCircleFilled,
 } from "@ant-design/icons";
-import { Breadcrumb, Col, Modal, Rate, Row, Space, Table, Typography } from "antd";
+import { Breadcrumb, Carousel, Col, Image, Modal, Rate, Row, Space, Table, Typography } from "antd";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -42,6 +42,7 @@ export default withAuth(function HotelDetails() {
 
   useEffect(() => {
     dispatch(getHotelID(hotelId));
+    // dispatch(getFacility());
     setRefresh(false);
   }, [hotelId]);
 
@@ -93,10 +94,19 @@ export default withAuth(function HotelDetails() {
 
   const column = [
     {
-      title: "ID",
-      dataIndex: "faciId",
+      title: "Photo",
+      dataIndex: ["facilityPhotos","faphoPhotoFilename"],
       key: "1",
-      width: "5%",
+      width: "10%",
+      render: (_:any,record:any)=>{
+        let foto = record?.facilityPhotos[0].faphoPhotoFilename
+        return(
+          <Image 
+          src= {`${configuration.BASE_URL}/facility-photos/${foto}`} 
+          alt={`${foto}`} 
+          />
+        )
+      }
     },
     {
       title: "Facility Name",
@@ -120,7 +130,7 @@ export default withAuth(function HotelDetails() {
       title: "Max Vacant",
       dataIndex: "maxVacant",
       key: "1",
-      width: "10%",
+      width: "5%",
       render: (text: any, record: any) => (
         <>
           {record.faciMaxNumber} {record.faciMeasureUnit}
@@ -240,15 +250,19 @@ export default withAuth(function HotelDetails() {
       ) : null}
       <Link href={'/dashboard/hotel'}><ArrowLeftOutlined /> Back</Link>
 
-      <Row>
-        {/* <Col span={5}>
-            <img
-              src={`${configuration.BASE_URL}/facility-photos/src/Gambar4-1678273598077-44332439.png`}
-              width={200}
-              className="rounded-xl"
-            />
-          </Col> */}
-        <Col span={16}>
+      <Row gutter={24}>
+        <Col span={5}>
+            <Carousel autoplay autoplaySpeed={2500}>
+              {hotelById?.facilities?.map((item:any)=>(
+                item.facilityPhotos.map((items:any)=>(
+                  <Image 
+                  src={`${configuration.BASE_URL}/facility-photos/${items.faphoPhotoFilename}`} 
+                  alt={`${items.faphoPhotoFilename}`}/>
+                ))
+              ))}
+            </Carousel>
+          </Col>
+        <Col span={11}>
           <Title level={3}>{hotelById?.hotelName}</Title>
           <Text type="secondary">{hotelById?.hotelAddr?.addrLine1}</Text>
           <br />

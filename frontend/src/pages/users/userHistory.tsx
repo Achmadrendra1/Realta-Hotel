@@ -29,20 +29,20 @@ export default withAuth(function UserHistory() {
     (item: any) => item.user_id == user[0]?.user_id
   );
 
-  const date = new Date();
-
-  const format:any = {
-    day: "2-digit",
-    month: "short",
-    year: "numeric",
-  };
-
-  const dateFormatter = new Intl.DateTimeFormat("id-ID", format);
-  const currentDate = dateFormatter.format(date);
-
   const [position, setPosition] = useState<PaginationPosition>("bottom");
   const [align, setAlign] = useState<PaginationAlign>("end");
   const router = useRouter();
+  const checkDate = (checkInDate: any) => {
+    const now = new Date();
+    const checkIn = new Date(checkInDate);
+
+    if(checkIn > now){
+      return true
+    } else {
+      return false
+    }
+  };
+
 
   return (
     <div>
@@ -64,10 +64,12 @@ export default withAuth(function UserHistory() {
                   <p>
                     <RightOutlined
                       className="hover:cursor-pointer"
-                      onClick={() => router.push({
-                        pathname:"/booking/room/invoice",
-                        query:{id : item.boor_order_number}
-                      })}
+                      onClick={() =>
+                        router.push({
+                          pathname: "/booking/room/invoice",
+                          query: { id: item.boor_order_number },
+                        })
+                      }
                     />
                   </p>
                 </Tooltip>
@@ -85,52 +87,17 @@ export default withAuth(function UserHistory() {
               </div>
               <div className="flex justify-between">
                 <p className="text-md font-semibold">{`${item.total_guest} Tamu, ${item.boor_total_room} Kamar`}</p>
-                {item.check_in_date == currentDate && (
+                {checkDate(item.check_in_date) && (
                   <p className="text-sm font-medium text-red-600 hover:cursor-pointer hover:underline">
                     Cancel Booking
                   </p>
                 )}
+                
               </div>
             </div>
           </Card>
         )}
       >
-        {/* {Invoice.length != 0 ? (
-          Invoice.map((item: any) => (
-            <Card
-              title={item.boor_order_number}
-              className="m-4"
-              extra={item.boor_order_date.split("T")[0]}
-            >
-              <div>
-                <div className="flex justify-between">
-                  <p className=" text-lg font-bold">
-                    {item.hotel_name}{" "}
-                  </p>
-                  <p className=" text-md font-semibold">
-                    {item.boor_status}
-                  </p>
-                </div>
-                <div className="flex justify-between">
-                  <p className="text-md font-semibold">{`${item.check_in_date} - ${item.check_out_date}`}</p>
-                  <p className="text-lg font-bold">
-                    {item.boor_total_amount}
-                  </p>
-                </div>
-                <div className="flex justify-between">
-                  <p className="text-md font-semibold">{`${item.total_guest} Tamu, ${item.boor_total_room} Kamar`}</p>
-                  {item.check_in_date == currentDate && (
-                    <p className="text-sm font-medium text-red-600 hover:cursor-pointer hover:underline">
-                      Cancel Booking
-                    </p>
-                  )}
-                </div>
-              </div>
-            </Card>
-          ))
-        ) : (
-          <Empty className="mt-10 font-bold text-xl" />
-        )} */}
       </List>
     </div>
   );

@@ -185,8 +185,8 @@ export default withAuth( function Bank() {
         />
       ) : null}
 
-      <Row gutter={16}>
-        <Col span={16}>
+      {/* <Row gutter={16}>
+        <Col span={16}> */}
           <div className=" w-full">
             <div className="flex-col">
               <div className="flex justify-between mb-4">
@@ -213,7 +213,7 @@ export default withAuth( function Bank() {
               />
             </div>
           </div>
-        </Col>
+        {/* </Col>
         <Col span={8} className="text-center">
           <Card className="bg-[#754CFF] text-white m-auto w-3/5" hoverable>
             <Statistic
@@ -224,7 +224,7 @@ export default withAuth( function Bank() {
             />
           </Card>
         </Col>
-      </Row>
+      </Row> */}
     </div>
   );
 })

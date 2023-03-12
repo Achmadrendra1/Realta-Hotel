@@ -1,6 +1,11 @@
 import Layouts from "@/layouts/layout";
-import { LeftOutlined, RightOutlined } from "@ant-design/icons";
-import { Button, Card, DatePicker, Empty, List } from "antd";
+import {
+  LeftOutlined,
+  RightOutlined,
+  SettingFilled,
+  SettingOutlined,
+} from "@ant-design/icons";
+import { Button, Card, DatePicker, Empty, List, Tooltip } from "antd";
 import Head from "next/head";
 import Link from "next/link";
 import { use, useEffect, useState } from "react";
@@ -9,7 +14,12 @@ import DetailTransHpay from "./detailTransHpay";
 import { useDispatch, useSelector } from "react-redux";
 import { doTransactionRequest } from "@/Redux/Action/Payment/paymentDashAction";
 import { doGetHistory } from "@/Redux/Action/Payment/paymentUserAction";
-import { PaginationAlign, PaginationPosition } from "antd/es/pagination/Pagination";
+import {
+  PaginationAlign,
+  PaginationPosition,
+} from "antd/es/pagination/Pagination";
+import Buttons from "@/components/Button";
+import ChangePin from "./changePin";
 
 export default function hpay() {
   const addIcon = (
@@ -51,6 +61,7 @@ export default function hpay() {
   const dispacth = useDispatch();
   const [isOpenTP, setOpenTP] = useState(false);
   const [isOpenDetail, setOpenDetail] = useState(false);
+  const [changePin, setChangePin] = useState(false);
   const [confirmLoading, setConfirmLoading] = useState(false);
   const [msg, setMsg] = useState("");
 
@@ -70,13 +81,13 @@ export default function hpay() {
 
   const dataHistory = payHistoryTrx?.filter(
     (obj: any) =>
-      obj.userId === user[0]?.user_id &&
-      obj.sourcePaymentName !== null &&
-      obj.sourceNumber == accNumber ||
+      (obj.userId === user[0]?.user_id &&
+        obj.sourcePaymentName !== null &&
+        obj.sourceNumber == accNumber) ||
       obj.targetNumber == accNumber
   );
 
-  //Filter Account Number untuk mencari account number Dompet Realta
+  //Filter Account Number untuk mencari account number H-Pay
   const bankAcc = account?.filter(
     (obj: any) => obj.usacType === "Credit Card" || obj.usacType === "Debet"
   );
@@ -85,7 +96,7 @@ export default function hpay() {
     (item: any) => item.usacAccountNumber == accNumber
   );
 
-  //Variabel Saldo Dompet Realta
+  //Variabel Saldo H-Pay
   const saldo = parseInt(acc?.usacSaldo).toLocaleString("id-ID", {
     style: "currency",
     currency: "IDR",
@@ -99,6 +110,7 @@ export default function hpay() {
       setOpenTP(false);
       setOpenDetail(false);
       setConfirmLoading(false);
+      setChangePin(false)
     }, 2000);
   };
 
@@ -106,23 +118,26 @@ export default function hpay() {
     console.log("Clicked cancel button");
     setOpenTP(false);
     setOpenDetail(false);
+    setChangePin(false)
   };
 
   const handleClose = (data: boolean) => {
     setOpenTP(data);
+    setChangePin(data)
   };
 
   const { RangePicker } = DatePicker;
-  const handleDateChange = (value:any, dateString:any) => {
+  const handleDateChange = (value: any, dateString: any) => {
     // console.log("Selected Time: ", value);
     // console.log("Formatted Selected Time: ", dateString);
-    dispacth(doGetHistory({startDate: dateString[0], endDate: dateString[1]}))
+    dispacth(
+      doGetHistory({ startDate: dateString[0], endDate: dateString[1] })
+    );
     // setDateRange(dateString);
   };
 
-  const [position, setPosition] = useState<PaginationPosition>('bottom');
-  const [align, setAlign] = useState<PaginationAlign>('end');
-
+  const [position, setPosition] = useState<PaginationPosition>("bottom");
+  const [align, setAlign] = useState<PaginationAlign>("end");
 
   return (
     <>
@@ -142,20 +157,28 @@ export default function hpay() {
               <p className="text-lg text-white font-bold">H-Pay Balance</p>
             </div>
             <div className="w-2/4 h-36 mt-4 m-auto p-6 bg-white rounded-lg">
-              <div className="flex justify-between">
-                <div>
-                  <p className="text-md">Balance</p>
-                  <p className="text-3xl mt-2 font-bold">{saldo}</p>
+              <div className="">
+                <div className="flex justify-between items-center">
+                  <p className="text-lg font-semibold">Balance</p>
+                  <div className="h-10 w-24 flex items-center mr-8 gap-x-2">
+                    <Button
+                      className="bg-[#4728ae] text-white px-4 flex"
+                      onClick={() => {
+                        setOpenTP(true);
+                      }}
+                    >
+                      {addIcon}
+                      <p className="ml-2 text-md hover:text-white"> Top Up </p>
+                    </Button>
+                    <Tooltip title="Change PIN">
+                      <SettingFilled
+                        className="text-[#754cff] font-bold hover:cursor-pointer"
+                        onClick={() => setChangePin(true)}
+                      />
+                    </Tooltip>
+                  </div>
                 </div>
-                <Button
-                  className="bg-[#4728ae] text-white px-4 flex"
-                  onClick={() => {
-                    setOpenTP(true);
-                  }}
-                >
-                  {addIcon}
-                  <p className="ml-2 text-md hover:text-white"> Top Up </p>
-                </Button>
+                <p className="text-3xl mt-2 font-bold">{saldo}</p>
               </div>
             </div>
           </div>
@@ -165,13 +188,13 @@ export default function hpay() {
               <p className="text-lg font-semibold text-[#252525]">
                 History Transaction
               </p>
-              <RangePicker onChange={handleDateChange}/>
+              <RangePicker format={"DD MMM YYYY"} onChange={handleDateChange} />
             </div>
             <List
               className="pb-4"
               dataSource={dataHistory}
-              pagination={{ position, align,pageSize:5 }}
-              renderItem={(item:any) => (
+              pagination={{ position, align, pageSize: 5 }}
+              renderItem={(item: any) => (
                 <Card
                   title={item.transactionNumber}
                   extra={item.trxDate?.split("T")[0]}
@@ -204,7 +227,7 @@ export default function hpay() {
                     </div>
                     <div className="flex justify-between">
                       <p className="text-md">
-                        {item.orderNumber ? item.orderNumber : "Dompet Realta"}
+                        {item.orderNumber ? item.orderNumber : "H-Pay"}
                       </p>
                       <p className="text-md font-semibold">
                         {item.sourcePaymentName == null
@@ -214,11 +237,10 @@ export default function hpay() {
                     </div>
                   </div>
                 </Card>
-              )}   
-            >
-            </List>
+              )}
+            ></List>
           </div>
-          {isOpenTP ? (
+          {isOpenTP && (
             <TopUp
               show={isOpenTP}
               clickOk={handleOk}
@@ -228,7 +250,7 @@ export default function hpay() {
               card={bankAcc}
               handleCancell={handleClose}
             />
-          ) : null}
+          )}
           {isOpenDetail ? (
             <DetailTransHpay
               show={isOpenDetail}
@@ -236,6 +258,15 @@ export default function hpay() {
               clickCancel={handleCancel}
             />
           ) : null}
+          {changePin && (
+            <ChangePin
+              show={changePin}
+              clickOk={handleOk}
+              clickCancel={handleCancel}
+              dataUser={user}
+              handleCancell={handleClose}
+            />
+          )}
         </Layouts>
       </main>
     </>

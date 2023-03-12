@@ -18,8 +18,6 @@ export default withAuth(function AddHotelRealta(props: any) {
   const { Title, Text } = Typography;
   const { handleClose } = props;
 
-  console.log(addrs);
-
   useEffect(() => {
     dispatch(getAddress());
     dispatch(getProvince());
@@ -46,9 +44,8 @@ export default withAuth(function AddHotelRealta(props: any) {
       values.hotelAddr = cascaderValue;
 
       dispatch(addHotel(payload));
-      window.alert("Data Successfully Added");
       handleClose(false);
-      // window.location.reload();
+      window.location.reload();
     },
   });
 
@@ -132,7 +129,7 @@ export default withAuth(function AddHotelRealta(props: any) {
 
         <Form.Item
           name="hotelRatingStar"
-          label="Hotel Rating"
+          label="Hotel Stars"
           rules={[
             { required: true, message: "Please input Hotel Rating Star!" },
           ]}

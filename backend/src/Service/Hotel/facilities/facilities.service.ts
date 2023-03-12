@@ -3,6 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Facilities } from 'src/entities/Facilities';
 import { FacilityPriceHistory } from 'src/entities/FacilityPriceHistory';
 import { In, Repository } from 'typeorm';
+import { HotelsService } from '../hotels/hotels.service';
 
 @Injectable()
 export class FacilitiesService {
@@ -11,6 +12,7 @@ export class FacilitiesService {
     private faciRepository: Repository<Facilities>,
     @InjectRepository(FacilityPriceHistory)
     private faciHistoryRepository: Repository<FacilityPriceHistory>,
+    private HotelsService: HotelsService,
   ) {}
 
   async findAllFaci(): Promise<any> {
@@ -82,19 +84,19 @@ export class FacilitiesService {
       faciCagro: faci.faciCagro,
     });
     const id = result.faciId;
-    return await this.faciHistoryRepository
-      .save({
-        faphFaci: { faciId: id },
-        faphStartdate: new Date(),
-        faphEnddate: result.faciEnddate,
-        faphLowPrice: result.faciLowPrice,
-        faphHighPrice: result.faciHighPrice,
-        faphRatePrice: result.faciRatePrice,
-        faphDiscount: result.faciDiscount,
-        faphTaxRate: result.faciTaxRate,
-        faphModifiedDate: date,
-        faphUser: faci.userId,
-      })
+    await this.faciHistoryRepository.save({
+      faphFaci: { faciId: id },
+      faphStartdate: new Date(),
+      faphEnddate: result.faciEnddate,
+      faphLowPrice: result.faciLowPrice,
+      faphHighPrice: result.faciHighPrice,
+      faphRatePrice: result.faciRatePrice,
+      faphDiscount: result.faciDiscount,
+      faphTaxRate: result.faciTaxRate,
+      faphModifiedDate: date,
+      faphUser: faci.userId,
+    });
+    return await this.HotelsService.findByNameId(result.faciHotel.hotelId)
       .then((result) => {
         return {
           message: `Facilities successfuly added to the system`,

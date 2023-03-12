@@ -29,7 +29,7 @@ export class BookingOrderDetailExtraService {
       extraDetail.boexQty = body.boexQty
       extraDetail.boexSubtotal = body.boexSubtotal
       extraDetail.boexMeasureUnit = body.boexMeasure
-      extraDetail.boexBorde = body.boex_borde_id
+      extraDetail.boexBorde = body.bordeId
       return await this.bookingOrderDetailExtra.save(extraDetail)
     })
   }

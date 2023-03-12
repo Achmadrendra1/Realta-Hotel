@@ -17,18 +17,22 @@ export class PaymentTransactionService {
   async getAll(query) {
     const startDate = query.startDate || '';
     const endDate = query.endDate || '';
+    const keyword = query.keyword || '';
 
     let data;
 
     if(startDate && endDate){
       data = await this.payRepository.query(
         `SELECT * FROM payment.user_transactions
-        WHERE "trxDate" BETWEEN $1 AND $2`,
-        [startDate, endDate]
+        WHERE (LOWER("transactionType") LIKE LOWER($3))
+        AND "trxDate" BETWEEN $1 AND $2`,
+        [startDate, endDate, `%${keyword}%`]
       );
     } else {
       data = await this.payRepository.query(
-        'select * from payment.user_transactions'
+        `select * from payment.user_transactions
+        WHERE LOWER("transactionType") LIKE LOWER($1)`,
+        [`%${keyword}%`]
       );
     }
 
@@ -59,7 +63,8 @@ export class PaymentTransactionService {
         OR LOWER("userFullName") LIKE LOWER($1)
         OR LOWER("debit"::text) LIKE LOWER($1)
         OR LOWER("credit"::text) LIKE LOWER($1))
-        AND "trxDate" BETWEEN $2 AND $3`,
+        AND "trxDate" BETWEEN $2 AND $3
+        ORDER BY "transactionId" DESC`,
         [`%${keyword}%`, startDate, endDate],
       );
       data = await this.payRepository.query(
@@ -69,6 +74,7 @@ export class PaymentTransactionService {
          OR LOWER("debit"::text) LIKE LOWER($1)
          OR LOWER("credit"::text) LIKE LOWER($1))
          AND "trxDate" BETWEEN $2 AND $3
+         ORDER BY "trxDate" DESC
          OFFSET $4 LIMIT $5`,
         [`%${keyword}%`, startDate, endDate, skip, take],
       );
@@ -78,7 +84,8 @@ export class PaymentTransactionService {
         WHERE (LOWER("transactionType") LIKE LOWER($1)
         OR LOWER("userFullName") LIKE LOWER($1)
         OR LOWER("debit"::text) LIKE LOWER($1)
-        OR LOWER("credit"::text) LIKE LOWER($1))`,
+        OR LOWER("credit"::text) LIKE LOWER($1))
+        ORDER BY "trxDate" DESC`,
         [`%${keyword}%`],
       );
       data = await this.payRepository.query(
@@ -87,6 +94,7 @@ export class PaymentTransactionService {
          OR LOWER("userFullName") LIKE LOWER($1)
          OR LOWER("debit"::text) LIKE LOWER($1)
          OR LOWER("credit"::text) LIKE LOWER($1))
+         ORDER BY "trxDate" DESC
          OFFSET $2 LIMIT $3`,
         [`%${keyword}%`, skip, take],
       );
