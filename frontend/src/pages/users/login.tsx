@@ -21,6 +21,7 @@ import Layouts from "@/layouts/layout";
 import withAuth from "@/PrivateRoute/WithAuth";
 import Auth from "@/PrivateRoute/Auth";
 import Register from "./register";
+import { CloseCircleOutlined, CloseOutlined } from "@ant-design/icons";
 
 export default Auth( function Login() {
   const { Content } = Layout;
@@ -71,11 +72,14 @@ export default Auth( function Login() {
   const [dotPosition, setDotPosition] = useState<DotPosition>("bottom");
 
   const { Meta } = Card;
+  const router = useRouter()
+
   return (
     <>
       {contextHolder}
       <div className="bg-[#f2f1fa] h-screen p-28">
       <Card className=" mx-52 drop-shadow-md bg-[#8662FF] rounded-3xl">
+      <p className="mt-4 mr-2 font-bold text-end text-lg text-white hover:cursor-pointer"><CloseOutlined onClick={() => {router.push('/')}}/></p>
         <Row>
           <Col span={14}>
             <Card className={`p-2 mr-3  ${loginStyle.cardLogin} no-border`}>
@@ -182,7 +186,7 @@ export default Auth( function Login() {
           </Col>
           {/* Form */}
           <Col className="ml-3">
-            <div className="container mt-16 mb-12  ">
+            <div className="container mt-16 mb-12">
               <h1 className="text-3xl font-bold text-white mb-2">
                 Welcome back.
               </h1>
@@ -251,6 +255,7 @@ export default Auth( function Login() {
                   </Link>
               </p>
             </Form>
+    
           </Col>
         </Row>
       </Card>

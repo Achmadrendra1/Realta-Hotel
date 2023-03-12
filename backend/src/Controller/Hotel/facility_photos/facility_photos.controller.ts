@@ -47,7 +47,7 @@ export class FacilityPhotosController {
   @UseInterceptors(
     FilesInterceptor('faphoUrl', 10, {
       storage: diskStorage({
-        destination: UploadConfig.storage,
+        destination: './public/FacilitiesPhotos',
         filename: UploadConfig.PhotoFilename,
       }),
     }),

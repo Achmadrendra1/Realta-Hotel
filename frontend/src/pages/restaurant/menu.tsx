@@ -12,7 +12,7 @@ import {
   Tag,
 } from "antd";
 import Image from "next/image";
-import { DeleteOutlined, DownOutlined, MinusCircleOutlined, PlusCircleOutlined, PlusOutlined } from "@ant-design/icons";
+import { CloseOutlined, CoffeeOutlined, DeleteOutlined, DownOutlined, MinusCircleOutlined, PlusCircleOutlined, PlusOutlined } from "@ant-design/icons";
 import type { MenuProps } from "antd";
 import { Dropdown, Space, Typography } from "antd";
 import Link from "next/link";
@@ -503,6 +503,8 @@ export default function menu({ restaurant }:any) {
                  { getCartTotal()===0 || !userid ? 
                    <Affix className='lg:w-2/5 sm:w-full'>
                     <div className='border font-semibold bg-white rounded-lg shadow py-20 lg:ml-2 text-xl text-center'>
+                      <CoffeeOutlined className="text-5xl"/>
+                      <br />
                         Welcome to Hotel Realta ! <br/>
 
                         { !userid ? 
@@ -545,7 +547,7 @@ export default function menu({ restaurant }:any) {
                                 onClick={() => removeFromCart(order)}
                                 className="text-red-600 text-md mr-4"
                               >
-                                <DeleteOutlined />
+                                <CloseOutlined />
                               </button>
                             </div>
                             {/* <p>{order.desc}</p> */}
@@ -680,13 +682,13 @@ export default function menu({ restaurant }:any) {
           {/* ----------------------------- MODALS CART ------------------------------ */}
           <Modal
             width={600}
-            title={"Add new cart"}
+            title={"Add New Cart"}
             open={openCart}
             onOk={handleOkButton}
             onCancel={closeModalCart}
             footer={[
               <>
-                <Button key="back" onClick={handleCancel}>
+                <Button key="back" onClick={closeModalCart}>
                   Cancel
                 </Button>
                 <Button key='ok' onClick={changeOrder}>
@@ -695,8 +697,8 @@ export default function menu({ restaurant }:any) {
               </>,
             ]}
           >
-            <div>
-              Previous Cart
+            <div className="text-center text-xl font-bold">
+              Items Previously Selected
             </div>
 
             {cart &&
@@ -740,7 +742,8 @@ export default function menu({ restaurant }:any) {
                 </div>
               ))}
 
-              <div>
+              <div className="text-base mb-10">
+                This is your previous selected order from a different restaurant. <br />
                 Are you sure you want to change this order?
               </div>
           </Modal>

@@ -15,9 +15,7 @@ function menuPhotoReducer(state = initialState, action:any){
             
             return {...state, menuPhoto: action.payload}
 
-        case photoConstant.ADD_PHOTO:
-            console.log('masuk reducer add photo');
-            
+        case photoConstant.ADD_PHOTO: 
             return {...state};
         case photoConstant.ADD_PHOTO_SUCCEED:
             return {
@@ -25,8 +23,7 @@ function menuPhotoReducer(state = initialState, action:any){
                 menuPhoto:[...state.menuPhoto, action.payload]
             }
 
-        case photoConstant.DELETE_PHOTO:
-            console.warn(state, 'ini di state delele photo')
+        case photoConstant.DELETE_PHOTO: 
             return {...state};
         case photoConstant.DELETE_PHOTO_SUCCEED:
             return {
@@ -46,8 +43,7 @@ function menuPhotoReducer(state = initialState, action:any){
     }
 }
 
-async function updatePrimaryPhoto(state:any, action:any) {
-    console.log('di reducer',state.menuPhoto,'action',action.payload);
+async function updatePrimaryPhoto(state:any, action:any) { 
     
     return await state.menuPhoto.map((rowPhoto:any)=>{
         if(rowPhoto.remp_id === action.payload.rempid){

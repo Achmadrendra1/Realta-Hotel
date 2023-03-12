@@ -650,7 +650,6 @@ $$
 LANGUAGE PLPGSQL;
 
 
-
 CREATE OR REPLACE FUNCTION resto.orders(
 		ormeOrderNumber text,
 		ormeDate date,
@@ -695,6 +694,3 @@ CREATE OR REPLACE FUNCTION resto.orders(
 END;
 $$ 
 LANGUAGE PLPGSQL;
-
-
-------------------------------------------- END TERBARUUUUUU ------------------------------------------

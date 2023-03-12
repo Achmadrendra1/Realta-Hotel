@@ -72,16 +72,14 @@ export const doDeleteMenu = (payload:any) => {
     }
 }
 
-export const doDeleteMenuSucceed = (payload:any) => {
-    console.log('sampe action succeed ', payload)
+export const doDeleteMenuSucceed = (payload:any) => { 
     return {
         type: menuConstant.DELETE_MENU_SUCCEED,
         payload
     }
 }
 
-export const doDeleteMenuFailed = (payload:any) => {
-    console.log('sampe di failed action delete')
+export const doDeleteMenuFailed = (payload:any) => { 
     return {
         type: menuConstant.DELETE_MENU_FAILED,
         payload

@@ -71,7 +71,7 @@ export default withAuth( function restoMenu() {
 
   const onFinish = (e: any) => { 
     e.preventDefault() 
-    console.log(e.target.rempurl);
+    // console.log(e.target.rempurl);
 
   } 
 
@@ -91,7 +91,7 @@ export default withAuth( function restoMenu() {
     // debugger; 
     const menu:any = await axios(API('Get', `/resto-menus/${id}`, null))
       .then((res: any) => {
-        console.log('res',res.data[0]);
+        // console.log('res',res.data[0]);
         let getmenu = res.data[0];
         
         let data = {
@@ -327,7 +327,7 @@ export default withAuth( function restoMenu() {
     formData.append('rempUrl', imageInput);
     formData.append('remeId', insertPhoto.remeId.toString());
 
-    console.log(formData,'isi form');
+    // console.log(formData,'isi form');
     
     axios.post('http://localhost:3501/resto-menu-photos', formData, {
       headers: {
@@ -384,7 +384,7 @@ export default withAuth( function restoMenu() {
     setisThumbnail(true);
     setGetPhoto({...getPhoto, remeName : reme.reme_name})
     const result = await axios(API('Get', `/resto-menu-photos/${reme.reme_id}`, null));
-    let photos = result.data;
+    let photos = result.data; 
     
     // isi semua data yang bukan primary
     let migratePhoto: any = [];
@@ -705,7 +705,7 @@ export default withAuth( function restoMenu() {
 
             {/* -------------------------------------------- MODAL ADD MENU */}
             <Modal
-              title="Add Menu"
+              title="Add Menu Restaurant"
               open={isModalAddMenu}
               onOk={handleAddMenu}
               onCancel={handleCancelAddMenu}
@@ -736,7 +736,7 @@ export default withAuth( function restoMenu() {
                     <Select placeholder={'Select restaurant'} onChange={(e) => handleSelection(e, 'remeFaci')} >
                       {
                         list_restaurant && list_restaurant.map((resto: any) => (
-                          <Select.Option value={resto.faci_id}>{resto.faci_name} - {resto.hotel_name}</Select.Option>
+                          <Select.Option value={resto.faci_id} key={resto.faci_id}>{resto.faci_name} - {resto.hotel_name}</Select.Option>
                         ))
                       }
                     </Select>

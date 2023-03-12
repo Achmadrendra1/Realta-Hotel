@@ -9,6 +9,7 @@ import { useDispatch, useSelector } from "react-redux";
 export default withAuth( function EditHotelRealta(props: any) {
   const dispatch = useDispatch();
   const { Title, Text } = Typography;
+  const {handleClose} = props
   const { hotelById } = useSelector((state: any) => state.HotelReducer);
   useEffect(() => {
     dispatch(getHotelID(props.id));

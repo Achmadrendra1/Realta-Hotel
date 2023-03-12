@@ -2,9 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { OrderMenuDetail } from 'src/entities/OrderMenuDetail';
 import { OrderMenus } from 'src/entities/OrderMenus';
-import { getConnection, Repository } from 'typeorm';
-
-import { Like } from 'typeorm';
+import { getConnection, Repository } from 'typeorm'; 
 @Injectable()
 export class OrderMenusService {
     constructor(
@@ -16,11 +14,7 @@ export class OrderMenusService {
         return await this.orderMenuRepository.find();
     }
 
-    async getOrderNumber(data:any){
-        // console.log(data);
-        // const id = Number(data.userId);
-        // const id = 1; 
-         
+    async getOrderNumber(data:any){ 
         return await this.orderMenuRepository.query(`SELECT * FROM resto.ordermenuscomplete($1)`,[data.orderNumber])
     }
  
@@ -49,19 +43,11 @@ export class OrderMenusService {
             .select('order_menus.ormeOrderNumber')
             .where('order_menus.ormeOrderNumber LIKE :ormeOrderNumber',{ormeOrderNumber:`${generate}%`})
             .getMany();
-        
-        // let angka:number[] = [];
-
-        // for(let x of code){
-        //     let counts = Number(x.slice(-4));
-        //     angka.push(counts)
-        // }
-
+         
         return ormeOrderNumber;
     }
 
-    async addOrderMenus(data:OrderMenus){
-        // console.log(data);
+    async addOrderMenus(data:OrderMenus){ 
 
         // // konfig buat transaction commit - rollback
         // const connection = getConnection();

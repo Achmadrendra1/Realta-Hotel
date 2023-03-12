@@ -121,7 +121,7 @@ const getFacilityById = (state: any, action: any) => {
 };
 
 const AddHotelSuccessed = (state: any, action: any) => {
-  const { payload } = action;
+  const { payload } = action;  
   return {
     ...state,
     hotel: [...state.hotel, payload.result],
@@ -151,6 +151,8 @@ const deleteHotelSucceed = (state: any, action: any) => {
 
 const AddFacilitySuccessed = (state: any, action: any) => {
   const { payload } = action;
+  console.log(payload);
+  
   return {
     ...state,
     facilities: [...state.facilities, payload.result],
@@ -180,7 +182,7 @@ const deleteFacilitySucceed = (state: any, action: any) => {
 };
 
 const AddFaphoSuccessed = (state: any, action: any) => {
-  const { payload } = action;
+  const { payload } = action;  
   return {
     ...state,
     fapho: [payload.result],
