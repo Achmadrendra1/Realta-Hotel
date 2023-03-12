@@ -54,7 +54,7 @@ export class FacilityPhotosController {
   )
   addFapho(@UploadedFiles() file: Express.Multer.File, @Body() body: any) {
     return this.FaphoService.addNewFapho(file, body);
-  }
+  } 
 
   @Delete()
   DeleteFapho(@Param('id') params) {

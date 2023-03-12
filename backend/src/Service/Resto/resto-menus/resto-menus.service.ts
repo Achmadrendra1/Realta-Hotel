@@ -12,8 +12,8 @@ export class RestoMenusService {
         ){}
 
     async getMenus(){
-        return await this.restoMenusRepository.query('SELECT * FROM resto.restomenu_dashboard')
-        // return await this.restoMenusRepository.find();
+        // return await this.restoMenusRepository.query('SELECT * FROM resto.restomenu_dashboard')
+        return await this.restoMenusRepository.find();
     }
  
     async getMenuByFacility(Param:any){
