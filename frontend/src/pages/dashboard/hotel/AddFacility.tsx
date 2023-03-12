@@ -50,7 +50,6 @@ export default withAuth( function AddFacilities(props: any) {
       payload.append("faciHotel", values.faciHotel);
 
       dispatch(addFacility(payload));
-      window.alert("Data Successfully Added");
       handleClose(false);
       // window.location.reload();
     },

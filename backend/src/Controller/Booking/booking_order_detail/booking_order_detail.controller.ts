@@ -10,6 +10,10 @@ export class BookingOrderDetailController {
         return this.BookingOrderDetailService.findAll()
     }
 
+    @Get('last')
+    findLastBookingDetail(){
+        return this.BookingOrderDetailService.findLastBookingDetail()
+    }
     @Get('all/:id')
     findAllId(@Param() params){
         return this.BookingOrderDetailService.findAllId(params.id)

@@ -87,7 +87,7 @@ export default function MyAccount() {
   );
   const fintechAcc = userAcc?.filter((obj: any) => obj.usacType === "Payment");
 
-  //Check Status Account Dompet Realta
+  //Check Status Account H-Pay
   const accDompet = fintechAcc?.find(
     (item: any) => item.usacAccountNumber == accNumberDompet
   );
@@ -95,7 +95,7 @@ export default function MyAccount() {
     accDompet ? setIsActive(true) : setIsActive(false);
   }, [accDompet]);
 
-  //Get Saldo Dompet Realta
+  //Get Saldo H-Pay
   const saldoDompet = parseInt(accDompet?.usacSaldo).toLocaleString("id-ID", {
     style: "currency",
     currency: "IDR",
@@ -111,7 +111,7 @@ export default function MyAccount() {
     accGoto ? setIsLinked(true) : setIsLinked(false);
   }, [accGoto]);
 
-  //Get Saldo Dompet Realta
+  //Get Saldo H-Pay
   const saldoGoto = parseInt(accGoto?.usacSaldo).toLocaleString("id-ID", {
     style: "currency",
     currency: "IDR",
@@ -230,7 +230,7 @@ export default function MyAccount() {
             <Card className="w-full">
               <div className="flex justify-between items-center w-full">
                 <div>
-                  <p className="text-xl font-bold">Dompet Realta</p>
+                  <p className="text-xl font-bold">H-Pay</p>
                   <div className="flex mt-2">
                     <p>{accNumberDompet}</p>
                     {isActive ? (

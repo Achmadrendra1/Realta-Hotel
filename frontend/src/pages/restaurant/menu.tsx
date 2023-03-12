@@ -12,7 +12,7 @@ import {
   Tag,
 } from "antd";
 import Image from "next/image";
-import { DeleteOutlined, DownOutlined, MinusCircleOutlined, PlusCircleOutlined, PlusOutlined } from "@ant-design/icons";
+import { CloseOutlined, CoffeeOutlined, DeleteOutlined, DownOutlined, MinusCircleOutlined, PlusCircleOutlined, PlusOutlined } from "@ant-design/icons";
 import type { MenuProps } from "antd";
 import { Dropdown, Space, Typography } from "antd";
 import Link from "next/link";
@@ -82,7 +82,7 @@ export default function menu({ restaurant }:any) {
     },
   ];
 
-  const [cart, setCart] = useState([]);
+  const [cart, setCart]:any = useState([]);
  
   useEffect(() => {
     const cartdrlocalstorage = localStorage.getItem("cart");
@@ -97,36 +97,57 @@ export default function menu({ restaurant }:any) {
     localStorage.setItem("result", JSON.stringify(ormeNumber));
   }, [cart]);
 
-  useEffect(() => {
-    const cartdrlocalstorage = localStorage.getItem("cart");
-    const parsedCart =
-      cartdrlocalstorage !== null ? JSON.parse(cartdrlocalstorage) : [];
-    setCart(parsedCart);
-  }, []);
+  // useEffect(() => {
+  //   const cartdrlocalstorage = localStorage.getItem("cart");
+  //   const parsedCart =
+  //     cartdrlocalstorage !== null ? JSON.parse(cartdrlocalstorage) : [];
+  //   setCart(parsedCart);
+  // }, []);
+
+  const [openCart, setOpenCart] = useState(false);
+  const [newOrder, setNewOrder]:any = useState()
+  function closeModalCart(){
+    setOpenCart(false)
+  }
+
+  function changeOrder(){
+    setCart([]);
+    localStorage.setItem("cart", JSON.stringify([]));
+    // setCart([newOrder]);
+    setOpenCart(false);
+  }
 
   const addtocart = (menu: any) => {
-    let newCart:any = [...cart];
-    let itemInCart:any = cart.find((item: any) => menu.remename === item.remename); 
-    if (!itemInCart) {
-      let itemInCart:any = {
-        ...menu, 
-        quantity: 1,
-        subtotal: 0,
-        orderNumber: code(),
-      };
-      let numberOfPrice = Number(
-        menu.remeprice.split(",")[0].replace(/[^0-9]/g, "")
-      ); 
-      itemInCart.subtotal = itemInCart.quantity * numberOfPrice;
-      newCart.push(itemInCart);
-    } else {
-      itemInCart.quantity++; 
-      let numberString = menu.remeprice.split(",")[0].replace(/[^0-9]/g, "");
-      const numberOfPrice = parseInt(numberString);
-      itemInCart.subtotal = itemInCart.quantity * numberOfPrice;
-      // console.log(typeof numberString)
+    if(cart.length === 0 || menu.remefaciid == cart[0]?.remefaciid){
+      let newCart:any = [...cart];
+      let itemInCart:any = cart.find((item: any) => menu.remename === item.remename); 
+      if (!itemInCart) {
+        let itemInCart:any = {
+          ...menu, 
+          quantity: 1,
+          subtotal: 0,
+          orderNumber: code(),
+        };
+        let numberOfPrice = Number(
+          menu.remeprice.split(",")[0].replace(/[^0-9]/g, "")
+        ); 
+        itemInCart.subtotal = itemInCart.quantity * numberOfPrice;
+        newCart.push(itemInCart);
+      } else {
+        itemInCart.quantity++; 
+        let numberString = menu.remeprice.split(",")[0].replace(/[^0-9]/g, "");
+        const numberOfPrice = parseInt(numberString);
+        itemInCart.subtotal = itemInCart.quantity * numberOfPrice;
+        // console.log(typeof numberString)
+      }
+      setCart(newCart);
+    }else{
+      setOpenCart(true);
+      setNewOrder(menu)
     }
-    setCart(newCart);
+    
+    
+    
   };
  
   const removeFromCart = (productToRemove: any) => { 
@@ -142,7 +163,7 @@ export default function menu({ restaurant }:any) {
   };
 
   const getCartTotal = (): number => {
-    return cart.reduce((sum: number, { quantity }) => sum + quantity, 0); 
+    return cart.reduce((sum: number, { quantity }:any) => sum + quantity, 0); 
   };
 
   const setQuantity = (product: any, amount: any) => {
@@ -390,8 +411,8 @@ export default function menu({ restaurant }:any) {
 
             <hr className="my-5 border-t-2" />
 
-            <div className="mt-3 lg:flex">
-              <div className="lg:w-3/5 sm:full sm:mb-4 lg:mb-0 border rounded-xl shadow p-3 lg:mr-2 bg-white">
+            <div className="mt-3 lg:flex  my-20">
+              <div className="lg:w-3/5 sm:full sm:mb-4 border rounded-xl shadow p-3 lg:mr-2 bg-white">
                 <div className="text-xl font-bold text-center">
                   Menus
                 </div>
@@ -482,6 +503,8 @@ export default function menu({ restaurant }:any) {
                  { getCartTotal()===0 || !userid ? 
                    <Affix className='lg:w-2/5 sm:w-full'>
                     <div className='border font-semibold bg-white rounded-lg shadow py-20 lg:ml-2 text-xl text-center'>
+                      <CoffeeOutlined className="text-5xl"/>
+                      <br />
                         Welcome to Hotel Realta ! <br/>
 
                         { !userid ? 
@@ -499,7 +522,7 @@ export default function menu({ restaurant }:any) {
                    </Affix>
                  
                  : (
-                  <div className="bg-white rounded-lg shadow p-3 sticky top-0 lg:w-2/5 sm:w-full h-2/5">
+                  <div className="bg-white rounded-lg shadow p-3 sticky top-0 h-1/2 lg:w-2/5 sm:w-full">
                     <div className="text-xl font-bold text-center">
                       Checkout
                     </div>
@@ -507,8 +530,8 @@ export default function menu({ restaurant }:any) {
                       Total Order : {getCartTotal()}
                     </div>
                     {cart &&
-                      cart.map((order: any, index:number) => (
-                        <div className="border rounded-lg p-4 shadow-md gap-y-2 my-5 flex" key={index}>
+                      cart.map((order: any) => (
+                        <div className="border rounded-lg p-4 shadow-md gap-y-2 my-5 flex">
                           <img
                             src={`${configuration.BASE_URL}/${order.rempurl}`}
                             alt={order.remename}
@@ -524,7 +547,7 @@ export default function menu({ restaurant }:any) {
                                 onClick={() => removeFromCart(order)}
                                 className="text-red-600 text-md mr-4"
                               >
-                                <DeleteOutlined />
+                                <CloseOutlined />
                               </button>
                             </div>
                             {/* <p>{order.desc}</p> */}
@@ -624,7 +647,7 @@ export default function menu({ restaurant }:any) {
             ]}
           >
             <div>
-              <img src={selected.rempurl} alt='menu' className="h-80 w-full object-cover"/>
+              <img src={selected.rempurl} alt="menu" />
             </div>
             {/* <Carousel autoplay> */}
             <div className="flex">
@@ -653,6 +676,76 @@ export default function menu({ restaurant }:any) {
             <p className="text-lg font-bold">{menuDetail.nama}</p>
             <p>{menuDetail.desc}</p>
             <p>{menuDetail.harga}</p>
+          </Modal>
+
+
+          {/* ----------------------------- MODALS CART ------------------------------ */}
+          <Modal
+            width={600}
+            title={"Add New Cart"}
+            open={openCart}
+            onOk={handleOkButton}
+            onCancel={closeModalCart}
+            footer={[
+              <>
+                <Button key="back" onClick={closeModalCart}>
+                  Cancel
+                </Button>
+                <Button key='ok' onClick={changeOrder}>
+                  Yes, Change Order
+                </Button>
+              </>,
+            ]}
+          >
+            <div className="text-center text-xl font-bold">
+              Items Previously Selected
+            </div>
+
+            {cart &&
+              cart.map((order: any) => (
+                <div className="border rounded-lg p-4 shadow-md gap-y-2 my-5 flex">
+                  <img
+                    src={`${configuration.BASE_URL}/${order.rempurl}`}
+                    alt={order.remename}
+                    width={120}
+                    height={120}
+                  ></img>
+                  <div className="ml-3 mt-1 w-full">
+                    <div className="flex justify-between">
+                      <p className="font-bold w-4/5">
+                        {order.remename}
+                      </p>
+                    </div>
+                    {/* <p>{order.desc}</p> */}
+                    <p>
+                      {parseInt(
+                        order.remeprice
+                          .split(",")[0]
+                          .replace(/[^0-9]/g, "")
+                      ).toLocaleString("id-ID", {
+                        style: "currency",
+                        currency: "IDR",
+                        minimumFractionDigits: 0,
+                        maximumFractionDigits: 0,
+                      })}
+                    </p>
+                    <p>
+                      Subtotal:{" "}
+                      {order.subtotal.toLocaleString("id-ID", {
+                        style: "currency",
+                        currency: "IDR",
+                        minimumFractionDigits: 0,
+                        maximumFractionDigits: 0,
+                      })}
+                    </p>
+                  </div>
+                </div>
+              ))}
+
+              <div className="text-base mb-10">
+                This is your previous selected order from a different restaurant. <br />
+                Are you sure you want to change this order?
+              </div>
           </Modal>
         </Layouts>
       </main>

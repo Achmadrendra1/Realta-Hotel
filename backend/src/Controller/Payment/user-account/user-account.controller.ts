@@ -36,6 +36,12 @@ export class UserAccountController {
     }
 
     @Put()
+    updateSecureCode(@Body() body){
+        return this.accountService.updateSecureCode(body)
+        // console.log(body)
+    }
+
+    @Put('/updateAcc')
     updateAcc(@Body() body){
         return this.accountService.updateAccount(body.usacAccountNumber, body)
     }

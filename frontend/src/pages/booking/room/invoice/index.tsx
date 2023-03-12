@@ -13,8 +13,6 @@ export default function index() {
   const { id } = root.query;
   const dispatch = useDispatch();
 
-  const router = useRouter();
-
   const invoiceView = useSelector(
     (state: any) => state.BoorInvoiceReducer.invoice
   );
@@ -27,22 +25,19 @@ export default function index() {
     (item: any) => item.boor_order_number === id
   );
 
-
-  const boor_order_number =
-    Invoice?.length > 0 ? Invoice[0].boor_order_number : "";
+  const boor_order_number = Invoice?.length > 0 ? Invoice[0].boor_order_number : "";
   const boor_order_date = Invoice?.length > 0 ? Invoice[0].boor_order_date : "";
   const boor_is_paid = Invoice?.length > 0 ? Invoice[0]?.boor_paid : "";
   const boor_pay_type = Invoice?.length > 0 ? Invoice[0]?.payment_Type : "" ;
   const user_full_name = Invoice?.length > 0 ? Invoice[0].user_full_name : "";
-  const user_phone_number =
-    Invoice?.length > 0 ? Invoice[0].user_phone_number : "";
+  const user_phone_number = Invoice?.length > 0 ? Invoice[0].user_phone_number : "";
   const user_email = Invoice?.length > 0 ? Invoice[0].user_email : "";
   const usme_memb_name = Invoice?.length > 0 ? Invoice[0].usme_memb_name : "";
-  const usme_promote_date =
-    Invoice?.length > 0 ? Invoice[0].usme_promote_date : "";
+  const usme_promote_date = Invoice?.length > 0 ? Invoice[0].usme_promote_date : "";
   const usme_points = Invoice?.length > 0 ? Invoice[0].usme_points : 0;
   const faci_name = Invoice?.length > 0 ? Invoice[0].faci_name : "";
   const boor_total_room = Invoice?.length > 0 ? Invoice[0].boor_total_room : 0;
+  const boor_total_amount = Invoice?.length > 0 ? Invoice[0].boor_total_amount : 0;
   const borde_adults = Invoice?.length > 0 ? Invoice[0].borde_adults : 0;
   const borde_kids = Invoice?.length > 0 ? Invoice[0].borde_kids : 0;
   const borde_price = Invoice?.length > 0 ? Invoice[0].borde_price : "";
@@ -50,7 +45,15 @@ export default function index() {
   const borde_subtotal = Invoice?.length > 0 ? Invoice[0].borde_subtotal : "";
   const inv_number = Invoice?.length > 0 ? Invoice[0].patr_trx_id : "";
   const inv_date = Invoice?.length > 0 ? Invoice[0].patr_modified_date : "";
+  const borde_checkin = Invoice?.length > 0 ? Invoice[0].check_in_date : "";
+  const borde_checkout = Invoice?.length > 0 ? Invoice[0].check_out_date : "";
 
+  const checkin = new Date(borde_checkin)
+  const checkout = new Date(borde_checkout)
+  const numberCheckin = checkin.getDate();
+  const numberCheckout = checkout.getDate()
+  const nights = numberCheckout - numberCheckin
+  const days = nights + 1
 
   const [getInvoice, setGetinvoice] = useState({
     boor_order_number: "",
@@ -66,11 +69,16 @@ export default function index() {
     usme_points: 0,
     faci_name: "",
     boor_total_room: 0,
+    boor_total_amount : 0,
     borde_adults: 0,
     borde_kids: 0,
     borde_price: "",
     borde_discount: "",
     borde_subtotal: "",
+    prit_name : "",
+    boex_price : "",
+    boex_qty : 0,
+    boex_subtotal : ""
   });
 
   useEffect(() => {
@@ -87,6 +95,7 @@ export default function index() {
       usme_points: usme_points,
       faci_name: faci_name,
       boor_total_room: boor_total_room,
+      boor_total_amount : boor_total_amount,
       borde_adults: borde_adults,
       borde_kids: borde_kids,
       borde_price: borde_price,
@@ -94,6 +103,10 @@ export default function index() {
       borde_subtotal: borde_subtotal,
       invoice_number: inv_number,
       invoice_date: inv_date,
+      prit_name : Invoice.prit_name,
+      boex_price : Invoice.boex_price,
+      boex_qty : Invoice.boex_qty,
+      boex_subtotal : Invoice.boex_subtotal
     });
   }, [boor_order_number]);
 
@@ -216,18 +229,26 @@ export default function index() {
             </Col>
             <Col span={4} className="flex">
               <div>
+                <h2 className="text-lg font-semibold mb-1">Total Nights</h2>
+                <h3 className="text-md">
+                  {days} Days {nights} Nights
+                </h3>
+              </div>
+            </Col>
+            <Col span={4} className="flex">
+              <div>
                 <h2 className="text-lg font-semibold mb-1">Qty</h2>
                 <h3 className="text-md">{getInvoice.boor_total_room}</h3>
               </div>
             </Col>
-            <Col span={4} className="flex">
+            {/* <Col span={4} className="flex">
               <div>
                 <h2 className="text-lg font-semibold mb-1">Total Guests</h2>
                 <h3 className="text-md">
                   {getInvoice.borde_adults} Adults {getInvoice.borde_kids} Kids
                 </h3>
               </div>
-            </Col>
+            </Col> */}
             <Col span={4} className="flex">
               <div>
                 <h2 className="text-lg font-semibold mb-1">Price</h2>
@@ -247,6 +268,39 @@ export default function index() {
               </div>
             </Col>
           </Row>
+          {
+            Invoice &&
+            Invoice.map((items : any)=>{
+              return (
+                <Row className="flex">
+                  <Col span={4} className="flex">
+                    <div>
+                      <h3 className="text-md">{items.prit_name}</h3>
+                    </div>
+                  </Col>
+                  <Col span={4} className="flex">
+                  </Col>
+                  <Col span={4} className="flex">
+                    <div>
+                      <h3 className="text-md">{items.boex_qty}</h3>
+                    </div>
+                  </Col>
+                  <Col span={4} className="flex">
+                    <div>
+                      <h3 className="text-md">{items.boex_price}</h3>
+                    </div>
+                  </Col>
+                  <Col span={4} className="flex">
+                  </Col>
+                  <Col span={4} className="flex">
+                    <div>
+                      <h3 className="text-md">{items.boex_subtotal}</h3>
+                    </div>
+                  </Col>
+              </Row>
+              )
+            })
+          }
           <Divider dashed style={{ borderColor: "black" }} />
           <div className="w-10/12 flex justify-between items-center">
             <QRCode value={`http://localhost:3000/${root.asPath}`} size={96} className="ml-14" />
@@ -256,7 +310,7 @@ export default function index() {
                   Total Amount
                 </h2>
                 <h2 className="flex text-lg font-semibold mb-1">
-                  {getInvoice.borde_subtotal}
+                  {getInvoice.boor_total_amount}
                 </h2>
               </div>
               <div className="flex justify-between min-w-[350px]">
@@ -264,7 +318,7 @@ export default function index() {
                   Payment Amount
                 </h2>
                 <h2 className="flex text-lg font-semibold mb-1">
-                  {getInvoice.borde_subtotal}
+                  {getInvoice.boor_total_amount}
                 </h2>
               </div>
             </div>

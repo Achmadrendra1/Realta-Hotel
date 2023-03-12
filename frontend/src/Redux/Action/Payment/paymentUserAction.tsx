@@ -81,6 +81,25 @@ export const doCheckSecureCodeFailed = (payload : any) => {
     }
 }
 
+export const doUpdatePin = (payload : any) => {
+    return {
+        type : PaymentConst.UPDATE_SECURE_CODE,
+        payload
+    }
+}
+export const doUpdatePinSuccess = (payload : any) => {
+    return {
+        type : PaymentConst.UPDATE_SECURE_CODE_SUCCESS,
+        payload
+    }
+}
+export const doUpdatePinFailed = (payload : any) => {
+    return {
+        type : PaymentConst.UPDATE_SECURE_CODE_FAILED,
+        payload
+    }
+}
+
 export const doTopUp = (payload: any) => {
     return {
         type : PaymentConst.TOP_UP_WALLET,

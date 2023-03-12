@@ -1,6 +1,6 @@
 import Dashboard from '@/layouts/dashboard'
 import React, { useEffect, useRef, useState } from 'react'
-import { Button, Dropdown, Form, Input, Menu, MenuProps, Modal, Pagination, Select, Space, Switch, Tabs, Upload } from 'antd';
+import { Button, Dropdown, Form, Input, Menu, MenuProps, message, Modal, Pagination, Popconfirm, Select, Space, Switch, Tabs, Upload } from 'antd';
 import { Table } from 'antd'
 import { CloseOutlined, DeleteOutlined, DownOutlined, EditOutlined, InboxOutlined, MoreOutlined, PictureOutlined, PlusOutlined, UploadOutlined, WarningOutlined } from '@ant-design/icons';
 import {  useDispatch, useSelector } from 'react-redux';
@@ -156,6 +156,12 @@ export default withAuth( function restoMenu() {
   const handleUpdateMenu = (e: any) => {
     e.preventDefault();
     dispatch(doUpdateMenu(getMenu))
+    
+    messageApi.open({
+      type: 'success',
+      content: 'Menu successfully updated!',
+      duration: 5,
+    });
     // buat nutup modal
     setIsModalOpen(false)
   }
@@ -171,6 +177,12 @@ export default withAuth( function restoMenu() {
     e.preventDefault();
     // disini tambahin id menunya, diambil dari db
     dispatch(doAddMenu(addMenu))
+    
+    messageApi.open({
+      type: 'success',
+      content: 'Menu added successfully!',
+      duration: 5,
+    });
     // reset form
     form.resetFields()
     setIsModalAddMenu(false)
@@ -338,11 +350,6 @@ export default withAuth( function restoMenu() {
  
   }
 
-  // -------------------------------------------- DELETE PHOTO
-  function deletePhoto(id: number) {
-    dispatch(doDeletePhoto(id))
-    setisThumbnail(false);
-  } 
   // switch menu available or not
   let [available, setAvailable] = useState('EMPTY') 
   const switchMenu = (checked: boolean) => {
@@ -381,6 +388,7 @@ export default withAuth( function restoMenu() {
 
   const thumbnailMenu = async (reme: any) => {
     setisThumbnail(true);
+    setGetPhoto({...getPhoto, remeName : reme.reme_name})
     const result = await axios(API('Get', `/resto-menu-photos/${reme.reme_id}`, null));
     let photos = result.data; 
     
@@ -469,7 +477,21 @@ export default withAuth( function restoMenu() {
     setisThumbnail(false);
 
   }
-  
+
+  // delete photo
+  const [messageApi, contextHolder] = message.useMessage();
+
+  // -------------------------------------------- DELETE PHOTO
+  function deletePhoto(id: number) {
+    dispatch(doDeletePhoto(id))
+    messageApi.open({
+      type: 'success',
+      content: 'Photo successfully deleted!',
+      duration: 5,
+    });
+    setisThumbnail(false);
+  } 
+ 
   // --------- MULTIPLE PHOTO
   const [showAddMultiple, setShowAddMultiple] = useState(false);
   const [addPhotos, setAddPhotos] = useState([]);
@@ -479,7 +501,7 @@ export default withAuth( function restoMenu() {
     reme_id: 0
   })
   const [readPhoto, setReadPhoto]:any = useState([])
-  
+  const [imageUrl, setImageUrl] = useState('')
   // const inputRef = useRef(null);
   // const [formMultiplePhoto]:any = Form.useForm()
   function cancelAddMultiple(){
@@ -491,8 +513,9 @@ export default withAuth( function restoMenu() {
     setAddPhotos([])
     setReadPhoto([])
     setShowAddMultiple(false)
-  }
+  } 
   function handleInputMultiple(e:any){ 
+    console.log('ini e', e);
     
     let multiple:any = []
     let uploaded = e.target.files;
@@ -534,7 +557,12 @@ export default withAuth( function restoMenu() {
     })  
 
     dispatch(doAddPhoto(form)) 
-
+    messageApi.open({
+      type: 'success',
+      content: 'Photo successfully added!',
+      duration: 5,
+    });
+    
     // formMultiplePhoto.resetFields()
     setAddPhotos([])
     setReadPhoto([])
@@ -595,7 +623,7 @@ export default withAuth( function restoMenu() {
             
             {/* ------------------------------------------------------------------------------------- MODALS EDIT MENU */}
             <Modal
-              title="Update Menu"
+              title="Update Menu Restaurant"
               open={isModalOpen}
               onOk={handleUpdateMenu}
               onCancel={handleCancel}
@@ -603,7 +631,8 @@ export default withAuth( function restoMenu() {
               footer={[
                 <>
                   <Button key="back" onClick={handleCancel}>Cancel</Button>
-                  <Button key="submit" onClick={handleUpdateMenu}>Update Menu</Button>
+                  {contextHolder}
+                  <Button key="submit" onClick={handleUpdateMenu} className='bg-sky-500 text-white' onMouseEnter={(e:any) => { e.target.style.color = '#fff'; }}>Update Menu </Button>
                 </>
               ]}
 
@@ -619,7 +648,7 @@ export default withAuth( function restoMenu() {
                 className="mx-auto"
               >
                 <p className='text-center text-xl py-5 font-bold'>
-                  Update Menu Resto
+                  Update Menu Restaurant
                 </p>
                 <>
                   <Form.Item name="remeFaciId" label="Facility"
@@ -690,7 +719,8 @@ export default withAuth( function restoMenu() {
               footer={[
                 <>
                   <Button key="back" onClick={handleCancelAddMenu}>Cancel</Button>
-                  <Button key="submit" onClick={handleAddMenu}>Add Menu</Button>
+                    {contextHolder}
+                  <Button key="submit" onClick={handleAddMenu} className='bg-sky-500 text-white' onMouseEnter={(e:any) => { e.target.style.color = '#fff'; }}>Add Menu</Button>
                 </>
               ]}
 
@@ -763,7 +793,7 @@ export default withAuth( function restoMenu() {
               footer={[
                 <>
                   <Button key="back" onClick={handleCancelPhoto}>Cancel</Button>
-                  <Button key="submit" onClick={handlePhoto}>OK</Button>
+                  <Button key="submit" onClick={handlePhoto} className='bg-sky-500 text-white' onMouseEnter={(e:any) => { e.target.style.color = '#fff'; }}>OK</Button>
                 </>
               ]}
             >
@@ -838,14 +868,14 @@ export default withAuth( function restoMenu() {
       <Modal
         title="SET THUMBNAIL PHOTO"
         open={isThumbnail}
-        onOk={updatePhoto} // belum tau mau diisi apa sama di button ok jga benerin
+        onOk={updatePhoto}
         onCancel={handleCancelThumbnail}
         width={1000}
         footer={[
           <>
             <Button key="back" onClick={handleCancelThumbnail}>Cancel</Button>
             { viewThumbnailPhoto.length > 0 ? 
-              <Button key="submit" onClick={updatePhoto}>Update Photo</Button>
+              <Button key="submit" onClick={updatePhoto} className='bg-sky-500 text-white' onMouseEnter={(e:any) => { e.target.style.color = '#fff'; }}>Set as thumbnail</Button>
             : '' }
           </>
         ]}
@@ -880,9 +910,28 @@ export default withAuth( function restoMenu() {
                       <p className='text-base text-center'>Photo {i+1}</p> 
                     </div>
                   </button>
-                  <div className='text-center pb-2'>
-                    <button onClick={() => deletePhoto(photo.rempid)} className='text-red-500 text-center'><CloseOutlined /> Delete</button>
-                  </div>
+                  { photo.rempid != newPrimary.rempid ? 
+                    <div className='text-center pb-2'>
+                      <Popconfirm
+                        placement="bottomRight"
+                        title={'Delete Photo'}
+                        description={'Are you sure to delete this photo?'}
+                        onConfirm={() => deletePhoto(photo.rempid)}
+                        okText="Yes"
+                        cancelText="No"
+                        okButtonProps={{ 
+                          style: { backgroundColor: '#1890ff', color: '#fff'}
+                          }}
+                      >
+                        {/* <Button>BR</Button> */}
+                        {contextHolder}
+                        <button className='text-red-500 text-center'><CloseOutlined /> Delete</button>
+                      </Popconfirm>
+                      {/* <button onClick={() => deletePhoto(photo.rempid)} className='text-red-500 text-center'><CloseOutlined /> Delete</button> */}
+                    </div>
+                    :
+                    ''
+                  }
                 </div>
               ))
             }
@@ -898,49 +947,60 @@ export default withAuth( function restoMenu() {
       
       {/* ------------------------- ADD MULTIPLE PHOTO ------------------------------- */}
       <Modal
-              title="Upload Photo Multiple"
-              open={showAddMultiple}
-              // onOk={handlePhoto}
-              onCancel={cancelAddMultiple}
-              width={1000}
-              footer={[
-                <>
-                  <Button key="back" onClick={cancelAddMultiple}>Cancel</Button>
-                  {/* <Button key="submit" onClick={handlePhoto}>OK</Button> */}
-                </>
-              ]}
-            >
+        title="Upload Photo Multiple"
+        open={showAddMultiple}
+        onOk={saveMultiplePhoto}
+        onCancel={cancelAddMultiple}
+        width={1000}
+        footer={[
+          <>
+            <Button key="back" onClick={cancelAddMultiple}>Cancel</Button>
+            {contextHolder}
+            <Button key="submit" onClick={saveMultiplePhoto} className='bg-sky-500 text-white' onMouseEnter={(e:any) => { e.target.style.color = '#fff'; }}>Upload Photo</Button>
+          </>
+        ]}
+      >
               <Form
                 // ref={inputRef}
                 // form={formMultiplePhoto}
                 // onFinish={}
-                // labelCol={{ span:8 }}  
-                // wrapperCol={{ span:14 }}
+                labelCol={{ span:5 }}  
+                wrapperCol={{ span:17 }}
                 layout="horizontal"
                 // style={{ maxWidth: 600}}
                 className="py-5 mx-auto"
                 encType='multipart/form-data'>
 
-                  <div className='flex flex-wrap mx-auto justify-center'>
-                    {
-                      readPhoto.map((photo:any) =>
-                        <img src={photo} className='h-48 w-64 object-cover bg-slate-200 m-2'></img>
-                      
-                      )
-                    }
-                  </div>
-                  <label htmlFor="formFile"></label>
-                  <input type="file" id='rempUrl' name='rempUrl' accept='image/*' onChange={handleInputMultiple} multiple/>
+                  <Form.Item label='Menu name'>
+                    <Input value={dataReme.reme_name} readOnly/>
+                  </Form.Item>
+
+                  <Form.Item label='Upload photo'>
+                    <label htmlFor="formFile"></label>
+                    <input  type="file" id='rempUrl' name='rempUrl' accept='image/*' onChange={handleInputMultiple} multiple
+                            className='file:w-24 file:border file:border-dashed file:border-slate-500 file:bg-white '
+                    />
+                    <div className='flex flex-wrap justify-left'>
+                      {
+                        readPhoto.map((photo:any) =>
+                          <img src={photo} className='h-48 w-64 object-cover bg-slate-200 m-2'></img>
+                        
+                        )
+                      }
+                    </div>
+                  </Form.Item>
+
+
                 <div>
-                  <br />
+                  {/* <br />
                   <Buttons funcs={saveMultiplePhoto}>
                     Upload Photo
-                  </Buttons>
+                  </Buttons> */}
                 </div>
 
                 {/* <div>
                   <Upload
-                    // action={'https://localhost:3501/restomenuphotos'}
+                    action={'http://localhost:3600/restomenuphotos'}
                     listType="picture"
                     multiple
                     id='rempUrl'
@@ -951,9 +1011,6 @@ export default withAuth( function restoMenu() {
                     <Button icon={<UploadOutlined />}>Upload</Button>
                   </Upload>
                   <br />
-                  <Buttons funcs={saveMultiplePhoto}>
-                    Upload Photo
-                  </Buttons>
                 </div> */}
 
               </Form> 

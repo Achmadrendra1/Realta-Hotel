@@ -25,6 +25,7 @@ import { CgGym } from "react-icons/cg";
 import Buttons from "@/components/Button";
 import { useDispatch, useSelector } from "react-redux";
 import {
+  getBorde,
   getSpFacilities,
   getSpHotel,
   getSpInvoice,
@@ -63,7 +64,7 @@ import Link from "next/link";
 
 export default function bookingRoom() {
   const root = useRouter();
-  const { id } = root.query;
+  const { id, name } = root.query;
   const dispatch = useDispatch();
 
   //useEffect Reducer
@@ -119,6 +120,9 @@ export default function bookingRoom() {
   //useSelector Get Last Booking Order
   let boorNumber = useSelector((state: any) => state.BoorReducer.boor);
 
+  //useSelector Get Last Booking Order Detail
+  let bordeNumber = useSelector((state: any)=> state.BoorDetailReducer.borde);
+
   //State untuk View More Amanities
   const [more, setMore] = useState(false);
 
@@ -133,6 +137,9 @@ export default function bookingRoom() {
 
   //State untuk button modal booking extra
   const [addExtra, setAddExtra] = useState(false);
+
+  //State untuk button trash
+  const [showTrash, setShowTrash] = useState(false)
 
   //State untuk Checkin-Checkout Date
   const [inDate, setInDate] = useState(null);
@@ -163,6 +170,7 @@ export default function bookingRoom() {
     pritQty: [] as any[],
     pritTotal: [] as any[],
     pritMeasure: [] as any[],
+    bordeId : [] as any[]
   });
 
   //State untuk extraTotal
@@ -235,30 +243,29 @@ export default function bookingRoom() {
       boexQty: valueExtra.pritQty[index],
       boexSubtotal: valueExtra.pritTotal[index],
       boexMeasure: valueExtra.pritMeasure[index],
+      bordeId : valueExtra.bordeId[index]
     };
   });
 
+  //Variable untuk Get Room into Booking Detail
+  const faci_id = faciRoom?.length > 0 ? faciRoom[0]?.faci_id : null;
+  const faci_name = faciRoom?.length > 0 ? faciRoom[0]?.faci_name : "";
+  const faci_rate_price = faciRoom?.length > 0 ? faciRoom[0]?.faci_rate_price : "";
+  const faci_high_price = faciRoom?.length > 0 ? faciRoom[0]?.faci_high_price : "";
+  const faci_tax_rate = faciRoom?.length > 0 ? faciRoom[0]?.faci_tax_rate  : "";
+
   let spofDiscInt = parseInt(
-    spofPrice.spofDiscount.split(",")[0].replace(/[^0-9]/g, "")
+    spofPrice.spofDiscount?.split(",")[0].replace(/[^0-9]/g, "")
   );
   let ratePriceInt = parseInt(
-    priceRoom.faci_rate_price.split(",")[0].replace(/[^0-9]/g, "")
+    priceRoom.faci_rate_price?.split(",")[0].replace(/[^0-9]/g, "")
   );
   let taxRateInt = parseInt(
-    priceRoom.faci_tax_rate.split(",")[0].replace(/[^0-9]/g, "")
+    priceRoom.faci_tax_rate?.split(",")[0].replace(/[^0-9]/g, "")
   );
 
   //Google Maps
   let maps = "https://www.google.com/maps/search/?api=1&query=";
-
-  //Variable untuk Get Room into Booking Detail
-  const faci_id = faciRoom?.length > 0 ? faciRoom[0].faci_id : null;
-  const faci_name = faciRoom?.length > 0 ? faciRoom[0].faci_name : "";
-  const faci_rate_price =
-    faciRoom?.length > 0 ? faciRoom[0].faci_rate_price : "";
-  const faci_high_price =
-    faciRoom?.length > 0 ? faciRoom[0].faci_high_price : "";
-  const faci_tax_rate = faciRoom?.length > 0 ? faciRoom[0].faci_tax_price : "";
 
   //Variable Count and Filter Rating
   let rating1 = oneReview?.filter((item: any) => item.hore_rating == 1).length;
@@ -306,8 +313,21 @@ export default function bookingRoom() {
     year: "numeric",
   };
 
-  const dateFormatter = new Intl.DateTimeFormat("id-ID", format);
-  const currentDate = dateFormatter.format(date);
+  const dateFormatter = new Intl.DateTimeFormat("id-ID", format)
+  const currentDate = dateFormatter.format(date)
+  
+  let link1 = faciRoom?.length > 0 ? faciRoom[0].fapho_url : ''
+  let link2 = faciRoom?.length > 0 ? faciRoom[1].fapho_url : ''
+  let link3 = faciRoom?.length > 0 ? faciRoom[2].fapho_url : ''
+  const [pict, setPict] = useState({
+    pict1 : '',
+    pict2 : '',
+    pict3 : ''
+  })
+
+  useEffect(()=> {
+    setPict({...pict, pict1 : link1, pict2 : link2, pict3 : link3})
+  },[link1,link2,link3])
 
   //Configure Date untuk Booking
   const dateFormat = "YYYY-MM-DD";
@@ -324,6 +344,9 @@ export default function bookingRoom() {
     if (date !== null) {
       setDataBooking({
         ...dataBooking,
+        // borde_checkin: dayjs(dateString[0]).format('YYYY MM DD'),
+        // boor_arrival_date: dayjs(dateString[0]).format('YYYY MM DD'),
+        // borde_checkout: dayjs(dateString[1]).format('YYYY MM DD'),
         borde_checkin: dateString[0].replace(/ /g, "-"),
         boor_arrival_date: dateString[0].replace(/ /g, "-"),
         borde_checkout: dateString[1].replace(/ /g, "-"),
@@ -362,7 +385,7 @@ export default function bookingRoom() {
     boor_total_room: 0,
     boor_total_guest: 0,
     boor_discount: 0,
-    boor_total_tax: 0,
+    boor_total_tax: taxRateInt,
     boor_total_amount: 0,
     boor_down_payment: 0,
     boor_pay_type: "C",
@@ -377,12 +400,14 @@ export default function bookingRoom() {
     borde_price: ratePriceInt,
     borde_extra: 0,
     borde_discount: 0,
-    borde_tax: 0,
+    borde_tax: taxRateInt,
     borde_subtotal: 0,
-    borde_faci_id: priceRoom.faci_id,
-    soco_spof_id: spofPrice.spofId,
+    borde_faci_id: 0,
+    soco_spof_id: null,
     boor_cardnumber: "",
   });
+
+  console.log(dataBooking)
 
 
   const [dataPayment, setDataPayment] = useState({
@@ -408,16 +433,34 @@ export default function bookingRoom() {
       borde_tax: taxRateInt,
       boor_total_tax: taxRateInt,
       borde_faci_id: priceRoom.faci_id,
-      soco_spof_id: spofPrice.spofId,
+      soco_spof_id: spofPrice.spofId || null,
     });
   }, [ratePriceInt, spofDiscInt, taxRateInt, priceRoom.faci_id]);
 
-  // useEffect list hotel into Booking Detail
-  // useEffect(()=> {
-  //     setPriceRoom({
-  //         faci_id, faci_name, faci_rate_price, faci_high_price, faci_tax_rate
-  //     })
-  // }, [faci_name])
+  // useEffect book now into Booking Detail
+  useEffect(()=> {
+      if(name !== undefined){
+        setDetail(true)
+        setPriceRoom({
+          faci_id: faci_id,
+          faci_name: faci_name,
+          faci_high_price: faci_high_price,
+          faci_rate_price: faci_rate_price,
+          faci_tax_rate: faci_tax_rate,
+        });
+        setDataBooking({
+          ...dataBooking,
+          boor_hotel_id : id,
+          borde_faci_id: faci_id,
+          borde_price: ratePriceInt,
+          borde_tax : taxRateInt,
+          boor_total_tax : taxRateInt,
+          boor_total_amount : ratePriceInt
+        });
+      }
+  }, [name, faci_id])
+
+  console.log(dataBooking)
 
   //Handle button selected room into booking
   const handleButtonSelected = (index: any) => {
@@ -445,6 +488,7 @@ export default function bookingRoom() {
       spofDiscount: selected.spofDiscount,
     });
     setSpofOpen(false);
+    setShowTrash(true)
   };
 
   // Handle untuk Booking Extra di dalam Modal
@@ -477,6 +521,7 @@ export default function bookingRoom() {
         measureUnit = "People";
       }
       setValueExtra({
+        ...valueExtra,
         pritId: [...valueExtra.pritId, selected.pritId],
         pritName: [...valueExtra.pritName, selected.pritName],
         pritPrice: [
@@ -494,26 +539,36 @@ export default function bookingRoom() {
     setAddExtra(false);
   };
 
+  useEffect(()=>{
+    const borde_id = bordeNumber?.length > 0 ? bordeNumber[0].borde_id : null;
+    const id = borde_id + 1;
+    for (let i = 0; i < valueExtra.pritName.length; i++){
+      valueExtra.bordeId[i] = id
+    }
+    setValueExtra({...valueExtra, bordeId : valueExtra.bordeId})
+  }, [dataBooking.borde_extra])
+
   //UseEffect untuk change auto totalPrice di booking
   useEffect(() => {
-    const rate = dataBooking.borde_price;
+    const rate = dataBooking.borde_price || 0;
     const room = dataBooking.boor_total_room || 1;
     const days = numDays || 1;
     const disc = dataBooking.borde_discount || 0;
     const extra = extraTotal.extraSubTotal;
+    const rateTotal = rate * room * days - disc
     const total = rate * days * room - disc + extra;
     const subTotal = () => {
       setDataBooking({
         ...dataBooking,
         boor_total_amount: total,
-        borde_subtotal: total,
+        borde_subtotal: rateTotal,
         borde_extra: extra,
       });
       setDataPayment({ ...dataPayment, amount: total });
     };
-    if (dataBooking.borde_price !== 0 || dataBooking.borde_discount !== 0) {
-      subTotal();
-    }
+    subTotal();
+    // if (dataBooking.borde_price !== 0 || dataBooking.borde_discount !== 0) {
+    // }
   }, [
     dataBooking.borde_price,
     dataBooking.boor_total_room,
@@ -539,8 +594,8 @@ export default function bookingRoom() {
     const delPritPrice = valueExtra.pritPrice.filter((price, i) => i !== index);
     const delPritQty = valueExtra.pritQty.filter((qty, i) => i !== index);
     const delPritTotal = valueExtra.pritTotal.filter((total, i) => i !== index);
-    const delPritMeasure = valueExtra.pritMeasure.filter(
-      (measure, i) => i !== index
+    const delBorde = valueExtra.bordeId.filter((borde, i) => i !== index)
+    const delPritMeasure = valueExtra.pritMeasure.filter((measure, i) => i !== index
     );
     setValueExtra({
       pritName: delPritName,
@@ -549,21 +604,16 @@ export default function bookingRoom() {
       pritMeasure: delPritMeasure,
       pritQty: delPritQty,
       pritTotal: delPritTotal,
-    });
-  };
-
-  //Handle untuk generate booking code otomatis
-  const handleBookingCode = () => {
-    const boor_id = boorNumber?.length > 0 ? boorNumber[0].boor_id : null;
-    const id = boor_id + 1;
-    dispatch(insertBooking(dataBooking));
-    root.push({
-      pathname: `/booking/room/invoice`,
-      search: `${dataBooking.boor_order_number}`,
+      bordeId : delBorde
     });
   };
 
   const handleReservation = () => {
+      setDetail(!detail);
+  };
+
+  const handleBookingCode = () => {
+    dispacth(getBorde())
     const currentDate = new Date();
     const year = currentDate.getFullYear().toString();
     const month = (currentDate.getMonth() + 1).toString().padStart(2, "0");
@@ -594,20 +644,14 @@ export default function bookingRoom() {
           setDataBooking({ ...dataBooking, boor_order_number: newOrderNumber });
           setDataPayment({ ...dataPayment, orderNumber: newOrderNumber });
         }
-        setDetail(!detail);
+        setPayment(!payment);
       }
     } else {
       newOrderNumber = `BO#${currentDateString}-0001`;
       setDataBooking({ ...dataBooking, boor_order_number: newOrderNumber });
       setDataPayment({ ...dataPayment, orderNumber: newOrderNumber });
-      setDetail(!detail);
-    }
-  };
-
-  // const handleAddExtra = () => {
-  //   dispacth(insertBookingExtra(dataExtra));
-  //   console.log(dataExtra);
-  // };
+  }
+}
 
   const handleAdultsValue = (value: any) => {
     setDataBooking({ ...dataBooking, borde_adults: value });
@@ -621,9 +665,10 @@ export default function bookingRoom() {
     setDataBooking({ ...dataBooking, boor_total_room: value });
   };
 
-  // const handleDeleteSpof = () => {
-  //   setSpofPrice({...spofPrice, spofId : 0, spofDiscount : '', spofName : ''})
-  // }
+  const handleDeleteSpof = () => {
+    setSpofPrice({...spofPrice, spofId : 0, spofDiscount : '', spofName : ''})
+    setShowTrash(false)
+  }
 
   const [isActive, setIsActive] = useState(false);
   const [isLinked, setIsLinked] = useState(false);
@@ -659,11 +704,12 @@ export default function bookingRoom() {
   };
 
   const router = useRouter();
-  const onCompleteCash = () => {
+  const onCompleteCash = async ()  => {
     const boor_id = boorNumber?.length > 0 ? boorNumber[0].boor_id : null;
     const id = boor_id + 1;
-    dispatch(insertBooking(dataBooking));
-    dispacth(doCreateTransaction(dataPayment));
+    await dispatch(insertBooking(dataBooking));
+    await dispacth(doCreateTransaction(dataPayment));
+    await dispacth(insertBookingExtra(dataExtra)) 
 
     setTimeout(
       () =>
@@ -704,7 +750,7 @@ export default function bookingRoom() {
   );
   const fintechAcc = userAcc?.filter((obj: any) => obj.usacType === "Payment");
 
-  //Check Status Account Dompet Realta
+  //Check Status Account H-Pay
   const accDompet = fintechAcc?.find(
     (item: any) => item.usacAccountNumber == accNumberDompet
   );
@@ -713,7 +759,7 @@ export default function bookingRoom() {
     accDompet ? setIsActive(true) : setIsActive(false);
   }, [accDompet]);
 
-  //Get Saldo Dompet Realta
+  //Get Saldo H-Pay
   const saldoDompet = parseInt(accDompet?.usacSaldo).toLocaleString("id-ID", {
     style: "currency",
     currency: "IDR",
@@ -729,7 +775,7 @@ export default function bookingRoom() {
     accGoto ? setIsLinked(true) : setIsLinked(false);
   }, [accGoto]);
 
-  //Get Saldo Dompet Realta
+  //Get Saldo H-Pay
   const saldoGoto = parseInt(accGoto?.usacSaldo).toLocaleString("id-ID", {
     style: "currency",
     currency: "IDR",
@@ -798,6 +844,10 @@ export default function bookingRoom() {
     }
   }, [selectCard, dataBooking.boor_total_amount]);
 
+  let pict1 = pict.pict1.split(',')
+  let pict2 = pict.pict2.split(',')
+  let pict3 = pict.pict3.split(',')
+
   return (
     <Layouts>
       {openAdd ? (
@@ -845,6 +895,26 @@ export default function bookingRoom() {
       ) : null}
       <div className="mb-3 rounded"></div>
       <div>
+            <Carousel slidesToShow={3}>
+              <div className="w-1/8 border-2">
+                <img src={`../.${pict1[0]}`} alt="pict1"/>
+              </div>
+              <div className="w-1/8 border-2">
+                <img src={`../.${pict1[1]}`} alt="pict1"/>
+              </div>
+              <div className="w-1/8 border-2">
+                <img src={`../.${pict2[0]}`} alt="pict2"/>
+              </div>
+              <div className="w-1/8 border-2">
+                <img src={`../.${pict2[1]}`} alt="pict2"/>
+              </div>
+              <div className="w-1/8 border-2">
+                <img src={`../.${pict3[0]}`} alt="pict3"/>
+              </div>
+              <div className="w-1/8 border-2">
+                <img src={`../.${pict3[1]}`} alt="pict3"/>
+              </div>
+            </Carousel>
         <Row gutter={16}>
           <Col span={14} className={`${!detail ? "block" : "hidden"}`}>
             <div className="mb-3">
@@ -883,12 +953,13 @@ export default function bookingRoom() {
                       </div>
                       <div className="text-l mt-2">
                         <p className="italic">
-                          {hotel.length > 0 && (
-                            <Link href={`${maps}${hotel[0].place}`}>
-                              {hotel[0].place}
-                            </Link>
-                          )}
-                          {hotel.place}
+                        {hotel.length > 0 ? (
+                          <Link href={`${maps}${hotel[0].place}`}>
+                            {hotel[0].place}
+                          </Link>
+                        ) : (
+                          hotel.place
+                        )}
                         </p>
                       </div>
                       <div className="text-xl mt-2 font-semibold">
@@ -1306,6 +1377,7 @@ export default function bookingRoom() {
                             ...dataPayment,
                             sourceNumber: "0",
                             targetNumber: "0",
+                            trxType: "TRB",
                           }),
                           setDataBooking({
                             ...dataBooking,
@@ -1390,7 +1462,7 @@ export default function bookingRoom() {
                           >
                             <div className="flex justify-between items-center px-6">
                               <p className="text-[16px] font-semibold">
-                                Dompet Realta
+                                H-Pay
                               </p>
                               <p className="text-[16px] font-semibold">
                                 {saldoDompet}
@@ -1401,7 +1473,7 @@ export default function bookingRoom() {
                           <Card size={"small"} className="mb-2">
                             <div className="flex justify-between items-center px-6">
                               <p className="text-[16px] font-semibold">
-                                Dompet Realta
+                                H-Pay
                               </p>
                               <p
                                 className={`${
@@ -1534,7 +1606,7 @@ export default function bookingRoom() {
               </div>
             </div>
           </Col>
-          <Col span={10} >
+          <Col span={10}>
             <div className="sticky top-0 border-4 shadow-lg p-5 rounded-lg bg-white">
               <div className="flex justify-center font-bold text-3xl">
                 Booking Order Details
@@ -1542,8 +1614,8 @@ export default function bookingRoom() {
                 <h1 className="font-bold text-lg mt-4">
                   {dataBooking.boor_order_number}
                 </h1>
-              <Divider/>
-              <div className="flex text-center mt-3 items-center">
+              <Divider className="border-2"/>
+              <div className="flex text-center my-5 items-center">
                 <div className="flex text-2xl font-bold text-center text-red-500">
                   <p>{priceRoom.faci_rate_price}</p>
                 </div>
@@ -1551,7 +1623,6 @@ export default function bookingRoom() {
                   <p>{priceRoom.faci_high_price}</p>
                 </div>
               </div>
-              <p className="my-3 italic">Include Tax</p>
               <Row gutter={10}>
                 <Col span={12}>
                   <p>Please input date :</p>
@@ -1662,9 +1733,9 @@ export default function bookingRoom() {
                 <div className="text-xl font-semibold italic">
                   {spofPrice.spofName}
                 </div>
-                {/* <div>
-                  <button onClick={handleDeleteSpof}><DeleteOutlined /></button>
-                </div> */}
+                <div>
+                  <button onClick={handleDeleteSpof} className={`${showTrash ? "block" : "hidden"}`}><DeleteOutlined className="text-red-500" /></button>
+                </div>
                 <div className="flex text-xl my-1 items-center">
                   - {spofPrice.spofDiscount}
                 </div>
@@ -1678,7 +1749,7 @@ export default function bookingRoom() {
                   })}
                 </div>
               </div>
-              <div className="flex items-center justify-between mb-3">
+              <div className="flex items-center justify-between mb-8">
                 <div className="flex text-l items-center">Your Saving</div>
                 <div className="flex text-xl items-center">
                   - {spofPrice.spofDiscount}
@@ -1704,11 +1775,7 @@ export default function bookingRoom() {
                   Reservation Booking
                 </Button>
                 <Button
-                  // onClick={handleBookingCode}
-                  onClick={() => {
-                    setPayment(!payment), 
-                    dispacth(insertBookingExtra(dataExtra)) 
-                  }}
+                  onClick={handleBookingCode}
                   className={`text-white bg-[#754CFF] ${!detail || payment ? "hidden" : "block"}`}
                 >
                   {/* text-white bg-[#754CFF] */}

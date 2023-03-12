@@ -35,7 +35,6 @@ export default withAuth( function EditHotelRealta(props: any) {
       payload.append("hotelPhonenumber", values.hotelPhonenumber);
       payload.append("hotelModifiedDate", values.hotelModifiedDate);
 
-      window.alert("Data Successfully Edited");
       dispatch(updateHotel(payload));
       handleClose(false);
       props.onRefresh();

@@ -9,13 +9,14 @@ export default function ActivationHpay(props: any) {
   const [pin, setPin] = useState(["", "", "", ""]);
   const [confirmPin, setConfirmPin] = useState(["", "", "", ""]);
   const [error, setError] = useState("");
-  const {handleAct} = props
-  const {handleCancell, dataUser, dataPaga} = props
-  const dispatch = useDispatch()
+  const { handleAct } = props;
+  const { handleCancell, dataUser, dataPaga } = props;
+  const dispatch = useDispatch();
 
-  const pagaId = dataPaga?.filter((obj:any) => obj.pagaName === 'H-Pay')[0]?.pagaEntityId
-  const accNumber = `131${dataUser[0]?.user_phone_number}`
-  
+  const pagaId = dataPaga?.filter((obj: any) => obj.pagaName === "H-Pay")[0]
+    ?.pagaEntityId;
+  const accNumber = `131${dataUser[0]?.user_phone_number}`;
+
   const [formValues, setFormValues] = useState({
     usacAccountNumber: accNumber,
     usacEntityId: pagaId,
@@ -23,16 +24,15 @@ export default function ActivationHpay(props: any) {
     usacExpmonth: 0,
     usacExpyear: 0,
     usacSaldo: 0,
-    usacSecureCode : "",
-    usacUserId : dataUser[0].user_id
+    usacSecureCode: "",
+    usacUserId: dataUser[0].user_id,
   });
-
 
   const handleChange = (index: number, event: any) => {
     const newPin = [...pin];
     newPin[index] = event.target.value;
     setPin(newPin);
-    setFormValues({...formValues, usacSecureCode: newPin.join("")})
+    setFormValues({ ...formValues, usacSecureCode: newPin.join("") });
     if (event.target.value.length === 1) {
       const nextIndex = index + 1;
       if (nextIndex < 4) {
@@ -47,7 +47,7 @@ export default function ActivationHpay(props: any) {
   const handleBackspace = (index: number, event: any) => {
     if (event.keyCode === 8 && index > 0) {
       const newPin = [...pin];
-      newPin[index] = '';
+      newPin[index] = "";
       setPin(newPin);
       const prevIndex = index - 1;
       const prevInput = document.getElementById(`pin-${prevIndex + 1}`);
@@ -75,7 +75,7 @@ export default function ActivationHpay(props: any) {
   const handleDelConfirm = (index: number, event: any) => {
     if (event.keyCode === 8 && index > 0) {
       const newConfirmPin = [...confirmPin];
-      newConfirmPin[index] = '';
+      newConfirmPin[index] = "";
       setConfirmPin(newConfirmPin);
       const prevIndex = index - 1;
       const prevInput = document.getElementById(`Confpin-${prevIndex + 1}`);
@@ -96,9 +96,9 @@ export default function ActivationHpay(props: any) {
       return;
     }
     setError("");
-    handleCancell(false)
+    handleCancell(false);
     // console.log(formValues)
-    dispatch(doCreateAccount(formValues))
+    dispatch(doCreateAccount(formValues));
     // continue with form submission
   };
   return (
@@ -111,7 +111,12 @@ export default function ActivationHpay(props: any) {
         centered
         footer={null}
       >
-        <Input size="large" readOnly value={props.phone} className="my-4 hover:border-[#754cff]"/>
+        <Input
+          size="large"
+          readOnly
+          value={props.phone}
+          className="my-4 hover:border-[#754cff]"
+        />
         <div className="mt-4 text-center justify-center">
           <p className="mb-2 font-bold">Create New Pin</p>
           <div className="flex justify-center">
@@ -129,28 +134,26 @@ export default function ActivationHpay(props: any) {
             ))}
           </div>
         </div>
-      <div className="mt-4 text-center">
-      <p className="mb-2 font-bold">Confirm Your Pin</p>
-        <div className="flex justify-center">
-          {confirmPin.map((value, index) => (
-            <Input
-              key={index}
-              id={`Confpin-${index + 1}`}
-              type="text"
-              maxLength={1}
-              value={value}
-              onChange={(event) => handleConfirmPinChange(index, event)}
-              onKeyDown={(event) => handleDelConfirm(index, event)}
-              className="h-[45px] mx-4 focus:border-[#754cff] hover:border-[#754cff] w-[45px] text-center"
-            />
-          ))}
+        <div className="mt-4 text-center">
+          <p className="mb-2 font-bold">Confirm Your Pin</p>
+          <div className="flex justify-center">
+            {confirmPin.map((value, index) => (
+              <Input
+                key={index}
+                id={`Confpin-${index + 1}`}
+                type="text"
+                maxLength={1}
+                value={value}
+                onChange={(event) => handleConfirmPinChange(index, event)}
+                onKeyDown={(event) => handleDelConfirm(index, event)}
+                className="h-[45px] mx-4 focus:border-[#754cff] hover:border-[#754cff] w-[45px] text-center"
+              />
+            ))}
+          </div>
         </div>
-      </div>
         <div className="text-center mt-4">
           {error && <div className="error text-red-600 my-4">{error}</div>}
-          <Buttons funcs={handleSubmit} >
-            Activate
-          </Buttons>
+          <Buttons funcs={handleSubmit}>Activate</Buttons>
         </div>
       </Modal>
     </>

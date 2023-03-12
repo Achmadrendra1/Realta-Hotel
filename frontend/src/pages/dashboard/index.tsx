@@ -1666,7 +1666,7 @@ export default function menuMaster() {
                     <Select.Option value="SERVICE">SERVICE</Select.Option>
                     <Select.Option value="SNACK">SNACK</Select.Option>
                     <Select.Option value="SOFTDRINK">SOFTDRINK</Select.Option>
-                    <Select.Option value="">ALL</Select.Option>
+                    {/* <Select.Option value="">ALL</Select.Option> */}
                   </Select>
                 </div>
               </Form.Item>
