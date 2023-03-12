@@ -82,7 +82,7 @@ export default function menu({ restaurant }:any) {
     },
   ];
 
-  const [cart, setCart] = useState([]);
+  const [cart, setCart]:any = useState([]);
  
   useEffect(() => {
     const cartdrlocalstorage = localStorage.getItem("cart");
@@ -104,34 +104,54 @@ export default function menu({ restaurant }:any) {
   //   setCart(parsedCart);
   // }, []);
 
+  const [openCart, setOpenCart] = useState(false);
+  const [newOrder, setNewOrder]:any = useState()
+  function closeModalCart(){
+    setOpenCart(false)
+  }
+
+  function changeOrder(){
+    setCart([]);
+    localStorage.setItem("cart", JSON.stringify([]));
+    // setCart([newOrder]);
+    setOpenCart(false);
+  }
+
   const addtocart = (menu: any) => {
-    let newCart:any = [...cart];
-    let itemInCart:any = cart.find((item: any) => menu.remename === item.remename); 
-    if (!itemInCart) {
-      let itemInCart:any = {
-        ...menu, 
-        quantity: 1,
-        subtotal: 0,
-        orderNumber: code(),
-      };
-      let numberOfPrice = Number(
-        menu.remeprice.split(",")[0].replace(/[^0-9]/g, "")
-      ); 
-      itemInCart.subtotal = itemInCart.quantity * numberOfPrice;
-      newCart.push(itemInCart);
-    } else {
-      itemInCart.quantity++; 
-      let numberString = menu.remeprice.split(",")[0].replace(/[^0-9]/g, "");
-      const numberOfPrice = parseInt(numberString);
-      itemInCart.subtotal = itemInCart.quantity * numberOfPrice;
-      // console.log(typeof numberString)
+    if(cart.length === 0 || menu.remefaciid == cart[0]?.remefaciid){
+      let newCart:any = [...cart];
+      let itemInCart:any = cart.find((item: any) => menu.remename === item.remename); 
+      if (!itemInCart) {
+        let itemInCart:any = {
+          ...menu, 
+          quantity: 1,
+          subtotal: 0,
+          orderNumber: code(),
+        };
+        let numberOfPrice = Number(
+          menu.remeprice.split(",")[0].replace(/[^0-9]/g, "")
+        ); 
+        itemInCart.subtotal = itemInCart.quantity * numberOfPrice;
+        newCart.push(itemInCart);
+      } else {
+        itemInCart.quantity++; 
+        let numberString = menu.remeprice.split(",")[0].replace(/[^0-9]/g, "");
+        const numberOfPrice = parseInt(numberString);
+        itemInCart.subtotal = itemInCart.quantity * numberOfPrice;
+        // console.log(typeof numberString)
+      }
+      setCart(newCart);
+    }else{
+      setOpenCart(true);
+      setNewOrder(menu)
     }
-    setCart(newCart);
+    
+    
+    
   };
  
   const removeFromCart = (productToRemove: any) => { 
-    setCart(cart.filter((product: any) => product !== productToRemove));
-    console.log(getCartTotal(),'cart');
+    setCart(cart.filter((product: any) => product !== productToRemove)); 
     
     if(cart.length === 1){
       localStorage.setItem("cart", JSON.stringify([]));
@@ -143,7 +163,7 @@ export default function menu({ restaurant }:any) {
   };
 
   const getCartTotal = (): number => {
-    return cart.reduce((sum: number, { quantity }) => sum + quantity, 0); 
+    return cart.reduce((sum: number, { quantity }:any) => sum + quantity, 0); 
   };
 
   const setQuantity = (product: any, amount: any) => {
@@ -654,6 +674,75 @@ export default function menu({ restaurant }:any) {
             <p className="text-lg font-bold">{menuDetail.nama}</p>
             <p>{menuDetail.desc}</p>
             <p>{menuDetail.harga}</p>
+          </Modal>
+
+
+          {/* ----------------------------- MODALS CART ------------------------------ */}
+          <Modal
+            width={600}
+            title={"Add new cart"}
+            open={openCart}
+            onOk={handleOkButton}
+            onCancel={closeModalCart}
+            footer={[
+              <>
+                <Button key="back" onClick={handleCancel}>
+                  Cancel
+                </Button>
+                <Button key='ok' onClick={changeOrder}>
+                  Yes, Change Order
+                </Button>
+              </>,
+            ]}
+          >
+            <div>
+              Previous Cart
+            </div>
+
+            {cart &&
+              cart.map((order: any) => (
+                <div className="border rounded-lg p-4 shadow-md gap-y-2 my-5 flex">
+                  <img
+                    src={`${configuration.BASE_URL}/${order.rempurl}`}
+                    alt={order.remename}
+                    width={120}
+                    height={120}
+                  ></img>
+                  <div className="ml-3 mt-1 w-full">
+                    <div className="flex justify-between">
+                      <p className="font-bold w-4/5">
+                        {order.remename}
+                      </p>
+                    </div>
+                    {/* <p>{order.desc}</p> */}
+                    <p>
+                      {parseInt(
+                        order.remeprice
+                          .split(",")[0]
+                          .replace(/[^0-9]/g, "")
+                      ).toLocaleString("id-ID", {
+                        style: "currency",
+                        currency: "IDR",
+                        minimumFractionDigits: 0,
+                        maximumFractionDigits: 0,
+                      })}
+                    </p>
+                    <p>
+                      Subtotal:{" "}
+                      {order.subtotal.toLocaleString("id-ID", {
+                        style: "currency",
+                        currency: "IDR",
+                        minimumFractionDigits: 0,
+                        maximumFractionDigits: 0,
+                      })}
+                    </p>
+                  </div>
+                </div>
+              ))}
+
+              <div>
+                Are you sure you want to change this order?
+              </div>
           </Modal>
         </Layouts>
       </main>
