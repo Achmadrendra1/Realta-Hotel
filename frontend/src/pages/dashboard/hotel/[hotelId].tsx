@@ -13,7 +13,18 @@ import {
   EditOutlined,
   ExclamationCircleFilled,
 } from "@ant-design/icons";
-import { Breadcrumb, Carousel, Col, Image, Modal, Rate, Row, Space, Table, Typography } from "antd";
+import {
+  Breadcrumb,
+  Carousel,
+  Col,
+  Image,
+  Modal,
+  Rate,
+  Row,
+  Space,
+  Table,
+  Typography,
+} from "antd";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -38,7 +49,6 @@ export default withAuth(function HotelDetails() {
   const { Title, Text } = Typography;
   const rating = hotelById.hotelRatingStar;
   const { confirm } = Modal;
-
 
   useEffect(() => {
     dispatch(getHotelID(hotelId));
@@ -95,36 +105,40 @@ export default withAuth(function HotelDetails() {
   const column = [
     {
       title: "Photo",
-      dataIndex: ["facilityPhotos","faphoPhotoFilename"],
+      dataIndex: ["facilityPhotos", "faphoPhotoFilename"],
       key: "1",
       width: "10%",
-      render: (_:any,record:any)=>{
-        let foto = record?.facilityPhotos[0]?.faphoPhotoFilename
-        return(
-          <Image 
-          src= {`${configuration.BASE_URL}/facility-photos/${foto}`} 
-          alt={`${foto}`} 
+      render: (_: any, record: any) => {
+        let foto = record?.facilityPhotos
+          ?.filter((items: any) => items.faphoPrimary === true)
+          .map((item: any) => item.faphoPhotoFilename);
+
+        return (
+          <Image
+            src={`${configuration.BASE_URL}/facility-photos/${foto[0]}`}
+            alt={`${foto[0]}`}
           />
-        )
-      }
+        );
+      },
     },
     {
       title: "Facility Name",
       dataIndex: "faciName",
       key: "1",
       width: "15%",
-      sorter:{
-        compare: (a:any,b:any)=> (a.faciName < b.faciName ? -1 : 1)
-      }
+      sorter: {
+        compare: (a: any, b: any) => (a.faciName < b.faciName ? -1 : 1),
+      },
     },
     {
       title: "Room Number",
       dataIndex: "faciRoomNumber",
       key: "1",
       width: "10%",
-      sorter:{
-        compare: (a:any,b:any)=> (a.faciRoomNumber < b.faciRoomNumber ? -1 : 1)
-      }
+      sorter: {
+        compare: (a: any, b: any) =>
+          a.faciRoomNumber < b.faciRoomNumber ? -1 : 1,
+      },
     },
     {
       title: "Max Vacant",
@@ -248,20 +262,23 @@ export default withAuth(function HotelDetails() {
           htlname={hotelById.hotelName}
         />
       ) : null}
-      <Link href={'/dashboard/hotel'}><ArrowLeftOutlined /> Back</Link>
+      <Link href={"/dashboard/hotel"}>
+        <ArrowLeftOutlined /> Back
+      </Link>
 
       <Row gutter={24}>
         <Col span={5}>
-            <Carousel autoplay autoplaySpeed={2500}>
-              {hotelById?.facilities?.map((item:any)=>(
-                item.facilityPhotos.map((items:any)=>(
-                  <Image 
-                  src={`${configuration.BASE_URL}/facility-photos/${items.faphoPhotoFilename}`} 
-                  alt={`${items.faphoPhotoFilename}`}/>
-                ))
-              ))}
-            </Carousel>
-          </Col>
+          <Carousel autoplay autoplaySpeed={2500}>
+            {hotelById?.facilities?.map((item: any) =>
+              item.facilityPhotos.map((items: any) => (
+                <Image
+                  src={`${configuration.BASE_URL}/facility-photos/${items.faphoPhotoFilename}`}
+                  alt={`${items.faphoPhotoFilename}`}
+                />
+              ))
+            )}
+          </Carousel>
+        </Col>
         <Col span={11}>
           <Title level={3}>{hotelById?.hotelName}</Title>
           <Text type="secondary">{hotelById?.hotelAddr?.addrLine1}</Text>

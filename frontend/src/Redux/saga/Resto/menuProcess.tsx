@@ -7,8 +7,7 @@ import { call, put } from "redux-saga/effects";
 function* handleMenu(action:any):any{
     try{ 
         const result = yield axios(API('Post',`/resto-menus/menu-dashboard`,action.payload)) 
-        yield put(doMenuRequestSucceed(result.data))
-        return result.data;
+        yield put(doMenuRequestSucceed(result.data)) 
     }catch(e:any){
         yield put(doMenuRequestFailed(e))
     }
@@ -18,8 +17,7 @@ function* handleUpdateMenu(action:any):any{
     try{ 
         // debugger;
         const result = yield axios(API('Put',`/resto-menus/${action.payload.remeId}`,action.payload))
-        yield put(doUpdateMenuSucceed(result.data))
-        return result.data;
+        yield put(doUpdateMenuSucceed(result.data)) 
     }catch(err:any){
         yield put(doMenuRequestFailed(err))
     }
@@ -29,8 +27,7 @@ function* handleAddMenu(action:any):any{
     try{ 
         // debugger;
         const result = yield axios(API('Post',`/resto-menus`,action.payload))
-        yield put(doAddMenuSucceed(result.data))
-        return result.data
+        yield put(doAddMenuSucceed(result.data)) 
     }catch(err){
         yield put(doAddMenuFailed(err))
     }

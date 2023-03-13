@@ -71,10 +71,13 @@ export default function AddService(props: any) {
             ]}
           >
             <Input
+            type="number"
+            min={0}
               style={{
                 width: '80%',
                 marginLeft: '10%',
                 marginTop: '3%',
+                
               }}
               placeholder="Input Sequence Order"
             />
