@@ -14,7 +14,6 @@ import {
 } from '../../Action/Master/actionAddress';
 import { API } from '@/Redux/Configs/consumeApi';
 
-
 //_____________________________________________________________________________________________________________________________________________________________________________________________________________________
 //  GET
 
@@ -50,7 +49,7 @@ function* handlerAddAddress(action: any): any {
 function* handlerUpdateAddress(action: any): any {
   try {
     yield axios(
-      API("PUT", "address/edit/" + action.payload.addrId, action.payload)
+      API('PUT', '/address/edit/' + action.payload.addr_id, action.payload)
     );
     yield put(doUpdateAddressSucceed(action.payload));
   } catch (error: any) {
@@ -62,16 +61,14 @@ function* handlerUpdateAddress(action: any): any {
   }
 }
 
-
 //_____________________________________________________________________________________________________________________________________________________________________________________________________________________
 //  ADD
 
 function* handlerDeleteAddress(action: any): any {
   try {
-    yield axios(API("DELETE", "/address/delete/" + action.payload));
+    yield axios(API('DELETE', '/address/delete/' + action.payload));
     yield put(doDelAddressSucceed(action.payload));
   } catch (error: any) {
-    console.log(error);
   }
 }
 

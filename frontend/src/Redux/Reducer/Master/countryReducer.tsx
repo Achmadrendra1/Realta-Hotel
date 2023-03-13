@@ -33,6 +33,15 @@ function countryReducer(state = initialState, action: any) {
       return { ...state, country: [...state.country, action.payload] };
 
     //-----------------------------------------------------------------------------------------------------------------------------------------
+    // UPDATE
+    case ActionTypes.UPDATE_COUNTRY:
+      return { ...state };
+    case ActionTypes.UPDATE_COUNTRY_SUCCEED:
+      return { ...state, country: [...state.country, action.payload] };
+    case ActionTypes.UPDATE_COUNTRY_FAILED:
+      return { ...state, country: [...state.country, action.payload] };
+
+    //-----------------------------------------------------------------------------------------------------------------------------------------
     // DEL
     case ActionTypes.DEL_COUNTRY:
       return { ...state };

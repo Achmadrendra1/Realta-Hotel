@@ -58,7 +58,6 @@ import AddRegions from './master/add/addRegions';
 import AddCountry from './master/add/addCountry';
 import AddProvinces from './master/add/addProvinces';
 import AddCity from './master/add/addCity';
-import AddJalan from './master/add/addJalan';
 import AddPolicy from './master/add/addPolicy';
 import AddCategory from './master/add/addCategory';
 import AddPrice from './master/add/addPrice';
@@ -68,7 +67,6 @@ import EditRegions from './master/edit/editRegions';
 import EditCountry from './master/edit/editCountry';
 import EditProvinces from './master/edit/editProvinces';
 import EditAddress from './master/edit/editCity';
-import EditJalan from './master/edit/editJalan';
 import EditPolicy from './master/edit/editPolicy';
 import EditCategory from './master/edit/editCategory';
 import EditPrice from './master/edit/editPrice';
@@ -88,79 +86,62 @@ export default function menuMaster() {
   //React Hooks
 
   const dispatch = useDispatch();
-
-  useEffect(() => {
-    dispatch(doRegions());
-    dispatch(doLocationsRC());
-    dispatch(doLocationsRCP());
-    dispatch(doLocations());
-    dispatch(doPolicy());
-    dispatch(doCategoryGroup());
-    dispatch(doPriceItems());
-    dispatch(doServiceTask());
-
-    dispatch(doCountry());
-    dispatch(doProvinces());
-    dispatch(doAddress());
-    dispatch(doLocations());
-    dispatch(doLocationsRC());
-    dispatch(doLocationsRCP());
-  }, []);
-
-  const [messageApi, contextHolder] = message.useMessage();
-  //-------------------------------------------------------------------------------
-  //-------------------------------------------------------------------------------
-  /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   //GET DATA FROM DATABASE
-
-  let dataRegions = useSelector((state: any) => state.regionsReducer.regions);
-  // // console.log('Selector Regions :', dataRegions);
-
-  let dataCountry = useSelector((state: any) => state.countryReducer.country);
-  // console.log('Selector Country :', dataCountry);
 
   let dataProvinces = useSelector(
     (state: any) => state.provincesReducer.provinces
   );
-  // console.log('Selector Provinces :', dataProvinces);
 
   let dataCity = useSelector((state: any) => state.addressReducer.address);
-  // console.log('Selector City :', dataCity);
-  let dataJalan = useSelector((state: any) => state.addressReducer.address);
-  // console.log('S electorJalan :', dataJalan);
+
+  let dataRegions = useSelector((state: any) => state.regionsReducer.regions);
+  useEffect(() => {
+    dispatch(doRegions());
+  }, [dataRegions]);
+  useEffect(() => {
+    dispatch(doLocationsRC());
+    dispatch(doLocationsRCP());
+    dispatch(doLocations());
+  },[]);
+  let dataLocationsRC = useSelector(
+    (state: any) => state.locationsRCReducer.locationsRC
+  );
+  let dataLocationsRCP = useSelector(
+    (state: any) => state.locationsRCPReducer.locationsRCP
+  );
+
+  let dataLocationsAll = useSelector(
+    (state: any) => state.locationsReducer.locations
+  );
 
   let dataPolicy = useSelector((state: any) => state.policyReducer.policy);
-  // console.log('Selector policy :', dataPolicy);
+  useEffect(() => {
+    dispatch(doPolicy());
+  }, [dataPolicy]);
 
   let dataCategory = useSelector(
     (state: any) => state.categoryGroupReducer.categoryGroup
   );
+  useEffect(() => {
+    dispatch(doCategoryGroup());
+  }, [dataCategory]);
 
-  // console.log('Selector categoryGroup :', dataCategory);
   let dataPrice = useSelector(
     (state: any) => state.priceItemsReducer.priceItems
   );
-  // console.log('Selector priceItems :', dataPrice);
+  useEffect(() => {
+    dispatch(doPriceItems());
+  }, [dataPrice]);
+
   let dataService = useSelector(
     (state: any) => state.serviceTaskReducer.serviceTask
   );
-  // console.log('Selector serviceTask :', dataPolicy);
-  let dataLocationsAll = useSelector(
-    (state: any) => state.locationsReducer.locations
-  );
-  // console.log('Selector locationsAll :', dataLocationsAll);
-  let dataLocationsRC = useSelector(
-    (state: any) => state.locationsRCReducer.locationsRC
-  );
-  // console.log('Selector locationsRC :', dataLocationsRC);
-  let dataLocationsRCP = useSelector(
-    (state: any) => state.locationsRCPReducer.locationsRCP
-  );
-  // console.log('Selector locationsRCP :', dataLocationsRCP);
+  useEffect(() => {
+    dispatch(doServiceTask());
+  }, [dataService]);
 
-  //-------------------------------------------------------------------------------
-  //-------------------------------------------------------------------------------
-  //-------------------------------------------------------------------------------
+  const [messageApi, contextHolder] = message.useMessage();
+
   /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   //ADD DATA FROM DATABASE
 
@@ -183,7 +164,6 @@ export default function menuMaster() {
   const [isOpenAddCountry, setOpenAddCountry] = useState(false);
   const [isOpenAddProvinces, setOpenAddProvinces] = useState(false);
   const [isOpenAddCity, setOpenAddCity] = useState(false);
-  const [isOpenAddJalan, setOpenAddJalan] = useState(false);
   const [isOpenAddPolicy, setOpenAddPolicy] = useState(false);
   const [isOpenAddCategory, setOpenAddCategory] = useState(false);
   const [isOpenAddPrice, setOpenAddPrice] = useState(false);
@@ -194,7 +174,6 @@ export default function menuMaster() {
   const [isOpenEditCountry, setOpenEditCountry] = useState(false);
   const [isOpenEditProvinces, setOpenEditProvinces] = useState(false);
   const [isOpenEditCity, setOpenEditCity] = useState(false);
-  const [isOpenEditJalan, setOpenEditJalan] = useState(false);
   const [isOpenEditPolicy, setOpenEditPolicy] = useState(false);
   const [isOpenEditCategory, setOpenEditCategory] = useState(false);
   const [isOpenEditPrice, setOpenEditPrice] = useState(false);
@@ -210,7 +189,6 @@ export default function menuMaster() {
   const [idCountry, setIdCountry] = useState(0);
   const [idProvinces, setIdProvinces] = useState(0);
   const [idCity, setIdCity] = useState(0);
-  const [idJalan, setIdJalan] = useState(0);
   const [idPolicy, setIdPolicy] = useState(0);
   const [idCategory, setIdCategory] = useState(0);
   const [idPrice, setIdPrice] = useState(0);
@@ -222,33 +200,23 @@ export default function menuMaster() {
   const editDataRegions = (idRegions: number) => {
     setOpenEditRegions(true);
     setIdRegions(idRegions);
-    // console.log('click edit region :', idRegions);
   };
   const editDataCountry = (idCountry: number) => {
     setOpenEditCountry(true);
     setIdCountry(idCountry);
-    // console.log(idCountry);
   };
   const editDataProvinces = (idProvinces: number) => {
     setOpenEditProvinces(true);
     setIdProvinces(idProvinces);
-    // console.log(idProvinces);
   };
   const editDataCity = (idCity: number) => {
     setOpenEditCity(true);
     setIdCity(idCity);
-    // console.log(idCity);
-  };
-  const editDataJalan = (idJalan: number) => {
-    setOpenEditJalan(true);
-    setIdJalan(idJalan);
-    // console.log(idJalan);
   };
 
   const editDataPolicy = (idPolicy: number) => {
     setOpenEditPolicy(true);
     setIdPolicy(idPolicy);
-    // console.log('click poli :', idPolicy);
   };
 
   /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -259,7 +227,6 @@ export default function menuMaster() {
     setOpenEditCategory(true);
     setIdCategory(idCategory);
     setVisibleCategory(!visibleCategory);
-    // console.log(idCategory);
   };
 
   const [visiblePrice, setVisiblePrice] = useState(false);
@@ -268,28 +235,23 @@ export default function menuMaster() {
     setIdPrice(idPrice);
     setVisiblePrice(!visiblePrice);
 
-    // console.log(idPrice);
   };
   const editDataService = (idService: number) => {
     setOpenEditService(true);
     setIdService(idService);
-    // console.log(idService);
   };
 
   const viewDataPolicy = (idPolicy: number) => {
     setViewPolicy(true);
     setIdPolicy(idPolicy);
-    // console.log('button poli view click: ', idPolicy);
   };
   const viewDataCategory = (idCategory: number) => {
     setViewCategory(true);
     setIdCategory(idCategory);
-    // console.log('button cate view click:', idCategory);
   };
   const viewDataPrice = (idPrice: number) => {
     setViewPrice(true);
     setIdPrice(idPrice);
-    // console.log('button cate view click:', idPrice);
   };
 
   //----------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -306,17 +268,14 @@ export default function menuMaster() {
       setOpenAddCountry(false);
       setOpenAddProvinces(false);
       setOpenAddCity(false);
-      setOpenAddJalan(false);
       setOpenAddPolicy(false);
       setOpenAddCategory(false);
       setOpenAddPrice(false);
       setOpenAddService(false);
-      // setOpenAddJalan(false);
       setOpenEditRegions(false);
       setOpenEditCountry(false);
       setOpenEditProvinces(false);
       setOpenEditCity(false);
-      setOpenEditJalan(false);
       setOpenEditPolicy(false);
       setOpenEditCategory(false);
       setOpenEditPrice(false);
@@ -329,23 +288,19 @@ export default function menuMaster() {
   //Cancel
 
   const handleCancel = () => {
-    // console.log('Clicked cancel button');
     setOpenAddRegions(false);
     setOpenAddCountry(false);
     setOpenAddProvinces(false);
     setOpenAddCity(false);
-    setOpenAddJalan(false);
     setOpenAddPolicy(false);
     setOpenAddCategory(false);
     setOpenAddPrice(false);
     setOpenAddService(false);
-    // setOpenAddJalan(false);
 
     setOpenEditRegions(false);
     setOpenEditProvinces(false);
     setOpenEditCountry(false);
     setOpenEditCity(false);
-    setOpenEditJalan(false);
     setOpenEditPolicy(false);
     setOpenEditCategory(false);
     setOpenEditPrice(false);
@@ -360,24 +315,19 @@ export default function menuMaster() {
   //Close
 
   const handleClose = (data: boolean) => {
-    // console.log('button Close : ', data);
-
     setOpenAddRegions(data);
     setOpenAddCountry(data);
     setOpenAddProvinces(data);
     setOpenAddCity(data);
-    setOpenAddJalan(data);
     setOpenAddPolicy(data);
     setOpenAddCategory(data);
     setOpenAddPrice(data);
     setOpenAddService(data);
-    // setOpenAddJalan(data);
 
     setOpenEditRegions(data);
     setOpenEditProvinces(data);
     setOpenEditCountry(data);
     setOpenEditCity(data);
-    setOpenEditJalan(data);
     setOpenEditPolicy(data);
     setOpenEditCategory(data);
     setOpenEditPrice(data);
@@ -406,11 +356,9 @@ export default function menuMaster() {
         dispatch(doDelRegions(id));
       },
       onCancel() {
-        // console.log('Cancel');
       },
     });
 
-    // console.log('delete id :', id);
   };
 
   const showDeleteCountry = (id: any) => {
@@ -426,10 +374,8 @@ export default function menuMaster() {
         window.location.reload();
       },
       onCancel() {
-        // console.log('Cancel');
       },
     });
-    // console.log('delete country id  :', id);
   };
 
   const showDeleteProvinces = (id: any) => {
@@ -445,7 +391,6 @@ export default function menuMaster() {
         window.location.reload();
       },
       onCancel() {
-        // console.log('Cancel');
       },
     });
   };
@@ -460,29 +405,12 @@ export default function menuMaster() {
       cancelText: 'No',
       onOk() {
         dispatch(doDelAddress(id)), window.location.reload();
-        // console.log('OK');
       },
       onCancel() {
-        // console.log('Cancel');
       },
     });
   };
-  const showDeleteJalan = (id: any) => {
-    confirm({
-      title: 'Are you sure delete this Regions?',
-      icon: <ExclamationCircleFilled />,
-      content: 'The data for the regions will be deleted.',
-      okText: 'Yes',
-      okType: 'danger',
-      cancelText: 'No',
-      onOk() {
-        dispatch(doDelAddress(id)); // console.log('OK');
-      },
-      onCancel() {
-        // console.log('Cancel');
-      },
-    });
-  };
+
   const showDeletePolicy = (id: any) => {
     confirm({
       title: 'Are you sure delete this Regions?',
@@ -492,10 +420,9 @@ export default function menuMaster() {
       okType: 'danger',
       cancelText: 'No',
       onOk() {
-        dispatch(doDelPolicy(id)); // console.log('OK');
+        dispatch(doDelPolicy(id)); 
       },
       onCancel() {
-        // console.log('Cancel');
       },
     });
   };
@@ -509,10 +436,9 @@ export default function menuMaster() {
       okType: 'danger',
       cancelText: 'No',
       onOk() {
-        dispatch(doDelCategoryGroup(id)); // console.log('OK');
+        dispatch(doDelCategoryGroup(id)); 
       },
       onCancel() {
-        // console.log('Cancel');
       },
     });
   };
@@ -526,10 +452,10 @@ export default function menuMaster() {
       okType: 'danger',
       cancelText: 'No',
       onOk() {
-        dispatch(doDelPriceItems(id)); // console.log('OK');
+
+        dispatch(doDelPriceItems(id)); 
       },
       onCancel() {
-        // console.log('Cancel');
       },
     });
   };
@@ -543,25 +469,21 @@ export default function menuMaster() {
       okType: 'danger',
       cancelText: 'No',
       onOk() {
-        dispatch(doDelServiceTask(id)); // console.log('OK');
+        dispatch(doDelServiceTask(id)); 
       },
       onCancel() {
-        // console.log('Cancel');
       },
     });
-    // console.log('id :', id);
   };
 
   /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   //SEARCH
 
-  // search price name
   const [queryPrice, setQueryPrice] = useState('');
   // handleSearchPrice
   const handleSearchPrice = (e: any) => {
     const input = e.target.value.toLowerCase().replace(/\s/g, '');
     setQueryPrice(input);
-    // console.log('price input:', input);
   };
   // searchResultsPrice
   const searchResultsPrice = dataPrice.filter((item: any) =>
@@ -578,7 +500,6 @@ export default function menuMaster() {
   const filterPrice = searchResultsPrice.filter((item: any) =>
     selectType ? item.pritType === selectType : true
   );
-  // console.log('filterPrice :', filterPrice);
 
   //-------------------------------------------------------------------------------
   // Radio  Select Regions
@@ -589,20 +510,19 @@ export default function menuMaster() {
 
   const handleRadioClick = (record: any) => {
     setSelectedRow(record);
-    // console.log('nih record region:', record);
-
     const filterRC = dataLocationsRC
       .filter((item: any) => item.region_code == record.region_code)
       .sort((az: any, za: any) => az.country_id - za.country_id);
     setFilterRCP(filterRCP);
 
     setFilterRC(filterRC);
-    // console.log('filterRC :', filterRC);
     setRegionNamee(record.region_name);
     setRegionId(record.region_code);
 
-    // console.log('record.region_code :', record.region_code);
   };
+  useEffect(() => {
+    dispatch(doLocationsRC());
+  }, [filterRC, dataLocationsRC]);
 
   //
   // Radio  Select Country
@@ -613,13 +533,10 @@ export default function menuMaster() {
 
   const handleRadioClickCountry = (record: any) => {
     setSelectedRowCountry(record);
-    // console.log('nih record country:', record);
-
     const filterRCP = dataLocationsRCP
       .filter((item: any) => item.country_id == record.country_id)
       .sort((az: any, za: any) => az.prov_id - za.prov_id);
     setFilterRCP(filterRCP);
-    // console.log('nih filterRCP :', filterRCP);
     setCountryNamee(record.country_name);
     setCountryId(record.country_id);
   };
@@ -632,13 +549,10 @@ export default function menuMaster() {
 
   const handleRadioClickprovinces = (record: any) => {
     setSelectedRowProvince(record);
-    // console.log('nih record province:', record);
     const filterRCPA = dataLocationsAll.filter(
       (item: any) => item.prov_id == record.prov_id
     );
-
     setFilterRCPA(filterRCPA);
-    // console.log('nih filterRCPA :', filterRCPA);
     setProvNamee(record.prov_name);
     setProvId(record.prov_id);
   };
@@ -650,22 +564,15 @@ export default function menuMaster() {
 
   const handleRadioClickCity = (record: any) => {
     setSelectedRowCity(record);
-    // console.log('nih record city:', record);
 
     const filterRCPCJ = filterRCPA.filter(
       (item: any) => item.addr_line2 == record.addr_line2
     );
 
     setFilterRCPCJ(filterRCPCJ);
-    // console.log('nih filterRCPAJ :', filterRCPCJ);
     setCityNamee(record.addr_line2);
     setCityId(record.addr_line2);
-
-    // console.log('record.addr_line2 :', record.addr_line2);
   };
-
-  //-------------------------------------------------------------------------------
-  //-------------------------------------------------------------------------------
 
   /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   // Data TABLE REGIONS
@@ -697,8 +604,6 @@ export default function menuMaster() {
       dataIndex: 'region_code',
       width: '10%',
       render: (text: any, record: any, index: any) => index + 1,
-      fixed: 'left',
-      // align: 'left',
     },
     {
       width: '90%',
@@ -789,8 +694,6 @@ export default function menuMaster() {
       dataIndex: 'country_id',
       width: '10%',
       render: (text: any, record: any, index: any) => index + 1,
-      fixed: 'left',
-      // align: 'left',
     },
     {
       width: '90%',
@@ -881,8 +784,6 @@ export default function menuMaster() {
       dataIndex: 'prov_id',
       width: '10%',
       render: (text: any, record: any, index: any) => index + 1,
-      fixed: 'left',
-      // align: 'left',
     },
     {
       width: '90%',
@@ -930,8 +831,10 @@ export default function menuMaster() {
                 className="hover:text-blue-700 mr-4"
                 onClick={() => editDataProvinces(record.prov_id)}
               />
-              onClick={() => showDeleteProvinces(record.prov_id)}
-              <DeleteOutlined className="hover:text-red-700" />
+              <DeleteOutlined
+                className="hover:text-red-700"
+                onClick={() => showDeleteProvinces(record.prov_id)}
+              />
             </>
           </span>
         );
@@ -971,11 +874,16 @@ export default function menuMaster() {
       dataIndex: 'addr_id',
       width: '10%',
       render: (text: any, record: any, index: any) => index + 1,
-      fixed: 'left',
-      // align: 'left',
     },
     {
-      width: '90%',
+      width: '50%',
+      title: 'Jalan',
+      dataIndex: 'addr_line1',
+      key: 'addr_line1',
+      // align: 'center',
+    },
+    {
+      width: '40%',
       title: 'City',
       dataIndex: 'addr_line2',
       key: 'addr_line2',
@@ -1012,7 +920,7 @@ export default function menuMaster() {
 
       width: '30%',
 
-      render: (_: any, record: { addr_id: any }) => {
+      render: (_: any, record: any) => {
         return (
           <span className="flex justify-center">
             <>
@@ -1030,74 +938,7 @@ export default function menuMaster() {
       },
     },
   ];
-  // Data TABLE JALAN
 
-  const columnsJalan: ColumnType<any>[] = [
-    {
-      title: 'Jalan Id',
-      dataIndex: 'addr_id',
-      width: '10%',
-      render: (text: any, record: any, index: any) => index + 1,
-      fixed: 'left',
-      // align: 'left',
-    },
-    {
-      width: '90%',
-      title: 'Jalan',
-      dataIndex: 'addr_line1',
-      key: 'addr_line1',
-      // align: 'center',
-    },
-    {
-      title: (
-        <Button
-          icon
-          style={{
-            float: 'right',
-            backgroundColor: '#EEEEEE',
-            color: 'black',
-            marginTop: '3%',
-            marginBottom: '3%',
-            marginRight: '9%',
-          }}
-          type="default"
-          onClick={() => setOpenAddJalan(true)}
-        >
-          <PlusOutlined
-            style={{
-              backgroundColor: '#EEEEEE',
-              color: 'blue',
-              fontWeight: 'bold',
-              fontSize: 'larger',
-            }}
-          />
-          Add Jalan
-        </Button>
-      ),
-      key: 'action',
-      // align: 'right',
-
-      width: '30%',
-
-      render: (_: any, record: { addr_id: any }) => {
-        return (
-          <span className="flex justify-center">
-            <>
-              <EditOutlined
-                className="hover:text-blue-700 mr-4"
-                onClick={() => editDataJalan(record.addr_id)}
-              />
-
-              <DeleteOutlined
-                className="hover:text-red-700"
-                onClick={() => showDeleteJalan(record.addr_id)}
-              />
-            </>
-          </span>
-        );
-      },
-    },
-  ];
   //-------------------------------------------------------------------------------
   //-------------------------------------------------------------------------------
 
@@ -1110,8 +951,6 @@ export default function menuMaster() {
       dataIndex: 'poliId',
       width: '10%',
       render: (text: any, record: any, index: any) => index + 1,
-      fixed: 'left',
-      // align: 'left',
     },
     {
       title: 'Policy Name',
@@ -1121,14 +960,7 @@ export default function menuMaster() {
 
       // align: 'center',
     },
-    {
-      title: 'Country region Id',
-      dataIndex: 'country_id',
-      key: 'country_id',
-      width: '70%',
 
-      // align: 'center',
-    },
     {
       title: '',
       key: 'action',
@@ -1218,8 +1050,6 @@ export default function menuMaster() {
           height={50}
         />
       ),
-      fixed: 'left',
-      // align: 'left',
     },
     {
       title: 'Category Id',
@@ -1232,7 +1062,7 @@ export default function menuMaster() {
       title: 'Category Name',
       dataIndex: 'cagroName',
       key: 'cagroName',
-      // align: 'center',
+      width: '45%',
     },
 
     {
@@ -1240,7 +1070,7 @@ export default function menuMaster() {
       key: 'action',
       // align: 'right',
 
-      width: '12%',
+      width: '15%',
 
       render: (_: any, record: { cagroId: any }) => {
         return (
@@ -1260,6 +1090,7 @@ export default function menuMaster() {
       dataIndex: 'cagroType',
       key: 'cagroType',
       // align: 'center',
+      width: '15%',
     },
     {
       title: (
@@ -1324,21 +1155,20 @@ export default function menuMaster() {
       width: '5%',
 
       render: (text: any, record: any, index: any) => index + 1,
-      fixed: 'left',
-      // align: 'left',
     },
     {
       title: 'Item Name',
       dataIndex: 'pritName',
       key: 'pritName',
       // align: 'center',
+      width: '40%',
     },
     {
       title: '',
       key: 'action',
       // align: 'right',
 
-      width: '12%',
+      width: '15%',
 
       render: (_: any, record: { pritId: any }) => {
         return (
@@ -1357,13 +1187,13 @@ export default function menuMaster() {
       title: 'Price',
       dataIndex: 'pritPrice',
       key: 'pritPrice',
-      // align: 'center',
+      width: '15%',
     },
     {
       title: 'Type',
       dataIndex: 'pritType',
       key: 'pritType',
-      // align: 'center',
+      width: '15%',
     },
     {
       title: (
@@ -1427,14 +1257,13 @@ export default function menuMaster() {
       dataIndex: 'setaId',
       width: '10%',
       render: (text: any, record: any, index: any) => index + 1,
-      fixed: 'left',
-      // align: 'left',
     },
     {
       title: 'Task Name',
       dataIndex: 'setaName',
       key: 'pritName',
       // align: 'center',
+      width: '50%',
     },
 
     {
@@ -1565,17 +1394,6 @@ export default function menuMaster() {
           dataProvinces={dataLocationsAll}
         />
       ) : null}
-      {isOpenAddJalan ? (
-        <AddJalan
-          show={isOpenAddJalan}
-          clickOk={handleOk}
-          clickCancel={handleCancel}
-          handleClose={handleClose}
-          cityNamee={cityNamee}
-          cityId={cityId}
-          dataProvinces={dataLocationsAll}
-        />
-      ) : null}
       {isOpenAddPolicy ? (
         <AddPolicy
           show={isOpenAddPolicy}
@@ -1651,16 +1469,6 @@ export default function menuMaster() {
           idCity={idCity}
           provNamee={provNamee}
           dataCity={dataLocationsAll}
-        />
-      ) : null}
-      {isOpenEditJalan ? (
-        <EditAddress
-          show={isOpenEditJalan}
-          clickOk={handleOk}
-          clickCancel={handleCancel}
-          handleClose={handleClose}
-          idJalan={idJalan}
-          dataJalan={dataLocationsAll}
         />
       ) : null}
       {isOpenEditPolicy ? (
@@ -1779,16 +1587,8 @@ export default function menuMaster() {
                 dataSource={filterRCPA}
                 columns={columnsCity}
               ></Table>
-              {/* <Table
-                //Jalan
-                scroll={{ x: true }}
-                size="middle"
-                dataSource={filterRCPCJ}
-                columns={columnsJalan}
-              ></Table> */}
             </Tabs.TabPane>
             {/* Tab 1 end-------------------------------------------------------------------------------------------------------------------------------------- */}
-
             {/* Tabs 2 ---------------------------------------------------------------------------------------------------------------------------------------- */}
             <Tabs.TabPane tab="Policy" key="policy">
               <div
@@ -1868,14 +1668,6 @@ export default function menuMaster() {
                     <Select.Option value="SOFTDRINK">SOFTDRINK</Select.Option>
                     {/* <Select.Option value="">ALL</Select.Option> */}
                   </Select>
-                  <Button
-                    htmlType="submit"
-                    // onClick={}
-                    style={{ marginLeft: '1%  ', marginRight: '1%' }}
-                  >
-                    <SearchOutlined style={{ color: '#3399FF' }} />
-                    Search
-                  </Button>
                 </div>
               </Form.Item>
               <Table

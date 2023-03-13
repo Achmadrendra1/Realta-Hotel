@@ -13,12 +13,11 @@ import {
   doDelCountryFailed,
 } from '../../Action/Master/actionCountry';
 import { API } from '@/Redux/Configs/consumeApi';
-import axios from "axios";
-
+import axios from 'axios';
 
 //_____________________________________________________________________________________________________________________________________________________________________________________________________________________
 //  GET
-function* handlerCountry  (): any {
+function* handlerCountry(): any {
   try {
     const result = yield axios(API('GET', '/country'));
     yield put(doCountrySucceed(result.data));
@@ -27,7 +26,6 @@ function* handlerCountry  (): any {
     yield put(doCountryFailed(error));
   }
 }
-
 
 //_____________________________________________________________________________________________________________________________________________________________________________________________________________________
 //  ADD
@@ -45,20 +43,19 @@ function* handlerAddCountry(action: any): any {
   }
 }
 
-
 //_____________________________________________________________________________________________________________________________________________________________________________________________________________________
 //  UPDATE
 function* handlerUpdateCountry(action: any): any {
   try {
     yield axios(
-      API("PUT", "country/edit/" + action.payload.countryId, action.payload)
+      API('PUT', '/country/edit/' + action.payload.country_id, action.payload)
     );
     yield put(doUpdateCountrySucceed(action.payload));
   } catch (error: any) {
-    const delay = (time: any) =>
-      new Promise((resolve) => setTimeout(resolve, time));
-    yield put(doUpdateCountryFailed(error.response.data.message));
-    yield call(delay, 6000);
+    // const delay = (time: any) =>
+    //   new Promise((resolve) => setTimeout(resolve, time));
+    // yield put(doUpdateCountryFailed(error.response.data.message));
+    // yield call(delay, 6000);
     yield put(doUpdateCountryFailed(null));
   }
 }
@@ -67,14 +64,11 @@ function* handlerUpdateCountry(action: any): any {
 //  DELETE
 function* handlerDeleteCountry(action: any): any {
   try {
-    yield axios(API("DELETE", "/country/delete/" + action.payload));
+    yield axios(API('DELETE', '/country/delete/' + action.payload));
     yield put(doDelCountrySucceed(action.payload));
   } catch (error: any) {
-    console.log(error);
   }
 }
-
-
 
 //_____________________________________________________________________________________________________________________________________________________________________________________________________________________
 
@@ -84,4 +78,3 @@ export {
   handlerUpdateCountry,
   handlerDeleteCountry,
 };
- 

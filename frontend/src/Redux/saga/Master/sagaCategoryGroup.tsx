@@ -12,9 +12,8 @@ import {
   doDelCategoryGroupSucceed,
   doDelCategoryGroupFailed,
 } from '../../Action/Master/actionCategoryGroup';
-import { API } from '@/Redux/Configs/consumeApi';
-import axios from "axios";
-
+import { API, FORMAPI } from '@/Redux/Configs/consumeApi';
+import axios from 'axios';
 
 //_____________________________________________________________________________________________________________________________________________________________________________________________________________________
 //  GET
@@ -28,31 +27,31 @@ function* handlerCategoryGroup(): any {
   }
 }
 
-
 //_____________________________________________________________________________________________________________________________________________________________________________________________________________________
 //  ADD
 
 function* handlerAddCategoryGroup(action: any): any {
   try {
-    const res = yield axios(API('POST', '/category/upload', action.payload));
+    const res = yield axios(
+      FORMAPI('POST', '/category/upload', action.payload)
+    );
     yield put(doAddCategoryGroupSucceed(res.data.result));
     return res.data.result;
   } catch (error: any) {
-    const delay = (time: any) =>
-      new Promise((resolve) => setTimeout(resolve, time));
-    yield put(doAddCategoryGroupFailed(error.response.data.message));
-    yield call(delay, 6000);
-    yield put(doAddCategoryGroupFailed(null));
+    // const delay = (time: any) =>
+    //   new Promise((resolve) => setTimeout(resolve, time));
+    // yield put(doAddCategoryGroupFailed(error.response.data.message));
+    // yield call(delay, 6000);
+    // yield put(doAddCategoryGroupFailed(null));
   }
 }
-
 
 //_____________________________________________________________________________________________________________________________________________________________________________________________________________________
 //  UPDATE
 function* handlerUpdateCategoryGroup(action: any): any {
   try {
     yield axios(
-      API("PUT", "category/edit/" + action.payload.cagroId, action.payload)
+      API('PUT', '/category/edit/' + action.payload.cagroId, action.payload)
     );
     yield put(doUpdateCategoryGroupSucceed(action.payload));
   } catch (error: any) {
@@ -68,13 +67,11 @@ function* handlerUpdateCategoryGroup(action: any): any {
 //  DELETE
 function* handlerDeleteCategoryGroup(action: any): any {
   try {
-    yield axios(API("DELETE", "/category/delete/" + action.payload));
+    yield axios(API('DELETE', '/category/delete/' + action.payload));
     yield put(doDelCategoryGroupSucceed(action.payload));
   } catch (error: any) {
-    console.log(error);
   }
 }
-
 
 //_____________________________________________________________________________________________________________________________________________________________________________________________________________________
 
@@ -84,4 +81,3 @@ export {
   handlerUpdateCategoryGroup,
   handlerDeleteCategoryGroup,
 };
-  

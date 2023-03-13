@@ -17,11 +17,10 @@ export default function EditRegions(props: any) {
   const handleInputChange = (input: any) => (e: any) => {
     setFormValues({ ...formValues, [input]: e.target.value });
   };
-
+  
   const onFinish = () => {
     dispatch(doUpdateRegions(formValues));
     handleClose(false);
-    window.location.reload();
   };
 
   const onFinishFailed = (errorInfo: any) => {

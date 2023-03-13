@@ -23,16 +23,10 @@ export default function EditCategory(props: any) {
   const onFinish = (event: any) => {
     dispatch(doUpdateCategoryGroup(formValues));
     handleClose(false);
-    location.reload();
   };
 
   const onFinishFailed = (errorInfo: any) => {
-    console.log('Failed:', errorInfo);
   };
-
-  const [file, setFile] = useState('');
-  const { Search } = Input;
-  const onSearch = (value: string) => console.log(value);
 
   return (
     <>
@@ -91,22 +85,6 @@ export default function EditCategory(props: any) {
           </Form.Item>
           <Form.Item
             style={{ marginTop: '1%' }}
-            label="Policy Rules"
-            name={'poliName'}
-            rules={[]}
-          >
-            <Search
-              style={{
-                width: '80%',
-                marginLeft: '10%',
-                marginTop: '1%',
-              }}
-              placeholder="Search Policy Rules"
-              onChange={handleInputChange('poliName')}
-            />
-          </Form.Item>
-          <Form.Item
-            style={{ marginTop: '1%' }}
             label="Descriptions"
             name={'cagroDescription'}
             rules={[{ required: true, message: 'Please input Description!' }]}
@@ -121,25 +99,6 @@ export default function EditCategory(props: any) {
               autoSize={{ minRows: 5 }}
               onChange={handleInputChange('cagroDescription')}
             />
-          </Form.Item>
-          <Form.Item style={{ marginTop: '1%' }} label="ICON" name={'room.png'}>
-            <Upload.Dragger
-              name="icon"
-              beforeUpload={(file: any) => {
-                setFile(file);
-                return false;
-              }}
-              accept=".png, .svg"
-              showUploadList={false}
-            >
-              <p className="ant-upload-drag-icon">
-                <InboxOutlined />
-              </p>
-              <p className="ant-upload-text">
-                Click or drag file to this area to upload
-              </p>
-              <p className="ant-upload-hint">Only PNG files are allowed</p>
-            </Upload.Dragger>
           </Form.Item>
           <Form.Item label=" " colon={false} style={{ textAlign: 'right' }}>
             <Button htmlType="reset" onClick={props.clickCancel}>

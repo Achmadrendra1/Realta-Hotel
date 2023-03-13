@@ -1,3 +1,19 @@
+-- SET VAL
+
+SELECT setval('master."regions_region_code_seq"', (SELECT MAX(region_code) FROM master.regions));
+
+SELECT setval('master."country_country_id_seq"', (SELECT MAX(country_id) FROM master.country));
+
+SELECT setval('master."proviences_prov_id_seq"', (SELECT MAX(prov_id) FROM master.proviences));
+
+SELECT setval('master."address_addr_id_seq"', (SELECT MAX(addr_id) FROM master.address));
+
+SELECT setval('master."policy_poli_id_seq"', (SELECT MAX(poli_id) FROM master.policy));
+
+SELECT setval('master."category_group_cagro_id_seq"', (SELECT MAX(cagro_id) FROM master.category_group));
+
+SELECT setval('master."service_task_seta_id_seq"', (SELECT MAX(seta_id) FROM master.service_task));
+
 -- ALL 
 
 CREATE OR REPLACE FUNCTION master.getCagroId()

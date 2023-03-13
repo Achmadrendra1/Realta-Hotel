@@ -33,6 +33,15 @@ function regionsReducer(state = initialState, action: any) {
       return { ...state, regions: [...state.regions, action.payload] };
 
     //-----------------------------------------------------------------------------------------------------------------------------------------
+    // Update
+    case ActionTypes.UPDATE_REGIONS:
+      return { ...state };
+    case ActionTypes.UPDATE_REGIONS_SUCCEED:
+      return { ...state, regions: [...state.regions, action.payload] };
+    case ActionTypes.UPDATE_REGIONS_FAILED:
+      return { ...state, regions: [...state.regions, action.payload] };
+
+    //-----------------------------------------------------------------------------------------------------------------------------------------
     // DEL
     case ActionTypes.DEL_REGIONS:
       return { ...state };

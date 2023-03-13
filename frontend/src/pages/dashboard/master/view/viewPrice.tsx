@@ -10,7 +10,6 @@ export default function ViewPrice(props: any) {
   const [formValues, setFormValues] = useState(detailsPrice);
 
   const onFinish = () => {
-    console.log('Success:', formValues);
     handleClose(false);
   };
 

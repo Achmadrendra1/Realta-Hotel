@@ -51,7 +51,7 @@ function* handlerAddLocations(action: any): any {
 function* handlerUpdateLocations(action: any): any {
   try {
     yield axios(
-      API("PUT", "regions/locations/edit/" + action.payload.regionCode, action.payload)
+      API("PUT", "/regions/locations/edit/" + action.payload.region_code, action.payload)
     );
     yield put(doUpdateLocationsSucceed(action.payload));
   } catch (error: any) {
@@ -70,7 +70,6 @@ function* handlerDeleteLocations(action: any): any {
     yield axios(API("DELETE", "/regions/locations/delete/" + action.payload));
     yield put(doDelLocationsSucceed(action.payload));
   } catch (error: any) {
-    console.log(error);
   }
 }
 

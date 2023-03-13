@@ -33,6 +33,15 @@ function membersReducer(state = initialState, action: any) {
       return { ...state, members: [...state.members, action.payload] };
 
     //-----------------------------------------------------------------------------------------------------------------------------------------
+    // UPDATE
+    case ActionTypes.UPDATE_MEMBERS:
+      return { ...state };
+    case ActionTypes.UPDATE_MEMBERS_SUCCEED:
+      return { ...state, members: [...state.members, action.payload] };
+    case ActionTypes.UPDATE_MEMBERS_FAILED:
+      return { ...state, members: [...state.members, action.payload] };
+
+    //-----------------------------------------------------------------------------------------------------------------------------------------
     // DEL
     case ActionTypes.DEL_MEMBERS:
       return { ...state };

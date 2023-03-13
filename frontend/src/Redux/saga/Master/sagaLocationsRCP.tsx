@@ -27,12 +27,11 @@ function* handlerLocationsRCP(): any {
   }
 }
 
-
 //_____________________________________________________________________________________________________________________________________________________________________________________________________________________
 //  ADD
 function* handlerAddLocationsRCP(action: any): any {
   try {
-    const res = yield axios(API('POST', '/regions/locationsRCP/insert', action.payload));
+    const res = yield axios(API('POST', '/provinces/insert', action.payload));
     yield put(doAddLocationsRCPSucceed(res.data.result));
     return res.data.result;
   } catch (error: any) {
@@ -44,13 +43,16 @@ function* handlerAddLocationsRCP(action: any): any {
   }
 }
 
-
 //_____________________________________________________________________________________________________________________________________________________________________________________________________________________
 //  UPDATE
 function* handlerUpdateLocationsRCP(action: any): any {
   try {
     yield axios(
-      API('PUT', 'regions/locationsRCP/edit/' + action.payload.regionCode, action.payload)
+      API(
+        'PUT',
+        '/regions/locationsRCP/edit/' + action.payload.region_code,
+        action.payload
+      )
     );
     yield put(doUpdateLocationsRCPSucceed(action.payload));
   } catch (error: any) {
@@ -62,18 +64,17 @@ function* handlerUpdateLocationsRCP(action: any): any {
   }
 }
 
-
 //_____________________________________________________________________________________________________________________________________________________________________________________________________________________
 //  Delete
 function* handlerDeleteLocationsRCP(action: any): any {
   try {
-    yield axios(API('DELETE', '/regions/locationsRCP/delete/' + action.payload));
+    yield axios(
+      API('DELETE', '/regions/locationsRCP/delete/' + action.payload)
+    );
     yield put(doDelLocationsRCPSucceed(action.payload));
   } catch (error: any) {
-    console.log(error);
   }
 }
-
 
 //_____________________________________________________________________________________________________________________________________________________________________________________________________________________
 

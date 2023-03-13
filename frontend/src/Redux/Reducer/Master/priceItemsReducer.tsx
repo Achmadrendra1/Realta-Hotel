@@ -33,6 +33,15 @@ function priceItemsReducer(state = initialState, action: any) {
       return { ...state, priceItems: [...state.priceItems, action.payload] };
 
     //-----------------------------------------------------------------------------------------------------------------------------------------
+    // UPDATE
+    case ActionTypes.UPDATE_PRICE_ITEMS:
+      return { ...state };
+    case ActionTypes.UPDATE_PRICE_ITEMS_SUCCEED:
+      return { ...state, priceItems: [...state.priceItems, action.payload] };
+    case ActionTypes.UPDATE_PRICE_ITEMS_FAILED:
+      return { ...state, priceItems: [...state.priceItems, action.payload] };
+
+    //-----------------------------------------------------------------------------------------------------------------------------------------
     // DEL
     case ActionTypes.DEL_PRICE_ITEMS:
       return { ...state };

@@ -2,7 +2,6 @@
 
 //Artificial
 import ActionTypes from '@/Redux/Constant/Master/masterActionType';
-import serviceTask from '@/components/master/serviceTask';
 
 interface InitialState {
   serviceTask: any[];
@@ -31,6 +30,15 @@ function serviceTaskReducer(state = initialState, action: any) {
     case ActionTypes.ADD_SERVICE_TASK_SUCCEED:
       return { ...state, serviceTask: [...state.serviceTask, action.payload] };
     case ActionTypes.ADD_SERVICE_TASK_FAILED:
+      return { ...state, serviceTask: [...state.serviceTask, action.payload] };
+
+    //-----------------------------------------------------------------------------------------------------------------------------------------
+    // UPDATE
+    case ActionTypes.UPDATE_SERVICE_TASK:
+      return { ...state };
+    case ActionTypes.UPDATE_SERVICE_TASK_SUCCEED:
+      return { ...state, serviceTask: [...state.serviceTask, action.payload] };
+    case ActionTypes.UPDATE_SERVICE_TASK_FAILED:
       return { ...state, serviceTask: [...state.serviceTask, action.payload] };
 
     //-----------------------------------------------------------------------------------------------------------------------------------------
