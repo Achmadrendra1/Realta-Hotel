@@ -17,15 +17,15 @@ export default function AddProvinces(props: any) {
   const details = dataProvinces.find(
     (item: any) => item.prov_name == provNamee
   );
-  const [formValues, setFormValues] = useState(details);
 
+  const [formValues, setFormValues] = useState(details);
   const handleInputChange = (input: any) => (e: any) => {
     setFormValues({ ...formValues, [input]: e.target.value });
   };
 
   const onFinish = (data: any) => {
     dispatch(doAddAddress(data));
-    dispatch(doUpdateAddress(formValues));
+    dispatch(doUpdateAddress(formValues));  
     window.location.reload();
     handleClose(false);
     alert;
@@ -83,6 +83,24 @@ export default function AddProvinces(props: any) {
               disabled
             />
           </Form.Item>
+          {/* jalan */}
+          <Form.Item
+            style={{ marginTop: '5%' }}
+            // label={`${addr_line2}`}
+            name={'addr_line1'}
+            rules={[{ required: true, message: 'Please input Address name!' }]}
+          >
+            <Input
+              style={{
+                width: '80%',
+                marginLeft: '10%',
+                marginTop: '3%',
+              }}
+              placeholder="Input Jalan Name"
+              // onChange={handleInputChange('Provinces_name')}
+            />
+          </Form.Item>
+          {/* kota */}
           <Form.Item
             style={{ marginTop: '5%' }}
             // label={`${addr_line2}`}

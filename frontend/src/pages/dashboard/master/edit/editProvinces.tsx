@@ -22,6 +22,7 @@ export default function EditProvinces(props: any) {
     dispatch(doUpdateProvinces(formValues));
     handleClose(false);
     window.location.reload();
+
   };
 
   const onFinishFailed = (errorInfo: any) => {

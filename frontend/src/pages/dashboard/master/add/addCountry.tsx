@@ -27,13 +27,12 @@ export default function AddCountry(props: any) {
     dispatch(doAddCountry(data));
     dispatch(doUpdateCountry(formValues));
     handleClose(false);
-    // window.location.reload();
+    window.location.reload();
     handleClose(false);
     alert;
   };
 
-  const onFinishFailed = (errorInfo: any) => {
-  };
+  const onFinishFailed = (errorInfo: any) => {};
 
   //Alert
   const [visible, setVisible] = useState('hidden');
@@ -74,10 +73,10 @@ export default function AddCountry(props: any) {
           >
             <Input
               // type="hidden"
+              type="hidden"
               style={{
                 width: '80%',
                 marginLeft: '10%',
-                marginTop: '3%',
               }}
               placeholder="Input regions Name"
               // onChange={handleInputChange('country_region_id')}
@@ -86,7 +85,6 @@ export default function AddCountry(props: any) {
           </Form.Item>
 
           <Form.Item
-            style={{ marginTop: '5%' }}
             label="Country Name"
             name={'country_name'}
             rules={[{ required: true, message: 'Please input regions name!' }]}
@@ -95,7 +93,6 @@ export default function AddCountry(props: any) {
               style={{
                 width: '80%',
                 marginLeft: '10%',
-                marginTop: '3%',
               }}
               placeholder="Input Country Name"
               // onChange={handleInputChange('country_name')}

@@ -83,7 +83,7 @@ export class AddressService {
   async createAddress(data: any): Promise<Address> {
     const address = new Address();
     address.addrLine2 = data.addr_line2;
-    address.addrLine1 = data.adddr_line1;
+    address.addrLine1 = data.addr_line1;
     address.addrProv = data.addr_prov_id;
     return await this.addressRepository.save(address);
   }
@@ -92,7 +92,7 @@ export class AddressService {
   async updateAddress(addrId: number, data: any): Promise<Address> {
     const address = new Address();
     address.addrLine2 = data.addr_line2;
-    address.addrLine1 = data.adddr_line1;
+    address.addrLine1 = data.addr_line1;
     address.addrProv = data.addr_prov_id;
     return await this.addressRepository
       .update({ addrId: addrId }, address)

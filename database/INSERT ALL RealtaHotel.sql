@@ -83,13 +83,13 @@ VALUES
 INSERT INTO master.category_group
 	(cagro_id, cagro_name, cagro_description, cagro_type, cagro_icon, cagro_icon_url)
 VALUES
-	(1, 'Room', 'Category for room type', 'Facility', 'room.png', 'https://Realta-Hotels.com/room.png'),
-	(2, 'Restaurant', 'Category for restaurant service', 'Service', 'restaurant.png', 'https://Realta-Hotels.com/restaurant.png'),
-	(3, 'Meeting Room', 'Category for meeting room service', 'Service', 'meeting.png', 'https://Realta-Hotels.com/meeting.png'),
-	(4, 'Gym', 'Category for gym service', 'Facility', 'gym.png', 'https://Realta-Hotels.com/gym.png'),
-	(5, 'Hall', 'Category for hall service', 'Facility', 'hall.png', 'https://Realta-Hotels.com/hall.png'),
-	(6, 'Swimming Pool', 'Category for swimming pool service', 'Facility', 'pool.png', 'https://Realta-Hotels.com/pool.png'),
-	(7, 'Ballroom', 'Category for ballroom service', 'Facility', 'ballroom.png', 'https://Realta-Hotels.com/ballroom.png');
+	(1, 'Room', 'Category for room type', 'Facility', 'room.png', '../../assets//master/room.svg'),
+	(2, 'Restaurant', 'Category for restaurant service', 'Service', 'restaurant.png', '../../assets/master/resto.svg'),
+	(3, 'Meeting Room', 'Category for meeting room service', 'Service', 'meeting.png', '../../assets/master/meeting.svg'),
+	(4, 'Gym', 'Category for gym service', 'Facility', 'gym.png', '../../assets/master/gym.svg'),
+	(5, 'Hall', 'Category for hall service', 'Facility', 'hall.png', '../../assets/master/aula.svg'),
+	(6, 'Swimming Pool', 'Category for swimming pool service', 'Facility', 'pool.png', '../../assets/master/swimming-pool.svg'),
+	(7, 'Ballroom', 'Category for ballroom service', 'Facility', 'ballroom.png', '../../assets/master/swimming-pool.svg');
 -- (8, 'Layanan Kecantikan', 'Kategori untuk layanan kecantikan', 'Layanan', 'beauty.png', 'https://example.com/beauty.png'),
 -- (9, 'Layanan Transportasi', 'Kategori untuk layanan transportasi', 'Layanan', 'transportation.png', 'https://example.com/transportation.png'),
 -- (10, 'Layanan Cuci Kering', 'Kategori untuk layanan cuci kering', 'Layanan', 'laundry.png', 'https://example.com/laundry.png'),

@@ -95,9 +95,10 @@ export class RegionsService {
 
   //create new
   async createRegions(data: Regions): Promise<Regions> {
-    return await this.regionsRepository.save(
-      this.regionsRepository.create(data),
-    );
+    
+    return await 
+      this.regionsRepository.save(data)
+    ;
   }
 
   //update

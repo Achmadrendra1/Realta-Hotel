@@ -52,7 +52,7 @@ function* handlerAddPolicy(action: any): any {
 function* handlerUpdatePolicy(action: any): any {
   try {
     yield axios(
-      API("PUT", "policy/edit/" + action.payload.poliId, action.payload)
+      API("PUT", "/policy/edit/" + action.payload.poliId, action.payload)
     );
     yield put(doUpdatePolicySucceed(action.payload));
   } catch (error: any) {
@@ -72,7 +72,6 @@ function* handlerDeletePolicy(action: any): any {
     yield axios(API("DELETE", "/policy/delete/" + action.payload));
     yield put(doDelPolicySucceed(action.payload));
   } catch (error: any) {
-    console.log(error);
   }
 }
 

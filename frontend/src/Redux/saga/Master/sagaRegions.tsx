@@ -27,7 +27,6 @@ function* handlerRegions(): any {
   }
 }
 
-
 //_____________________________________________________________________________________________________________________________________________________________________________________________________________________
 //  ADD
 function* handlerAddRegions(action: any): any {
@@ -44,13 +43,12 @@ function* handlerAddRegions(action: any): any {
   }
 }
 
-
 //_____________________________________________________________________________________________________________________________________________________________________________________________________________________
 //  UPDATE
 function* handlerUpdateRegions(action: any): any {
   try {
     yield axios(
-      API('PUT', 'regions/edit/' + action.payload.regionCode, action.payload)
+      API('PUT', '/regions/edit/' + action.payload.region_code, action.payload)
     );
     yield put(doUpdateRegionsSucceed(action.payload));
   } catch (error: any) {
@@ -62,7 +60,6 @@ function* handlerUpdateRegions(action: any): any {
   }
 }
 
-
 //_____________________________________________________________________________________________________________________________________________________________________________________________________________________
 //  Delete
 
@@ -71,7 +68,6 @@ function* handlerDeleteRegions(action: any): any {
     yield axios(API('DELETE', '/regions/delete/' + action.payload));
     yield put(doDelRegionsSucceed(action.payload));
   } catch (error: any) {
-    console.log(error);
   }
 }
 

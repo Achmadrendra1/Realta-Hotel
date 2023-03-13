@@ -1,15 +1,6 @@
 import { doAddCategoryGroup } from '@/Redux/Action/Master/actionCategoryGroup';
 import { SaveOutlined, UndoOutlined } from '@ant-design/icons';
-import {
-  Button,
-  Divider,
-  Form,
-  Input,
-  Modal,
-  Select,
-  Upload,
-  message,
-} from 'antd';
+import { Button, Divider, Form, Input, Modal, Select } from 'antd';
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 
@@ -20,16 +11,12 @@ export default function AddCategory(props: any) {
 
   //D  versi
   const onFinish = (e: any) => {
-    console.log('Success:', e);
+    // location.reload();
     dispatch(doAddCategoryGroup(dataUp));
-    console.log(dataUp)
     handleClose(false);
-    window.location.reload()
   };
 
-  const onFinishFailed = (errorInfo: any) => {
-    console.log('Failed:', errorInfo);
-  };
+  const onFinishFailed = (errorInfo: any) => {};
 
   //D PICTURE
 
@@ -49,18 +36,15 @@ export default function AddCategory(props: any) {
     setDeskCagro(value.target.value);
   };
 
- 
-
   const onUploadLogo = (e: any) => {
     const img = e.target.files[0];
-    
     let formData = new FormData();
+
     formData.append('file', img);
     formData.append('cagroName', namaCagro);
     formData.append('cagroDescription', tipeCagro);
     formData.append('cagroType', deskCagro);
     setDataUp(formData);
-    console.log(formData)
   };
 
   let optionValPolicy: any = [{ value: '', label: 'Please choose' }];
@@ -78,7 +62,6 @@ export default function AddCategory(props: any) {
         title="Add New Category"
         open={props.show}
         onOk={props.clickOk}
-        // confirmLoading={confirmLoading}
         onCancel={props.clickCancel}
         style={{ top: 20 }}
         footer={null}
@@ -87,7 +70,6 @@ export default function AddCategory(props: any) {
           layout="vertical"
           onFinish={onFinish}
           onFinishFailed={onFinishFailed}
-          autoComplete="off"
         >
           <p>
             <Divider style={{ borderWidth: '2px' }} />
@@ -163,7 +145,7 @@ export default function AddCategory(props: any) {
                 marginLeft: '10%',
                 marginTop: '1%',
               }}
-              placeholder="  Descriptions"
+              placeholder=" Descriptions"
               onChange={handleInputDesk}
               autoSize={{ minRows: 5 }}
             />

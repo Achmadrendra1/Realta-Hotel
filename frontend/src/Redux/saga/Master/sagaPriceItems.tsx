@@ -51,7 +51,7 @@ function* handlerAddPriceItems(action: any): any {
 function* handlerUpdatePriceItems(action: any): any {
   try {
     yield axios(
-      API("PUT", "price/edit/" + action.payload.pritId, action.payload)
+      API("PUT", "/price/edit/" + action.payload.pritId, action.payload)
     );
     yield put(doUpdatePriceItemsSucceed(action.payload));
   } catch (error: any) {
@@ -72,7 +72,6 @@ function* handlerDeletePriceItems(action: any): any {
     yield axios(API("DELETE", "/price/delete/" + action.payload));
     yield put(doDelPriceItemsSucceed(action.payload));
   } catch (error: any) {
-    console.log(error);
   }
 }
 

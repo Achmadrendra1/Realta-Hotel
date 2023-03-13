@@ -26,10 +26,8 @@ export default function EditPrice(props: any) {
   };
 
   const onFinish = () => {
-    console.log('Success:', formValues);
     dispatch(doUpdatePriceItems(formValues));
     handleClose(false);
-    window.location.reload();
   };
 
   const onFinishFailed = (errorInfo: any) => {

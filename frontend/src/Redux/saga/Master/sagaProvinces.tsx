@@ -12,9 +12,8 @@ import {
   doDelProvincesSucceed,
   doDelProvincesFailed,
 } from '../../Action/Master/actionProvinces';
-import axios from "axios";
+import axios from 'axios';
 import { API } from '@/Redux/Configs/consumeApi';
-
 
 //_____________________________________________________________________________________________________________________________________________________________________________________________________________________
 //  GET
@@ -27,7 +26,6 @@ function* handlerProvinces(): any {
     yield put(doProvincesFailed(error));
   }
 }
-
 
 //_____________________________________________________________________________________________________________________________________________________________________________________________________________________
 //  ADD
@@ -45,13 +43,12 @@ function* handlerAddProvinces(action: any): any {
   }
 }
 
-
 //_____________________________________________________________________________________________________________________________________________________________________________________________________________________
 //  UPDATE
 function* handlerUpdateProvinces(action: any): any {
   try {
     yield axios(
-      API("PUT", "provinces/edit/" + action.payload.provId, action.payload)
+      API('PUT', '/provinces/edit/' + action.payload.prov_id, action.payload)
     );
     yield put(doUpdateProvincesSucceed(action.payload));
   } catch (error: any) {
@@ -59,22 +56,20 @@ function* handlerUpdateProvinces(action: any): any {
       new Promise((resolve) => setTimeout(resolve, time));
     yield put(doUpdateProvincesFailed(error.response.data.message));
     yield call(delay, 6000);
-    doUpdateProvincesFailed  }
+    doUpdateProvincesFailed;
+  }
 }
-
 
 //_____________________________________________________________________________________________________________________________________________________________________________________________________________________
 //  Delete
 
 function* handlerDeleteProvinces(action: any): any {
   try {
-    yield axios(API("DELETE", "/provinces/delete/" + action.payload));
+    yield axios(API('DELETE', '/provinces/delete/' + action.payload));
     yield put(doDelProvincesSucceed(action.payload));
   } catch (error: any) {
-    console.log(error);
   }
 }
-
 
 //_____________________________________________________________________________________________________________________________________________________________________________________________________________________
 

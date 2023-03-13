@@ -49,7 +49,7 @@ function* handlerAddServiceTask(action: any): any {
 function* handlerUpdateServiceTask(action: any): any {
   try {
     yield axios(
-      API('PUT', 'service/edit/' + action.payload.setaId, action.payload)
+      API('PUT', '/service/edit/' + action.payload.setaId, action.payload)
     );
     yield put(doUpdateServiceTaskSucceed(action.payload));
   } catch (error: any) {
@@ -68,7 +68,6 @@ function* handlerDeleteServiceTask(action: any): any {
     yield axios(API('DELETE', '/service/delete/' + action.payload));
     yield put(doDelServiceTaskSucceed(action.payload));
   } catch (error: any) {
-    console.log(error);
   }
 }
 
