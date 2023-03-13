@@ -99,7 +99,7 @@ export default withAuth(function HotelDetails() {
       key: "1",
       width: "10%",
       render: (_:any,record:any)=>{
-        let foto = record?.facilityPhotos[0].faphoPhotoFilename
+        let foto = record?.facilityPhotos[0]?.faphoPhotoFilename
         return(
           <Image 
           src= {`${configuration.BASE_URL}/facility-photos/${foto}`} 

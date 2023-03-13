@@ -366,7 +366,7 @@ export default withAuth( function restoMenu() {
 
   const [isThumbnail, setisThumbnail] = useState(false);
   const [viewThumbnailPhoto, setViewThumbnailPhoto] = useState([]); // all photo not primary
-  const [thumbnail, setThumbnail] = useState({
+  const [primaryPhoto, setPrimaryPhoto] = useState({
     remename: '',
     rempid: 0,
     rempphotofilename: '',
@@ -417,6 +417,7 @@ export default withAuth( function restoMenu() {
           rempthumbnailfilename: photo.rempthumbnailfilename,
           rempurl: `${configuration.BASE_URL}/${photo?.rempurl}`
         })
+        setPrimaryPhoto(newDataPhoto)
       }
     })
     setViewThumbnailPhoto(migratePhoto)
@@ -463,7 +464,11 @@ export default withAuth( function restoMenu() {
     })
 
     dispatch(doUpdatePrimary(newPhotoPrimary)) 
-
+    messageApi.open({
+      type: 'success',
+      content: 'Thumbnail photo successfully updated!',
+      duration: 5
+    });
     
     setNewPrimary({
       remename: '',
@@ -875,7 +880,10 @@ export default withAuth( function restoMenu() {
           <>
             <Button key="back" onClick={handleCancelThumbnail}>Cancel</Button>
             { viewThumbnailPhoto.length > 0 ? 
-              <Button key="submit" onClick={updatePhoto} className='bg-sky-500 text-white' onMouseEnter={(e:any) => { e.target.style.color = '#fff'; }}>Set as thumbnail</Button>
+              <>
+                {contextHolder}
+                <Button key="submit" onClick={updatePhoto} className='bg-sky-500 text-white' onMouseEnter={(e:any) => { e.target.style.color = '#fff'; }}>Set as thumbnail</Button>
+              </>
             : '' }
           </>
         ]}
@@ -910,7 +918,7 @@ export default withAuth( function restoMenu() {
                       <p className='text-base text-center'>Photo {i+1}</p> 
                     </div>
                   </button>
-                  { photo.rempid != newPrimary.rempid ? 
+                  { photo.rempid != primaryPhoto.rempid ? 
                     <div className='text-center pb-2'>
                       <Popconfirm
                         placement="bottomRight"
@@ -947,7 +955,7 @@ export default withAuth( function restoMenu() {
       
       {/* ------------------------- ADD MULTIPLE PHOTO ------------------------------- */}
       <Modal
-        title="Upload Photo Multiple"
+        title="Upload Photo"
         open={showAddMultiple}
         onOk={saveMultiplePhoto}
         onCancel={cancelAddMultiple}

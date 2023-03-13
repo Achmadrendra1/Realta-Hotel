@@ -412,7 +412,7 @@ export default function menu({ restaurant }:any) {
             <hr className="my-5 border-t-2" />
 
             <div className="mt-3 lg:flex  my-20">
-              <div className="lg:w-3/5 sm:full sm:mb-4 border rounded-xl shadow p-3 lg:mr-2 bg-white">
+              <div className="lg:w-3/5 sm:full sm:mb-4 border rounded-xl shadow p-3 lg:mr-2 bg-white lg:mb-0">
                 <div className="text-xl font-bold text-center">
                   Menus
                 </div>
@@ -531,7 +531,7 @@ export default function menu({ restaurant }:any) {
                     </div>
                     {cart &&
                       cart.map((order: any) => (
-                        <div className="border rounded-lg p-4 shadow-md gap-y-2 my-5 flex">
+                        <div className="border rounded-lg p-4 shadow-md gap-y-2 my-5 flex" key={order.remeid}>
                           <img
                             src={`${configuration.BASE_URL}/${order.rempurl}`}
                             alt={order.remename}
@@ -647,7 +647,7 @@ export default function menu({ restaurant }:any) {
             ]}
           >
             <div>
-              <img src={selected.rempurl} alt="menu" />
+              <img src={selected.rempurl} alt="menu" className="h-80 w-full object-cover"/>
             </div>
             {/* <Carousel autoplay> */}
             <div className="flex">
