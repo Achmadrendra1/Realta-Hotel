@@ -11,12 +11,12 @@ export default function AddCategory(props: any) {
 
   //D  versi
   const onFinish = (e: any) => {
+    // location.reload();
     dispatch(doAddCategoryGroup(dataUp));
     handleClose(false);
   };
 
-  const onFinishFailed = (errorInfo: any) => {
-  };
+  const onFinishFailed = (errorInfo: any) => {};
 
   //D PICTURE
 

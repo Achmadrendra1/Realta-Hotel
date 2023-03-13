@@ -55,9 +55,9 @@ export class CategoryGroupController {
   @Post('upload')
   @UseInterceptors(
     FileInterceptor('file', {
-      dest: 'public/upload',
+      dest: './public/upload',
       storage: diskStorage({
-        destination: 'public/upload',
+        destination: './public/upload',
         filename(req, file, cb) {
           return cb(null, file.originalname);
         },
