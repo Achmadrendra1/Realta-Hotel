@@ -46,7 +46,7 @@ export default function EditProfile(props: any) {
 
   
   const onFinish = () => {
-    console.log("Success:", formValues);
+    // console.log("Success:", formValues);
     dispatch(doUpdate(formValues));
     handleClose(false);
     message.success("Data Berhasil Diubah", 1.5)
@@ -76,7 +76,7 @@ export default function EditProfile(props: any) {
 
 
   const onFinishFailed = (errorInfo: any) => {
-    console.log("Failed:", errorInfo);
+    // console.log("Failed:", errorInfo);
   };
 
   return (

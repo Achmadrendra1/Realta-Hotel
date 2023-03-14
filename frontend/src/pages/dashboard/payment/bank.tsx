@@ -74,7 +74,7 @@ export default withAuth( function Bank() {
   };
 
   const handleCancel = () => {
-    console.log("Clicked cancel button");
+    // console.log("Clicked cancel button");
     setOpenAddBank(false);
     setOpenEditBank(false);
   };
@@ -93,11 +93,11 @@ export default withAuth( function Bank() {
       okType: "danger",
       cancelText: "No",
       onOk() {
-        console.log(id);
+        // console.log(id);
         dispatch(doDeleteBank(id));
       },
       onCancel() {
-        console.log("Cancel");
+        // console.log("Cancel");
       },
     });
   };

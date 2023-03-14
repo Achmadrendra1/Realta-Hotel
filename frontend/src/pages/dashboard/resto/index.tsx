@@ -242,7 +242,7 @@ export default withAuth( function restoMenu() {
     photos.map((photo: any) => {
       console.warn('ini photo ', photo.rempid);
 
-      let newDataPhoto = { rempId: photo.rempid, rempUrl: `${configuration.BASE_URL}/${photo.rempurl}` }
+      let newDataPhoto = { rempId: photo.rempid, rempUrl: `${configuration.BASE_URL}/resto-menu-photos/menu/${photo.rempphotofilename}` }
       // console.warn(photo.rempurl, ' satu satu');
       migratePhoto.push(newDataPhoto)
     })
@@ -258,7 +258,7 @@ export default withAuth( function restoMenu() {
 
 
     if (result.data.length !== 0) {
-      urlPhoto = `${configuration.BASE_URL}/${result.data[0].rempurl}`;
+      urlPhoto = `${configuration.BASE_URL}/resto-menu-photos/menu/${result.data[0].rempphotofilename}`;
     }
 
 
@@ -366,7 +366,7 @@ export default withAuth( function restoMenu() {
 
   const [isThumbnail, setisThumbnail] = useState(false);
   const [viewThumbnailPhoto, setViewThumbnailPhoto] = useState([]); // all photo not primary
-  const [thumbnail, setThumbnail] = useState({
+  const [primaryPhoto, setPrimaryPhoto] = useState({
     remename: '',
     rempid: 0,
     rempphotofilename: '',
@@ -403,7 +403,7 @@ export default withAuth( function restoMenu() {
         rempprimary: '0',
         rempreme: photo.rempreme,
         rempthumbnailfilename: photo.rempthumbnailfilename,
-        rempurl: `${configuration.BASE_URL}/${photo.rempurl}`
+        rempurl: `${configuration.BASE_URL}/resto-menu-photos/menu/${photo.rempphotofilename}`
       }
       migratePhoto.push(newDataPhoto)
       // } else {
@@ -415,8 +415,9 @@ export default withAuth( function restoMenu() {
           rempprimary: '1',
           rempreme: photo.rempreme,
           rempthumbnailfilename: photo.rempthumbnailfilename,
-          rempurl: `${configuration.BASE_URL}/${photo?.rempurl}`
+          rempurl: `${configuration.BASE_URL}/resto-menu-photos/menu/${photo.rempphotofilename}`
         })
+        setPrimaryPhoto(newDataPhoto)
       }
     })
     setViewThumbnailPhoto(migratePhoto)
@@ -445,7 +446,7 @@ export default withAuth( function restoMenu() {
       rempprimary: '1',
       rempreme: photo.rempreme,
       rempthumbnailfilename: photo.rempthumbnailfilename,
-      rempurl: photo.rempurl
+      rempurl: `${configuration.BASE_URL}/resto-menu-photos/menu/${photo.rempphotofilename}`
     })
 
   }
@@ -515,7 +516,7 @@ export default withAuth( function restoMenu() {
     setShowAddMultiple(false)
   } 
   function handleInputMultiple(e:any){ 
-    console.log('ini e', e);
+    // console.log('ini e', e);
     
     let multiple:any = []
     let uploaded = e.target.files;
@@ -910,7 +911,7 @@ export default withAuth( function restoMenu() {
                       <p className='text-base text-center'>Photo {i+1}</p> 
                     </div>
                   </button>
-                  { photo.rempid != newPrimary.rempid ? 
+                  { photo.rempid != primaryPhoto.rempid ? 
                     <div className='text-center pb-2'>
                       <Popconfirm
                         placement="bottomRight"

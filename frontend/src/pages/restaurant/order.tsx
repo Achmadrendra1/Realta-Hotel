@@ -309,7 +309,7 @@ function Order({orderNumberUser}:any) {
               <Breadcrumb.Item>Order</Breadcrumb.Item>
             </Breadcrumb>
             <div className="lg:flex">
-              <div className="lg:w-3/5 sm:full sm:mb-4 border rounded-xl bg-white shadow p-6 lg:mr-4">
+              <div className="lg:w-3/5 sm:full sm:mb-4 border rounded-lg bg-white shadow p-6 lg:mr-4">
                 <p className="text-2xl font-semibold">Enter Your Details</p>
                 <p className="pb-5">
                   We will use these details to share your order information
@@ -571,7 +571,7 @@ function Order({orderNumberUser}:any) {
                   </Row>
                 </div>
               </div>
-              <div className="lg:w-2/5 sm:w-full border rounded-lg shadow bg-white p-3 my-4 sticky top-0 h-1/2 ">
+              <div className="lg:w-2/5 sm:w-full border rounded-lg shadow bg-white p-3 sticky top-0 h-1/2 ">
                 <p className="text-center text-2xl font-semibold mt-3">
                   Order Summary
                 </p>

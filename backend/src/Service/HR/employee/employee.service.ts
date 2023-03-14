@@ -201,7 +201,7 @@ export class EmployeeService {
 
     const deptNames = departments.deptName.split(' ');
     const jobRoles = await this.job.findOne({
-      where: { joroName: Like(`%${deptNames[0]}%`) },
+      where: { joroName: Like(`%${deptNames[0].slice(0, 5)}%`) },
     });
 
     await this.employeeStore

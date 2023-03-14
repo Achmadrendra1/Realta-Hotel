@@ -21,7 +21,7 @@ export default function ChangePassword(props: any) {
       setTimeout(() => {
       }, 2000);
     } else {
-      console.log("Success:", values);
+      // console.log("Success:", values);
       dispatch(doUpdatePassword(values));
       handleClose(false);
       message.success("Data Berhasil Diubah", 1.5);

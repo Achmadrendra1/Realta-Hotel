@@ -54,7 +54,7 @@ export default Auth( function Login() {
 
   //Pas click submit dispatch langsung, kalo formnya masih kosong validasi muncul
   const onFinish = (values: any) => {
-    console.log("Success:", values);
+    // console.log("Success:", values);
     dispatch(doLogin(values));
   };
 

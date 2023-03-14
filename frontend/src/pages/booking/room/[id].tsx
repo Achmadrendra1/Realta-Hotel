@@ -61,6 +61,7 @@ import {
   doGetAllBank,
 } from "@/Redux/Action/Payment/paymentUserAction";
 import Link from "next/link";
+import { configuration } from "@/Redux/Configs/url";
 
 export default function bookingRoom() {
   const root = useRouter();
@@ -316,9 +317,9 @@ export default function bookingRoom() {
   const dateFormatter = new Intl.DateTimeFormat("id-ID", format)
   const currentDate = dateFormatter.format(date)
   
-  let link1 = faciRoom?.length > 0 ? faciRoom[0].fapho_url : ''
-  let link2 = faciRoom?.length > 0 ? faciRoom[1].fapho_url : ''
-  let link3 = faciRoom?.length > 0 ? faciRoom[2].fapho_url : ''
+  let link1 = faciRoom?.length > 0 ? faciRoom[0]?.fapho_url : ''
+  let link2 = faciRoom?.length > 0 ? faciRoom[1]?.fapho_url : ''
+  let link3 = faciRoom?.length > 0 ? faciRoom[2]?.fapho_url : ''
   const [pict, setPict] = useState({
     pict1 : '',
     pict2 : '',
@@ -407,7 +408,7 @@ export default function bookingRoom() {
     boor_cardnumber: "",
   });
 
-  console.log(dataBooking)
+  // console.log(dataBooking)
 
 
   const [dataPayment, setDataPayment] = useState({
@@ -460,7 +461,7 @@ export default function bookingRoom() {
       }
   }, [name, faci_id])
 
-  console.log(dataBooking)
+  // console.log(dataBooking)
 
   //Handle button selected room into booking
   const handleButtonSelected = (index: any) => {
@@ -844,9 +845,9 @@ export default function bookingRoom() {
     }
   }, [selectCard, dataBooking.boor_total_amount]);
 
-  let pict1 = pict.pict1.split(',')
-  let pict2 = pict.pict2.split(',')
-  let pict3 = pict.pict3.split(',')
+  let pict1 = pict.pict1?.split(', ')
+  let pict2 = pict.pict2?.split(', ')
+  let pict3 = pict.pict3?.split(', ')
 
   return (
     <Layouts>
@@ -895,25 +896,25 @@ export default function bookingRoom() {
       ) : null}
       <div className="mb-3 rounded"></div>
       <div>
-            <Carousel slidesToShow={3}>
+            <Carousel slidesToShow={3} className="mb-4">
               <div className="w-1/8 border-2">
-                <img src={`../.${pict1[0]}`} alt="pict1"/>
+                <img src={`${configuration.BASE_URL}/facility-photos/${pict1[0]}`} alt="pict1"/>
               </div>
               <div className="w-1/8 border-2">
-                <img src={`../.${pict1[1]}`} alt="pict1"/>
+                <img src={`${configuration.BASE_URL}/facility-photos/${pict1[1]}`} alt="pict1"/>
               </div>
               <div className="w-1/8 border-2">
-                <img src={`../.${pict2[0]}`} alt="pict2"/>
+                <img src={`${configuration.BASE_URL}/facility-photos/${pict2[0]}`} alt="pict2"/>
               </div>
               <div className="w-1/8 border-2">
-                <img src={`../.${pict2[1]}`} alt="pict2"/>
+                <img src={`${configuration.BASE_URL}/facility-photos/${pict2[1]}`} alt="pict2"/>
               </div>
-              <div className="w-1/8 border-2">
+              {/* <div className="w-1/8 border-2">
                 <img src={`../.${pict3[0]}`} alt="pict3"/>
               </div>
               <div className="w-1/8 border-2">
                 <img src={`../.${pict3[1]}`} alt="pict3"/>
-              </div>
+              </div> */}
             </Carousel>
         <Row gutter={16}>
           <Col span={14} className={`${!detail ? "block" : "hidden"}`}>
@@ -1046,11 +1047,11 @@ export default function bookingRoom() {
                           <Col span={8}>
                             <div className="float-right">
                               <div className="flex justify-center">
-                                {/* <img
-                                  src={`../.${arrPict[0]}`}
+                                <img
+                                  src={`${configuration.BASE_URL}/facility-photos/${pict1[0]}`}
                                   alt=""
                                   className="w-3/4 rounded border-2"
-                                /> */}
+                                />
                               </div>
                               <div className="flex justify-center mt-5">
                                 <Buttons

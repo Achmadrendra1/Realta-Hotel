@@ -8,13 +8,13 @@ export default function AddFintech(props: any) {
   const {handleClose} = props
 
   const onFinish = (data: any) => {
-    console.log("Success:", data);
+    // console.log("Success:", data);
     dispatch(doPagaCreate(data));
     handleClose(false)
   };
   
   const onFinishFailed = (errorInfo: any) => {
-    console.log('Failed:', errorInfo);
+    // console.log('Failed:', errorInfo);
   };
   return (
     <>

@@ -73,8 +73,11 @@ const EmployeeDetail = () => {
     }
 
     useEffect(() => {
-        dispatch(getDetailEmp(parseInt(employee[0])))
+        dispatch(getDetailEmp(employee[0]))
         dispatch(getDeptSelect())
+        
+        setMutation({ ...mutation, empId: employee[0]})
+        setPayment({ ...payment, empId: employee[0]})
     }, [])
 
     useEffect(() => {
@@ -95,9 +98,6 @@ const EmployeeDetail = () => {
             sick: details?.sickleave,
             jobId: jobId?.value
         })
-        
-        setMutation({ ...mutation, empId: details?.empid})
-        setPayment({ ...payment, empId: details?.empid})
 
     }, [details])
 

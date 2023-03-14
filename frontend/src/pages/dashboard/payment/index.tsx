@@ -222,8 +222,8 @@ export default withAuth(function index() {
   // };
 
   const handleDateChange = (value: any, dateString: any) => {
-    console.log("Selected Time: ", value);
-    console.log("Formatted Selected Time: ", dateString);
+    // console.log("Selected Time: ", value);
+    // console.log("Formatted Selected Time: ", dateString);
     dispatch(
       doTransactionRequest({ startDate: dateString[0], endDate: dateString[1] })
     );
@@ -241,7 +241,7 @@ export default withAuth(function index() {
   };
 
   const handleChange = (value: string) => {
-    console.log(`selected ${value}`);
+    // console.log(`selected ${value}`);
     dispatch(doTransactionRequest({ keyword: value }));
   };
 

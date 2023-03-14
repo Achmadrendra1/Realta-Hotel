@@ -39,7 +39,7 @@ export default withAuth( function EditFacilityHotel(props: any) {
     },
 
     onSubmit: async (values:any) => {
-      console.log(values);
+      // console.log(values);
 
       let payload = new FormData();
       payload.append("faciId", values.faciId);

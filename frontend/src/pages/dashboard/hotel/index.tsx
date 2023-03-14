@@ -2,6 +2,7 @@ import { deleteHotel, getHotel } from "@/Redux/Action/Hotel/HotelAction";
 import Buttons from "@/components/Button";
 import Dashboard from "@/layouts/dashboard";
 import {
+  ArrowLeftOutlined,
   DeleteOutlined,
   EditOutlined,
   ExclamationCircleFilled,
@@ -175,14 +176,7 @@ export default withAuth(function index() {
 
   return (
     <Dashboard>
-      <Breadcrumb>
-        <Breadcrumb.Item>
-          <Link href="/dashboard/">Dashboard</Link>
-        </Breadcrumb.Item>
-        <Breadcrumb.Item>
-          <Link href="/dashboard/hotel">Hotel</Link>
-        </Breadcrumb.Item>
-      </Breadcrumb>
+      <Link href={'/dashboard/hotel'}><ArrowLeftOutlined /> Back</Link>
 
       {OpenAdd ? (
         <AddHotelsRealta

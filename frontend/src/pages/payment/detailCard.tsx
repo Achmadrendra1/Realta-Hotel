@@ -7,7 +7,6 @@ import { useDispatch } from "react-redux";
 export default function DetailCards(props: any) {
   const dispatch = useDispatch()
   const { data, dataBank, handleCancell } = props;
-  console.log(data);
   function maskCardNumber(cardNumber: number) {
     // Mengambil 4 digit terakhir
     const lastFourDigits = cardNumber.toString().slice(-4);
@@ -23,7 +22,7 @@ export default function DetailCards(props: any) {
   }
 
   const handleDelete = (accNumber:any)=>{
-    console.log(accNumber)
+    // console.log(accNumber)
     dispatch(doDeleteAccount(accNumber))
     handleCancell(false)
   }

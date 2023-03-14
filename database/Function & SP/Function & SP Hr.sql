@@ -84,7 +84,7 @@ begin
 		join hr.department dpt on edh.edhi_dept_id = dpt.dept_id
 		join hr.shift sh on edh.edhi_shift_id = sh.shift_id
 		join hr.job_role job on emp_joro_id = job.joro_id 
-	where emp_id = 1;
+	where emp_id = id;
 end; $$
 language plpgsql
 
