@@ -11,11 +11,11 @@ export default function AddPrice(props: any) {
   const onFinish = (data: any) => {
     dispatch(doAddPriceItems(data));
     handleClose(false);
+    window.location.reload();
     alert;
   };
 
-  const onFinishFailed = (errorInfo: any) => {
-  };
+  const onFinishFailed = (errorInfo: any) => {};
 
   //Alert
   const [visible, setVisible] = useState('hidden');

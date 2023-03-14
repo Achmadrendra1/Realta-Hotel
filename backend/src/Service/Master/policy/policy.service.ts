@@ -50,8 +50,7 @@ export class PolicyService {
 
   //create new
   async createPolicy(data: Policy): Promise<Policy> {
-    
-    return await this.policyRepository.save(this.policyRepository.create(data));
+    return await this.policyRepository.save(data);
   }
 
   //update

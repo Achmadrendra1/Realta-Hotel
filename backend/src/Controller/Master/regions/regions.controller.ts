@@ -82,6 +82,7 @@ export class RegionsController {
   @Post('insert')
   async createRegions(@Body() data: Regions) {
     const regions = await this.RegionsService.createRegions(data);
+    console.log('data ctrl',data);
     if (!regions) {
       return 'failed insert to regions';
     } else {
@@ -92,6 +93,8 @@ export class RegionsController {
   //update
   @Put('edit/:id')
   async update(@Param() params, @Body() body: any): Promise<any> {
+    // console.log('masuk ctrl',body);
+    
     return this.RegionsService.updateRegions(params.id, body);
   }
 

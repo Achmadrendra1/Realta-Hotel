@@ -33,6 +33,15 @@ function addressReducer(state = initialState, action: any) {
       return { ...state, address: [...state.address, action.payload] };
 
     //-----------------------------------------------------------------------------------------------------------------------------------------
+    // UPDATE
+    case ActionTypes.UPDATE_ADDRESS:
+      return { ...state };
+    case ActionTypes.UPDATE_ADDRESS_SUCCEED:
+      return { ...state, address: [...state.address, action.payload] };
+    case ActionTypes.UPDATE_ADDRESS_FAILED:
+      return { ...state, address: [...state.address, action.payload] };
+
+    //-----------------------------------------------------------------------------------------------------------------------------------------
     // DEL
     case ActionTypes.DEL_ADDRESS:
       return { ...state };

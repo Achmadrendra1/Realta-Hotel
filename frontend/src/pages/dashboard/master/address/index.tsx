@@ -50,7 +50,6 @@ export default function index() {
         dispatch(doDelAddress(id));
       },
       onCancel() {
-        console.log('CANCEL');
       },
     });
   };

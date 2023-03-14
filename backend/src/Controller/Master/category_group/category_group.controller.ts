@@ -52,16 +52,10 @@ export class CategoryGroupController {
     }
   }
 
-  // upload
-  @Get('public/:fileName')
-  getPhoto(@Param('fileName') fileName: string, @Res() res) {
-    return res.sendFile(fileName, { root: join('public/upload') });
-  }
-
   @Post('upload')
   @UseInterceptors(
     FileInterceptor('file', {
-      dest: 'public/upload',
+      dest: './public/upload',
       storage: diskStorage({
         destination: './public/upload',
         filename(req, file, cb) {
@@ -81,6 +75,11 @@ export class CategoryGroupController {
         result: result.result,
       };
     }
+  }
+  // upload
+  @Get('public/upload/:fileName')
+  getPhoto(@Param('fileName') fileName: string, @Res() res) {
+    return res.sendFile(fileName, { root: join('public/upload') });
   }
 
   // upload end

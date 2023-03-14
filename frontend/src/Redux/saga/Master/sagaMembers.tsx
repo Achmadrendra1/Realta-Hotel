@@ -50,7 +50,7 @@ function* handlerAddMembers(action: any): any {
 function* handlerUpdateMembers(action: any): any {
   try {
     yield axios(
-      API("PUT", "members/edit/" + action.payload.membName, action.payload)
+      API("PUT", "/members/edit/" + action.payload.membName, action.payload)
     );
     yield put(doUpdateMembersSucceed(action.payload));
   } catch (error: any) {
@@ -69,7 +69,6 @@ function* handlerDeleteMembers(action: any): any {
     yield axios(API("DELETE", "/members/delete/" + action.payload));
     yield put(doDelMembersSucceed(action.payload));
   } catch (error: any) {
-    console.log(error);
   }
 }
 

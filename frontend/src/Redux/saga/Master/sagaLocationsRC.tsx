@@ -34,7 +34,7 @@ function* handlerLocationsRC(): any {
 
 function* handlerAddLocationsRC(action: any): any {
   try {
-    const res = yield axios(API('POST', '/regions/locationsRC/insert', action.payload));
+    const res = yield axios(API('POST', '/country/insert', action.payload));
     yield put(doAddLocationsRCSucceed(res.data.result));
     return res.data.result;
   } catch (error: any) {
@@ -52,7 +52,7 @@ function* handlerAddLocationsRC(action: any): any {
 function* handlerUpdateLocationsRC(action: any): any {
   try {
     yield axios(
-      API("PUT", "regions/locationsRC/edit/" + action.payload.regionCode, action.payload)
+      API("PUT", "/regions/locationsRC/edit/" + action.payload.region_code, action.payload)
     );
     yield put(doUpdateLocationsRCSucceed(action.payload));
   } catch (error: any) {
@@ -73,7 +73,6 @@ function* handlerDeleteLocationsRC(action: any): any {
     yield axios(API("DELETE", "/regions/locationsRC/delete/" + action.payload));
     yield put(doDelLocationsRCSucceed(action.payload));
   } catch (error: any) {
-    console.log(error);
   }
 }
 

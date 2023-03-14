@@ -39,6 +39,21 @@ function categoryGroupReducer(state = initialState, action: any) {
       };
 
     //-----------------------------------------------------------------------------------------------------------------------------------------
+    // UPDATE
+    case ActionTypes.UPDATE_CATEGORY_GROUP:
+      return { ...state };
+    case ActionTypes.UPDATE_CATEGORY_GROUP_SUCCEED:
+      return {
+        ...state,
+        categoryGroup: [...state.categoryGroup, action.payload],
+      };
+    case ActionTypes.UPDATE_CATEGORY_GROUP_FAILED:
+      return {
+        ...state,
+        categoryGroup: [...state.categoryGroup, action.payload],
+      };
+
+    //-----------------------------------------------------------------------------------------------------------------------------------------
     // DEL
     case ActionTypes.DEL_CATEGORY_GROUP:
       return { ...state };

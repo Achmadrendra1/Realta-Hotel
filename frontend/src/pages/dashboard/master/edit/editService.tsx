@@ -17,10 +17,8 @@ export default function EditService(props: any) {
   };
 
   const onFinish = () => {
-    console.log('Success:', formValues);
     dispatch(doUpdateServiceTask(formValues));
     handleClose(false);
-    window.location.reload();
   };
 
   const onFinishFailed = (errorInfo: any) => {

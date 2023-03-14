@@ -23,7 +23,6 @@ export default function EditAddress(props: any) {
   };
 
   const onFinishFailed = (errorInfo: any) => {
-    console.log('Failed:', errorInfo);
   };
 
   return (
@@ -50,6 +49,22 @@ export default function EditAddress(props: any) {
             label={`Provinces Name : ${provNamee}`}
             // rules={[{ required: true, message: 'Please input prov_name !' }]}
           ></Form.Item>
+          <Form.Item
+            style={{ marginTop: '5%' }}
+            label="Jalan"
+            name="addr_line1"
+            rules={[{ required: true, message: 'Please input jalan name!' }]}
+          >
+            <Input
+              style={{
+                width: '80%',
+                marginLeft: '10%',
+                marginTop: '3%',
+              }}
+              placeholder="Input Jalan Name"
+              onChange={handleInputChange('addr_line1')}
+            />
+          </Form.Item>
           <Form.Item
             style={{ marginTop: '5%' }}
             label="City"

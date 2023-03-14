@@ -15,8 +15,7 @@ export default function AddRegions(props: any) {
     alert;
   };
 
-  const onFinishFailed = (errorInfo: any) => {
-  };
+  const onFinishFailed = (errorInfo: any) => {};
 
   //Alert
   const [visible, setVisible] = useState('hidden');
@@ -51,7 +50,7 @@ export default function AddRegions(props: any) {
           <Form.Item
             style={{ marginTop: '5%' }}
             label="Regions Name"
-            name={'region_name'}
+            name={'regionName'}
             rules={[{ required: true, message: 'Please input region name!' }]}
           >
             <Input
