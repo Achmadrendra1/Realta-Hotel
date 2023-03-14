@@ -104,7 +104,7 @@ console.log(props.id);
       </Form.Item>
 
       <Form.Item>
-        <Upload {...upld}>
+        <Upload {...upld} multiple={true}>
           <Button icon={<UploadOutlined />}>Select File</Button>
         </Upload>
       </Form.Item>

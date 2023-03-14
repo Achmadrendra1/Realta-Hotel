@@ -17,7 +17,7 @@ export class HotelsService {
     const keyword = query?.keyword || '';
     const [data, total] = await this.hotelRepository.findAndCount({
       order: {
-        hotelName: 'ASC',
+        hotelId: 'ASC',
       },
       relations: {
         facilities: {
@@ -99,7 +99,6 @@ export class HotelsService {
 
   async UpdateHotel(hotelId: any, hotel: Hotels): Promise<any> {
     const date = new Date();
-    console.log(hotelId);
 
     return await this.hotelRepository
       .update(hotelId, {

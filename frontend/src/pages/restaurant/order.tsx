@@ -309,7 +309,7 @@ function Order({orderNumberUser}:any) {
               <Breadcrumb.Item>Order</Breadcrumb.Item>
             </Breadcrumb>
             <div className="lg:flex">
-              <div className="lg:w-3/5 sm:full sm:mb-4 border rounded-xl bg-white shadow p-6 lg:mr-4">
+              <div className="lg:w-3/5 sm:full sm:mb-4 border rounded-xl bg-white shadow p-6 lg:mr-4 lg:mb-0">
                 <p className="text-2xl font-semibold">Enter Your Details</p>
                 <p className="pb-5">
                   We will use these details to share your order information
@@ -578,7 +578,7 @@ function Order({orderNumberUser}:any) {
                 <p className="font-semibold py-4 text-center">{orme}</p>
                 {orderFromUser &&
                   orderFromUser.map((order: any) => (
-                    <div className="border rounded-lg p-2 shadow-md flex my-2">
+                    <div className="border rounded-lg p-2 shadow-md flex my-2" >
                       {/* <img src={`${configuration.BASE_URL}/${order.rempurl}`} alt='cake' width={120} height={120}>
                       </img> */}
                       <div className="ml-3 mt-1 w-full">

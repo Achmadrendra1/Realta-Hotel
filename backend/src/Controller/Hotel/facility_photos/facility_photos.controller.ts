@@ -56,8 +56,8 @@ export class FacilityPhotosController {
     return this.FaphoService.addNewFapho(file, body);
   } 
 
-  @Delete()
-  DeleteFapho(@Param('id') params) {
-    return this.FaphoService.deleteFapho(params);
+  @Delete(':id')
+  DeleteFapho(@Param('id') id) {
+    return this.FaphoService.deleteFapho(id);
   }
 }

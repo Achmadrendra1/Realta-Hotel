@@ -7,8 +7,7 @@ function* handleUserOrder(action:any):any{
     try{ 
         // debugger;
         const result = yield axios(API('Post', '/order-menus/order', {orderNumber : action.payload}))
-        yield put(doGetUserOrderSucceed(result.data))
-        return result.data;
+        yield put(doGetUserOrderSucceed(result.data)) 
     }catch(err:any){
         yield put(doGetUserOrderFailed(err))
     }
