@@ -70,12 +70,12 @@ export default function pay() {
   }, [finalForm]);
 
   const onComplete = () => {
-    console.log(finalForm);
+    // console.log(finalForm);
     setShowCheck(true);
   };
 
   const onCompleteCash = () => {
-    console.log(finalForm)
+    // console.log(finalForm)
   }
 
   const onClose = () => {

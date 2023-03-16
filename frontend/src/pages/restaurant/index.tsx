@@ -3,6 +3,7 @@ import Buttons from '@/components/Button'
 import Hero from '@/components/restaurant.tsx/Hero'
 import Layouts from '@/layouts/layout'
 import { doRestoRequest } from '@/Redux/Action/Resto/restoAction'
+import { configuration } from '@/Redux/Configs/url'
 import { Card, Carousel, Col, Pagination, Row } from 'antd'
 import Head from 'next/head'
 import Image from 'next/image'
@@ -76,7 +77,7 @@ export default function index() {
                 restaurant.data && restaurant.data.map( (hotel:any,index:any) =>
                   <>
                     <div className='border rounded-lg shadow-lg p-3 flex my-10 hover:bg-slate-100 bg-white'>
-                      <img  src={`/assets/resto/${index+1}.jpg`} alt='Resto' width={250} height={250}></img>
+                      <img  src={`${configuration.BASE_URL}/facility-photos/`+hotel.fapho_thumbnail_filename} alt='Resto' width={250} height={250}></img>
                       <div className='ml-5'>
                         <h1 className='text-xl font-bold'>{hotel.hotel_name}</h1>
                         <h2 className='text-lg'>{hotel.faci_name}</h2>

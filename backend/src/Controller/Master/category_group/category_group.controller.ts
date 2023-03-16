@@ -65,7 +65,7 @@ export class CategoryGroupController {
     }),
   )
   async uploadFile(@UploadedFile() file: any, @Body() body) {
-    console.log(file);
+    // console.log(file)
     const result = await this.CategoryGroupService.storeFileInfo(file, body);
     if (!result) {
       return 'gagal upload';

@@ -56,6 +56,10 @@ const Department = () => {
         setTitle(id ? 'Edit' : 'Add')
     }
 
+    const submitsForm = (id?:any) => {
+        id ? updateItems() : addItems()
+    }
+
     const columns = [
         {
             title: 'Department ID',
@@ -85,7 +89,7 @@ const Department = () => {
             <Modal title={titles + ' Name'} open={open} closable={false} footer={
                 <div className="w-full flex gap-5 justify-end">
                     <Buttons funcs={onClose} type='danger'>Cancel</Buttons>
-                    <Buttons funcs={() => ids ? updateItems() : addItems()}>Save</Buttons>
+                    <Buttons funcs={() => submitsForm(ids)}>Save</Buttons>
                 </div>
             }>
                 <Form.Item label='Department'>

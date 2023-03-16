@@ -59,6 +59,7 @@ export function* handleDeptHist(action:any): any{
         const res = yield axios(API('post', '/employee/mutation', payload))
         yield put({ type: empType.ADD_MUTATION_SUCCESS, payload: res.data})
     } catch (e:any) {
+        console.log(e)
         yield put({ type: empType.ADD_MUTATION_FAILED });
     }
 }

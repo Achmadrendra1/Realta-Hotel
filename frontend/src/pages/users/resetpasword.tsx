@@ -24,7 +24,7 @@ export default function ResetPassword() {
 
 
   const onFinish = (values: any) => {
-    console.log("Success:", values);
+    // console.log("Success:", values);
   };
 
   function getItem(
@@ -65,7 +65,7 @@ export default function ResetPassword() {
   };
 
   const handleCancel = () => {
-    console.log('Clicked cancel button');
+    // console.log('Clicked cancel button');
     setOpen(false);
   };
 

@@ -174,14 +174,6 @@ export default function* rootSaga() {
     takeEvery(UserConst.EDIT_DATA_PROFILE,HandleEditProfile),
     takeEvery(UserConst.UPDATE_PASSWORD,HandleUpdatePassword),
 
-
-    takeEvery(deptType.GET_DATA, handleGetDept),
-    takeEvery(deptType.ADD_DATA, handleAddDept),
-    takeEvery(deptType.UPDATE_DATA, handleUpdateDept),
-    takeEvery(deptType.DELETE_DATA, handleDeleteDept),
-    takeEvery(empType.GET_DATA, handleGetEmployees),
-    takeEvery(empType.GET_DETAIL, handleDetailEmployee),
-
     //Payment
     takeEvery(PaymentConst.GET_PAYMENT_HISTORY_DASH, handleTrxDashRequest),
     takeEvery(PaymentConst.GET_PAYMENT_GATEWAY_REQUEST, handlePagaRequest),

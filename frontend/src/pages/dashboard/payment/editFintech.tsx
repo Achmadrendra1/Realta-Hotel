@@ -17,13 +17,13 @@ export default function EditFintech(props: any) {
   };
 
   const onFinish = () => {
-    console.log("Success:", formValues);
+    // console.log("Success:", formValues);
     dispatch(doPagaUpdate(formValues))
     handleClose(false)
   };
 
   const onFinishFailed = (errorInfo: any) => {
-    console.log("Failed:", errorInfo);
+    // console.log("Failed:", errorInfo);
   };
 
   return (

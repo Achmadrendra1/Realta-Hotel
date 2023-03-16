@@ -61,7 +61,7 @@ export default withAuth( function Fintech() {
   };
 
   const handleCancel = () => {
-    console.log("Clicked cancel button");
+    // console.log("Clicked cancel button");
     setOpenAddFin(false);
     setOpenEditFin(false);
   };
@@ -99,11 +99,11 @@ export default withAuth( function Fintech() {
       okType: "danger",
       cancelText: "No",
       onOk() {
-        console.log(id);
+        // console.log(id);
         dispatch(doPagaDelete(id));
       },
       onCancel() {
-        console.log("Cancel");
+        // console.log("Cancel");
       },
     });
   };

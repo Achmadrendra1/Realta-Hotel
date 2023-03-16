@@ -39,8 +39,6 @@ export default function Finance() {
     dispatch(doUsacRequest(user[0]?.user_id));
   }, [user]);
 
-  console.log(data)
-
   const columnsTrans: ColumnsType<DataType> = [
     {
       title: "Transaction Number",

@@ -146,7 +146,7 @@ export default function MyAccount() {
   };
 
   const handleCancel = () => {
-    console.log("Clicked cancel button");
+    // console.log("Clicked cancel button");
     setShowActivation(false);
     setShowLink(false);
     setShowAddCard(false);

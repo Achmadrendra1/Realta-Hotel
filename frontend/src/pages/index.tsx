@@ -10,6 +10,7 @@ import { Card, Input, Space } from "antd";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "next/router";
+import { configuration } from "@/Redux/Configs/url";
 const inter = Inter({ subsets: ["latin"] });
 
 export default function Home() {
@@ -65,7 +66,12 @@ export default function Home() {
 
   useEffect(() => {
     dispatch(doRestoRequest(1));
+    dispatch(getSpHotel())
   }, []);
+
+  let hotel = useSelector((state: any) => state.HotelBoorReducer.hotel)
+  // console.log(hotel)
+  
 
   const { Meta } = Card;
   useEffect(() => {
@@ -109,22 +115,22 @@ const router = useRouter()
             <Buttons funcs={() => router.push("/booking")}>View More</Buttons>
           </div>
         </div>
-        <div className="flex gap-5 mt-8 justify-start flex-wrap">
-          {landing.map((item: any, index:number) => (
+        <div className="flex gap-5 mt-8 justify-center flex-wrap">
+          {hotel.map((item: any, index:number) => (
             <Card
-              key={index}
-              style={{ width: 400 }}
-              cover={<img alt="example" src="../assets/dummy.png" />}
+            key={index}
+            style={{ width: 400 }}
+            cover={<img alt="example" src={`${configuration.BASE_URL}/facility-photos/${item.url.split(',')[0]}`} />}
             >
-              <p className="font-bold">{item.faciHotel?.hotelName}</p>
+              <p className="font-bold">{item.hotel_name}</p>
               <p className="text-[#adaeb8]">
-                {item.faciHotel?.hotelAddr?.addrLine2}
+                {item.place}
               </p>
               <div className="flex justify-between items-center mt-4">
                 <Space>
                   <StarOutlined className="text-[#F7C934]" />
                   <span className="font-semibold">
-                    {item.faciHotel?.hotelRatingStar}
+                    {item.hotel_rating_star}
                   </span>
                 </Space>
                 <div>
@@ -145,17 +151,17 @@ const router = useRouter()
             <Buttons funcs={() => router.push('restaurant')}>View More</Buttons>
           </div>
         </div>
-        <div className="flex gap-5 mt-8 justify-start flex-wrap">
+        <div className="flex gap-5 mt-8 justify-start flex-wrap justify-center">
           {resto.data?.map((item: any, index:number) => (
             <Card
               key={index}
               style={{ width: 400 }}
-              cover={<img alt="example" src={`/assets/resto/${index+1}.jpg`} className="h-[300px]"/>}
+              cover={<img alt="example" src={`${configuration.BASE_URL}/facility-photos/`+item.fapho_thumbnail_filename} className="h-[300px]"/>}
             >
               <p className="font-bold text-[#754CFF]">{item.hotel_name}</p>
               <p className="text-black font-semibold mb-3">{item.faci_name}</p>
               <p className="text-[#adaeb8]">{item.faci_description}</p>
-              <div className="flex justify-between items-center mt-4">
+              <div className="flex justify-end items-center mt-4">
                 <div>
                   <Buttons funcs={""}>Order Now</Buttons>
                 </div>

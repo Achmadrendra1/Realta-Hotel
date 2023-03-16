@@ -39,13 +39,13 @@ export default function AddCard(props: any) {
   });
 
   const onFinish = () => {
-    console.log("Success:", formValues);
+    // console.log("Success:", formValues);
     dispacth(doCreateAccount(formValues));
     handleCancell(false);
   };
 
   const onFinishFailed = (errorInfo: any) => {
-    console.log("Failed:", errorInfo);
+    // console.log("Failed:", errorInfo);
   };
 
   const handleInputChange = (input: any) => (e: any) => {

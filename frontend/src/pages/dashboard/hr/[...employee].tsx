@@ -73,8 +73,11 @@ const EmployeeDetail = () => {
     }
 
     useEffect(() => {
-        dispatch(getDetailEmp(parseInt(employee[0])))
+        dispatch(getDetailEmp(employee[0]))
         dispatch(getDeptSelect())
+        
+        setMutation({ ...mutation, empId: employee[0]})
+        setPayment({ ...payment, empId: employee[0]})
     }, [])
 
     useEffect(() => {
@@ -87,7 +90,7 @@ const EmployeeDetail = () => {
             hireDate: details?.hiredate,
             marital: details?.marital,
             gender: details?.gender,
-            salary: details?.salary.split('Rp')[1]?.split(',')[0].replace(/\./g, ''),
+            salary: details?.salary?.split('Rp')[1]?.split(',')[0].replace(/\./g, ''),
             frequentlyPay: details?.frequentlypay,
             salaryFlag: details?.salariedflag,
             status: details?.status,
@@ -95,15 +98,13 @@ const EmployeeDetail = () => {
             sick: details?.sickleave,
             jobId: jobId?.value
         })
-        
-        setMutation({ ...mutation, empId: details?.empid})
-        setPayment({ ...payment, empId: details?.empid})
 
     }, [details])
 
     const submitForm = (e:any) => {
         e.preventDefault()
         dispatch(updateEmployee(update))
+        setIsEdit(false)
     }
 
     const editPhoto = () => {
@@ -115,8 +116,8 @@ const EmployeeDetail = () => {
         setPhotos([])
     }
 
-    const addCommas = (num:any) => num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-    const removeNonNumeric = (num:any) => num.toString().replace(/[^0-9]/g, "");
+    const addCommas = (num:any) => num?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    const removeNonNumeric = (num:any) => num?.toString().replace(/[^0-9]/g, "");
     return(
         <Dashboard>
             <Row gutter={32}>
@@ -206,6 +207,7 @@ const EmployeeDetail = () => {
                                 { isEdit ? <Input className="my-2" placeholder="X.XXX.XXX" prefix={'Rp'} value={update.salary} 
                                 onChange={e => setUpdate({ ...update, salary: e.target.value})}/> : <p className="text-md font-regular my-2">{details?.salary}</p>}
                             </Col>
+
                             <Col span={12}>
                                 <h2 className="text-lg font-semibold">Pay Frequencies</h2>
                                 { isEdit ? <Select options={[

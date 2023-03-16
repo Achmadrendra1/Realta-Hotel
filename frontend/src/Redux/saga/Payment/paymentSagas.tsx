@@ -96,7 +96,7 @@ function* handleBankRequest(action: any): any {
     yield put(doBankRequestSuccess(result.data));
     return result.data;
   } catch (error) {
-    console.log(error);
+    // console.log(error);
     yield put(doBankRequestFailed(error));
   }
 }
@@ -144,7 +144,7 @@ function* handleDeleteBank(action: any): any {
     yield axios(API("DELETE", "/bank/" + action.payload));
     yield put(doDeleteBankSuccess(action.payload));
   } catch (error: any) {
-    console.log(error);
+    // console.log(error);
   }
 }
 
@@ -163,7 +163,7 @@ function* handlePagaRequest(action: any): any {
     yield put(doPagaRequestSuccess(res.data));
     return res.data;
   } catch (error) {
-    console.log(error);
+    // console.log(error);
   }
 }
 
@@ -207,7 +207,7 @@ function* handlePagaDelete(action: any): any {
     );
     yield put(doPagaDeleteSuccess(action.payload));
   } catch (error: any) {
-    console.log(error);
+    // console.log(error);
   }
 }
 

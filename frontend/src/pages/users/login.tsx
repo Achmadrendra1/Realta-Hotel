@@ -54,7 +54,7 @@ export default Auth( function Login() {
 
   //Pas click submit dispatch langsung, kalo formnya masih kosong validasi muncul
   const onFinish = (values: any) => {
-    console.log("Success:", values);
+    // console.log("Success:", values);
     dispatch(doLogin(values));
   };
 
@@ -74,11 +74,12 @@ export default Auth( function Login() {
   return (
     <>
       {contextHolder}
-      <div className="bg-[#f2f1fa] h-screen p-3">
-      <Card className=" mx-52 drop-shadow-md bg-[#8662FF] rounded-3xl">
-      <p className="mt-4 mr-2 font-bold text-end text-lg text-white hover:cursor-pointer"><CloseOutlined onClick={() => {router.push('/')}}/></p>
+      <div className="bg-[#f2f1fa] h-screen p-3  ">
+      <Card className="mx-80 drop-shadow-md bg-[#8662FF] rounded-3xl mt-28">
+      
         <Row gutter={16}>
           <Col span={14}>
+         
             <Card className={`p-2 mr-3]  ${loginStyle.cardLogin} no-border`}>
               <div className="container mt-3 ">
                 <img src="/assets/icons.png" alt="" style={{ width: 60 }} />
@@ -183,6 +184,7 @@ export default Auth( function Login() {
           </Col>
           {/* Form */}
           <Col className="ml-3">
+          <p className="mt-4 mr-2 font-bold text-end text-lg text-white hover:cursor-pointer"><CloseOutlined onClick={() => {router.push('/')}}/></p>
             <div className="container mt-16 mb-12">
               <h1 className="text-3xl font-bold text-white mb-2">
                 Welcome back.

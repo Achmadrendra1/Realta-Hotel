@@ -43,7 +43,7 @@ export default withAuth( function Userprofile() {
   };
 
   const handleCancel = () => {
-    console.log("Clicked cancel button");
+    // console.log("Clicked cancel button");
     setOpenEdit(false);
     setOpenChange(false);
   };

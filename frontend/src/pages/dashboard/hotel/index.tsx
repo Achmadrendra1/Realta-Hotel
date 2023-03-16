@@ -2,6 +2,7 @@ import { deleteHotel, getHotel } from "@/Redux/Action/Hotel/HotelAction";
 import Buttons from "@/components/Button";
 import Dashboard from "@/layouts/dashboard";
 import {
+  ArrowLeftOutlined,
   DeleteOutlined,
   EditOutlined,
   ExclamationCircleFilled,

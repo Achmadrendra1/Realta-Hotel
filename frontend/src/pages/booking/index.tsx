@@ -35,7 +35,7 @@ export default function index() {
 
   //Get data Hotel
   let hotel = useSelector((state: any) => state.HotelBoorReducer.hotel)
-  console.log(hotel)
+  // console.log(hotel)
 
   
   const locationHotel = hotel.filter((item:any) => {
@@ -83,7 +83,7 @@ export default function index() {
     setMapHotel(hotel)
   }
 
-  console.log(handleClear)
+  // console.log(handleClear)
 
   const handleFilter = () => {
     setMapHotel(filterHotel)
@@ -175,7 +175,7 @@ export default function index() {
                       <Card key={index} className="mb-2">
                         <Row>
                           <Col span={6} className="flex items-center">
-                            <Row gutter={10}>
+                            <Row gutter={10} className="items-center">
                               <Col span={18}>
                                 <Carousel autoplay autoplaySpeed={5000}>
                                   {arrPict?.map((each: any) => (

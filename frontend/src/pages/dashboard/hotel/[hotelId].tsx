@@ -8,11 +8,24 @@ import Buttons from "@/components/Button";
 import Dashboard from "@/layouts/dashboard";
 import {
   ArrowLeftOutlined,
+  ArrowLeftOutlined,
   CameraOutlined,
   DeleteOutlined,
   EditOutlined,
   ExclamationCircleFilled,
 } from "@ant-design/icons";
+import {
+  Breadcrumb,
+  Carousel,
+  Col,
+  Image,
+  Modal,
+  Rate,
+  Row,
+  Space,
+  Table,
+  Typography,
+} from "antd";
 import {
   Breadcrumb,
   Carousel,
@@ -47,7 +60,7 @@ export default withAuth(function HotelDetails() {
   const router = useRouter();
   const { hotelId } = router.query;
   const { Title, Text } = Typography;
-  const rating = hotelById.hotelRatingStar;
+  const rating = hotelById?.hotelRatingStar;
   const { confirm } = Modal;
 
   useEffect(() => {
@@ -92,7 +105,7 @@ export default withAuth(function HotelDetails() {
         dispatch(deleteFacility(faciId));
       },
       onCancel() {
-        console.log("Cancel");
+        // console.log("Cancel");
       },
     });
   };
@@ -106,18 +119,23 @@ export default withAuth(function HotelDetails() {
     {
       title: "Photo",
       dataIndex: ["facilityPhotos", "faphoPhotoFilename"],
+      dataIndex: ["facilityPhotos", "faphoPhotoFilename"],
       key: "1",
       width: "10%",
       render: (_: any, record: any) => {
         let foto = record?.facilityPhotos
-          ?.filter((items: any) => items.faphoPrimary === true)
-          .map((item: any) => item.faphoPhotoFilename);
+          ?.filter((item: any) => item.faphoPrimary === true)
+          .map((items: any) => items.faphoPhotoFilename);
+          // console.log(foto);
+          
 
         return (
           <Image
             src={`${configuration.BASE_URL}/facility-photos/${foto[0]}`}
-            alt={`${foto[0]}`}
+            alt={`${foto}`}
           />
+        );
+      },
         );
       },
     },
@@ -265,16 +283,21 @@ export default withAuth(function HotelDetails() {
       <Link href={"/dashboard/hotel"}>
         <ArrowLeftOutlined /> Back
       </Link>
+      <Link href={"/dashboard/hotel"}>
+        <ArrowLeftOutlined /> Back
+      </Link>
 
       <Row gutter={24}>
         <Col span={5}>
           <Carousel autoplay autoplaySpeed={2500}>
             {hotelById?.facilities?.map((item: any) =>
               item.facilityPhotos.map((items: any) => (
-                <Image
-                  src={`${configuration.BASE_URL}/facility-photos/${items.faphoPhotoFilename}`}
-                  alt={`${items.faphoPhotoFilename}`}
-                />
+                <>
+                  <Image
+                    src={`${configuration.BASE_URL}/facility-photos/${items.faphoPhotoFilename}`}
+                    alt={`${items.faphoPhotoFilename}`}
+                  />
+                </>
               ))
             )}
           </Carousel>

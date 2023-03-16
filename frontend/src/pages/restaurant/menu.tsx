@@ -293,7 +293,7 @@ export default function menu({ restaurant }:any) {
     );
     let photos = result.data;
     setSelected({
-      rempurl: `${configuration.BASE_URL}/` + photos[0].rempurl,
+      rempurl: `${configuration.BASE_URL}/resto-menu-photos/menu/` + photos[0].rempphotofilename,
     });
 
     // isi semua data yang bukan primary
@@ -306,7 +306,7 @@ export default function menu({ restaurant }:any) {
         rempprimary: "0",
         rempreme: photo.rempreme,
         rempthumbnailfilename: photo.rempthumbnailfilename,
-        rempurl: `${configuration.BASE_URL}/${photo.rempurl}`,
+        rempurl: `${configuration.BASE_URL}/resto-menu-photos/menu/${photo.rempphotofilename}`,
       };
       migratePhoto.push(newDataPhoto);
     });
@@ -416,8 +416,21 @@ export default function menu({ restaurant }:any) {
                 <div className="text-xl font-bold text-center">
                   Menus
                 </div>
-                <div className="flex my-4">
-                  <div className="w-1/2">
+                <div className="flex my-10">
+                  <div className="w-1/2 ml-10">
+                    <br />
+                    <input
+                      className="placeholder:italic placeholder:text-slate-400 block bg-white w-4/5 border border-slate-300 rounded-md py-2 pl-9 pr-3 shadow-sm focus:outline-none focus:border-sky-500 focus:ring-sky-500 focus:ring-1 sm:text-sm"
+                      placeholder="Search for food..."
+                      type="text"
+                      name="search"
+                      onChange={(e) => {
+                        setSearch(e.target.value);
+                      }}
+                    />
+                    
+                  </div>
+                  <div className="w-1/2 text-right mr-10">
                     <Dropdown
                       menu={{
                         items,
@@ -433,17 +446,6 @@ export default function menu({ restaurant }:any) {
                       </Typography.Link>
                     </Dropdown>
                   </div>
-                  <div className="right-0 w-1/2 py-4">
-                    <input
-                      className="placeholder:italic placeholder:text-slate-400 block bg-white w-full border border-slate-300 rounded-md py-2 pl-9 pr-3 shadow-sm focus:outline-none focus:border-sky-500 focus:ring-sky-500 focus:ring-1 sm:text-sm"
-                      placeholder="Search for food..."
-                      type="text"
-                      name="search"
-                      onChange={(e) => {
-                        setSearch(e.target.value);
-                      }}
-                    />
-                  </div>
                 </div>
 
                 <div className="flex flex-wrap ml-5 item-center justify-center">
@@ -456,7 +458,7 @@ export default function menu({ restaurant }:any) {
                               className=" hover:text-[#754cff]"
                             >
                               <img
-                                src={`${configuration.BASE_URL}/${menu.rempurl}`}
+                                src={`${configuration.BASE_URL}/resto-menu-photos/menu/${menu.rempphotofilename}`}
                                 alt={menu.remename}
                                 className="h-40 w-full object-cover rounded-lg"
                               ></img>
@@ -532,11 +534,13 @@ export default function menu({ restaurant }:any) {
                     {cart &&
                       cart.map((order: any) => (
                         <div className="border rounded-lg p-4 shadow-md gap-y-2 my-5 flex" key={order.remeid}>
+                        <div className="border rounded-lg p-4 shadow-md gap-y-2 my-5 flex" key={order.remeid}>
                           <img
-                            src={`${configuration.BASE_URL}/${order.rempurl}`}
+                            src={`${configuration.BASE_URL}/resto-menu-photos/menu/${order.rempphotofilename}`}
                             alt={order.remename}
                             width={120}
                             height={120}
+                            className="object-cover"
                           ></img>
                           <div className="ml-3 mt-1 w-full">
                             <div className="flex justify-between">
@@ -647,7 +651,7 @@ export default function menu({ restaurant }:any) {
             ]}
           >
             <div>
-              <img src={selected.rempurl} alt="menu" className="h-80 w-full object-cover"/>
+              <img src={selected.rempurl} alt="menu" className="h-96 w-full object-cover object-center"/>
             </div>
             {/* <Carousel autoplay> */}
             <div className="flex">
@@ -705,7 +709,7 @@ export default function menu({ restaurant }:any) {
               cart.map((order: any) => (
                 <div className="border rounded-lg p-4 shadow-md gap-y-2 my-5 flex">
                   <img
-                    src={`${configuration.BASE_URL}/${order.rempurl}`}
+                    src={`${configuration.BASE_URL}/resto-menu-photos/menu/${order.rempphotofilename}`}
                     alt={order.remename}
                     width={120}
                     height={120}
