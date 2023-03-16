@@ -386,15 +386,15 @@ import { LandingController } from 'src/Controller/Hotel/facilities/landing.contr
 export class GlobalModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
     consumer.apply(AuthMiddleware).forRoutes(
-      ServiceTaskController,
-      RegionsController,
-      ProvincesController,
-      PriceItemsController,
-      PolicyController,
-      MembersController,
-      CountryController,
+      // ServiceTaskController,
+      // RegionsController,
+      // ProvincesController,
+      // PriceItemsController,
+      // PolicyController,
+      // MembersController,
+      // CountryController,
       // CategoryGroupController,
-      AddressController,
+      // AddressController,
       StockController,
       StodController,
       SphoController,

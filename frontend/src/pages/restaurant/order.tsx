@@ -578,7 +578,7 @@ function Order({orderNumberUser}:any) {
                 <p className="font-semibold py-4 text-center">{orme}</p>
                 {orderFromUser &&
                   orderFromUser.map((order: any) => (
-                    <div className="border rounded-lg p-2 shadow-md flex my-2">
+                    <div className="border rounded-lg p-2 shadow-md flex my-2" >
                       {/* <img src={`${configuration.BASE_URL}/${order.rempurl}`} alt='cake' width={120} height={120}>
                       </img> */}
                       <div className="ml-3 mt-1 w-full">

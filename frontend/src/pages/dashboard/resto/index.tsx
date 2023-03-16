@@ -464,7 +464,11 @@ export default withAuth( function restoMenu() {
     })
 
     dispatch(doUpdatePrimary(newPhotoPrimary)) 
-
+    messageApi.open({
+      type: 'success',
+      content: 'Thumbnail photo successfully updated!',
+      duration: 5
+    });
     
     setNewPrimary({
       remename: '',
@@ -876,7 +880,10 @@ export default withAuth( function restoMenu() {
           <>
             <Button key="back" onClick={handleCancelThumbnail}>Cancel</Button>
             { viewThumbnailPhoto.length > 0 ? 
-              <Button key="submit" onClick={updatePhoto} className='bg-sky-500 text-white' onMouseEnter={(e:any) => { e.target.style.color = '#fff'; }}>Set as thumbnail</Button>
+              <>
+                {contextHolder}
+                <Button key="submit" onClick={updatePhoto} className='bg-sky-500 text-white' onMouseEnter={(e:any) => { e.target.style.color = '#fff'; }}>Set as thumbnail</Button>
+              </>
             : '' }
           </>
         ]}
@@ -948,7 +955,7 @@ export default withAuth( function restoMenu() {
       
       {/* ------------------------- ADD MULTIPLE PHOTO ------------------------------- */}
       <Modal
-        title="Upload Photo Multiple"
+        title="Upload Photo"
         open={showAddMultiple}
         onOk={saveMultiplePhoto}
         onCancel={cancelAddMultiple}

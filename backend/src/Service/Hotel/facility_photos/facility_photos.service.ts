@@ -80,9 +80,7 @@ export class FacilityPhotosService {
   }
 
   async deleteFapho(id: FacilityPhoto) {
-    await this.FaphoRepsitory.delete({
-      faphoId: id.faphoId,
-    })
+    await this.FaphoRepsitory.delete(id)
       .then((result) => {
         return {
           message: `Facilities successfully deleted`,

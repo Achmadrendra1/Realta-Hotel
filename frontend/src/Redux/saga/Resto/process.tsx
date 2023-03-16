@@ -6,8 +6,7 @@ import { put } from 'redux-saga/effects';
 function* processMenu():any{
     try{
         const result = yield axios(API('Get','/resto-menu-detail',null));
-        yield put(doMenuSucceed(result.data))
-        return result.data;
+        yield put(doMenuSucceed(result.data)) 
     }catch(err:any){
         yield put(doMenuFailed(err))
     }

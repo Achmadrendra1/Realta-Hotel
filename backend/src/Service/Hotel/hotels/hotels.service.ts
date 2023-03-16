@@ -17,7 +17,7 @@ export class HotelsService {
     const keyword = query?.keyword || '';
     const [data, total] = await this.hotelRepository.findAndCount({
       order: {
-        hotelName: 'ASC',
+        hotelId: 'ASC',
       },
       relations: {
         facilities: {

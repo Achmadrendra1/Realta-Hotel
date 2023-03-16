@@ -51,7 +51,7 @@ export default withAuth( function AddFacilities(props: any) {
 
       dispatch(addFacility(payload));
       handleClose(false);
-      // window.location.reload();
+      window.location.reload();
     },
   });
 

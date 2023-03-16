@@ -62,6 +62,7 @@ import {
 } from "@/Redux/Action/Payment/paymentUserAction";
 import Link from "next/link";
 import { configuration } from "@/Redux/Configs/url";
+import { configuration } from "@/Redux/Configs/url";
 
 export default function bookingRoom() {
   const root = useRouter();
@@ -86,6 +87,7 @@ export default function bookingRoom() {
   //useSelector Get Room by Hotel Id
   let room = useSelector((state: any) => state.FaciBoorReducer.facilities);
   const faciRoom = room.filter((item: any) => item.hotel_id == id);
+  
 
   //useSelector Average Rating Hotel
   let hotelReview = useSelector((state: any) => state.ReviewBoorReducer.review);
@@ -848,6 +850,9 @@ export default function bookingRoom() {
   let pict1 = pict.pict1?.split(', ')
   let pict2 = pict.pict2?.split(', ')
   let pict3 = pict.pict3?.split(', ')
+  let pict1 = pict.pict1?.split(', ')
+  let pict2 = pict.pict2?.split(', ')
+  let pict3 = pict.pict3?.split(', ')
 
   return (
     <Layouts>
@@ -899,21 +904,27 @@ export default function bookingRoom() {
             <Carousel slidesToShow={3} className="mb-4">
               <div className="w-1/8 border-2">
                 <img src={`${configuration.BASE_URL}/facility-photos/${pict1[0]}`} alt="pict1"/>
+                <img src={`${configuration.BASE_URL}/facility-photos/${pict1[0]}`} alt="pict1"/>
               </div>
               <div className="w-1/8 border-2">
+                <img src={`${configuration.BASE_URL}/facility-photos/${pict1[1]}`} alt="pict1"/>
                 <img src={`${configuration.BASE_URL}/facility-photos/${pict1[1]}`} alt="pict1"/>
               </div>
               <div className="w-1/8 border-2">
                 <img src={`${configuration.BASE_URL}/facility-photos/${pict2[0]}`} alt="pict2"/>
+                <img src={`${configuration.BASE_URL}/facility-photos/${pict2[0]}`} alt="pict2"/>
               </div>
               <div className="w-1/8 border-2">
                 <img src={`${configuration.BASE_URL}/facility-photos/${pict2[1]}`} alt="pict2"/>
+                <img src={`${configuration.BASE_URL}/facility-photos/${pict2[1]}`} alt="pict2"/>
               </div>
+              {/* <div className="w-1/8 border-2">
               {/* <div className="w-1/8 border-2">
                 <img src={`../.${pict3[0]}`} alt="pict3"/>
               </div>
               <div className="w-1/8 border-2">
                 <img src={`../.${pict3[1]}`} alt="pict3"/>
+              </div> */}
               </div> */}
             </Carousel>
         <Row gutter={16}>

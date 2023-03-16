@@ -8,11 +8,24 @@ import Buttons from "@/components/Button";
 import Dashboard from "@/layouts/dashboard";
 import {
   ArrowLeftOutlined,
+  ArrowLeftOutlined,
   CameraOutlined,
   DeleteOutlined,
   EditOutlined,
   ExclamationCircleFilled,
 } from "@ant-design/icons";
+import {
+  Breadcrumb,
+  Carousel,
+  Col,
+  Image,
+  Modal,
+  Rate,
+  Row,
+  Space,
+  Table,
+  Typography,
+} from "antd";
 import {
   Breadcrumb,
   Carousel,
@@ -106,6 +119,7 @@ export default withAuth(function HotelDetails() {
     {
       title: "Photo",
       dataIndex: ["facilityPhotos", "faphoPhotoFilename"],
+      dataIndex: ["facilityPhotos", "faphoPhotoFilename"],
       key: "1",
       width: "10%",
       render: (_: any, record: any) => {
@@ -122,18 +136,27 @@ export default withAuth(function HotelDetails() {
           />
         );
       },
+        );
+      },
     },
     {
       title: "Facility Name",
       dataIndex: "faciName",
       key: "1",
       width: "15%",
+      sorter: {
+        compare: (a: any, b: any) => (a.faciName < b.faciName ? -1 : 1),
+      },
     },
     {
       title: "Room Number",
       dataIndex: "faciRoomNumber",
       key: "1",
       width: "10%",
+      sorter: {
+        compare: (a: any, b: any) =>
+          a.faciRoomNumber < b.faciRoomNumber ? -1 : 1,
+      },
     },
     {
       title: "Max Vacant",
@@ -257,6 +280,9 @@ export default withAuth(function HotelDetails() {
           htlname={hotelById.hotelName}
         />
       ) : null}
+      <Link href={"/dashboard/hotel"}>
+        <ArrowLeftOutlined /> Back
+      </Link>
       <Link href={"/dashboard/hotel"}>
         <ArrowLeftOutlined /> Back
       </Link>

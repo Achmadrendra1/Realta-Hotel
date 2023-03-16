@@ -110,7 +110,7 @@ export class FacilitiesService {
 
   async UpdateFaci(faciId: number, faci: any): Promise<any> {
     const date = new Date();
-    const result = await this.faciRepository.update(faciId, {
+    await this.faciRepository.update(faciId, {
       faciName: faci.faciName,
       faciDescription: faci.faciDescription,
       faciMaxNumber: faci.faciMaxNumber,
@@ -141,10 +141,15 @@ export class FacilitiesService {
         faphUser: faci.userId,
       })
       .then((result) => {
-        return {
-          message: `Facilities successfully updated`,
-          result: result,
-        };
+        return this.faciRepository.findOne({
+          where: { faciId: faciId },
+          relations: {
+            faciHotel: true,
+            facilityPhotos: true,
+            facilityPriceHistories: true,
+            faciCagro: true,
+          },
+        });
       })
       .catch((err) => {
         return `Failed to Update Facilities` + err;
