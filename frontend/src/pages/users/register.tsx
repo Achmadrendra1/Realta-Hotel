@@ -5,12 +5,11 @@ import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 
 import Auth from "@/PrivateRoute/Auth";
-import Layouts from "@/layouts/layout";
 import loginStyle from "@/styles/login.module.css";
+import { CloseOutlined } from "@ant-design/icons";
 import { motion } from "framer-motion";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { CloseOutlined } from "@ant-design/icons";
 
 export default Auth ( function Register(): any {
   const [password, setPassword] = useState("");
@@ -52,7 +51,7 @@ export default Auth ( function Register(): any {
         }}
       
     >
-    <div className="bg-[#f2f1fa] pt-12">
+    <div className="bg-[#f2f1fa] pt-12 h-screen">
       
     <Card className=" mx-52 drop-shadow-md  bg-[#754CFF] ">
       <Row>
@@ -173,7 +172,7 @@ export default Auth ( function Register(): any {
                 placeholder=" Your Password"
               />
             </Form.Item>
-            {error}
+            {error && <div  className="error text-red-600 mb-2" >{error}</div>}
             <button
               type="submit"
               className="bg-purple-400 hover:bg-purple-500 text-white px-4 py-3 my-2 rounded-lg font-medium w-80"

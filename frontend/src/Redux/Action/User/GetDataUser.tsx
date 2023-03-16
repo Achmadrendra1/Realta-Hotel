@@ -22,6 +22,7 @@ export const doGetDataFailed = (error : any) =>{
 
 //register
 export const doAddDataUser = (payload : any)=>{
+    // console.log(payload)
     return {
         type : UserConst.ADD_DATA_USER,
         payload

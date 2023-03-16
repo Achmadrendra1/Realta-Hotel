@@ -393,7 +393,7 @@ export class GlobalModule implements NestModule {
       PolicyController,
       MembersController,
       CountryController,
-      CategoryGroupController,
+      // CategoryGroupController,
       AddressController,
       StockController,
       StodController,

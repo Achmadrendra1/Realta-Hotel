@@ -47,7 +47,7 @@ export default withAuth(function HotelDetails() {
   const router = useRouter();
   const { hotelId } = router.query;
   const { Title, Text } = Typography;
-  const rating = hotelById.hotelRatingStar;
+  const rating = hotelById?.hotelRatingStar;
   const { confirm } = Modal;
 
   useEffect(() => {

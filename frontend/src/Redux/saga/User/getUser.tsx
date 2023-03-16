@@ -19,7 +19,7 @@ export function* HandleGetUser():any {
 export function* HandleCreateUser(action:any):any {
     try {
        const result=  yield axios(API('POST',"/users/",action.payload ));
-        // console.log(result.data.users);
+        console.log(result.data.users);
         yield put (doAddDataUserSuccess(result.data.users))
     } catch (error : any) {
         const delay = (time: any) =>

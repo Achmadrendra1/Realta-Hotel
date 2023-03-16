@@ -70,9 +70,9 @@ export default function EditPodes(props: any) {
                         <Input onChange={eventHandler("podhe_rejected_qty")} />
                     </Form.Item>
 
-                    <Form.Item label=" " colon={false}>
+                    {/* <Form.Item label=" " colon={false}>
                         <Button className="flex justify-end" disabled>Generate Barcode</Button>
-                    </Form.Item>
+                    </Form.Item> */}
 
                     <Form.Item label=" " colon={false}>
                         <div className="flex justify-end">

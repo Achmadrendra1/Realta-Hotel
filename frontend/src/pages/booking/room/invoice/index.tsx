@@ -25,6 +25,8 @@ export default function index() {
     (item: any) => item.boor_order_number === id
   );
 
+  console.log(Invoice.prit_name)
+
   const boor_order_number = Invoice?.length > 0 ? Invoice[0].boor_order_number : "";
   const boor_order_date = Invoice?.length > 0 ? Invoice[0].boor_order_date : "";
   const boor_is_paid = Invoice?.length > 0 ? Invoice[0]?.boor_paid : "";

@@ -29,7 +29,7 @@ export default withAuth( function restoMenu() {
 
   let [search, setSearch] = useState('');
   let list_restaurant = restaurant.data;
-
+  
   
   // ------------------------ PAGINATION
   const [currentpage, setCurrentPage] = useState(1);
@@ -50,7 +50,7 @@ export default withAuth( function restoMenu() {
 
     dispatch(doMenuRequest(data));
     dispatch(doGetPhoto());
-    dispatch(doRestoRequest(currentpage))
+    dispatch(doRestoRequest(1))
 
   }, [menus, search, currentpage])
  
@@ -108,7 +108,7 @@ export default withAuth( function restoMenu() {
       })
       .catch((err) => alert(err))
     
-    list_restaurant.map( (resto:any) => {
+    list_restaurant && list_restaurant.map( (resto:any) => {
       if(resto.faci_id == menu.remeFaciId){
         let restaurant = resto.faci_name + ' - ' + resto.hotel_name
         setFirstValue(restaurant)          
