@@ -7,8 +7,8 @@ import {
   Post,
   Put,
 } from '@nestjs/common';
-import { PriceItemsService } from 'src/Service/Master/price_items/price_items.service';
-import { PriceItems } from 'src/entities/PriceItems';
+import { PriceItemsService } from '../../../Service/Master/price_items/price_items.service';
+import { PriceItems } from '../../../entities/PriceItems';
 @Controller('price')
 export class PriceItemsController {
   constructor(private PriceItemsService: PriceItemsService) {}

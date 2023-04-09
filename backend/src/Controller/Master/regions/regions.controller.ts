@@ -7,8 +7,8 @@ import {
   Post,
   Put,
 } from '@nestjs/common';
-import { RegionsService } from 'src/Service/Master/regions/regions.service';
-import { Regions } from 'src/entities/Regions';
+import { RegionsService } from '../../../Service/Master/regions/regions.service';
+import { Regions } from '../../../entities/Regions';
 
 interface dataLocations {
   regionCode: any;

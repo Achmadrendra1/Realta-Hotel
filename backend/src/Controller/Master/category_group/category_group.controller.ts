@@ -10,9 +10,9 @@ import {
   UploadedFile,
   Res,
 } from '@nestjs/common';
-import { ServiceTask } from 'src/entities/ServiceTask';
-import { CategoryGroupService } from 'src/Service/Master/category_group/category_group.service';
-import { CategoryGroup } from 'src/entities/CategoryGroup';
+import { ServiceTask } from '../../../entities/ServiceTask';
+import { CategoryGroupService } from '../../../Service/Master/category_group/category_group.service';
+import { CategoryGroup } from '../../../entities/CategoryGroup';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import { join } from 'path';

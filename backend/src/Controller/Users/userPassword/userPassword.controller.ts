@@ -5,7 +5,7 @@ import {
   Param,
   Put
 } from '@nestjs/common';
-import { UserPasswordService } from 'src/Service/Users/user-password/userPassword.service';
+import { UserPasswordService } from '../../../Service/Users/user-password/userPassword.service';
 
 @Controller('password')
 export class UsersPasswordController {

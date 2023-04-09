@@ -7,7 +7,7 @@ import {
   Post,
   Delete,
 } from '@nestjs/common';
-import { DepartmentService } from 'src/Service/HR/department/department.service';
+import { DepartmentService } from '../../../Service/HR/department/department.service';
 
 @Controller('dept')
 export class DepartmentController {

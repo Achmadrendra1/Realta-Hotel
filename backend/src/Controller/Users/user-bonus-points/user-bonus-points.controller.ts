@@ -8,8 +8,8 @@ import {
   Delete,
   Put,
 } from '@nestjs/common';
-import { UserBonusPointsService } from 'src/Service/Users/user-bonus-points/user-bonus-points.service';
-import { UserBonusPoints } from 'src/entities/UserBonusPoints';
+import { UserBonusPointsService } from '../../../Service/Users/user-bonus-points/user-bonus-points.service';
+import { UserBonusPoints } from '../../../entities/UserBonusPoints';
 
 @Controller('user-bonus-points')
 export class UserBonusPointsController {

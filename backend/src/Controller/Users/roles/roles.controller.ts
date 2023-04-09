@@ -8,8 +8,8 @@ import {
   Delete,
   Put,
 } from '@nestjs/common';
-import { RolesService } from 'src/Service/Users/roles/roles.service';
-import { Roles } from 'src/entities/Roles';
+import { RolesService } from '../../../Service/Users/roles/roles.service';
+import { Roles } from '../../../entities/Roles';
 
 @Controller('roles')
 export class RolesController {

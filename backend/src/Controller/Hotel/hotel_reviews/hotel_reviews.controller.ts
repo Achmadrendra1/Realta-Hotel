@@ -7,7 +7,7 @@ import {
   Post,
   Put,
 } from '@nestjs/common';
-import { HotelReviewsService } from 'src/Service/Hotel/hotel_reviews/hotel_reviews.service';
+import { HotelReviewsService } from '../../../Service/Hotel/hotel_reviews/hotel_reviews.service';
 
 @Controller('hotel-reviews')
 export class HotelReviewsController {

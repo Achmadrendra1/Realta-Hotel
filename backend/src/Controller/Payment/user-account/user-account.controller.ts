@@ -1,5 +1,5 @@
 import { Controller, Get, Post, Put, Delete, Body, Param } from '@nestjs/common';
-import { UserAccountService } from 'src/Service/Payment/user-account/user-account.service';
+import { UserAccountService } from '../../../Service/Payment/user-account/user-account.service';
 
 @Controller('user-account')
 export class UserAccountController {

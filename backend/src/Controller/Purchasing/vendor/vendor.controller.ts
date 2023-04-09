@@ -7,7 +7,7 @@ import {
     Put,
     Delete
 } from '@nestjs/common';
-import { VendorService } from 'src/service/Purchasing/vendor/vendor.service';
+import { VendorService } from '../../../service/Purchasing/vendor/vendor.service';
 
 @Controller('vendor')
 export class VendorController {

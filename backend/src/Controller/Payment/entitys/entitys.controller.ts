@@ -1,5 +1,5 @@
 import { Body, Controller, Delete, Get, Param, Post, Req, Res, UseGuards } from '@nestjs/common';
-import { EntitysService } from 'src/Service/Payment/entitys/entitys.service';
+import { EntitysService } from '../../../Service/Payment/entitys/entitys.service';
 
 
 @Controller('entitys')

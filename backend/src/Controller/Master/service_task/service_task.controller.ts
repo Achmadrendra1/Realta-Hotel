@@ -7,8 +7,8 @@ import {
   Post,
   Put,
 } from '@nestjs/common';
-import { ServiceTaskService } from 'src/Service/Master/service_task/service_task.service';
-import { ServiceTask } from 'src/entities/ServiceTask';
+import { ServiceTaskService } from '../../../Service/Master/service_task/service_task.service';
+import { ServiceTask } from '../../../entities/ServiceTask';
 @Controller('service')
 export class ServiceTaskController {
   constructor(private ServiceTaskService: ServiceTaskService) {}

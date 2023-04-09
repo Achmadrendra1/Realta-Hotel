@@ -1,6 +1,6 @@
 import { Body, Controller, Get, Post, Put, UploadedFile, UseInterceptors, UploadedFiles } from '@nestjs/common';
 import { FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
-import { RestoMenuPhotosService } from 'src/Service/Resto/resto-menu-photos/resto-menu-photos.service';
+import { RestoMenuPhotosService } from '../../../Service/Resto/resto-menu-photos/resto-menu-photos.service';
 // import { diskStorage } from 'multer';
 import { diskStorage } from 'multer'
 import { Helper } from './Helper';

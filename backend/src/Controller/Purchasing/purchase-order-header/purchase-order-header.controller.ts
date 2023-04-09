@@ -7,7 +7,7 @@ import {
     Put,
     Delete
 } from '@nestjs/common';
-import { PoheService } from 'src/Service/Purchasing/purchase-order-header/purchase-order-header.service';
+import { PoheService } from '../../../Service/Purchasing/purchase-order-header/purchase-order-header.service';
 
 @Controller('purchase-order-header')
 export class PoheController {

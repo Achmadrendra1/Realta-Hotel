@@ -7,8 +7,8 @@ import {
   Post,
   Put,
 } from '@nestjs/common';
-import { Policy } from 'src/entities/Policy';
-import { PolicyService } from 'src/Service/Master/policy/policy.service';
+import { Policy } from '../../../entities/Policy';
+import { PolicyService } from '../../../Service/Master/policy/policy.service';
 @Controller('policy')
 export class PolicyController {
   constructor(private PolicyService: PolicyService) {}

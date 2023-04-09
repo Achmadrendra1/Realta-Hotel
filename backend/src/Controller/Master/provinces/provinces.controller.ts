@@ -8,8 +8,8 @@ import {
   Put,
 } from '@nestjs/common';
 
-import { ProvincesService } from 'src/Service/Master/provinces/provinces.service';
-import { Proviences } from 'src/entities/Proviences';
+import { ProvincesService } from '../../../Service/Master/provinces/provinces.service';
+import { Proviences } from '../../../entities/Proviences';
 @Controller('provinces')
 export class ProvincesController {
   constructor(private ProvincesService: ProvincesService) {}

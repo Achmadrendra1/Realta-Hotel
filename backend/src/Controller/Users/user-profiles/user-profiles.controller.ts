@@ -8,8 +8,8 @@ import {
   Delete,
   Put,
 } from '@nestjs/common';
-import { UserProfilesService } from 'src/Service/Users/user-profiles/user-profiles.service';
-import { UserProfiles } from 'src/entities/UserProfiles';
+import { UserProfilesService } from '../../../Service/Users/user-profiles/user-profiles.service';
+import { UserProfiles } from '../../../entities/UserProfiles';
 
 @Controller('user-profiles')
 export class UserProfilesController {

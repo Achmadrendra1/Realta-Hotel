@@ -8,8 +8,8 @@ import {
   Put,
 } from '@nestjs/common';
 
-import { CountryService } from 'src/Service/Master/country/country.service';
-import { Country } from 'src/entities/Country';
+import { CountryService } from '../../../Service/Master/country/country.service';
+import { Country } from '../../../entities/Country';
 @Controller('country')
 export class CountryController {
   constructor(private CountryService: CountryService) {}

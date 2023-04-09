@@ -7,7 +7,7 @@ import {
     Put,
     Delete
 } from '@nestjs/common';
-import { PodeService } from 'src/Service/Purchasing/purchase-order-detail/purchase-order-detail.service';
+import { PodeService } from '../../../Service/Purchasing/purchase-order-detail/purchase-order-detail.service';
 
 @Controller('purchase-order-detail')
 export class PodeController {

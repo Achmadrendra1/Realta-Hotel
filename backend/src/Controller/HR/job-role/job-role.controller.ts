@@ -1,5 +1,5 @@
 import { Controller, Get, Param, Req, Res } from '@nestjs/common';
-import { JobRoleService } from 'src/Service/HR/job-role/job-role.service';
+import { JobRoleService } from '../../../Service/HR/job-role/job-role.service';
 
 @Controller('jobrole')
 export class JobRoleController {

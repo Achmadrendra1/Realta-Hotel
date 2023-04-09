@@ -7,7 +7,7 @@ import {
   Post,
   Put,
 } from '@nestjs/common';
-import { WorkorderService } from 'src/Service/HR/workorder/workorder.service';
+import { WorkorderService } from '../../../Service/HR/workorder/workorder.service';
 
 @Controller('workorder')
 export class WorkorderController {

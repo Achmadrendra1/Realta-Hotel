@@ -1,5 +1,5 @@
 import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
-import { RestoMenusService } from 'src/Service/Resto/resto-menus/resto-menus.service';
+import { RestoMenusService } from '../../../Service/Resto/resto-menus/resto-menus.service';
 
 @Controller('resto-menus')
 export class RestoMenusController {

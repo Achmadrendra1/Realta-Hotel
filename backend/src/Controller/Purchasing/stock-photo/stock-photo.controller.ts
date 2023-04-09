@@ -9,7 +9,7 @@ import {
     UseInterceptors,
     UploadedFiles
 } from '@nestjs/common';
-import { SphoService } from 'src/service/Purchasing/stock-photo/stock-photo.service';
+import { SphoService } from '../../../service/Purchasing/stock-photo/stock-photo.service';
 import { FilesInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import { extname, join } from 'path';
@@ -26,7 +26,7 @@ export class SphoController {
         return this.sphoService.findAllSpho()
     }
 
-    @Get('src/:filename')
+    @Get('../../../:filename')
     getSphoFile(@Param('filename') filename: string, @Res() res: any) {
         return res.sendFile(filename, {
             root: join('src', 'Service', 'Purchasing', 'stock-photo', 'photos')
@@ -47,7 +47,7 @@ export class SphoController {
     @UseInterceptors(
         FilesInterceptor('sphoUrl', 10, {
             storage: diskStorage({
-                destination: './src/Service/Purchasing/stock-photo/photos',
+                destination: './../../../Service/Purchasing/stock-photo/photos',
                 filename(req, file, callback) {
                     let customName = file.originalname.split('.')[0] // Remove Extension
                     customName = customName + '-' + Date.now() + '-' + Math.round(Math.random() * 1e9)

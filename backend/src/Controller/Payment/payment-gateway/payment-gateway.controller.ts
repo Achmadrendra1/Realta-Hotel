@@ -8,7 +8,7 @@ import {
   Put,
   Query,
 } from '@nestjs/common';
-import { PaymentGatewayService } from 'src/Service/Payment/payment-gateway/payment-gateway.service';
+import { PaymentGatewayService } from '../../../Service/Payment/payment-gateway/payment-gateway.service';
 
 @Controller('payment-gateway')
 export class PaymentGatewayController {

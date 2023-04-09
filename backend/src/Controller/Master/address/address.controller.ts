@@ -8,8 +8,8 @@ import {
   Put,
 } from '@nestjs/common';
 
-import { AddressService } from 'src/Service/Master/address/address.service';
-import { Address } from 'src/entities/Address';
+import { AddressService } from '../../../Service/Master/address/address.service';
+import { Address } from '../../../entities/Address';
 
 @Controller('address')
 export class AddressController {

@@ -1,5 +1,5 @@
 import { Body, Controller, Delete, Get, Param, Post } from '@nestjs/common';
-import { OrderMenusService } from 'src/Service/Resto/order-menus/order-menus.service';
+import { OrderMenusService } from '../../../Service/Resto/order-menus/order-menus.service';
 
 @Controller('order-menus')
 export class OrderMenusController {

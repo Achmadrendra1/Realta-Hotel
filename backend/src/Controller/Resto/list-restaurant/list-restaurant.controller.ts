@@ -1,5 +1,5 @@
 import { Body, Controller, Get, Param, Post } from '@nestjs/common';
-import { ListRestaurantService } from 'src/Service/Resto/list-restaurant/list-restaurant.service';
+import { ListRestaurantService } from '../../../Service/Resto/list-restaurant/list-restaurant.service';
 
 @Controller('list-restaurant')
 export class ListRestaurantController {

@@ -8,8 +8,8 @@ import {
   Delete,
   Put,
 } from '@nestjs/common';
-import { UserRolesService } from 'src/Service/Users/user-roles/user_roles.service';
-import { UserRoles } from 'src/entities/UserRoles';
+import { UserRolesService } from '../../../Service/Users/user-roles/user_roles.service';
+import { UserRoles } from '../../../entities/UserRoles';
 @Controller('users-roles')
 export class UserRolesController {
   constructor(private userRolesService: UserRolesService) {}
