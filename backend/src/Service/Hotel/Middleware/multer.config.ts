@@ -12,7 +12,7 @@ export class ConfigMulter {
         } else {
           return callback(new Error(` format not supported`), false);
         }
-        // console.log(file);
+        console.log(file);
       },
       limits: { fileSize: 1 * 1024 * 1024 },
     };

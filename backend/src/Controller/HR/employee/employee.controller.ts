@@ -13,8 +13,8 @@ import {
 import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import { join } from 'path';
-import { EmployeeService } from 'src/Service/HR/employee/employee.service';
-import { JobRoleService } from 'src/Service/HR/job-role/job-role.service';
+import { EmployeeService } from '../../../Service/HR/employee/employee.service';
+import { JobRoleService } from '../../../Service/HR/job-role/job-role.service';
 
 @Controller('employee')
 export class EmployeeController {

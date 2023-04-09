@@ -1,5 +1,5 @@
 import { Controller, Get, Param, Body, Put, Delete, Post } from '@nestjs/common';
-import { BookingOrderDetailService } from 'src/Service/Booking/booking_order_detail/booking_order_detail.service';
+import { BookingOrderDetailService } from '../../../Service/Booking/booking_order_detail/booking_order_detail.service';
 
 @Controller('booking-order-detail')
 export class BookingOrderDetailController {

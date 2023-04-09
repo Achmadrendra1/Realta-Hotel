@@ -7,7 +7,7 @@ import {
   Post,
   Put,
 } from '@nestjs/common';
-import { FacilityPriceHistoryService } from 'src/Service/Hotel/facility_price_history/facility_price_history.service';
+import { FacilityPriceHistoryService } from '../../../Service/Hotel/facility_price_history/facility_price_history.service';
 
 @Controller('facility-price-history')
 export class FacilityPriceHistoryController {

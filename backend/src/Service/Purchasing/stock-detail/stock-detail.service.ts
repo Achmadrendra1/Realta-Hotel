@@ -49,7 +49,7 @@ export class StodService {
         result: res
       }
     } catch (error) {
-      // console.log(error)
+      console.log(error)
     }
   }
 

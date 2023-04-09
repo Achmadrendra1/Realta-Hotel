@@ -2186,7 +2186,7 @@ values
 
 INSERT INTO payment.payment_gateway
 values
-	(16, 'hpay', 'H-Pay', now())
+	(16, 'hpay', 'H-Pay', now()),
 (17, 'goto', 'GOTO', now
 ());
 

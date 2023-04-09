@@ -7,7 +7,7 @@ import {
   Put,
   Delete,
 } from '@nestjs/common';
-import { StodService } from 'src/Service/Purchasing/stock-detail/stock-detail.service';
+import { StodService } from '../../../Service/Purchasing/stock-detail/stock-detail.service';
 
 @Controller('stock-detail')
 export class StodController {

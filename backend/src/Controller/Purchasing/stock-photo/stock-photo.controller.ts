@@ -9,7 +9,7 @@ import {
     UseInterceptors,
     UploadedFiles
 } from '@nestjs/common';
-import { SphoService } from 'src/service/Purchasing/stock-photo/stock-photo.service';
+import { SphoService } from '../../../service/Purchasing/stock-photo/stock-photo.service';
 import { FilesInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import { extname, join } from 'path';

@@ -1,5 +1,5 @@
 import { Controller, Get, Param, Post, Body, Put, Delete } from '@nestjs/common';
-import { UserBreakfeastService } from 'src/Service/Booking/user-breakfeast/user-breakfeast.service';
+import { UserBreakfeastService } from '../../../Service/Booking/user-breakfeast/user-breakfeast.service';
 
 @Controller('user-breakfeast')
 export class UserBreakfeastController {

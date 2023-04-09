@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { AppService } from './service/app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { GlobalModule } from './module/global.module';
+import { GlobalModule } from './Module/global.module'
 import { AppController } from './Controller/app.controller';
 import { MulterModule } from '@nestjs/platform-express';
 
@@ -14,7 +14,7 @@ import { MulterModule } from '@nestjs/platform-express';
       username: process.env.DATABASE_USER,
       password: process.env.DATABASE_PASSWORD,
       database: process.env.DATABASE,
-      entities: ['src/entities/*{.ts,.js}'],
+      entities: ['dist/entities/*{.ts,.js}'],
       synchronize: false,
       autoLoadEntities: true,
     }),

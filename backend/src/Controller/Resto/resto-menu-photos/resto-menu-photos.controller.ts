@@ -1,8 +1,7 @@
-import { Body, Controller, Get, Post, Put, UploadedFile, UseInterceptors, UploadedFiles, Res } from '@nestjs/common';
+import { Body, Controller, Get, Post, Put, UploadedFile, UseInterceptors, UploadedFiles } from '@nestjs/common';
 import { FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
 import { RestoMenuPhotosService } from 'src/Service/Resto/resto-menu-photos/resto-menu-photos.service';
 // import { diskStorage } from 'multer';
-import { join } from 'path';
 import { diskStorage } from 'multer'
 import { Helper } from './Helper';
 import { Delete, Param } from '@nestjs/common/decorators';
@@ -22,13 +21,6 @@ export class RestoMenuPhotosController {
         // console.warn('ini param', param);
         
         return this.restoMenuPhotos.getListPhoto(param)
-    }
-
-    @Get(`menu/:filename`)
-    getPhoto(@Param('filename') filename: string, @Res() res) {
-      return res.sendFile(filename, {
-        root: join('restomenuphotos'),
-      });
     }
  
     // add data

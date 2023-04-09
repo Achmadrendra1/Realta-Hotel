@@ -99,7 +99,6 @@ export class HotelsService {
 
   async UpdateHotel(hotelId: any, hotel: Hotels): Promise<any> {
     const date = new Date();
-    // console.log(hotelId);
 
     return await this.hotelRepository
       .update(hotelId, {
@@ -130,7 +129,7 @@ export class HotelsService {
   }
 
   async deleteHotels(id: Hotels) {
-    // console.log(id);
+    console.log(id);
 
     await this.hotelRepository
       .delete(id)

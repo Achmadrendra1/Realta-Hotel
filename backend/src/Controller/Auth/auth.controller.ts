@@ -7,7 +7,7 @@ import {
   HttpException,
   HttpStatus,
 } from '@nestjs/common';
-import { AuthService } from 'src/Service/Auth/auth.service';
+import { AuthService } from '../../Service/Auth/auth.service';
 import * as jwt from 'jsonwebtoken';
 
 @Controller('auth')

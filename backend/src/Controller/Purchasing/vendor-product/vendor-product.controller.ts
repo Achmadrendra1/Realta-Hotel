@@ -7,7 +7,7 @@ import {
     Put,
     Delete
 } from '@nestjs/common';
-import { VeproService } from 'src/Service/Purchasing/vendor-product/vendor-product.service';
+import { VeproService } from '../../../Service/Purchasing/vendor-product/vendor-product.service';
 
 @Controller('vendor-product')
 export class VeproController {

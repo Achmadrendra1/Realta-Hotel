@@ -16,8 +16,8 @@ import { FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
 import { join } from 'path';
 // import { diskStorage } from 'multer';
 import { diskStorage } from 'multer';
-import { UploadConfig } from 'src/Service/Hotel/Middleware/upload.config';
-import { FacilityPhotosService } from 'src/Service/Hotel/facility_photos/facility_photos.service';
+import { UploadConfig } from '../../../Service/Hotel/Middleware/upload.config';
+import { FacilityPhotosService } from '../../../Service/Hotel/facility_photos/facility_photos.service';
 
 @Controller('facility-photos')
 export class FacilityPhotosController {

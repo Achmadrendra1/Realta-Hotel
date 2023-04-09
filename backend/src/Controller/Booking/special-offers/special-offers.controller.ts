@@ -1,5 +1,5 @@
 import { Body, Controller, Get, Param, Post, Put, Delete, Req, Res } from '@nestjs/common';
-import { SpecialOffersService } from 'src/Service/Booking/special-offers/special-offers.service';
+import { SpecialOffersService } from '../../../Service/Booking/special-offers/special-offers.service';
 
 @Controller('special-offers')
 export class SpecialOffersController {

@@ -11,7 +11,7 @@ import {
   Next,
   Query,
 } from '@nestjs/common';
-import { HotelsService } from 'src/Service/Hotel/hotels/hotels.service';
+import { HotelsService } from '../../../Service/Hotel/hotels/hotels.service';
 
 @Controller('hotels')
 export class HotelsController {
