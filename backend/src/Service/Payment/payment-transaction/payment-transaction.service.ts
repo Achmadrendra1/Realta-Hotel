@@ -2,7 +2,7 @@ import { Body, HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { PaymentTransaction } from 'src/entities/PaymentTransaction';
 import { Repository } from 'typeorm';
-import * as myEnum from '../../../DataEnum';
+import * as myEnum from 'src/DataEnum';
 import { randomBytes } from 'crypto';
 import { UserAccountService } from '../user-account/user-account.service';
 
