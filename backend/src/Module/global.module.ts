@@ -5,7 +5,7 @@ import { PaymentTransactionController } from 'src/Controller/Payment/payment-tra
 import { UserAccountController } from 'src/Controller/Payment/user-account/user-account.controller';
 import { AppController } from 'src/Controller/app.controller';
 import { EmployeeService } from 'src/Service/HR/employee/employee.service';
-import { AppService } from 'src/service/app.service';
+import { AppService } from 'src/Service/app.service';
 import { PaymentTransactionService } from 'src/Service/Payment/payment-transaction/payment-transaction.service';
 import { UserAccountService } from 'src/Service/Payment/user-account/user-account.service';
 import { Address } from 'src/entities/Address';
@@ -123,10 +123,10 @@ import { VendorProduct } from 'src/entities/VendorProduct';
 import { PurchaseOrderHeader } from 'src/entities/PurchaseOrderHeader';
 import { PurchaseOrderDetail } from 'src/entities/PurchaseOrderDetail';
 // Purchasing Service
-import { StockService } from 'src/service/Purchasing/stock/stock.service';
+import { StockService } from 'src/Service/Purchasing/stock/stock.service';
 import { StodService } from 'src/Service/Purchasing/stock-detail/stock-detail.service';
-import { SphoService } from 'src/service/Purchasing/stock-photo/stock-photo.service';
-import { VendorService } from 'src/service/Purchasing/vendor/vendor.service';
+import { SphoService } from 'src/Service/Purchasing/stock-photo/stock-photo.service';
+import { VendorService } from 'src/Service/Purchasing/vendor/vendor.service';
 import { VeproService } from 'src/Service/Purchasing/vendor-product/vendor-product.service';
 import { PoheService } from 'src/Service/Purchasing/purchase-order-header/purchase-order-header.service';
 import { PodeService } from 'src/Service/Purchasing/purchase-order-detail/purchase-order-detail.service';

@@ -12,9 +12,9 @@ async function bootstrap() {
   // untuk membaca folder restomenuphotos di FE 
   // TOLONG JANGAN DI HAPUSSS LINE 14 INIIII, DIPAKE SAMA MODUL RESTO - SOFFIE ANASTYA
   app.use('/restomenuphotos', express.static(path.join(__dirname,'../restomenuphotos')));
-  const port = 3600;
+  const port = process.env.PORT ?? 3600;
   await app.listen(port, () => {
-    console.log(`server anda berjalan pada port ${port}`);
+    console.log(`Server started on port : ${port}`);
   });
 }
 bootstrap();

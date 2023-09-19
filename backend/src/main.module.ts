@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { AppService } from 'src/service/app.service';
+import { AppService } from 'src/Service/app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { GlobalModule } from 'src/Module/global.module'
 import { AppController } from 'src/Controller/app.controller';
