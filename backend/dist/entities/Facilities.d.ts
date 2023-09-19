@@ -1,0 +1,32 @@
+import { BookingOrderDetail } from './BookingOrderDetail';
+import { CategoryGroup } from './CategoryGroup';
+import { Hotels } from './Hotels';
+import { FacilityPhoto } from './FacilityPhoto';
+import { FacilityPriceHistory } from './FacilityPriceHistory';
+import { RestoMenus } from './RestoMenus';
+import { StockDetail } from './StockDetail';
+import { WorkOrderDetail } from './WorkOrderDetail';
+export declare class Facilities {
+    faciId: number;
+    faciName: string | null;
+    faciDescription: string | null;
+    faciMaxNumber: number | null;
+    faciMeasureUnit: string | null;
+    faciRoomNumber: string | null;
+    faciStartdate: Date | null;
+    faciEnddate: Date | null;
+    faciLowPrice: string | null;
+    faciHighPrice: string | null;
+    faciRatePrice: string | null;
+    faciDiscount: string | null;
+    faciTaxRate: string | null;
+    faciModifiedDate: Date | null;
+    bookingOrderDetails: BookingOrderDetail[];
+    faciCagro: CategoryGroup;
+    faciHotel: Hotels;
+    facilityPhotos: FacilityPhoto[];
+    facilityPriceHistories: FacilityPriceHistory[];
+    restoMenus: RestoMenus[];
+    stockDetails: StockDetail[];
+    workOrderDetails: WorkOrderDetail[];
+}
